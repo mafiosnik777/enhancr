@@ -1,4 +1,5 @@
-# ![heading-icon](https://mafiosnik.needsmental.help/4pBrFtuv8T.png?key=UheGMMXIDOTdJF)
+
+# ![heading-icon](https://mafiosnik.needsmental.help/TuuFJcPFi2.png?key=wfGxa75b2G2pyp)
 
 **enhancr** is an **elegant and easy to use** GUI for **Video Frame Interpolation** and **Video Upscaling** which takes advantage of artificial intelligence - built using **node.js** and **Electron**. It was created **to enhance the user experience** for anyone interested in enhancing video footage using artificial intelligence. The GUI was **designed to provide a stunning experience** powered by state-of-the-art technologies **without feeling clunky and outdated** like other alternatives.
 
