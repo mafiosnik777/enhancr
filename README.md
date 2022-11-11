@@ -8,6 +8,16 @@
 It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI processes **significantly**. **Pre-packaged, without the need to install Docker or WSL** (Windows Subsystem for Linux) - and **NCNN** inference by Tencent which is lightweight and runs on **NVIDIA**, **AMD** and even **Apple Silicon** - in contrast to the mammoth of an inference PyTorch is, which **only runs on NVIDA GPUs**.
 
 # Features
+- Encodes video on the fly and reads frames from source video, without the need of extracting frames or loading into memory
+- Queue for batch processing
+- Live Preview of output media
+- Allows chaining of interpolation, upscaling & restoration
+- Offers the possibility to trim videos before processing
+- Can load custom ESRGAN models in onnx format
+- Has Scene Detection built-in, to skip interpolation on scene change frames & mitigate artifacts
+- Color Themes for user customization
+- Discord Rich Presence, to show all your friends progress, current speed & what you're currently enhancing
+- ... and much more
 
 ## Interpolation
 
@@ -17,7 +27,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-ncnn-vulkan** (unreleased)
 
->**CAIN (TensorRT)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [HubertSotnowski](https://github.com/HubertSotnowski)/**vsynth-cain-tensorrt** (unreleased)
+>**CAIN (TensorRT)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [HubertSotnowski](https://github.com/HubertSotnowski)/**[cain-TensorRT](https://github.com/HubertSotnowski/cain-TensorRT)**
 
 *Thanks to [HubertSontowski](https://github.com/HubertSotnowski) and [styler00dollar](https://github.com/styler00dollar) for helping out with implementing CAIN.*
 
@@ -26,8 +36,6 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 >**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vs-mlrt](https://github.com/nlzy/vapoursynth-waifu2x-ncnn-vulkan)**
 
 >**RealESRGAN (TensorRT)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
-
->**RealCUGAN (ONNX)** - [bilibili](https://github.com/bilibili)/[ailab](https://github.com/bilibili/ailab)/**[Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
 ## Restoration
 
@@ -76,7 +84,7 @@ Input size: 1920x1080 @ 2x
 | RIFE / rife-v4.6 (TensorRT) | 70.34 fps ||
 | CAIN / cvp-v6 (TensorRT) | 45.41 fps ||
 | CAIN / cvp-v6 (NCNN) | 10.67 fps ||
-| waifu2x / upconv7 (NCNN) | 6.71 fps ||
+| waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps ||
 | RealESRGAN / animevideov3 (TensorRT) | 8.17 fps ||
 | DPIR / Denoise (TensorRT) | 4.38 fps ||
 
