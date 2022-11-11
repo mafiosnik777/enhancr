@@ -139,7 +139,8 @@ if (process.platform == "linux") {
         nodeIntegrationInSubFrames: true,
         enableRemoteModule: true,
         contextIsolation: false,
-        plugins: true
+        plugins: true,
+        backgroundThrottling: false
       },
       resizable: false,
       backgroundColor: "#333333",
@@ -235,7 +236,8 @@ if (process.platform == "win32") {
             nodeIntegrationInSubFrames: true,
             enableRemoteModule: true,
             contextIsolation: false,
-            plugins: true
+            plugins: true,
+            backgroundThrottling: false
           },
           resizable: false,
           transparent: transparency,
@@ -297,7 +299,8 @@ if (process.platform == "win32") {
             nodeIntegrationInSubFrames: true,
             enableRemoteModule: true,
             contextIsolation: false,
-            plugins: true
+            plugins: true,
+            backgroundThrottling: false
           },
           resizable: false,
           transparent: transparency,
@@ -361,7 +364,7 @@ if (process.platform == "darwin") {
         enableRemoteModule: true,
         contextIsolation: false,
         enableBlinkFeatures: 'AudioVideoTracks',
-        backgroundThrottling: false,
+        backgroundThrottling: false
       },
       resizable: false,
       transparent: true,
