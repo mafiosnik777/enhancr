@@ -3,6 +3,7 @@ const path = require("path");
 const MediaInfoFactory = require("mediainfo.js");
 const ratio = require('aspect-ratio')
 const fse = require('fs-extra');
+const { ipcRenderer, webFrame } = require("electron");
 
 const ffmpeg = require('fluent-ffmpeg');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
