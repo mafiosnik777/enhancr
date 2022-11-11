@@ -7,7 +7,7 @@ const os = require('os');
 
 const { spawn } = require('child_process');
 const { clipboard } = require('electron')
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, webFrame } = require("electron");
 
 const enhancr = require('./js/helper.js')
 const Interpolation = require('./js/interpolation.js')
@@ -77,6 +77,7 @@ function renderQueueItem() {
 
   function setScreenshot(i) {
     setTimeout(function () {
+      webFrame.clearCache()
       let thumb = document.getElementById(`queue-thumb${i}`);
       thumb.setAttribute('src', path.join(appDataPath, `/.enhancr/thumbs/queue${i}.png`));
     }, 1000)
@@ -95,6 +96,7 @@ function renderQueueItem() {
       folder: path.join(appDataPath, '/.enhancr/thumbs'),
       size: '426x240'
     });
+    webFrame.clearCache()
     let thumb = document.createElement('img');
     thumb.classList.add('queue-thumb');
     thumb.setAttribute('id', `queue-thumb${i}`);

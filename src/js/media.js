@@ -138,7 +138,7 @@ function fetchMetadata() {
         infoDuration.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
         infoFramecount.textContent = FrameCount;
         infoBitrate.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-
+        webFrame.clearCache()
         ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbInterpolation.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
         var thumbInterpolation = document.getElementById('interpolation-thumb-img');
         function setThumbInterpolation() {
@@ -182,7 +182,7 @@ function fetchMetadataUpscale() {
         infoDurationUp.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
         infoFramecountUp.textContent = FrameCount;
         infoBitrateUp.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-
+        webFrame.clearCache()
         ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbUpscaling.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
         var thumbUpscaling = document.getElementById('upscaling-thumb-img');
         function setThumbUpscaling() {
@@ -238,7 +238,7 @@ function fetchMetadataRestore() {
         infoDurationRes.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
         infoFramecountRes.textContent = FrameCount;
         infoBitrateRes.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-
+        webFrame.clearCache()
         ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbRestoration.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
         var thumbRestoration = document.getElementById('restoration-thumb-img');
         function setThumbRestoration() {
@@ -314,7 +314,7 @@ class Media {
             infoDuration.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
             infoFramecount.textContent = FrameCount;
             infoBitrate.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-
+            webFrame.clearCache()
             ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbInterpolation.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
             var thumbInterpolation = document.getElementById('interpolation-thumb-img');
             function setThumbInterpolation() {
@@ -356,7 +356,7 @@ class Media {
             infoDurationUp.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
             infoFramecountUp.textContent = FrameCount;
             infoBitrateUp.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-
+            webFrame.clearCache()
             ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbUpscaling.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
             var thumbUpscaling = document.getElementById('upscaling-thumb-img');
             function setThumbUpscaling() {
@@ -394,7 +394,7 @@ class Media {
             infoDurationRes.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
             infoFramecountRes.textContent = FrameCount;
             infoBitrateRes.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-
+            webFrame.clearCache()
             ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbRestoration.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
             var thumbRestoration = document.getElementById('restoration-thumb-img');
             function setThumbRestoration() {
