@@ -1,0 +1,42 @@
+#launch-wrapper {
+    font-size: 35pt;
+    font-weight: bold;
+  }
+  
+  #launch-img {
+    position: absolute;
+    left: 38%;
+    top: 42.5%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    height: 75px;
+    width: auto;
+  }
+  
+  #launch-text {
+    font-size: 35pt;
+    font-weight: 500;
+    position: absolute;
+    left: 46%;
+    top: 43%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+  
+  .launch-progress {
+    background-color: rgba(186, 186, 186, 0.383);
+    height: 0.5em;
+    position: absolute;
+    bottom: 0%;
+    left: 0%;
+    width: 100%;
+    border-radius: 0px;
+  }
+  
+  .launch-bar {
+    background-size: 23em 0.25em;
+    height: 100%;
+    position: relative;
+    background-color: rgb(0, 103, 206);
+    animation: cssload-width 3.45s cubic-bezier(0.45, 0, 1, 1);
+  }

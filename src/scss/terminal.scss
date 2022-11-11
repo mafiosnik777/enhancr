@@ -1,0 +1,50 @@
+@font-face {
+    font-family: "MenloTerminal";
+    src: url('../assets/Menlo.ttf');
+}
+
+.terminal {
+    background: rgba(0, 0, 0, 0.25);
+    position: absolute;
+    width: 46%;
+    height: 24%;
+    left: 6%;
+    bottom: 9%;
+    border-radius: 12.5px;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+    z-index: -1;
+
+    #terminal-text {
+        width: 420px;
+        background: transparent;
+        color: white;
+        resize: none;
+        border: 0 none;
+        height: 118px;
+        margin-top: 10px;
+        margin-left: 42px;
+        font-size: 6.25pt;
+        outline: 0px solid transparent;
+        font-family: "Consolas", "MenloTerminal";
+    }
+}
+
+#terminal-side {
+    background: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    width: 7%;
+    height: 100%;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+    i {
+        margin: 0;
+        position: absolute;
+        top: 49%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        margin-left: 10.5px;
+        color: #d1d1d1;
+        font-size: 8pt;
+    }
+}

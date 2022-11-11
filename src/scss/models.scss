@@ -1,0 +1,540 @@
+$macosblue: #1e5cce;
+
+.models {
+    background: rgba(0, 0, 0, 0.35);
+    position: absolute;
+    width: 46%;
+    height: 81%;
+    left: 6%;
+    top: 10%;
+    border-radius: 12.5px;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+    z-index: -1;
+
+    &::after {
+        content: " ";
+        position: absolute;
+        position: absolute;
+        top: 16%;
+        right: 100%;
+        margin-top: 312px;
+        border-width: 7.5px;
+        border-style: solid;
+        border-color: transparent rgba(0, 0, 0, 0.35) transparent transparent;
+        box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
+    }
+}
+
+#models-tab {
+    display: none;
+}
+
+#model-select {
+    position: absolute;
+    width: 265px;
+    height: 24px;
+    background: rgba(71, 71, 71, 0.6588235294);
+    left: 30.5%;
+    top: 10.5%;
+    border-radius: 6px;
+}
+
+#model-select-waifu2x {
+    position: absolute;
+    width: 265px;
+    height: 24px;
+    background: rgba(71, 71, 71, 0.6588235294);
+    left: 30.5%;
+    top: 10.5%;
+    border-radius: 6px;
+}
+
+#model-select-realcugan {
+    position: absolute;
+    width: 265px;
+    height: 24px;
+    background: rgba(71, 71, 71, 0.6588235294);
+    left: 30.5%;
+    top: 10.5%;
+    border-radius: 6px;
+}
+
+#animevideo {
+    position: absolute;
+    left: 40.5%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#cunet {
+    position: absolute;
+    left: 46.5%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#pro-conservative {
+    position: absolute;
+    left: 50.5%;
+    top: 14%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#undeint {
+    position: absolute;
+    left: 50.5%;
+    top: 32%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#pro-denoise {
+    position: absolute;
+    left: 53%;
+    top: 38%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#anime_style_art {
+    position: absolute;
+    left: 50.5%;
+    top: 44%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#bleedout {
+    position: absolute;
+    left: 54%;
+    bottom: 35%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#upresnet10 {
+    position: absolute;
+    left: 52.5%;
+    bottom: 14%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#pro-no-denoise {
+    position: absolute;
+    left: 51.5%;
+    top: 58%;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+#custom-model-label {
+    position: absolute;
+    bottom: 64%;
+    left: 14%;
+    font-weight: 400;
+    z-index: 2;
+}
+
+#info-realcugan {
+    position: absolute;
+    bottom: 9%;
+    left: 10%;
+    font-weight: 500;
+    z-index: 2;
+    font-size: 6pt;
+}
+
+#denoise-line {
+    all: unset;
+    background-color: rgba(99, 99, 99, 0.35);
+    height: 15px;
+    width: 7.5%;
+    border-radius: 10px;
+    caret-color: #1e5cce;
+    outline: 0px solid transparent;
+    font-size: 9pt;
+    padding-left: 6px;
+    color: #8c8c8c;
+    transition: 0.2s;
+    font-weight: 700;
+    position: absolute;
+    bottom: 10%;
+    left: 27%;
+
+    &:hover {
+        background-color: rgba(120, 120, 120, 0.35);
+    }
+}
+
+#custom-model {
+    position: absolute;
+    bottom: 64.25%;
+    left: 26%;
+    background-color: rgba(99, 99, 99, 0.35);
+    height: 15px;
+    width: 70%;
+    border-radius: 10px;
+    cursor: pointer;
+    z-index: 4;
+
+    &:hover {
+        background-color: rgba(120, 120, 120, 0.35);
+    }
+
+    i {
+        position: absolute;
+        top: 21%;
+        right: 3%;
+        color: darkgray;
+        z-index: 2;
+    }
+}
+
+#custom-divider {
+    background: rgba(34, 34, 34, 0.36);
+    width: 401px;
+    height: 27px;
+    position: absolute;
+    border-radius: 7px;
+    bottom: 58%;
+    left: 9.5%;
+    z-index: 1;
+}
+
+#realesrgan-model-label {
+    position: absolute;
+    font-size: 9pt;
+    left: 16%;
+    top: 32%;
+    font-weight: 500;
+    color: #e1e1e1;
+}
+
+#waifu2x-model-label {
+    position: absolute;
+    font-size: 9pt;
+    left: 10%;
+    top: 44%;
+    font-weight: 500;
+    color: #e1e1e1;
+}
+
+#realcugan-model-label {
+    position: absolute;
+    font-size: 9pt;
+    left: 10%;
+    top: 40%;
+    font-weight: 500;
+    color: #e1e1e1;
+}
+
+#model-container-realesrgan {
+    width: 401px;
+    height: 73px;
+    position: absolute;
+    background: #1f1f1fad;
+    border-radius: 8px;
+    top: 5%;
+    left: 9.5%;
+}
+
+#custom-models {
+    position: absolute;
+    font-size: 8pt;
+    font-weight: 600;
+    background: rgba(60, 60, 60, 0.3);
+    border-radius: 10px;
+    padding: 8px 12px 8px 12px;
+    bottom: 3%;
+    right: 2.5%;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+    color: #1e5cce;
+    transition: color 300ms linear, background 0.2s;
+
+    i {
+        margin-right: 2px;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(76, 76, 76, 0.3);
+    }
+}
+
+#models-hider {
+    position: absolute;
+    width: 471px;
+    height: 466px;
+    background: rgba(0, 0, 0, 0.5607843137);
+    left: 0%;
+    top: 0%;
+    z-index: 3;
+    border-radius: 11px;
+    visibility: hidden;
+}
+
+#custom-model-dropdown {
+    font-size: 6.5pt;
+    position: absolute;
+    color: #8c8c8c;
+    left: 27%;
+    top: 20.25%;
+    background-color: rgba(99, 99, 99, 0.35);
+    border-radius: 10px;
+    width: 66.75%;
+    visibility: hidden;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+    padding-top: 2px;
+    padding-bottom: 2px;
+    z-index: 5;
+}
+
+.optionModel {
+    padding-left: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    cursor: pointer;
+
+    &:hover {
+        color: $macosblue;
+    }
+}
+
+#upscale-wiki {
+    position: absolute;
+    font-size: 8pt;
+    font-weight: 600;
+    background: rgba(60, 60, 60, 0.3);
+    border-radius: 10px;
+    padding: 8px 12px 8px 12px;
+    top: 3%;
+    right: 2.5%;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+    color: #787878;
+    transition: color 300ms linear, background 0.2s;
+
+    i {
+        margin-right: 2px;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background: rgba(76, 76, 76, 0.3);
+    }
+}
+
+#tensorrt-settings {
+    position: absolute;
+    bottom: 3%;
+    left: 3%;
+    font-size: 8pt;
+    color: darkgrey;
+    background: rgba(36, 36, 36, 0.43);
+    padding: 6px 9px;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+
+    &:hover {
+        background: #3434349e;
+        cursor: pointer;
+    }
+}
+
+#realesrgan-list {
+    margin-top: 3.5px;
+    padding: 12px 125px 6px 10px;
+    display: inline-block;
+    height: 75px;
+    width: 315px;
+    margin-left: 10px;
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    top: 11%;
+    position: absolute;
+}
+
+#realesrgan-list li {
+    padding-bottom: 8px;
+    margin-left: 28px;
+    padding-top: 2px;
+}
+
+#realesrgan-side {
+    transform: rotate(-90deg);
+    font-size: 9pt;
+    top: 34%;
+    left: -6.8%;
+    background: rgba(0, 0, 0, 0.2);
+    width: 20.5%;
+    height: 31%;
+    border-top-left-radius: 10px;
+    position: absolute;
+    border-top-right-radius: 10px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    font-weight: 500;
+}
+
+#realcugan-list {
+    margin-top: 3.5px;
+    padding: 12px 125px 6px 10px;
+    display: inline-block;
+    height: 100px;
+    width: 315px;
+    margin-left: 10px;
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    top: 60%;
+    position: absolute;
+}
+
+
+#realcugan-list li {
+    padding-bottom: 8px;
+    margin-left: 28px;
+    padding-top: 2px;
+}
+
+#realcugan-side {
+    transform: rotate(-90deg);
+    font-size: 9pt;
+    top: 34%;
+    left: -9%;
+    background: rgba(0, 0, 0, 0.2);
+    width: 26%;
+    height: 32%;
+    border-top-left-radius: 10px;
+    position: absolute;
+    border-top-right-radius: 10px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    font-weight: 500;
+}
+
+#waifu2x-list {
+    margin-top: 3.5px;
+    padding: 12px 125px 6px 10px;
+    display: inline-block;
+    height: 75px;
+    width: 315px;
+    margin-left: 10px;
+    background: rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    top: 38%;
+    position: absolute;
+}
+
+#waifu2x-list li {
+    padding-bottom: 8px;
+    margin-left: 28px;
+    padding-top: 2px;
+}
+
+#waifu2x-side {
+    transform: rotate(-90deg);
+    font-size: 9pt;
+    top: 30%;
+    left: -6.5%;
+    background: rgba(0, 0, 0, 0.2);
+    width: 21%;
+    height: 40%;
+    border-top-left-radius: 10px;
+    position: absolute;
+    border-top-right-radius: 10px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 30px;
+    font-weight: 500;
+}
+
+#animevideo-question {
+    top: -48% !important;
+    width: 102px !important;
+}
+
+#undeint-question {
+    top: -52% !important;
+    width: 139px !important;
+}
+
+#bleedout-question {
+    top: -53% !important;
+    width: 165px !important;
+}
+
+#models-header {
+    padding: 14px;
+
+    #models-header-text {
+        font-size: 7pt;
+        font-weight: 500;
+        background: rgba(28, 115, 211, 0.2);
+        border-radius: 10px;
+        width: auto;
+        height: auto;
+        padding: 8px;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+        color: #d0d0d0;
+    }
+}
+
+#models-wip {
+    position: absolute;
+    top: 45%;
+    left: 40%;
+    font-size: 20pt;
+    color: darkgrey;
+}
+
+.model-container {
+    background: rgba(60, 60, 60, 0.3);
+    width: 415px;
+    height: 80px;
+    border-radius: 12.5px;
+    margin-left: 15px;
+    margin-top: 8px;
+}
+
+#model-header {
+    font-size: 6pt;
+    font-weight: 500;
+    background: #1e5cce;
+    border-radius: 10px;
+    width: auto;
+    height: auto;
+    padding: 8px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+    margin: 5px;
+    color: #d0d0d0;
+    display: inline-block;
+}

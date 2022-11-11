@@ -1,0 +1,292 @@
+$macosblue: #1e5cce;
+/* Progess bar */
+  
+  .progress-container {
+    position: absolute;
+    width: 100%;
+    bottom: 0%;
+    --animate-delay:0.8s;
+    left: 0;
+  }
+
+  .export {
+    position: absolute;
+    bottom: 17.5%;
+    right: 1%;
+    font-size: 8pt;
+    font-weight: 500;
+    background: rgb(6 6 6 / 43%);
+    border-radius: 10px;
+    padding: 6px 12px;
+    color: #d0d0d0;
+    box-shadow: 0px 8px 15px rgb(0 0 0 / 10%);
+    transition: 0.2s;
+    &:hover {
+      background: rgb(30 30 30 / 43%);
+      cursor: pointer;
+    }
+  }
+
+  #enhance-icon {
+    margin-right: 4px;
+    font-size: 10pt;
+    vertical-align: bottom;
+  }
+
+  #process-overlay {
+    background: rgb(0 0 0 / 40%);
+    position: absolute;
+    width: 46%;
+    height: 54%;
+    left: 6%;
+    top: 10%;
+    border-radius: 12.5px;
+    visibility: hidden;
+    z-index: 1;
+  }
+
+  .spinner {
+    animation: rotate 2s linear infinite;
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -25px;
+    width: 50px;
+    height: 50px;
+    
+    & .path {
+      stroke: rgb(190, 190, 190);
+      stroke-linecap: round;
+      animation: dash 1.5s ease-in-out infinite;
+    }
+    
+  }
+  
+  @keyframes rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes dash {
+    0% {
+      stroke-dasharray: 1, 150;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -35;
+    }
+    100% {
+      stroke-dasharray: 90, 150;
+      stroke-dashoffset: -124;
+    }
+  }
+  
+  #progress-bar {
+    position: relative;
+    right: 0;
+    bottom: 0;
+    height: 38px;
+    background-color: hsla(0,0%,0%,0.325);
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
+    left: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  #progress-done {
+    background: linear-gradient(90deg, var(--bar-color) 0%, rgba(25, 25, 25, 0.5882352941) 33%, var(--bar-color) 66%, rgba(25, 25, 25, 0.5882352941) 100%);
+    position: absolute;
+    background-size: 300% 100%;
+    height: 10%;
+    left: 0%;
+    bottom: 0;
+    animation: animLoad 2s linear infinite;
+    width: 0%;
+    transition: 1s ease 0.3s;
+    max-width: 1021px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  #fps-meter {
+    position: relative;
+    bottom: 85.5%;
+    font-size: 8pt;
+    background-color: rgba(6, 6, 6, 0.43);
+    border-radius: 10px;
+    visibility: hidden;
+    color: #d0d0d0;
+    font-weight: 500;
+    margin-left: 8.5%;
+    width: fit-content;
+    display: inline-block;
+    padding: 4px 9px;
+  }
+
+  #eta {
+    position: relative;
+    bottom: 85.5%;
+    font-size: 8pt;
+    background-color: rgba(6, 6, 6, 0.43);
+    border-radius: 10px;
+    visibility: hidden;
+    color: #d0d0d0;
+    font-weight: 500;
+    width: fit-content;
+    display: inline-block;
+    padding: 4px 9px;
+  }
+
+  #loading {
+    width: 20px;
+    margin-right: 2.5px;
+    visibility: hidden;
+    color: silver;
+    font-size: 10pt;
+  }
+  
+  #progress-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  #progress-span {
+    font-size: 9pt;
+    font-weight: 500;
+  }
+  
+  .notifications {
+    font-size: small;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    right: -1%;
+    color: #929292;
+  }
+
+  #errors {
+    padding-right: 4px;
+  }
+  
+  /* Animation stuff */
+  
+  @-moz-keyframes animLoad {
+    0% {
+      background-position: 100%;
+    }
+  
+    100% {
+      background-position: 0%;
+    }
+  }
+  
+  @-webkit-keyframes animLoad {
+    0% {
+      background-position: 100%;
+    }
+  
+    100% {
+      background-position: 0%;
+    }
+  }
+  
+  @-o-keyframes animLoad {
+    0% {
+      background-position: 100%;
+    }
+  
+    100% {
+      background-position: 0%;
+    }
+  }
+  
+  @keyframes animLoad {
+    0% {
+      background-position: 100%;
+    }
+  
+    100% {
+      background-position: 0%;
+    }
+  }
+  
+  @keyframes cssload-width {
+    0%,
+    100% {
+      transition-timing-function: cubic-bezier(1, 0, 0.65, 0.85);
+    }
+  
+    0% {
+      width: 0;
+    }
+  
+    100% {
+      width: 100%;
+    }
+  }
+  
+  @-o-keyframes cssload-width {
+    0%,
+    100% {
+      -o-transition-timing-function: cubic-bezier(1, 0, 0.65, 0.85);
+    }
+  
+    0% {
+      width: 0;
+    }
+  
+    100% {
+      width: 100%;
+    }
+  }
+  
+  @-ms-keyframes cssload-width {
+    0%,
+    100% {
+      -ms-transition-timing-function: cubic-bezier(1, 0, 0.65, 0.85);
+    }
+  
+    0% {
+      width: 0;
+    }
+  
+    100% {
+      width: 100%;
+    }
+  }
+  
+  @-webkit-keyframes cssload-width {
+    0%,
+    100% {
+      -webkit-transition-timing-function: cubic-bezier(1, 0, 0.65, 0.85);
+    }
+  
+    0% {
+      width: 0;
+    }
+  
+    100% {
+      width: 100%;
+    }
+  }
+  
+  @-moz-keyframes cssload-width {
+    0%,
+    100% {
+      -moz-transition-timing-function: cubic-bezier(1, 0, 0.65, 0.85);
+    }
+  
+    0% {
+      width: 0;
+    }
+  
+    100% {
+      width: 100%;
+    }
+  }

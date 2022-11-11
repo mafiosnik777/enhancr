@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>enhancr</title>
+  <link rel="stylesheet" href="../css/app.css" />
+  <link rel="stylesheet" href="../css/animate.css" />
+  <link rel="stylesheet" href="../assets/fontawesome/css/all.css" />
+</head>
+
+<body>
+  <div id="light-mode"></div>
+  <div id="title-bar" style="-webkit-app-region: drag"></div>
+  <div id="recents-container">
+    <span id="no-recents">No recently used projects.</span>
+    <div class="recent animate__animated animate__fadeInRight animate__delay-1s" id="recent-0">
+      <img class="history-file" src="../assets/enhancr-file.png" />
+      <span class="project-title" id="title0"></span>
+      <span class="project-path" id="path0"></span>
+    </div>
+    <div class="recent animate__animated animate__fadeInRight animate__delay-1s" id="recent-1">
+      <img class="history-file" src="../assets/enhancr-file.png" />
+      <span class="project-title" id="title1"></span>
+      <span class="project-path" id="path1"></span>
+    </div>
+    <div class="recent animate__animated animate__fadeInRight animate__delay-2s" id="recent-2">
+      <img class="history-file" src="../assets/enhancr-file.png" />
+      <span class="project-title" id="title2"></span>
+      <span class="project-path" id="path2"></span>
+    </div>
+    <div class="recent animate__animated animate__fadeInRight animate__delay-2s" id="recent-3">
+      <img class="history-file" src="../assets/enhancr-file.png" />
+      <span class="project-title" id="title3"></span>
+      <span class="project-path" id="path3"></span>
+    </div>
+    <div class="recent animate__animated animate__fadeInRight animate__delay-3s" id="recent-4">
+      <img class="history-file" src="../assets/enhancr-file.png" />
+      <span class="project-title" id="title4"></span>
+      <span class="project-path" id="path4"></span>
+    </div>
+    <div class="recent animate__animated animate__fadeInRight animate__delay-3s" id="recent-5">
+      <img class="history-file" src="../assets/enhancr-file.png" />
+      <span class="project-title" id="title5"></span>
+      <span class="project-path" id="path5"></span>
+    </div>
+    <div class="recent animate__animated animate__fadeInRight animate__delay-4s" id="recent-6">
+      <img class="history-file" src="../assets/enhancr-file.png" />
+      <span class="project-title" id="title6"></span>
+      <span class="project-path" id="path6"></span>
+    </div>
+    <div class="recent animate__animated animate__fadeInRight animate__delay-4s" id="recent-7">
+      <img class="history-file" src="../assets/enhancr-file.png" />
+      <span class="project-title" id="title7"></span>
+      <span class="project-path" id="path7"></span>
+    </div>
+  </div>
+  <div class="project-side-container">
+    <img class="app-icon animate__animated animate__fadeInDown" src="../assets/enhancr.png" />
+    <span id="welcome" class="animate__animated animate__fadeIn animate__delay-1s">Welcome to enhancr</span>
+    <span id="version" class="animate__animated animate__fadeIn animate__delay-1s">Version 0.8.3 (pre-release)</span>
+    <div id="hover-create-toggle" class="animate__animated animate__fadeInUp animate__delay-2s">
+      <i class="fa-solid fa-folder-plus" id="new-project"></i>
+      <span id="create-header">Create a new enhancr project</span>
+      <span id="create-text">Create a new workspace to interpolate or upscale your media.</span>
+    </div>
+    <div id="hover-open-toggle" class="animate__animated animate__fadeInUp animate__delay-2s">
+      <i class="fa-solid fa-folder-closed" id="open-project"></i>
+      <span id="open-header">Open a file or project</span>
+      <span id="open-text">Open an existing project or file on your computer.</span>
+    </div>
+  </div>
+</body>
+<script src="../js/welcome.js"></script>
+<script src="../js/sysinfo.js"></script>
+
+</html>

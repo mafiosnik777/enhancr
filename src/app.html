@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>enhancr</title>
+  <link rel="stylesheet" href="./css/app.css" />
+  <link rel="stylesheet" href="./assets/fontawesome/css/all.css" />
+  <link rel="stylesheet" href="./css/animate.css" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+
+<body>
+<div id="app">
+  <div class="content" id="content">
+    <!-- light mode layer -->
+    <div id="light-mode"></div>
+    <!-- Custom title bar -->
+    <div id="title-bar" style="-webkit-app-region: drag"></div>
+    <!-- Project bar -->
+    <div class="project-bar animate__animated animate__fadeInDown">
+      <div id="win-controls"><i class="fa-solid fa-xmark" id="close"></i><i class="fa-solid fa-window-minimize"
+          id="minimize"></i></div>
+      <span id="project"><i id="project-folder" class="fa-solid fa-folder"></i> project ~ <span
+          id="current-project">undefined</span></span>
+      <div class="new"><span id="new"><i class="fa-solid fa-folder-plus"></i></span></div>
+      <div id="top-bar-queue"><span><i class="fa-solid fa-bars-staggered"></i> Queue</span><span class="badge" id="queue-badge">0</span></div>
+      <i id="enhancr-user" class="fa-solid fa-circle-user"></i>
+    </div>
+  </div>
+  <!-- Side bar -->
+  <div class="side-bar animate__animated animate__fadeInLeft animate__delay-2s">
+    <div class="interpolate-side"><i id="interpolate-side" class="fa-solid fa-clone theme-side"></i>
+      <span class="tooltip-text">Interpolate</span>
+    </div>
+    <div class="upscale-side"><i id="upscale-side-arrow"
+        class="fa-solid fa-up-right-and-down-left-from-center theme-side"></i><i id="upscale-side"
+        class="fa-solid fa-expand theme-side"></i>
+      <span class="tooltip-text">Upscale</span>
+    </div>
+    <div class="restore-side"><i id="restore-side" class="fa-solid fa-wand-magic-sparkles theme-side"></i></i>
+      <span class="tooltip-text">Restore</span>
+    </div>
+    <div class="models-side"><i id="models-side" class="fa-solid fa-cube theme-side"></i><span
+        class="tooltip-text">Models</span>
+    </div>
+    <div class="settings-side"><i id="settings-side" class="fa-solid fa-gear theme-side"></i><span
+        class="tooltip-text">Settings</span></div>
+  </div>
+  <!-- Interpolate -->
+  <div class="interpolation animate__animated animate__fadeIn animate__delay-2s" id="interpolation-tab">
+    <div id="interpolation-header"><span id="interpolation-header-text" class="theme-header"><i
+          class="fa-solid fa-clone"></i>
+        Interpolation</span></div>
+    <div id="interpolation-container">
+      <ul style="list-style-type:none;" id="interpolation-list">
+        <li id="input-label-interpolation">Input video</li>
+        <div id="input-video"><span class="input-text" id="input-video-text"></span><input type="file"
+            class="open-dialog-input" id="dialog-video-input" accept="video/*,.mkv" multiple /><i
+            class="fa-solid fa-ellipsis ellipsis-small"></i></div>
+        <li id="output-label-interpolation">Output path</li>
+        <div id="output-path"><span class="input-text" id="output-path-text"></span><input type="file"
+            class="open-dialog-input" id="dialog-output-path" webkitdirectory /><i
+            class="fa-solid fa-ellipsis ellipsis-small"></i></div>
+        <li id="ffmpeg-param-label-interpolation">ffmpeg parameters</li>
+        <input type="text" class="input-text" id="ffmpeg-params"
+          value="-c:v libx264 -preset medium -pix_fmt yuv420p -crf 18">
+      </ul>
+      <div id="codec-selector">
+        <span id="codec-selector-label">Codec</span>
+        <div class="codec" id="x264"><span>x264</span></div>
+        <div class="codec" id="x265"><span>x265</span></div>
+        <div class="codec" id="AV1"><span>AV1</span></div>
+        <div class="codec" id="VP9"><span>VP9</span></div>
+        <div class="codec" id="ProRes"><span>ProRes</span></div>
+        <div class="codec" id="NVENC"><span>NVENC</span></div>
+      </div>
+      <ul style="list-style-type:none;" id="interpolation-list-continuation">
+        <li id="container-label-interpolation">Output video container</li>
+        <div id="output-container"><span class="input-text" id="container-span">.mkv</span><i
+            class="fa-solid fa-angle-down small-angle"></i></div>
+        <li id="engine-label-interpolation">Engine</li>
+        <div id="engine">
+          <span id="interpolation-engine-text" class="input-text">Channel Attention - CAIN (TensorRT)</span><i
+            class="fa-solid fa-angle-down small-angle"></i>
+        </div>
+        <li id="model-label-interpolation">Model</li>
+        <div id="model-selector"><span class="input-text" id="model-span">rife-v4</span><i
+            class="fa-solid fa-angle-down small-angle"></i></div>
+      </ul>
+      <div id="interpolate-button"><span id="interpolate-button-text"></i><i class="fa-solid fa-bars-staggered"></i> Add to queue</span></div>
+    </div>
+    <div id="settings-btn-interpolation">
+      <i class="fa-solid fa-gear"></i> Settings..
+    </div>
+  </div>
+  <div id="hider"></div>
+  <div id="container-dropdown">
+    <div class="option" id="mp4">.mp4</div>
+    <div class="option" id="mkv">.mkv</div>
+    <div class="option" id="webm">.webm</div>
+  </div>
+  <div id="engine-dropdown">
+    <div class="option" id="cain">Channel Attention - CAIN (NCNN)</div>
+    <div class="option" id="cain-trt">Channel Attention - CAIN (TensorRT)</div>
+    <div class="option" id="rife">Optical Flow - RIFE (NCNN)</div>
+    <div class="option" id="rife-trt">Optical Flow - RIFE (TensorRT)</div>
+  </div>
+  <div id="model-dropdown">
+    <div class="option" id="rife-23">RIFE - v2.3</div>
+    <div class="option" id="rife-4">RIFE - v4.0</div>
+    <div class="option" id="rife-46">RIFE - v4.6</div>
+    <div class="option" id="rvp-v1">RVP - v1.0</div>
+    <div class="option" id="cvp-v6">CVP - v6.0</div>
+  </div>
+  <!-- Upscaling -->
+  <div class="upscaling" id="upscaling-tab">
+    <div id="upscaling-header"><span id="upscaling-header-text" class="theme-header"><i
+          class="fa-solid fa-square-arrow-up-right"></i>
+        Upscaling</span></div>
+    <div id="upscaling-container">
+      <ul style="list-style-type:none;" id="upscaling-list">
+        <li id="input-label-upscaling">Input video</li>
+        <div id="upscale-input-video"><span class="input-text" id="upscale-input-text"></span><input type="file"
+            class="open-dialog-input" id="dialog-upscale-input" accept="video/*,.mkv" multiple /><i
+            class="fa-solid fa-ellipsis ellipsis-small"></i></div>
+        <li id="output-path-label-upscaling">Output path</li>
+        <div id="upscale-output-path"><span class="input-text" id="upscale-output-path-text"></span><input type="file"
+            class="open-dialog-input" id="dialog-upscale-output-path" webkitdirectory /><i
+            class="fa-solid fa-ellipsis ellipsis-small"></i></div>
+        <li id="ffmpeg-params-label-upscaling">ffmpeg parameters</li>
+        <input type="text" class="input-text" id="ffmpeg-params-upscale"
+          value="-c:v libx264 -preset medium -pix_fmt yuv420p -crf 18">
+      </ul>
+      <div id="codec-selector-upscale">
+        <span id="codec-selector-label">Codec</span>
+        <div class="codec" id="x264-up"><span>x264</span></div>
+        <div class="codec" id="x265-up"><span>x265</span></div>
+        <div class="codec" id="AV1-up"><span>AV1</span></div>
+        <div class="codec" id="VP9-up"><span>VP9</span></div>
+        <div class="codec" id="ProRes-up"><span>ProRes</span></div>
+        <div class="codec" id="NVENC-up"><span>NVENC</span></div>
+      </div>
+      <ul style="list-style-type:none;" id="upscaling-list-continuation">
+        <li id="container-label-upscaling">Output video container</li>
+        <div id="output-container-upscale"><span class="input-text" id="container-span-up">.mkv</span><i
+            class="fa-solid fa-angle-down small-angle"></i></div>
+        <li id="engine-label-upscaling">Engine</li>
+        <div id="fp"></div>
+        <div id="engine-upscale"><span class="input-text" id="upscale-engine-text">Upscaling - RealESRGAN (TensorRT)</span><i
+            class="fa-solid fa-angle-down small-angle"></i></div>
+        <li id="scale-label-upscaling">Scale</li>
+        <div id="factor-selector"><span class="input-text" id="factor-span">2x</span><i
+            class="fa-solid fa-angle-down small-angle"></i></div>
+      </ul>
+      <div id="upscaling-button"><span id="upscaling-button-text"><i class="fa-solid fa-bars-staggered"></i> Add to queue</span></div>
+      <div id="hider-upscale"></div>
+      <div id="container-dropdown-upscale">
+        <div class="option" id="mp4-up">.mp4</div>
+        <div class="option" id="mkv-up">.mkv</div>
+        <div class="option" id="webm-up">.webm</div>
+      </div>
+      <div id="engine-dropdown-upscale">
+        <div class="option" id="waifu2x-tensorrt">Upscaling - waifu2x (NCNN)</div>
+        <div class="option" id="realesrgan-tensorrt">Upscaling - RealESRGAN (TensorRT)</div>
+      </div>
+      <div id="factor-dropdown">
+        <div class="option" id="factor2">2x</div>
+        <div class="option" id="factor3">3x</div>
+        <div class="option" id="factor4">4x</div>
+      </div>
+      <div id="models-btn-upscale">
+        <i class="fa-solid fa-cube"></i> Models..
+      </div>
+    </div>
+  </div>
+  <div id="process-overlay">
+    <svg class="spinner" viewBox="0 0 50 50">
+      <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+    </svg>
+  </div>
+  <!-- Restoration -->
+  <div class="restoration" id="restoration-tab">
+    <div id="restoration-header">
+      <span id="restoration-header-text" class="theme-header"><i class="fa-solid fa-wand-magic-sparkles"></i>
+        Restoration</span>
+    </div>
+    <div id="restoration-container">
+      <ul style="list-style-type:none;" id="restoration-list">
+        <li id="input-label-restoration">Input video</li>
+        <div id="input-video-restoration"><span class="input-text" id="restore-input-text"></span><input type="file"
+            class="open-dialog-input" id="dialog-restore-input" accept="video/*,.mkv" multiple /><i
+            class="fa-solid fa-ellipsis ellipsis-small"></i></div>
+        <li id="output-label-restoration">Output path</li>
+        <div id="output-path-restoration"><span class="input-text" id="restore-output-path-text"></span><input
+            type="file" class="open-dialog-input" id="dialog-output-path" webkitdirectory /><i
+            class="fa-solid fa-ellipsis ellipsis-small"></i></div>
+        <li id="ffmpeg-param-label-restoration">ffmpeg parameters</li>
+        <input type="text" class="input-text" id="ffmpeg-params-restoration"
+          value="-c:v libx264 -preset medium -pix_fmt yuv420p -crf 18">
+      </ul>
+      <div id="codec-selector-restoration">
+        <span id="codec-selector-label-restoration">Codec</span>
+        <div class="codec" id="x264-res"><span>x264</span></div>
+        <div class="codec" id="x265-res"><span>x265</span></div>
+        <div class="codec" id="AV1-res"><span>AV1</span></div>
+        <div class="codec" id="VP9-res"><span>VP9</span></div>
+        <div class="codec" id="ProRes-res"><span>ProRes</span></div>
+        <div class="codec" id="NVENC-res"><span>NVENC</span></div>
+      </div>
+      <ul style="list-style-type:none;" id="restoration-list-continuation">
+        <li id="container-label-restoration">Output video container</li>
+        <div id="output-container-restoration"><span class="input-text" id="container-span-res">.mkv</span><i
+            class="fa-solid fa-angle-down small-angle"></i></div>
+        <li id="engine-label-restoration">Engine</li>
+        <div id="engine-restoration"><span id="restoration-engine-text" class="input-text">Video Restoration - DPIR
+            (TensorRT)</span><i class="fa-solid fa-angle-down small-angle"></i></div>
+        <li id="model-label-restoration">Model</li>
+        <div id="model-selector-restoration"><span class="input-text" id="model-span-restoration">Denoise</span><i class="fa-solid fa-angle-down small-angle"></i></div>
+      </ul>
+      <div id="restore-button"><span id="restore-button-text"></i><i class="fa-solid fa-bars-staggered"></i> Add to queue</span></div>
+    </div>
+    <div id="settings-btn-restoration">
+      <i class="fa-solid fa-gear"></i> Settings..
+    </div>
+  </div>
+  <div id="hider-restore"></div>
+  <div id="container-dropdown-restoration">
+    <div class="option" id="mp4-res">.mp4</div>
+    <div class="option" id="mkv-res">.mkv</div>
+    <div class="option" id="webm-res">.webm</div>
+  </div>
+  <div id="engine-dropdown-restoration">
+    <div class="option" id="dpir">Restoration - DPIR (TensorRT)</div>
+    <div class="option" id="anime-video">Restoration - AnimeVideo (TensorRT)</div>
+  </div>
+  <div id="model-dropdown-restoration">
+    <div class="option" id="denoise">Denoise</div>
+    <div class="option" id="deblock">Deblock</div>
+    <div class="option" id="denoise-sharpen">Denoise/Sharpen</div>
+  </div>
+  <!-- Settings -->
+  <div class="settings" id="settings-tab">
+    <div id="settings-switcher"><span>Page 1 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span></div>
+    <div id="settings-header"><span id="settings-header-text" class="theme-header"><i class="fa-solid fa-gear"></i>
+        Settings</span></div>
+    <div id="settings-button"><span id="settings-button-text">Save settings</span></div>
+    <ul style="list-style-type:none;" id="settings-list" class="animate__animated animate__fadeIn">
+      <div id="toggles-side"><i class="fa-solid fa-gear"></i></div>
+      <li><input type="checkbox" id="preview-check" /><span> Enable Preview</span></li>
+      <li><input type="checkbox" id="disable-blur" /><span id="advanced-view"> Enable Advanced View</span></li>
+      <li id="rpc-li-item"><input type="checkbox" id="toggle-rpc" /><span> Enable Discord Rich Presence (requires restart)</span></li>
+    </ul>
+    <div id="theming" class="animate__animated animate__fadeIn">
+      <div id="theming-side"><i id="theming-icon" class="fa-solid fa-paintbrush"></i></div>
+      <div id="theme-selector"></div>
+      <div id="theme-select-blue"></div>
+      <div id="theme-select-pink"></div>
+      <div id="theme-select-green"></div>
+      <div id="theme-select-purple"></div>
+      <div id="theme-select-orange"></div>
+      <div id="theme-select-yellow"></div>
+      <div id="theme-select-red"></div>
+      <div id="theme-select-sand"></div>
+      <div id="theme-select-mint"></div>
+      <div id="theme-select-salmon"></div>
+      <div id="theme-select-egg"></div>
+      <div id="theme-select-lavender"></div>
+      <div id="theme-select-rose"></div>
+      <div id="theme-select-grey"></div>
+      <div id="oled">
+        <input type="checkbox" id="oled-mode" name="oled-mode">
+        <label for="oled-mode" id="blur-check">Disable blur (requires restart)</label>
+      </div>
+    </div>
+    <div id="settings-sysinfo" class="animate__animated animate__fadeIn">
+      <div id="sysinfo-side"><i class="fa-solid fa-circle-info"></i></div>
+      <div id="settings-os" class="sysinfo-line"><i class="fa-solid fa-window-restore"></i><span
+          id="settings-os-span"></span></div>
+      <div id="settings-cpu" class="sysinfo-line"><i class="fa-solid fa-microchip"></i><span
+          id="settings-cpu-span"></span></div>
+      <div id="settings-gpu" class="sysinfo-line"><i class="fa-solid fa-cubes"></i><span id="settings-gpu-span"></span>
+      </div>
+      <div id="settings-memory" class="sysinfo-line"><i class="fa-solid fa-memory"></i><span
+          id="settings-memory-span"></span></div>
+      <div id="settings-display" class="sysinfo-line"><i class="fa-solid fa-display"></i><span
+          id="settings-display-span"></span></div>
+      <div id="settings-python" class="software-line"><i class="fa-brands fa-python"></i><span
+          id="settings-python-span"> 3.10.6</span></div>
+      <div id="settings-torch" class="software-line"><span id="torch-icon">TENSORRT </span><span
+          id="settings-torch-span">
+          8.5.1</span></div>
+      <div id="settings-ncnn" class="software-line"><span id="ncnn-icon">NCNN </span><span id="settings-ncnn-span">
+        20220729</span></div>
+      <div id="settings-electron" class="software-line"><i class="fa-solid fa-atom"></i><span
+          id="settings-electron-span"> v21.2.0</span></div>
+      <div id="settings-node" class="software-line"><i class="fa-brands fa-node-js"></i><span id="settings-node-span">
+          18.7.0</span></div>
+    </div>
+    <ul style="list-style-type:none;" id="rife-list" class="animate__animated animate__fadeIn">
+      <div id="rife-side">RIFE</div>
+      <li><input type="checkbox" id="rife-tta-check" /><span> Enable TTA/Ensemble <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="tta-question">Increases quality, in
+              exchange for speed</span></i></span></li>
+      <li><input type="checkbox" id="rife-uhd-check" /><span> Enable UHD mode <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="uhd-question">Recommended for
+              high-resolution media</span></i></span></li>
+      <li><input type="checkbox" id="rife-sc-check" /><span> Toggle Scene Detection <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="rife-sc-question">Skip interpolation on
+              scene change frames</span></i></span></li>
+    </ul>
+    <ul style="list-style-type:none;" id="cain-list" class="animate__animated animate__fadeIn">
+      <div id="cain-side">CAIN</div>
+      <li><input type="checkbox" id="cain-sc-check" /><span> Toggle Scene Detection <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="cain-sc-question">Skip interpolation on
+              scene change frames</span></i></span></li>
+    </ul>
+    <ul style="list-style-type:none;" id="tensorrt-list" class="animate__animated animate__fadeIn">
+      <div id="tensorrt-side">TensorRT</div>
+      <li><input type="text" class="input-text" id="num-streams" value="2"><span> Concurrent Streams <i
+            id="preview-question" class="fa-solid fa-circle-question"><span class="tooltip-text"
+              id="streams-question">Increasing this value speeds up the process significantly on
+              higher-end GPUs, when they're not being fully utilized</span></i></span>
+      </li>
+      <li><input type="checkbox" id="fp16-check" /><span> Build engine with FP16 <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="fp16-question">Increases performance on cards with tensor cores dramatically</span></i></span></li>
+    </ul>
+    <ul style="list-style-type:none;" id="shapes-list" class="animate__animated animate__fadeIn">
+      <div id="shapes-side">Engine</div>
+      <li><input type="text" class="input-text" id="shape-res" value="1080x1920" pattern="^\d\d\d(\dx\d\d\d(\d)?|x\d\d\d(\d)?)$"><span> Shape Resolution <i
+            id="preview-question" class="fa-solid fa-circle-question"><span class="tooltip-text"
+              id="shape-res-question">Default is 1080p, changing to higher values might cause higher VRAM usage</span></i></span>
+      </li>
+      <li><input type="checkbox" id="shape-check" /><span> Override engine resolution<i id="preview-question"
+            class="fa-solid fa-circle-question tiling-question"><span class="tooltip-text" id="shape-check-question">Enable if you want to override default input resolution limit</span></i></span></li>
+    </ul>
+    <ul style="list-style-type:none;" id="tiling-list" class="animate__animated animate__fadeIn">
+      <div id="tiling-side">Tiling</div>
+      <li><input type="text" class="input-text" id="tile-res" value="512x512" pattern="^\d\d\d(\dx\d\d\d(\d)?|x\d\d\d(\d)?)$"><span> Tile Resolution <i
+            id="preview-question" class="fa-solid fa-circle-question"><span class="tooltip-text"
+              id="streams-question">Make sure that input resolution is divisible by tile resolution, to avoid artifacts & performance loss </span></i></span>
+      </li>
+      <li><input type="checkbox" id="tiling-check" /><span> Enable Tiling<i id="preview-question"
+            class="fa-solid fa-circle-question tiling-question"><span class="tooltip-text" id="tiling-question">Enabling tiling makes running memory-intensive inferences possible on low-memory GPUs</span></i></span></li>
+    </ul>
+    <!-- <div id="settings-wip" style="visibility: hidden;"><i class="fa-solid fa-person-digging"></i> WIP</div> -->
+    <ul style="list-style-type:none;" id="dpir-list" class="animate__animated animate__fadeIn">
+      <div id="dpir-side">DPIR</div>
+      <li><input type="text" class="input-text" id="denoise-strength" value="20"><span> Denoise Strength <i
+            id="preview-question" class="fa-solid fa-circle-question"><span class="tooltip-text"
+              id="denoise-question">Recommended Values: 15 - 30</span></i></span>
+      </li>
+      <li><input type="text" id="deblock-strength" value="15" /><span> Deblock Strength <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="deblock-question">Recommended Values: 10 - 25</span></i></span></li>
+    </ul>
+    <ul style="list-style-type:none; visibility: hidden;" id="realesrgan-list" class="animate__animated animate__fadeIn">
+      <div id="realesrgan-side">RealESRGAN</div>
+      <li><span id="custom-model-label">Custom</span>
+        <div id="custom-model"><span class="input-text" id="custom-model-text"></span><i
+            class="fa-solid fa-angle-down small-angle"></i>
+        </div>
+      </li>
+      <div id="custom-divider"></div>
+      <li id="custom-models-li"><input type="checkbox" id="custom-model-check" /><span> Use custom model<i id="preview-question"
+        class="fa-solid fa-circle-question tiling-question"><span class="tooltip-text" id="custom-model-question">Enable to load custom ESRGAN model in onnx format</span></i></span></li>
+      <span id="open-custom-model-folder"><i class="fa-solid fa-folder-open"></i> Open custom models folder</span>
+    </ul>
+    <ul style="list-style-type:none; visibility: hidden;" id="trim-list" class="animate__animated animate__fadeIn">
+      <div id="trim-side">Trim</div>
+      <li id="trim-li"><input type="checkbox" id="trim-check" /><span> Trim using accurate cut <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="trim-question">Default is keyframe cut (inacurrate but doesn't re-encode)</span></i></span></li>
+    </ul>
+    <ul style="list-style-type:none; visibility: hidden;" id="python-list" class="animate__animated animate__fadeIn">
+      <div id="python-side"><i class="fa-brands fa-python"></i></div>
+      <li id="trim-li"><input type="checkbox" id="python-check" /><span> Use system python instead of packaged environment <i id="preview-question"
+        class="fa-solid fa-circle-question"><span class="tooltip-text" id="python-question">Don't touch this, unless you know what you're doing</span></i></span></li>
+    </ul>
+    <ul style="list-style-type:none; visibility: hidden;" id="language-list" class="animate__animated animate__fadeIn">
+      <div id="language-side"><i class="fa-solid fa-earth-americas"></i></div>
+      <li id="language-li">Language<div id="language-selector">English<i class="fa-solid fa-angle-down small-angle"></i></div></li>
+    </ul>
+    <div id="language-dropdown" style="visibility: hidden;">
+      <div class="option" id="english">English</div>
+      <div class="option" id="russian">Русский</div>
+      <div class="option" id="german">Deutsch</div>
+      <div class="option" id="chinese">中文</div>
+    </div>
+    <div id="models-hider"></div>
+    <div id="custom-model-dropdown"></div>
+    <span id="settings-footnote">enhancr • pre-release • made with <i id="heart" class="fa-solid fa-heart"></i> by
+      mafiosnik • build <span id="build-version">0.8.3</span></span>
+  </div>
+  <!-- Terminal -->
+  <div class="terminal animate__animated animate__fadeInUp animate__delay-3s" id="terminal-tab">
+    <div id="terminal-side"><i class="fa-solid fa-terminal"></i></div>
+    <textarea id="terminal-text" readonly></textarea>
+  </div>
+  <!-- Preview -->
+  <div class="preview animate__animated animate__fadeIn animate__delay-4s" id="preview-container">
+    <span id="preview-text"><i class="fa-solid fa-triangle-exclamation"></i> Preview not initialized</span>
+    <div id="thumb-interpolation"><img id="interpolation-thumb-img"></div> 
+    <div id="thumb-upscaling"><img id="upscaling-thumb-img"></div>
+    <div id="thumb-restoration"><img id="restoration-thumb-img"></div>
+    <video class="preview-video" id="preview" muted></video>
+    <div id="timecode"><span id="timecode-current">00:00</span>/<span id="timecode-duration">00:00</span></div>
+    <div id="framecount">Frame <span id="framecount-current">0</span> of <span id="framecount-total">???</span></div>
+  </div>
+  <!-- Media info -->
+  <div class="media-info animate__animated animate__fadeIn animate__delay-5s">
+    <div id="nomedia"><i class="fa-solid fa-video-slash"></i> No media currently selected</div>
+    <div id="media-container">
+      <div id="media-header"><span id="header-text" class="theme-header"></i><span id="file-name"></span></span></div>
+      <div id="info-list">
+        <ul style="list-style-type:none;" id="media-info-list">
+          <div id="mediainfo-side"><i id="mediainfo-side-icon" class="fa-solid fa-clapperboard"></i></div>
+          <li>Format: <span class="info-text" id="format"></span></li>
+          <li>Size on disk: <span class="info-text" id="size"></span></li>
+          <li>Dimensions: <span class="info-text" id="dimensions"></span></li>
+          <li>Framerate: <span class="info-text" id="framerate"></span></li>
+          <li>Duration: <span class="info-text" id="duration"></span></li>
+          <li>Output video container: <span class="info-text" id="mediainfo-container">mp4</span></li>
+          <li>Framecount: <span class="info-text" id="frame-count"></span></li>
+          <li>Bitrate: <span class="info-text" id="bitrate"></span></li>
+        </ul>
+      </div>
+    </div>
+    <div id="media-container-upscale">
+      <div id="media-header-upscale"><span id="header-text-upscale" class="theme-header"></i><span
+            id="file-name-upscale"></span></span>
+      </div>
+      <div id="info-list-upscale">
+        <ul style="list-style-type:none;" id="media-info-list-upscale">
+          <div id="mediainfo-side-upscale"><i id="mediainfo-side-icon" class="fa-solid fa-clapperboard"></i></div>
+          <li>Format: <span class="info-text" id="formatUp"></span></li>
+          <li>Size on disk: <span class="info-text" id="sizeUp"></span></li>
+          <li>Dimensions: <span class="info-text" id="dimensionsUp"></span></li>
+          <li>Framerate: <span class="info-text" id="framerateUp"></span></li>
+          <li>Duration: <span class="info-text" id="durationUp"></span></li>
+          <li>Output video container: <span class="info-text" id="mediainfo-containerUp">mp4</span></li>
+          <li>Framecount: <span class="info-text" id="frame-countUp"></span></li>
+          <li>Bitrate: <span class="info-text" id="bitrateUp"></span></li>
+        </ul>
+      </div>
+    </div>
+    <div id="media-container-restoration">
+      <div id="media-header-restoration"><span id="header-text-restore" class="theme-header"></i><span
+            id="file-name-restore"></span></span>
+      </div>
+      <div id="info-list-restore">
+        <ul style="list-style-type:none;" id="media-info-list-restore">
+          <div id="mediainfo-side-restore"><i id="mediainfo-side-icon" class="fa-solid fa-clapperboard"></i></div>
+          <li>Format: <span class="info-text" id="formatRes"></span></li>
+          <li>Size on disk: <span class="info-text" id="sizeRes"></span></li>
+          <li>Dimensions: <span class="info-text" id="dimensionsRes"></span></li>
+          <li>Framerate: <span class="info-text" id="framerateRes"></span></li>
+          <li>Duration: <span class="info-text" id="durationRes"></span></li>
+          <li>Output video container: <span class="info-text" id="mediainfo-containerRes">mp4</span></li>
+          <li>Framecount: <span class="info-text" id="frame-countRes"></span></li>
+          <li>Bitrate: <span class="info-text" id="bitrateRes"></span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- Queue -->
+  <div id="queue">
+    <span id="queue-blank"> No items scheduled for processing, add items to the queue to get started.</span>
+  </div>
+  <!-- Progress bar -->
+  <div class="progress-container animate__animated animate__fadeInUp animate__delay-1s">
+    <div id="progress-bar">
+      <div id="progress-done"></div>
+      <div id="progress-container"><i class="fa-solid fa-wand-magic-sparkles fa-bounce" id="loading"></i><span id="progress-span"></span></div>
+      <div class="export" id="export-btn">
+        <span id="export-button"><i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">⌘ + Enter</span></span>
+      </div>
+      <div class="socials">
+        <a href="https://discord.gg/jBDqCkSxYz" target="_blank" rel="noopener noreferrer"><i id="discord"
+            class="fa-brands fa-discord"></i></a>
+        <a href="" target="_blank" rel="noopener noreferrer"><i id="patreon" class="fa-brands fa-patreon"></i></a>
+      </div>
+      <div id="fps-meter"><i class="fa-solid fa-gauge-high"></i><span id="fps-text"></span></div>
+      <div id="eta"><i class="fa-solid fa-stopwatch"></i></i><span id="eta-text"></span></div>
+    </div>
+  </div>
+  <!-- Popup -->
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="title"><i class="fa-solid fa-triangle-exclamation"></i> Error</div>
+      <button data-modal-close class="closebtn">&times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="current desc">
+        The current file contains subtitles.
+      <div class="desc">Please change the output container to ".mkv" to retain the subtitles.</div>
+    </div>
+  </div>
+  <div class="modal" id="blank-modal">
+    <div class="modal-header">
+      <div class="title"><i class="fa-solid fa-triangle-exclamation"></i> Error</div>
+      <button data-modal-close class="closebtn">&times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="current desc">
+        No output path was specified.
+      <div class="desc">Please specify an output path to export the current file.</div>
+    </div>
+  </div>
+  <div class="modal" id="modal-success">
+    <div class="modal-header">
+      <div class="title"><i class="fa-regular fa-circle-check"></i> Complete</div>
+      <button data-modal-close class="closebtn" id="close-success">&times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="current desc">
+        <span id="success-title"></span>
+        <img id="thumb-modal">
+        <span id="share-modal-label"><i class="fa-solid fa-share-nodes"></i> Share via gofile.io</span>
+        <span id="path-modal-label"><i class="fa-solid fa-folder-closed"></i> Open file path</span>
+        <span id="play-modal-label"><i class="fa-solid fa-film"></i> Play video file</span>
+    </div>
+  </div>
+  <div class="modal" id="modal-save">
+    <div class="modal-header">
+      <div class="title"><i class="fa-solid fa-triangle-exclamation"></i> Unsaved Changes</div>
+      <button data-modal-close class="closebtn" id="close-success">&times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="current desc">
+        The current configuration contains unsaved changes.
+      <div class="desc">Make sure to save to avoid losing any changes made to the settings.</div>
+    </div>
+  </div>
+  <div class="modal" id="modal-beta">
+    <div class="modal-header">
+      <div class="title"><i class="fa-solid fa-heart"></i> Thank you for beta testing!</div>
+      <button data-modal-close class="closebtn" id="close-success">&times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="current desc">
+        This current build is a closed beta test.
+      <div class="desc"> You may encounter bugs and not yet implemented features. Most features are subject to change 
+        and are not final.</div>
+    </div>
+  </div>
+  <div class="modal" id="modal-edit">
+    <div class="modal-header">
+      <div class="title"><i class="fa-solid fa-pencil"></i> Change output file name</div>
+      <button data-modal-close class="closebtn" id="close-success">&times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="current desc">
+        <input type="text" class="input-text" id="edit-export-name" value="">
+        <div class="desc">
+          <div id="save-edit-btn"><span><i class="fa-solid fa-floppy-disk"></i> Save output file name</span></div>
+        </div>
+    </div>
+  </div>
+  <div class="modal" id="modal-trim">
+    <div class="modal-header">
+      <div class="title"><i class="fa-solid fa-scissors"></i> Trim input before processing</div>
+      <button data-modal-close class="closebtn" id="close-success">&times;
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="current desc">
+        <input type="text" class="input-text" id="timestamp-trim" placeholder="00:00:00-00:00:00" value="00:00:00-00:00:00" pattern="\d\d:\d\d:\d\d-\d\d:\d\d:\d\d">
+        <div class="desc">
+          <div id="save-timestamps-btn"><span><i class="fa-solid fa-floppy-disk"></i> Save timestamps</span></div>
+        </div>
+    </div>
+  </div>
+  <div class="modal" id="modal-chain">
+    <div class="modal-header">
+      <div class="title"><i class="fa-solid fa-link"></i> Chain</div>
+      <button data-modal-close class="closebtn" id="close-success">&times;
+      </button>
+    </div>
+    <div class="modal-body" id="chain-modal-body">
+      <p class="current desc">
+        <div class="chain-btn" id="chain-interpolation"><i class="fa-solid fa-clone"></i> Interpolation</div>
+        <div class="chain-btn" id="chain-upscaling"><i class="fa-solid fa-up-right-and-down-left-from-center"></i> Upscaling</div>
+        <div class="chain-btn" id="chain-restoration"><i class="fa-solid fa-wand-magic-sparkles"></i> Restoration</div>
+    </div>
+  </div>
+  <div id="overlay"></div>
+  <div id="drop-files">
+    <i class="fa-regular fa-square-plus" id="drop-icon"></i>
+    <br>
+    <span id="drop-span">Drop media to import here</span>
+  </div>
+  <script type="module" src="./js/themeengine.js"></script>
+  <script type="module" src="./js/ui.js"></script>
+  <script type="module" src="./js/sidebar.js"></script>
+  <script type="module" src="./js/media.js"></script>
+  <script type="module" src="./js/projects.js"></script>
+  <script type="module" src="./js/terminal.js"></script>
+  <script type="module" src="./js/settings.js"></script>
+  <script type="module" src="./js/models.js"></script>
+  <script type="module" src="./js/interpolation.js"></script>
+  <script type="module" src="./js/upscaling.js"></script>
+  <script type="module" src="./js/restoration.js"></script>
+  <script type="module" src="./js/preview.js"></script>
+  <script type="module" src="./js/queue.js"></script>
+  <script type="module" src="./js/sysinfo.js"></script>
+  <script type="module" src="./js/popup.js"></script>
+  <script type="module" src="./js/log.js"></script>
+  <script type="module" src="./js/helper.js"></script>
+  </div>
+</div>
+</body>
+
+</html>

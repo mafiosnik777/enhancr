@@ -1,0 +1,234 @@
+$macosblue: #1e5cce;
+
+.project-side-container {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.25);
+    left: 0%;
+    height: 100%;
+    width: 70%;
+    top: 0%;
+    z-index: -1;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.app-icon {
+    position: absolute;
+    width: 150px;
+    height: auto;
+    z-index: 1;
+    top: 20%;
+    left: 41%;
+    animation: fly-1 0.6s ease-in-out infinite alternate
+}
+
+#recent-0 {
+    visibility: hidden;
+}
+
+#recent-1 {
+    visibility: hidden;
+}
+
+#recent-2 {
+    visibility: hidden;
+}
+
+#recent-3 {
+    visibility: hidden;
+}
+
+#recent-4 {
+    visibility: hidden;
+}
+
+#recent-5 {
+    visibility: hidden;
+}
+
+#recent-6 {
+    visibility: hidden;
+}
+
+#recent-7 {
+    visibility: hidden;
+}
+
+#welcome {
+    position: absolute;
+    z-index: 1;
+    top: 43.5%;
+    left: 26%;
+    font-size: 30pt;
+    font-weight: 300;
+    color: rgb(230, 230, 230);
+}
+
+#version {
+    position: absolute;
+    z-index: 1;
+    bottom: 44.5%;
+    left: 41%;
+    font-size: 9pt;
+    font-weight: 250;
+    color: rgb(200, 200, 200);
+}
+
+#hover-create-toggle {
+    background: rgba(60, 60, 60, 0.3);
+    border-radius: 8px;
+    width: 500px;
+    height: 52px;
+    position: absolute;
+    bottom: 29%;
+    left: 11.5%;
+    display: block;
+    cursor: pointer;
+}
+
+#hover-open-toggle {
+    background: none;
+    border-radius: 8px;
+    width: 500px;
+    height: 52px;
+    position: absolute;
+    bottom: 19%;
+    left: 11.5%;
+    display: block;
+    cursor: pointer;
+}
+
+#create-header {
+    position: absolute;
+    z-index: 1;
+    top: 15%;
+    left: 12%;
+    font-size: 10pt;
+    font-weight: 500;
+    color: rgb(200, 200, 200);
+}
+
+#create-text {
+    position: absolute;
+    z-index: 1;
+    bottom: 18%;
+    left: 12%;
+    font-size: 10pt;
+    font-weight: 350;
+    color: rgb(180, 180, 180);
+}
+
+#new-project {
+    position: absolute;
+    color: rgba(197, 197, 197, 0.25);
+    z-index: 1;
+    font-size: 2.5em;
+    left: 2%;
+    margin: 0;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+#open-header {
+    position: absolute;
+    z-index: 1;
+    top: 15%;
+    left: 12%;
+    font-size: 10pt;
+    font-weight: 500;
+    color: rgb(200, 200, 200);
+}
+
+#open-text {
+    position: absolute;
+    z-index: 1;
+    bottom: 18%;
+    left: 12%;
+    font-size: 10pt;
+    font-weight: 350;
+    color: rgb(180, 180, 180);
+}
+
+#open-project {
+    position: absolute;
+    color: rgba(197, 197, 197, 0.25);
+    z-index: 1;
+    font-size: 2.5em;
+    left: 2%;
+    margin: 0;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.recent {
+    color: white;
+    background: rgba(145, 145, 145, 0.15);
+    border-radius: 8px;
+    width: 270px;
+    height: 50px;
+    top: 4%;
+    left: 6%;
+    display: block;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+    margin-left: 5%;
+    margin-top: 6%;
+    cursor: pointer;
+}
+
+.history-file {
+    z-index: 1;
+    top: 10%;
+    left: 1%;
+    height: 40px;
+    width: auto;
+    margin-top: 2%;
+}
+
+.project-title {
+    position: absolute;
+    z-index: 1;
+    font-size: 9pt;
+    font-weight: 450;
+    color: white;
+    margin-top: 3.5%;
+    margin-left: 1%;
+}
+
+.project-path {
+    position: absolute;
+    z-index: 1;
+    font-size: 9pt;
+    font-weight: 350;
+    color: rgb(170, 170, 170);
+    margin-top: 8.25%;
+    margin-left: 1.7%;
+}
+
+#recents-container {
+    width: 30%;
+    height: 100%;
+    position: absolute;
+    right: 0%;
+    top: 0%;
+}
+
+#no-recents {
+        position: absolute;
+        top: 50%;
+        left: 25%;
+        font-size: 9pt;
+        font-weight: 300;
+        color: darkgrey;
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateY(0.1em);
+  }
+
+  to {
+    transform: translateY(-0.1em);
+  }
+}

@@ -1,0 +1,11 @@
+node_modules/
+out/
+src/assets/.DS_Store
+.DS_Store
+src/assets/.DS_Store
+src/.DS_Store
+upload.json
+out/
+.vscode
+src/python/ffmpeg
+src/python/ffmpeg/*
