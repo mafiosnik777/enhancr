@@ -81,7 +81,7 @@ async function shareVideo() {
         terminal.textContent += "\r\n[gofile.io] Upload completed: " + json.data.downloadPage;
         terminal.scrollTop = terminal.scrollHeight;
         progressSpan.textContent = `Upload complete: ${path.basename(pipeOutPath)} | 100%`;
-        var notification = new Notification("Upload completed", { icon: "./assets/tvp-app.png", body: json.data.downloadPage });
+        var notification = new Notification("Upload completed", { icon: "", body: json.data.downloadPage });
         progressDone.style.width = `100%`;
         clipboard.writeText(json.data.downloadPage);
         terminal.textContent += "\r\n[gofile.io] Copied link to clipboard.";

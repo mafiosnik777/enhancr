@@ -45,20 +45,6 @@ $macosblue: #1e5cce;
   }
 }
 
-#tvp-icon {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  max-width: 3%;
-  height: auto;
-  padding: 4px 5px;
-  --animate-delay: 0.8s;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
 .project-bar {
   position: absolute;
   top: 0;
