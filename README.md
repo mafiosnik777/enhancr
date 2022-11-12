@@ -78,15 +78,15 @@ Support for Apple Silicon is planned as well, but I currently only have an Intel
 
 Input size: 1920x1080 @ 2x
 
-|| RTX 2060 Super | RTX 4090
-|--|--|--|
-| RIFE / rife-v4.6 (NCNN) | 53.78 fps ||
-| RIFE / rife-v4.6 (TensorRT) | 70.34 fps ||
-| CAIN / cvp-v6 (TensorRT) | 45.41 fps ||
-| CAIN / cvp-v6 (NCNN) | 10.67 fps ||
-| waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps ||
-| RealESRGAN / animevideov3 (TensorRT) | 8.17 fps ||
-| DPIR / Denoise (TensorRT) | 4.38 fps ||
+|| RTX 2060 Super | RTX 3070 | RTX 4090
+|--|--|--|--|
+| RIFE / rife-v4.6 (NCNN) | 53.78 fps | 64.08 fps ||
+| RIFE / rife-v4.6 (TensorRT) | 70.34 fps | 94.63 fps ||
+| CAIN / cvp-v6 (TensorRT) | 45.41 fps | 63.84 fps ||
+| CAIN / cvp-v6 (NCNN) | 9.42 fps | 10.56 fps ||
+| waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps | 9.36 fps ||
+| RealESRGAN / animevideov3 (TensorRT) | 7.64 fps | 9.10 fps ||
+| DPIR / Denoise (TensorRT) | 4.38 fps | 6.45 fps ||
 
 
 # FAQ (Frequently Asked Questions)
