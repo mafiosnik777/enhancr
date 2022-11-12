@@ -616,7 +616,7 @@ function getTheme() {
 function changeCodecH264() {
 
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -647,7 +647,7 @@ function changeCodecH264() {
 
 function changeCodecH265() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -677,7 +677,7 @@ function changeCodecH265() {
 
 function changeCodecAV1() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -708,7 +708,7 @@ function changeCodecAV1() {
 
 function changeCodecVP9() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -739,7 +739,7 @@ function changeCodecVP9() {
 
 function changeCodecProRes() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -769,7 +769,7 @@ function changeCodecProRes() {
 
 function changeCodecNVENC() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -887,7 +887,7 @@ var ffmpegParamsUpscale = document.getElementById("ffmpeg-params-upscale");
 
 function changeCodecH264Upscale() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -918,7 +918,7 @@ function changeCodecH264Upscale() {
 
 function changeCodecH265Upscale() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -949,7 +949,7 @@ function changeCodecH265Upscale() {
 
 function changeCodecAV1Upscale() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -980,7 +980,7 @@ function changeCodecAV1Upscale() {
 
 function changeCodecVP9Upscale() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -1011,7 +1011,7 @@ function changeCodecVP9Upscale() {
 
 function changeCodecProResUpscale() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -1041,7 +1041,7 @@ function changeCodecProResUpscale() {
 
 function changeCodecNVENCUpscale() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -1318,7 +1318,7 @@ var ffmpegParamsRestoration = document.getElementById("ffmpeg-params-restoration
 
 function changeCodecH264Restoration() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -1349,7 +1349,7 @@ function changeCodecH264Restoration() {
 
 function changeCodecH265Restoration() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -1380,7 +1380,7 @@ function changeCodecH265Restoration() {
 
 function changeCodecAV1Restoration() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -1411,7 +1411,7 @@ function changeCodecAV1Restoration() {
 
 function changeCodecVP9Restoration() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -1442,7 +1442,7 @@ function changeCodecVP9Restoration() {
 
 function changeCodecProResRestoration() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
@@ -1472,7 +1472,7 @@ function changeCodecProResRestoration() {
 
 function changeCodecNVENCRestoration() {
     try {
-        const jsonString = fs.readFileSync("./src/codecs.json");
+        const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
     } catch (err) {
         console.log(err);
