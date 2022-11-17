@@ -34,6 +34,7 @@ var containerDropdown = document.getElementById("container-dropdown");
 var mp4Option = document.getElementById("mp4");
 var mkvOption = document.getElementById("mkv");
 var webmOption = document.getElementById("webm");
+var movOption = document.getElementById("mov");
 
 var engineInput = document.getElementById("engine");
 var engineDropdown = document.getElementById("engine-dropdown");
@@ -316,6 +317,20 @@ mkvOption.addEventListener("click", function() {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.interpolation[0].outputContainer = ".mkv";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Output container written to project file.");
+});
+
+movOption.addEventListener("click", function() {
+    outputContainerSpan.textContent = ".mov";
+    hider.style.visibility = "hidden";
+    containerDropdown.style.visibility = "hidden";
+    mediaInfoContainer.textContent = "mov";
+
+    // autosave container in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.interpolation[0].outputContainer = ".mov";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Output container written to project file.");
 });
@@ -1082,6 +1097,7 @@ var hiderUpscale = document.getElementById("hider-upscale"),
 var outputContainerInputUpscale = document.getElementById("output-container-upscale"),
     mp4OptionUp = document.getElementById("mp4-up"),
     mkvOptionUp = document.getElementById("mkv-up"),
+    movOptionUp = document.getElementById("mov-up"),
     webmOptionUp = document.getElementById("webm-up");
 var outputContainerSpanUp = document.getElementById("container-span-up");
 
@@ -1132,6 +1148,20 @@ mkvOptionUp.addEventListener("click", function() {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.upscaling[0].outputContainer = ".mkv";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Output container written to project file.");
+});
+
+movOptionUp.addEventListener("click", function() {
+    outputContainerSpanUp.textContent = ".mov";
+    hiderUpscale.style.visibility = "hidden";
+    containerDropdownUpscale.style.visibility = "hidden";
+    mediaInfoContainerUp.textContent = "mov";
+
+    // autosave container in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.upscaling[0].outputContainer = ".mov";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Output container written to project file.");
 });
@@ -1513,6 +1543,7 @@ var hiderRestore = document.getElementById("hider-restore"),
 var outputContainerInputRestoration = document.getElementById("output-container-restoration"),
     mp4OptionRes = document.getElementById("mp4-res"),
     mkvOptionRes = document.getElementById("mkv-res"),
+    movOptionRes = document.getElementById("mov-res"),
     webmOptionRes = document.getElementById("webm-res");
 var outputContainerSpanRes = document.getElementById("container-span-res");
 
@@ -1562,6 +1593,20 @@ mkvOptionRes.addEventListener("click", function() {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.restoration[0].outputContainer = ".mkv";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Output container written to project file.");
+});
+
+movOptionRes.addEventListener("click", function() {
+    outputContainerSpanRes.textContent = ".mov";
+    hiderRestore.style.visibility = "hidden";
+    containerDropdownRestoration.style.visibility = "hidden";
+    mediaInfoContainerRes.textContent = "mov";
+
+    // autosave container in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.restoration[0].outputContainer = ".mov";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Output container written to project file.");
 });
