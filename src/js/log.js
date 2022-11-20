@@ -21,7 +21,7 @@ async function log() {
     });
     fse.writeFile(os.tmpdir() + '/tmpLog.txt', terminal.innerHTML);
     let terminalLog = diff(terminal.innerHTML, tmpLog);
-    fse.appendFileSync(path.join(appDataPath, '/.enhancr/', 'log.txt'), terminalLog);
+    fse.appendFile(path.join(appDataPath, '/.enhancr/', 'log.txt'), terminalLog);
 }
 setInterval(log, 5000);
 

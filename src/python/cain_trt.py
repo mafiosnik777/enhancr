@@ -16,6 +16,7 @@ def find_scenes(video_path, threshold=30.0):
     scene_manager = SceneManager()
     scene_manager.add_detector(ContentDetector(threshold=threshold))
     video_manager.set_downscale_factor()
+    print("Finding Scene Changes.. (This could take a while on larger files)", file=sys.stderr)
     video_manager.start()
     scene_manager.detect_scenes(frame_source=video_manager)
 
