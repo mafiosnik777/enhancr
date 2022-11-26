@@ -29,7 +29,7 @@ const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? proce
 
 class enhancr {
 
-    static version = '0.1.0 (pre-release)'
+    static version = '0.9.0 (pre-release)'
 
     static terminal(string, prefix = true, newLine = true, error = false) {
         let prfx = prefix ? "[enhancr] " : "";
