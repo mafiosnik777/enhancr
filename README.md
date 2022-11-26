@@ -23,7 +23,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**RIFE (NCNN)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VapourSynth-RIFE-ncnn-Vulkan](https://github.com/styler00dollar/VapourSynth-RIFE-ncnn-Vulkan)**
 
->**RIFE (TensorRT)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
+>**RIFE (TensorRT)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
 >**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-ncnn-vulkan** (unreleased)
 
@@ -104,10 +104,6 @@ It's a bit inconvenient at first, but definitely worth the 4x-5x speed boost com
 > Where can I get custom upscaling models?
 
 I can't include most models in enhancr because of Licensing. Custom models can be obtained [here](https://upscale.wiki/wiki/Model_Database) and loaded inside the models tab.
-
-> Why is Scene Detection in CAIN (TensorRT) so slow when using AV1 input?
-
-It is powered by OpenCV to detect scene changes, which still, as of the time of writing, doesn't support AV1 natively. I tried compiling against a custom ffmpeg build with dav1d, but couldn't get it to compile for Windows after hours of trying around. Recently though there were made some commits to the OpenCV repo for the 5.0 milestone to finally support AV1 but unfortunately only with AOM decoder, which is painfully slow. I compiled that one for now, so that there is AV1 decoding support at all.
 
 > I'm running out of memory when trying to run a TensorRT inference, what should I do?
 
