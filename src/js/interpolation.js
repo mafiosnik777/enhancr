@@ -110,22 +110,7 @@ class Interpolation {
             let systemPython = document.getElementById('python-check').checked;
 
             if (systemPython == true) {
-
-                const findLastIndex = (a, pred) => {
-                    for (let i = a.length - 1; i >= 0; i--) {
-                      if (pred(a[i], i, a)) {
-                        return i;
-                      }
-                    }
-                  
-                    return -1;
-                  };
-
-                let path = process.env.PATH;
-                const pathList = path.split(";");
-                const index = findLastIndex(pathList, e => e.includes("Python"));
-
-                var python = pathList[index] + "\\python.exe";
+                var python = "python";
             }
             else {
                 var python = path.join(__dirname, '..', "\\python\\bin\\python.exe");
