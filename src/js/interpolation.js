@@ -107,8 +107,30 @@ class Interpolation {
             let height = parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
             let floatingPoint = document.getElementById('fp16-check').checked;
             let fp = floatingPoint ? "fp16" : "fp32";
+            let systemPython = document.getElementById('python-check').checked;
 
-            var python = path.join(__dirname, '..', "\\python\\bin\\python.exe");
+            if (systemPython == true) {
+
+                const findLastIndex = (a, pred) => {
+                    for (let i = a.length - 1; i >= 0; i--) {
+                      if (pred(a[i], i, a)) {
+                        return i;
+                      }
+                    }
+                  
+                    return -1;
+                  };
+
+                let path = process.env.PATH;
+                const pathList = path.split(";");
+                const index = findLastIndex(pathList, e => e.includes("Python"));
+
+                var python = pathList[index] + "\\python.exe";
+            }
+            else {
+                var python = path.join(__dirname, '..', "\\python\\bin\\python.exe");
+            }
+            
             var convert = path.join(__dirname, '..', "\\python/torch/convert.py");
             var cainModel = document.getElementById('model-span').innerHTML == 'RVP - v1.0';
             var pth = cainModel ? path.join(__dirname, '..', "/python/torch/rvpv1.pth") : path.join(__dirname, '..', "/python/torch/cvp.pth");
