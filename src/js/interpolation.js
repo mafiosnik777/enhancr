@@ -195,7 +195,7 @@ class Interpolation {
 
             let shapeOverride = document.getElementById('shape-check').checked;
             let shapeDimensionsMax = shapeOverride ? document.getElementById('shape-res').value : '1080x1920';
-            let shapeDimensionsOpt = Math.ceil(parseInt(shapeDimensionsMax.split('x')[0]) / 2) + 'x' + Math.ceil(parseInt(shapeDimensionsMax.split('x')[1]) / 2);
+            let shapeDimensionsOpt = '720x1280';
 
             function getRifeEngine() {
                 if (document.getElementById('rife-tta-check').checked) {

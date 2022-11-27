@@ -58,14 +58,14 @@ if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models/', 'Make sure all m
 // create projects storage
 if (!fs.existsSync(path.join(appDataPath, '/.enhancr/projects.json'))) {
   var projects = {
-        recent0: "",
-        recent1: "",
-        recent2: "",
-        recent3: "",
-        recent4: "",
-        recent5: "",
-        recent6: "",
-        recent7: ""
+    recent0: "",
+    recent1: "",
+    recent2: "",
+    recent3: "",
+    recent4: "",
+    recent5: "",
+    recent6: "",
+    recent7: ""
   };
   var data = JSON.stringify(projects);
   fs.writeFile(path.join(appDataPath, '/.enhancr/projects.json'), data, (err) => {
@@ -117,11 +117,33 @@ if (!fs.existsSync(path.join(appDataPath, '/.enhancr/settings.json'))) {
 
 var osInfo = getOSInfo();
 
-// discord rpc
-// var client = new (require("easy-presence").EasyPresence)("1001909052453965964");
-// client.on("connected", () => {
-//   console.log("discord rpc initialized - user: ", client.environment.user.username);
-// });
+fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) => {
+  if (err) throw err;
+  let json = JSON.parse(settings);
+
+  if (json.settings[0].disableBlur == false) {
+    // discord rpc
+    var client = new (require("easy-presence").EasyPresence)("1046415937886228558");
+    client.on("connected", () => {
+      console.log("discord rpc initialized - user: ", client.environment.user.username);
+    });
+    client.setActivity({
+      details: osInfo + " " + process.arch + "・enhancr - 0.9.1",
+      assets: {
+        large_image: "enhancr",
+        large_text: "enhancr",
+        small_image: "enhancr-file"
+      },
+      buttons: [
+        {
+          label: "Visit on GitHub",
+          url: "https://github.com/mafiosnik777/enhancr"
+        }
+      ],
+      timestamps: { start: new Date() }
+    });
+  }})
+
 
 // window creation
 
