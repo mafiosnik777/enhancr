@@ -107,8 +107,15 @@ class Interpolation {
             let height = parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
             let floatingPoint = document.getElementById('fp16-check').checked;
             let fp = floatingPoint ? "fp16" : "fp32";
+            let systemPython = document.getElementById('python-check').checked;
 
-            var python = path.join(__dirname, '..', "\\python\\bin\\python.exe");
+            if (systemPython == true) {
+                var python = "python";
+            }
+            else {
+                var python = path.join(__dirname, '..', "\\python\\bin\\python.exe");
+            }
+            
             var convert = path.join(__dirname, '..', "\\python/torch/convert.py");
             var cainModel = document.getElementById('model-span').innerHTML == 'RVP - v1.0';
             var pth = cainModel ? path.join(__dirname, '..', "/python/torch/rvpv1.pth") : path.join(__dirname, '..', "/python/torch/cvp.pth");
