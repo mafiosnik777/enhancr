@@ -53,7 +53,8 @@ clip = core.ffms2.Source(source=f"{video_path}", fpsnum=-1, fpsden=1, cache=Fals
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-clip = core.misc.SCDetect(clip=clip, threshold=0.100)
+if sceneDetection == True:
+    clip = core.misc.SCDetect(clip=clip, threshold=0.100)
 
 clip1 = core.std.DeleteFrames(clip, frames=0)
 clip2 = core.std.StackHorizontal([clip1, clip])
