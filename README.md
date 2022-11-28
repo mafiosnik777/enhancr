@@ -33,7 +33,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 ## Upscaling
 
->**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vs-mlrt](https://github.com/nlzy/vapoursynth-waifu2x-ncnn-vulkan)**
+>**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vapoursynth-waifu2x-ncnn-vulkan](https://github.com/nlzy/vapoursynth-waifu2x-ncnn-vulkan)**
 
 >**RealESRGAN (TensorRT)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
