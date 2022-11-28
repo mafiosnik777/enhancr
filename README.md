@@ -109,6 +109,10 @@ I can't include most models in enhancr because of Licensing. Custom models can b
 
 Either lower concurrent streams in settings or set up tiling in combination with a smaller engine resolution to decrease Video Memory usage.
 
+> I get "Python exception: operator (): no valid optimization profile found"
+
+This means that shapes are not fitting, make sure you are using custom shapes in settings if you go over 1080p input or use correct tiling settings if you use tiling.
+
 # Inferences
 
 [TensorRT](https://developer.nvidia.com/tensorrt) is a highly optimized AI inference runtime for NVIDIA GPUs. It uses benchmarking to find the optimal kernel to use for your specific GPU, and there is an extra step to build an engine on the machine you are going to run the AI on. However, the resulting performance is also typically _much much_ better than any PyTorch or NCNN implementation.
