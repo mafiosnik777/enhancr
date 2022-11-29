@@ -33,7 +33,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 ## Upscaling
 
->**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vs-mlrt](https://github.com/nlzy/vapoursynth-waifu2x-ncnn-vulkan)**
+>**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vapoursynth-waifu2x-ncnn-vulkan](https://github.com/nlzy/vapoursynth-waifu2x-ncnn-vulkan)**
 
 >**RealESRGAN (TensorRT)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
@@ -112,6 +112,10 @@ I can't include most models in enhancr because of Licensing. Custom models can b
 > I'm running out of memory when trying to run a TensorRT inference, what should I do?
 
 Either lower concurrent streams in settings or set up tiling in combination with a smaller engine resolution to decrease Video Memory usage.
+
+> I get "Python exception: operator (): no valid optimization profile found"
+
+This means that shapes are not fitting, make sure you are using custom shapes in settings if you go over 1080p input or use correct tiling settings if you use tiling.
 
 # Inferences
 
