@@ -269,7 +269,7 @@ function renderQueueItem() {
               } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                 model = "waifu2x"
               } else {
-                model = "RealCUGAN"
+                model = "AnimeSR"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
               shell.openPath(outputPath);
@@ -373,7 +373,7 @@ function renderQueueItem() {
                     } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                       model = "waifu2x"
                     } else {
-                      model = "RealCUGAN"
+                      model = "AnimeSR"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
                   }
@@ -410,7 +410,7 @@ function renderQueueItem() {
                     } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                       model = "waifu2x"
                     } else {
-                      model = "RealCUGAN"
+                      model = "AnimeSR"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
                   } else {
@@ -477,7 +477,7 @@ function renderQueueItem() {
               } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                 model = "waifu2x"
               } else {
-                model = "RealCUGAN"
+                model = "AnimeSR"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
               remote.shell.showItemInFolder(outputPath);
@@ -543,7 +543,7 @@ function renderQueueItem() {
               } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                 model = "waifu2x"
               } else {
-                model = "RealCUGAN"
+                model = "AnimeSR"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
             } else if (queue[index].mode == 'restoration') {

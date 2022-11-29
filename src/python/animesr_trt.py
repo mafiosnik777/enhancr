@@ -34,10 +34,14 @@ clip = core.ffms2.Source(source=f"{video_path}", fpsnum=-1, fpsden=1, cache=Fals
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
+clip_pos1 = clip[1:]
+clip_pos2 = clip.std.Trim(first=0,last=clip.num_frames-2)
+clipstack =  [clip_pos1,clip_pos2]
+
 if tiling == False:
-    clip = core.trt.Model(clip, engine_path=engine, num_streams=streams)
+    clip = core.trt.Model(clipstack, engine_path=engine, num_streams=streams)
 else:
-    clip = core.trt.Model(clip, engine_path=engine, num_streams=streams, tilesize=[tileHeight, tileWidth])
+    clip = core.trt.Model(clipstack, engine_path=engine, num_streams=streams, tilesize=[tileHeight, tileWidth])
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 
