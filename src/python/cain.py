@@ -31,7 +31,7 @@ if model == 'RVP - v1.0':
 if model == 'CVP - v6.0':
     cainModel = 1
     
-clip = core.ffms2.Source(source=f"{video_path}", fpsnum=-1, fpsden=1, cache=False)
+clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
 sceneDetectionThreshold = 0.200
 clip = core.misc.SCDetect(clip=clip, threshold=sceneDetectionThreshold)

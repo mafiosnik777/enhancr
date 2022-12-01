@@ -101,7 +101,7 @@ with open(os.path.join(tmp_dir, "tmp.json"), encoding='utf-8') as f:
     streams = data['streams']
     sceneDetection = data['rife_scdetect']
     
-clip = core.ffms2.Source(source=f"{video_path}", fpsnum=-1, fpsden=1, cache=False)
+clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
 if sceneDetection == True:
     clip = core.misc.SCDetect(clip=clip, threshold=0.100)

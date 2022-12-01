@@ -48,8 +48,8 @@ with open(os.path.join(tmp_dir, "tmp.json"), encoding='utf-8') as f:
     engine = data['engine']
     streams = data['streams']
     sceneDetection = data['cain_scdetect']
-    
-clip = core.ffms2.Source(source=f"{video_path}", fpsnum=-1, fpsden=1, cache=False)
+
+clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
@@ -70,7 +70,7 @@ clip2 = core.std.Interleave([clip, clip2])
 
 output = vfi_frame_merger(clip1, clip2)
 
-output = vs.core.resize.Bicubic(output, format=vs.YUV420P8, matrix_s="709")
+output = vs.core.resize.Bicubic(output, format=vs.YUV422P10, matrix_s="709")
 
 print("Starting video output..", file=sys.stderr)
 output.set_output()

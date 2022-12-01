@@ -49,7 +49,7 @@ elif rife_model == 'RIFE - v4.6':
     model = 21
     TTA = False
     
-clip = core.ffms2.Source(source=f"{video_path}", fpsnum=-1, fpsden=1, cache=False)
+clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
 clip = core.misc.SCDetect(clip=clip, threshold=0.200)
 
