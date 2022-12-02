@@ -55,6 +55,7 @@ class Upscaling {
         if (!(stopped == 'true')) {
             // set flag for started upscaling process
             sessionStorage.setItem('status', 'upscaling');
+            sessionStorage.setItem('engine', engine);
 
             // render progresbar
             const loading = document.getElementById("loading");
@@ -110,6 +111,8 @@ class Upscaling {
                 return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/vsmlrt-cuda/trtexec.exe");
             }
             let trtexec = getTrtExecPath();
+            
+            let fp16 = document.getElementById('fp16-check');
 
             //get onnx input path
             function getOnnxPath() {
@@ -117,7 +120,11 @@ class Upscaling {
                     if (engine == 'Upscaling - RealESRGAN (TensorRT)') {
                         return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                     } else if (engine == 'Upscaling - AnimeSR (TensorRT)') {
-                        return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/animesr/animesr_v2.onnx");
+                        if (fp16.checked == true) {
+                            return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/animesr/animesr_v2.onnx");
+                        } else {
+                            return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/animesr/animesr_v2.onnx");
+                        }
                     }
                     
                 } else {
@@ -127,7 +134,7 @@ class Upscaling {
             }
             let onnx = getOnnxPath();
 
-            let floatingPoint = document.getElementById('fp16-check').checked && engine != 'Upscaling - AnimeSR (TensorRT)';
+            let floatingPoint = document.getElementById('fp16-check').checked;
             let fp = floatingPoint ? "fp16" : "fp32";
 
             let shapeOverride = document.getElementById('shape-check').checked;
@@ -140,7 +147,6 @@ class Upscaling {
             }
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
-            let fp16 = document.getElementById('fp16-check');
 
             // convert onnx to trt engine
             if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)' || !fse.existsSync(engineOut) && engine == 'Upscaling - AnimeSR (TensorRT)') {
@@ -148,13 +154,15 @@ class Upscaling {
                     return new Promise(function (resolve) {
                         if (engine == 'Upscaling - RealESRGAN (TensorRT)') {
                             if (fp16.checked == true) {
-                                var cmd = `${trtexec} --fp16 --onnx=${onnx} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine=${engineOut} --buildOnly --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var cmd = `${trtexec} --fp16 --onnx=${onnx} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine=${engineOut} --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             } else {
-                                var cmd = `${trtexec} --onnx=${onnx} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine=${engineOut} --buildOnly --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var cmd = `${trtexec} --onnx=${onnx} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine=${engineOut} --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             }
                         } else {
                             if (fp16.checked == true) {
-                                var cmd = `${trtexec} --onnx=${onnx} --optShapes=input:1x6x${shapeDimensionsOpt} --saveEngine=${engineOut} --buildOnly --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var cmd = `${trtexec} --fp16 --onnx=${onnx} --optShapes=input:1x6x${shapeDimensionsOpt} --verbose --profilingVerbosity=detailed --saveEngine=${engineOut}`;
+                            } else {
+                                var cmd = `${trtexec} --onnx=${onnx} --optShapes=input:1x6x${shapeDimensionsOpt} --saveEngine=${engineOut} --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             }
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });

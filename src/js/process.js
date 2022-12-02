@@ -110,11 +110,13 @@ class Process {
                         var fps = progress.split("(")[1].split(")")[0];
                         fpsMeter.style.visibility = "visible";
                         fpsMeterText.textContent = " " + fps;
+                        var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
                         var fpsNumber = parseFloat(fps.replace(" fps"));
                         var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
                         etaElement.style.visibility = "visible";
                         etaText.textContent = " " + eta + " minutes";
-                        ipcRenderer.send('rpc-upscaling', percentage, path.basename(sessionStorage.getItem('currentFile')), fpsNumber);
+                        var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
+                        ipcRenderer.send('rpc-restoration', fpsNumber, engineCleaned, percentage);
                     }
                 }
             } catch (error) {
@@ -214,7 +216,8 @@ class Process {
                         var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
                         etaElement.style.visibility = "visible";
                         etaText.textContent = " " + eta + " minutes";
-                        ipcRenderer.send('rpc-upscaling', percentage, path.basename(sessionStorage.getItem('currentFile')), fpsNumber);
+                        var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
+                        ipcRenderer.send('rpc-upscaling', fpsNumber, engineCleaned, percentage);
                     }
                 }
             } catch (error) {
@@ -322,7 +325,8 @@ class Process {
                             var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
                             etaElement.style.visibility = "visible";
                             etaText.textContent = " " + eta + " minutes";
-                            ipcRenderer.send('rpc-interpolation', percentage, path.basename(sessionStorage.getItem('currentFile')), fpsNumber);
+                            var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
+                            ipcRenderer.send('rpc-interpolation', fpsNumber, engineCleaned, percentage);
                         }
                     }
                 } catch {

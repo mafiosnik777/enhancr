@@ -55,6 +55,7 @@ class Restoration {
         if (!(stopped == 'true')) {
             // set flag for started restoration process
             sessionStorage.setItem('status', 'restoring');
+            sessionStorage.setItem('engine', engine);
 
             // render progresbar
             const loading = document.getElementById("loading");

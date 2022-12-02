@@ -46,6 +46,7 @@ class Interpolation {
         if (!(stopped == 'true')) {
             // set flag for started interpolation process
             sessionStorage.setItem('status', 'interpolating');
+            sessionStorage.setItem('engine', engine);
 
             // render progressbar
             const loading = document.getElementById("loading");
@@ -118,7 +119,7 @@ class Interpolation {
             
             var convert = path.join(__dirname, '..', "\\python/torch/convert.py");
             var cainModel = document.getElementById('model-span').innerHTML == 'RVP - v1.0';
-            var pth = cainModel ? path.join(__dirname, '..', "/python/torch/rvpv1.pth") : path.join(__dirname, '..', "/python/torch/cvp.pth");
+            var pth = cainModel ? path.join(__dirname, '..', "/python/torch/weights/rvpv1.pth") : path.join(__dirname, '..', "/python/torch/weights/cvp.pth");
             var out = path.join(temp, 'cain' + width + "x" + height + '.onnx');
             var groups = model ? 2 : 3;
 
@@ -287,6 +288,7 @@ class Interpolation {
                                 terminal.innerHTML += data;
                             });
                             term.on("close", () => {
+                                ipcRenderer.send('rpc-done');
                                 file = trimmedOut;
                                 terminal.innerHTML += '\r\n[enhancr] Trimmed video successfully.';
                                 resolve();

@@ -121,7 +121,7 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
   if (err) throw err;
   let json = JSON.parse(settings);
 
-  if (json.settings[0].disableBlur == false) {
+  if (json.settings[0].rpc == true) {
     // discord rpc
     var client = new (require("easy-presence").EasyPresence)("1046415937886228558");
     client.on("connected", () => {
@@ -141,6 +141,81 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
         }
       ],
       timestamps: { start: new Date() }
+    });
+    ipcMain.on("rpc-done", function (event) {
+      client.setActivity({
+        details: osInfo + " " + process.arch + "・enhancr - 0.9.1",
+        assets: {
+          large_image: "enhancr",
+          large_text: "enhancr",
+          small_image: "enhancr-file"
+        },
+        buttons: [
+          {
+            label: "Visit on GitHub",
+            url: "https://github.com/mafiosnik777/enhancr"
+          }
+        ],
+        timestamps: { start: new Date() }
+      });
+    })
+    var date = new Date();
+    ipcMain.on("rpc-interpolation", function (event, fps, engine, percentage) {
+      client.setActivity({
+        details: "Interpolating" + "・enhancr - 0.9.1",
+        state: engine + " - " + fps + " fps" + " - " + percentage + "%",
+        assets: {
+          large_image: "interpolate",
+          large_text: "Interpolating",
+          small_image: "enhancr",
+          small_text: "enhancr - 0.9.1"
+        },
+        buttons: [
+          {
+            label: "Visit on GitHub",
+            url: "https://github.com/mafiosnik777/enhancr"
+          }
+        ],
+        timestamps: { start: date }
+      });
+    })
+    ipcMain.on("rpc-upscaling", function (event, fps, engine, percentage) {
+      client.setActivity({
+        details: "Upscaling" + "・enhancr - 0.9.1",
+        state: engine + " - " + fps + " fps" + " - " + percentage + "%",
+        assets: {
+          large_image: "upscale",
+          large_text: "Upscaling",
+          small_image: "enhancr",
+          small_text: "enhancr - 0.9.1"
+        },
+        buttons: [
+          {
+            label: "Visit on GitHub",
+            url: "https://github.com/mafiosnik777/enhancr"
+          }
+        ],
+        timestamps: { start: date }
+      });
+    });
+    ipcMain.on("rpc-restoration", function (event, fps, engine, percentage) {
+      client.setActivity({
+        details: "Restoring" + "・enhancr - 0.9.1",
+        state: engine + " - " + fps + " fps" + " - " + percentage + "%",
+        assets: {
+          large_image: "restore",
+          large_text: "Restoring",
+          small_image: "enhancr",
+          small_text: "enhancr - 0.9.1"
+        },
+        buttons: [
+          {
+            label: "Visit on GitHub",
+            url: "https://github.com/mafiosnik777/enhancr"
+          }
+        ],
+        timestamps: { start: date }
+      });
     });
   }})
 
