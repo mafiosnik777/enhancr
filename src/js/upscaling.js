@@ -341,6 +341,7 @@ class Upscaling {
                             // don't merge streams if an error occurs
                             if (log.includes('[Pipe] pipe:: Invalid data found when processing input')) {
                                 terminal.innerHTML += `[enhancr] An error has occured.`;
+                                sessionStorage.setItem('status', 'done');
                                 resolve();
                             } else {
                                 terminal.innerHTML += `[enhancr] Finishing up upscaling..\r\n`;
