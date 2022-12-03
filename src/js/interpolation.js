@@ -138,7 +138,7 @@ class Interpolation {
             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
-                        var cmd = `${python} ${convert} --input ${pth} --output ${out} --height ${height} --width ${width} --groups ${groups}`;
+                        var cmd = `"${python}" "${convert}" --input "${pth}" --output "${out}" --height ${height} --width ${width} --groups ${groups}`;
                         let term = spawn(cmd, [], {
                             shell: true,
                             stdio: ['inherit', 'pipe', 'pipe'],
@@ -156,9 +156,9 @@ class Interpolation {
                         });
                         term.on("close", () => {
                             if (fp16.checked == true) {
-                                var engineCmd = `${trtexec} --fp16 --onnx=${out} --saveEngine=${engineOut} --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var engineCmd = `"${trtexec}" --fp16 --onnx="${out}" --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             } else {
-                                var engineCmd = `${trtexec} --onnx=${out} --saveEngine=${engineOut} --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var engineCmd = `"${trtexec}" --onnx="${out}" --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             }
                             let engineTerm = spawn(engineCmd, [], {
                                 shell: true,
@@ -220,9 +220,9 @@ class Interpolation {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
-                            var cmd = `${trtexec} --fp16 --onnx=${rifeOnnx} --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine=${rifeEngine} --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                            var cmd = `"${trtexec}" --fp16 --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                         } else {
-                            var cmd = `${trtexec} --onnx=${rifeOnnx} --minShapes=input:1x8x8x8 --optShapes=input:1x8x720x1280${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine=${rifeEngine} --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                            var cmd = `"${trtexec}" --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x720x1280${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                         }
                         let term = spawn(cmd, [], {
                             shell: true,
@@ -269,9 +269,9 @@ class Interpolation {
                     function trim() {
                         return new Promise(function (resolve) {
                             if (document.getElementById("trim-check").checked) {
-                                var cmd = `${ffmpeg} -y -loglevel error -ss ${timestampStart} -to ${timestampEnd} -i "${file}" -c copy -c:v libx264 -crf 14 -max_interleave_delta 0 "${trimmedOut}"`;
+                                var cmd = `"${ffmpeg}" -y -loglevel error -ss ${timestampStart} -to ${timestampEnd} -i "${file}" -c copy -c:v libx264 -crf 14 -max_interleave_delta 0 "${trimmedOut}"`;
                             } else {
-                                var cmd = `${ffmpeg} -y -loglevel error -ss ${timestampStart} -to ${timestampEnd} -i "${file}" -c copy -max_interleave_delta 0 "${trimmedOut}"`;
+                                var cmd = `"${ffmpeg}" -y -loglevel error -ss ${timestampStart} -to ${timestampEnd} -i "${file}" -c copy -max_interleave_delta 0 "${trimmedOut}"`;
                             }
                             let term = spawn(cmd, [], {
                                 shell: true,
@@ -392,9 +392,9 @@ class Interpolation {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `${vspipe} -c y4m ${engine} - -p | ${ffmpeg} -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `"${vspipe}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
-                            var cmd = `${vspipe} -c y4m ${engine} - -p | ${ffmpeg} -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
+                            var cmd = `"${vspipe}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
                         }
                         let term = spawn(cmd, [], {
                             shell: true,

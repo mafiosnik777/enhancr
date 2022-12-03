@@ -120,11 +120,7 @@ class Upscaling {
                     if (engine == 'Upscaling - RealESRGAN (TensorRT)') {
                         return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                     } else if (engine == 'Upscaling - AnimeSR (TensorRT)') {
-                        if (fp16.checked == true) {
                             return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/animesr/animesr_v2.onnx");
-                        } else {
-                            return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/animesr/animesr_v2.onnx");
-                        }
                     }
                     
                 } else {
@@ -154,16 +150,12 @@ class Upscaling {
                     return new Promise(function (resolve) {
                         if (engine == 'Upscaling - RealESRGAN (TensorRT)') {
                             if (fp16.checked == true) {
-                                var cmd = `${trtexec} --fp16 --onnx=${onnx} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine=${engineOut} --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             } else {
-                                var cmd = `${trtexec} --onnx=${onnx} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine=${engineOut} --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             }
                         } else {
-                            if (fp16.checked == true) {
-                                var cmd = `${trtexec} --fp16 --onnx=${onnx} --optShapes=input:1x6x${shapeDimensionsOpt} --verbose --profilingVerbosity=detailed --saveEngine=${engineOut}`;
-                            } else {
-                                var cmd = `${trtexec} --onnx=${onnx} --optShapes=input:1x6x${shapeDimensionsOpt} --saveEngine=${engineOut} --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
-                            }
+                                var cmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${shapeDimensionsOpt} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
@@ -204,9 +196,9 @@ class Upscaling {
                     function trim() {
                         return new Promise(function (resolve) {
                             if (document.getElementById("trim-check").checked) {
-                                var cmd = `${ffmpeg} -y -loglevel error -ss ${timestampStart} -to ${timestampEnd} -i "${file}" -c copy -c:v libx264 -crf 14 -max_interleave_delta 0 "${trimmedOut}"`;
+                                var cmd = `"${ffmpeg}" -y -loglevel error -ss ${timestampStart} -to ${timestampEnd} -i "${file}" -c copy -c:v libx264 -crf 14 -max_interleave_delta 0 "${trimmedOut}"`;
                             } else {
-                                var cmd = `${ffmpeg} -y -loglevel error -ss ${timestampStart} -to ${timestampEnd} -i "${file}" -c copy -max_interleave_delta 0 "${trimmedOut}"`;
+                                var cmd = `"${ffmpeg}" -y -loglevel error -ss ${timestampStart} -to ${timestampEnd} -i "${file}" -c copy -max_interleave_delta 0 "${trimmedOut}"`;
                             }
                             let term = spawn(cmd, [], {
                                 shell: true,
@@ -328,9 +320,9 @@ class Upscaling {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `${vspipe} -c y4m ${engine} - -p | ${ffmpeg} -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `"${vspipe}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
-                            var cmd = `${vspipe} -c y4m ${engine} - -p | ${ffmpeg} -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
+                            var cmd = `"${vspipe}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         // merge stdout & stderr & write data to terminal
@@ -351,7 +343,7 @@ class Upscaling {
                             let mkv = extension == ".mkv";
                             let mkvFix = mkv ? "-max_interleave_delta 0" : "";
 
-                            let muxCmd = `${ffmpeg} -y -loglevel error -i "${file}" -i ${tmpOutPath} -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
+                            let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i ${tmpOutPath} -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
                             let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
 
                             // merge stdout & stderr & write data to terminal
