@@ -116,7 +116,7 @@ class Interpolation {
             else {
                 var python = path.join(__dirname, '..', "\\python\\bin\\python.exe");
             }
-            
+
             var convert = path.join(__dirname, '..', "\\python/torch/convert.py");
             var cainModel = document.getElementById('model-span').innerHTML == 'RVP - v1.0';
             var pth = cainModel ? path.join(__dirname, '..', "/python/torch/weights/rvpv1.pth") : path.join(__dirname, '..', "/python/torch/weights/cvp.pth");
@@ -412,45 +412,53 @@ class Interpolation {
                             sessionStorage.setItem('progress', data);
                         });
                         term.on("close", () => {
-                            terminal.innerHTML += `[enhancr] Finishing up interpolation..\r\n`;
-                            terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-
-                            // fix audio loss when muxing mkv
-                            let mkv = extension == ".mkv";
-                            let mkvFix = mkv ? "-max_interleave_delta 0" : "";
-
-                            let out = sessionStorage.getItem('pipeOutPath');
-
-                            let muxCmd = `${ffmpeg} -y -loglevel error -i "${file}" -i ${tmpOutPath} -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${out}"`;
-                            let muxTerm = spawn(muxCmd, [], {
-                                shell: true,
-                                stdio: ['inherit', 'pipe', 'pipe'],
-                                windowsHide: true
-                            });
-
-                            // merge stdout & stderr & write data to terminal
-                            process.stdout.write('');
-                            muxTerm.stdout.on('data', (data) => {
-                                process.stdout.write(`[Pipe] ${data}`);
-                            });
-                            muxTerm.stderr.on('data', (data) => {
-                                process.stderr.write(`[Pipe] ${data}`);
-                                terminal.innerHTML += '[Pipe] ' + data;
-                                sessionStorage.setItem('progress', data);
-                            });
-                            muxTerm.on("close", () => {
-                                // finish up interpolation process
-                                terminal.innerHTML += `[enhancr] Completed interpolation`;
-                                const interpolateBtnSpan = document.getElementById("interpolate-button-text");
-                                var notification = new Notification("Interpolation completed", {
-                                    icon: "./assets/enhancr.png",
-                                    body: path.basename(file)
-                                });
-                                sessionStorage.setItem('status', 'done');
-                                successTitle.innerHTML = path.basename(sessionStorage.getItem("inputPath"));
-                                thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Date.now());
+                            let lines = terminal.value.match(/[^\r\n]+/g);
+                            let log = lines.slice(-10).reverse();
+                            // don't merge streams if an error occurs
+                            if (log.includes('[Pipe] pipe:: Invalid data found when processing input')) {
+                                terminal.innerHTML += `[enhancr] An error has occured.`;
                                 resolve();
-                            });
+                            } else {
+                                terminal.innerHTML += `[enhancr] Finishing up interpolation..\r\n`;
+                                terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
+
+                                // fix audio loss when muxing mkv
+                                let mkv = extension == ".mkv";
+                                let mkvFix = mkv ? "-max_interleave_delta 0" : "";
+
+                                let out = sessionStorage.getItem('pipeOutPath');
+
+                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i ${tmpOutPath} -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${out}"`;
+                                let muxTerm = spawn(muxCmd, [], {
+                                    shell: true,
+                                    stdio: ['inherit', 'pipe', 'pipe'],
+                                    windowsHide: true
+                                });
+
+                                // merge stdout & stderr & write data to terminal
+                                process.stdout.write('');
+                                muxTerm.stdout.on('data', (data) => {
+                                    process.stdout.write(`[Pipe] ${data}`);
+                                });
+                                muxTerm.stderr.on('data', (data) => {
+                                    process.stderr.write(`[Pipe] ${data}`);
+                                    terminal.innerHTML += '[Pipe] ' + data;
+                                    sessionStorage.setItem('progress', data);
+                                });
+                                muxTerm.on("close", () => {
+                                    // finish up interpolation process
+                                    terminal.innerHTML += `[enhancr] Completed interpolation`;
+                                    const interpolateBtnSpan = document.getElementById("interpolate-button-text");
+                                    var notification = new Notification("Interpolation completed", {
+                                        icon: "./assets/enhancr.png",
+                                        body: path.basename(file)
+                                    });
+                                    sessionStorage.setItem('status', 'done');
+                                    successTitle.innerHTML = path.basename(sessionStorage.getItem("inputPath"));
+                                    thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Date.now());
+                                    resolve();
+                                });
+                            }
                         })
                     })
                 }

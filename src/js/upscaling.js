@@ -111,7 +111,7 @@ class Upscaling {
                 return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/vsmlrt-cuda/trtexec.exe");
             }
             let trtexec = getTrtExecPath();
-            
+
             let fp16 = document.getElementById('fp16-check');
 
             //get onnx input path
@@ -120,9 +120,9 @@ class Upscaling {
                     if (engine == 'Upscaling - RealESRGAN (TensorRT)') {
                         return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                     } else if (engine == 'Upscaling - AnimeSR (TensorRT)') {
-                            return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/animesr/animesr_v2.onnx");
+                        return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/animesr/animesr_v2.onnx");
                     }
-                    
+
                 } else {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
@@ -155,7 +155,7 @@ class Upscaling {
                                 var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             }
                         } else {
-                                var cmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${shapeDimensionsOpt} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                            var cmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${shapeDimensionsOpt} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
@@ -336,36 +336,44 @@ class Upscaling {
                             sessionStorage.setItem('progress', data);
                         });
                         term.on("close", () => {
-                            terminal.innerHTML += `[enhancr] Finishing up upscaling..\r\n`;
-                            terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-
-                            // fix audio loss when muxing mkv
-                            let mkv = extension == ".mkv";
-                            let mkvFix = mkv ? "-max_interleave_delta 0" : "";
-
-                            let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i ${tmpOutPath} -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
-                            let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
-
-                            // merge stdout & stderr & write data to terminal
-                            process.stdout.write('');
-                            muxTerm.stdout.on('data', (data) => {
-                                process.stdout.write(`[Pipe] ${data}`);
-                            });
-                            muxTerm.stderr.on('data', (data) => {
-                                process.stderr.write(`[Pipe] ${data}`);
-                                terminal.innerHTML += '[Pipe] ' + data;
-                                sessionStorage.setItem('progress', data);
-                            });
-                            muxTerm.on("close", () => {
-                                // finish up upscaling process
-                                terminal.innerHTML += `[enhancr] Completed upscaling`;
-                                const upscalingBtnSpan = document.getElementById("upscaling-button-text");
-                                var notification = new Notification("Upscaling completed", { icon: "./assets/enhancr.png", body: path.basename(file) });
-                                sessionStorage.setItem('status', 'done');
-                                successTitle.innerHTML = path.basename(sessionStorage.getItem("upscaleInputPath"));
-                                thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Date.now());
+                            let lines = terminal.value.match(/[^\r\n]+/g);
+                            let log = lines.slice(-10).reverse();
+                            // don't merge streams if an error occurs
+                            if (log.includes('[Pipe] pipe:: Invalid data found when processing input')) {
+                                terminal.innerHTML += `[enhancr] An error has occured.`;
                                 resolve();
-                            });
+                            } else {
+                                terminal.innerHTML += `[enhancr] Finishing up upscaling..\r\n`;
+                                terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
+
+                                // fix audio loss when muxing mkv
+                                let mkv = extension == ".mkv";
+                                let mkvFix = mkv ? "-max_interleave_delta 0" : "";
+
+                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i ${tmpOutPath} -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
+                                let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
+
+                                // merge stdout & stderr & write data to terminal
+                                process.stdout.write('');
+                                muxTerm.stdout.on('data', (data) => {
+                                    process.stdout.write(`[Pipe] ${data}`);
+                                });
+                                muxTerm.stderr.on('data', (data) => {
+                                    process.stderr.write(`[Pipe] ${data}`);
+                                    terminal.innerHTML += '[Pipe] ' + data;
+                                    sessionStorage.setItem('progress', data);
+                                });
+                                muxTerm.on("close", () => {
+                                    // finish up upscaling process
+                                    terminal.innerHTML += `[enhancr] Completed upscaling`;
+                                    const upscalingBtnSpan = document.getElementById("upscaling-button-text");
+                                    var notification = new Notification("Upscaling completed", { icon: "./assets/enhancr.png", body: path.basename(file) });
+                                    sessionStorage.setItem('status', 'done');
+                                    successTitle.innerHTML = path.basename(sessionStorage.getItem("upscaleInputPath"));
+                                    thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Date.now());
+                                    resolve();
+                                });
+                            }
                         });
                     });
                 }
