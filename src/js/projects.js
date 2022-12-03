@@ -17,7 +17,7 @@ var x265Btn = document.getElementById("x265");
 var AV1Btn = document.getElementById("AV1");
 var VP9Btn = document.getElementById("VP9");
 var ProResBtn = document.getElementById("ProRes");
-var NVENCBtn = document.getElementById("NVENC");
+var LosslessBtn = document.getElementById("Lossless");
 
 var outputContainerSpan = document.getElementById("container-span");
 var modelSpan = document.getElementById("model-span");
@@ -66,7 +66,7 @@ function loadInterpolation() {
     AV1Btn.style.color = "#d0d0d0";
     VP9Btn.style.color = "#d0d0d0";
     ProResBtn.style.color = "#d0d0d0";
-    NVENCBtn.style.color = "#d0d0d0";
+    LosslessBtn.style.color = "#d0d0d0";
     x264Btn.style.color = "#1e5cce";
   }
   if (data.interpolation[0].codec === "H265") {
@@ -86,7 +86,7 @@ function loadInterpolation() {
     AV1Btn.style.color = "#d0d0d0";
     VP9Btn.style.color = "#d0d0d0";
     ProResBtn.style.color = "#d0d0d0";
-    NVENCBtn.style.color = "#d0d0d0";
+    LosslessBtn.style.color = "#d0d0d0";
     x265Btn.style.color = "#1e5cce";
   }
   if (data.interpolation[0].codec === "VP9") {
@@ -106,7 +106,7 @@ function loadInterpolation() {
     x265Btn.style.color = "#d0d0d0";
     AV1Btn.style.color = "#d0d0d0";
     ProResBtn.style.color = "#d0d0d0";
-    NVENCBtn.style.color = "#d0d0d0";
+    LosslessBtn.style.color = "#d0d0d0";
     VP9Btn.style.color = "#1e5cce";
   }
   if (data.interpolation[0].codec === "AV1") {
@@ -126,7 +126,7 @@ function loadInterpolation() {
     x265Btn.style.color = "#d0d0d0";
     VP9Btn.style.color = "#d0d0d0";
     ProResBtn.style.color = "#d0d0d0";
-    NVENCBtn.style.color = "#d0d0d0";
+    LosslessBtn.style.color = "#d0d0d0";
     AV1Btn.style.color = "#1e5cce";
   }
   if (data.interpolation[0].codec === "ProRes") {
@@ -149,7 +149,7 @@ function loadInterpolation() {
     VP9Btn.style.color = "#d0d0d0";
     ProResBtn.style.color = "#1e5cce";
   }
-  if (data.interpolation[0].codec === "NVENC") {
+  if (data.interpolation[0].codec === "Lossless") {
     try {
       const jsonString = fs.readFileSync(path.join(__dirname, "codecs.json"));
       var jsonCodec = JSON.parse(jsonString);
@@ -158,16 +158,16 @@ function loadInterpolation() {
       return;
     }
 
-    sessionStorage.setItem('codecInterpolation', 'NVENC');
+    sessionStorage.setItem('codecInterpolation', 'Lossless');
 
-    ffmpegParams.value = jsonCodec.codecs[0].NVENC;
+    ffmpegParams.value = jsonCodec.codecs[0].Lossless;
 
     x264Btn.style.color = "#d0d0d0";
     x265Btn.style.color = "#d0d0d0";
     AV1Btn.style.color = "#d0d0d0";
     ProResBtn.style.color = "#d0d0d0";
     VP9Btn.style.color = "#d0d0d0";
-    NVENCBtn.style.color = "#1e5cce";
+    LosslessBtn.style.color = "#1e5cce";
   }
   if (!data.interpolation[0].params == "") {
     ffmpegParams.value = data.interpolation[0].params;
@@ -235,7 +235,7 @@ var x265BtnUp = document.getElementById("x265-up"),
   AV1BtnUp = document.getElementById("AV1-up"),
   VP9BtnUp = document.getElementById("VP9-up"),
   ProResBtnUp = document.getElementById("ProRes-up"),
-  NVENCBtnUp = document.getElementById("NVENC-up"),
+  LosslessBtnUp = document.getElementById("Lossless-up"),
   x264BtnUp = document.getElementById("x264-up");
 
 var outputContainerSpanUpscale = document.getElementById("container-span-up"),
@@ -284,7 +284,7 @@ function loadUpscaling() {
     AV1BtnUp.style.color = "#d0d0d0";
     VP9BtnUp.style.color = "#d0d0d0";
     ProResBtnUp.style.color = "#d0d0d0";
-    NVENCBtnUp.style.color = "#d0d0d0";
+    LosslessBtnUp.style.color = "#d0d0d0";
     x264BtnUp.style.color = "#1e5cce";
   }
   if (data.upscaling[0].codec === "H265") {
@@ -304,7 +304,7 @@ function loadUpscaling() {
     AV1BtnUp.style.color = "#d0d0d0";
     VP9BtnUp.style.color = "#d0d0d0";
     ProResBtnUp.style.color = "#d0d0d0";
-    NVENCBtnUp.style.color = "#d0d0d0";
+    LosslessBtnUp.style.color = "#d0d0d0";
     x265BtnUp.style.color = "#1e5cce";
   }
   if (data.upscaling[0].codec === "VP9") {
@@ -324,7 +324,7 @@ function loadUpscaling() {
     x265BtnUp.style.color = "#d0d0d0";
     AV1BtnUp.style.color = "#d0d0d0";
     ProResBtnUp.style.color = "#d0d0d0";
-    NVENCBtnUp.style.color = "#d0d0d0";
+    LosslessBtnUp.style.color = "#d0d0d0";
     VP9BtnUp.style.color = "#1e5cce";
   }
   if (data.upscaling[0].codec === "AV1") {
@@ -344,7 +344,7 @@ function loadUpscaling() {
     x265BtnUp.style.color = "#d0d0d0";
     VP9BtnUp.style.color = "#d0d0d0";
     ProResBtnUp.style.color = "#d0d0d0";
-    NVENCBtnUp.style.color = "#d0d0d0";
+    LosslessBtnUp.style.color = "#d0d0d0";
     AV1BtnUp.style.color = "#1e5cce";
   }
 
@@ -369,7 +369,7 @@ function loadUpscaling() {
     ProResBtnUp.style.color = "#1e5cce";
   }
 
-  if (data.upscaling[0].codec === "NVENC") {
+  if (data.upscaling[0].codec === "Lossless") {
     try {
       const jsonString = fs.readFileSync(path.join(__dirname, "codecs.json"));
       var jsonCodec = JSON.parse(jsonString);
@@ -378,16 +378,16 @@ function loadUpscaling() {
       return;
     }
 
-    sessionStorage.setItem('codecUpscaling', 'NVENC');
+    sessionStorage.setItem('codecUpscaling', 'Lossless');
 
-    ffmpegParamsUpscale.value = jsonCodec.codecs[0].NVENC;
+    ffmpegParamsUpscale.value = jsonCodec.codecs[0].Lossless;
 
     x264BtnUp.style.color = "#d0d0d0";
     x265BtnUp.style.color = "#d0d0d0";
     AV1BtnUp.style.color = "#d0d0d0";
     ProResBtnUp.style.color = "#d0d0d0";
     VP9BtnUp.style.color = "#d0d0d0";
-    NVENCBtnUp.style.color = "#1e5cce";
+    LosslessBtnUp.style.color = "#1e5cce";
   }
 
   if (!data.upscaling[0].params == "") {
@@ -424,7 +424,7 @@ var x265BtnRes = document.getElementById("x265-res"),
   AV1BtnRes = document.getElementById("AV1-res"),
   VP9BtnRes = document.getElementById("VP9-res"),
   ProResBtnRes = document.getElementById("ProRes-res"),
-  NVENCBtnRes = document.getElementById("NVENC-res"),
+  LosslessBtnRes = document.getElementById("Lossless-res"),
   x264BtnRes = document.getElementById("x264-res");
 
 function loadRestoration() {
@@ -468,7 +468,7 @@ function loadRestoration() {
     AV1BtnRes.style.color = "#d0d0d0";
     VP9BtnRes.style.color = "#d0d0d0";
     ProResBtnRes.style.color = "#d0d0d0";
-    NVENCBtnRes.style.color = "#d0d0d0";
+    LosslessBtnRes.style.color = "#d0d0d0";
     x264BtnRes.style.color = "#1e5cce";
   }
   if (data.restoration[0].codec === "H265") {
@@ -488,7 +488,7 @@ function loadRestoration() {
     AV1BtnRes.style.color = "#d0d0d0";
     VP9BtnRes.style.color = "#d0d0d0";
     ProResBtnRes.style.color = "#d0d0d0";
-    NVENCBtnRes.style.color = "#d0d0d0";
+    LosslessBtnRes.style.color = "#d0d0d0";
     x265BtnRes.style.color = "#1e5cce";
   }
   if (data.restoration[0].codec === "VP9") {
@@ -508,7 +508,7 @@ function loadRestoration() {
     x265BtnRes.style.color = "#d0d0d0";
     AV1BtnRes.style.color = "#d0d0d0";
     ProResBtnRes.style.color = "#d0d0d0";
-    NVENCBtnRes.style.color = "#d0d0d0";
+    LosslessBtnRes.style.color = "#d0d0d0";
     VP9BtnRes.style.color = "#1e5cce";
   }
   if (data.restoration[0].codec === "AV1") {
@@ -528,7 +528,7 @@ function loadRestoration() {
     x265BtnRes.style.color = "#d0d0d0";
     VP9BtnRes.style.color = "#d0d0d0";
     ProResBtnRes.style.color = "#d0d0d0";
-    NVENCBtnRes.style.color = "#d0d0d0";
+    LosslessBtnRes.style.color = "#d0d0d0";
     AV1BtnRes.style.color = "#1e5cce";
   }
   if (data.restoration[0].codec === "ProRes") {
@@ -551,7 +551,7 @@ function loadRestoration() {
     VP9BtnRes.style.color = "#d0d0d0";
     ProResBtnRes.style.color = "#1e5cce";
   }
-  if (data.restoration[0].codec === "NVENC") {
+  if (data.restoration[0].codec === "Lossless") {
     try {
       const jsonString = fs.readFileSync(path.join(__dirname, "codecs.json"));
       var jsonCodec = JSON.parse(jsonString);
@@ -560,16 +560,16 @@ function loadRestoration() {
       return;
     }
 
-    sessionStorage.setItem('codecRestoration', 'NVENC');
+    sessionStorage.setItem('codecRestoration', 'Lossless');
 
-    ffmpegParamsRes.value = jsonCodec.codecs[0].NVENC;
+    ffmpegParamsRes.value = jsonCodec.codecs[0].Lossless;
 
     x264BtnRes.style.color = "#d0d0d0";
     x265BtnRes.style.color = "#d0d0d0";
     AV1BtnRes.style.color = "#d0d0d0";
     ProResBtnRes.style.color = "#d0d0d0";
     VP9BtnRes.style.color = "#d0d0d0";
-    NVENCBtnRes.style.color = "#1e5cce";
+    LosslessBtnRes.style.color = "#1e5cce";
   }
 
   if (!data.restoration[0].params == "") {

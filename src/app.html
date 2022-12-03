@@ -73,7 +73,7 @@
         <div class="codec" id="AV1"><span>AV1</span></div>
         <div class="codec" id="VP9"><span>VP9</span></div>
         <div class="codec" id="ProRes"><span>ProRes</span></div>
-        <div class="codec" id="NVENC"><span>NVENC</span></div>
+        <div class="codec" id="Lossless"><span>Lossless</span></div>
       </div>
       <ul style="list-style-type:none;" id="interpolation-list-continuation">
         <li id="container-label-interpolation">Output video container</li>
@@ -140,7 +140,7 @@
         <div class="codec" id="AV1-up"><span>AV1</span></div>
         <div class="codec" id="VP9-up"><span>VP9</span></div>
         <div class="codec" id="ProRes-up"><span>ProRes</span></div>
-        <div class="codec" id="NVENC-up"><span>NVENC</span></div>
+        <div class="codec" id="Lossless-up"><span>Lossless</span></div>
       </div>
       <ul style="list-style-type:none;" id="upscaling-list-continuation">
         <li id="container-label-upscaling">Output video container</li>
@@ -209,7 +209,7 @@
         <div class="codec" id="AV1-res"><span>AV1</span></div>
         <div class="codec" id="VP9-res"><span>VP9</span></div>
         <div class="codec" id="ProRes-res"><span>ProRes</span></div>
-        <div class="codec" id="NVENC-res"><span>NVENC</span></div>
+        <div class="codec" id="Lossless-res"><span>Lossless</span></div>
       </div>
       <ul style="list-style-type:none;" id="restoration-list-continuation">
         <li id="container-label-restoration">Output video container</li>
@@ -309,15 +309,14 @@
       <li><input type="checkbox" id="rife-uhd-check" /><span> Enable UHD mode <i id="preview-question"
             class="fa-solid fa-circle-question"><span class="tooltip-text" id="uhd-question">Recommended for
               high-resolution media</span></i></span></li>
-      <li><input type="checkbox" id="rife-sc-check" /><span> Toggle Scene Detection <i id="preview-question"
-            class="fa-solid fa-circle-question"><span class="tooltip-text" id="rife-sc-question">Skip interpolation on
-              scene change frames</span></i></span></li>
     </ul>
-    <ul style="list-style-type:none;" id="cain-list" class="animate__animated animate__fadeIn">
-      <div id="cain-side">CAIN</div>
-      <li><input type="checkbox" id="cain-sc-check" /><span> Toggle Scene Detection <i id="preview-question"
-            class="fa-solid fa-circle-question"><span class="tooltip-text" id="cain-sc-question">Skip interpolation on
-              scene change frames</span></i></span></li>
+    <ul style="list-style-type:none;" id="interpolation-settings-list" class="animate__animated animate__fadeIn">
+      <div id="interpolation-settings-side">Interpolation</div>
+      <li><input type="checkbox" id="sc-check" /><span> Enable Scene Detection <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="sc-question">Skips interpolation on scene change frames to mitigate artifacts
+            </span></i></span></li>
+      <li><input type="checkbox" id="skip-check" /><span> Skip duplicate frames <i id="preview-question"
+            class="fa-solid fa-circle-question"><span class="tooltip-text" id="skip-question">Skips interpolation on duplicate frames & grants a speed boost, especially on animation with a lot of same frames</span></i></span></li>
     </ul>
     <ul style="list-style-type:none;" id="tensorrt-list" class="animate__animated animate__fadeIn">
       <div id="tensorrt-side">TensorRT</div>
@@ -392,7 +391,7 @@
     <div id="models-hider"></div>
     <div id="custom-model-dropdown"></div>
     <span id="settings-footnote">enhancr • pre-release • made with <i id="heart" class="fa-solid fa-heart"></i> by
-      mafiosnik • build <span id="build-version">0.9.1</span></span>
+      mafiosnik • build <span id="build-version">0.9.2</span></span>
   </div>
   <!-- Terminal -->
   <div class="terminal animate__animated animate__fadeInUp animate__delay-3s" id="terminal-tab">

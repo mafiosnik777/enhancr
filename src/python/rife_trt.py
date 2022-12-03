@@ -99,12 +99,19 @@ with open(os.path.join(tmp_dir, "tmp.json"), encoding='utf-8') as f:
     frame_rate = data['framerate']
     engine = data['rife_engine']
     streams = data['streams']
-    sceneDetection = data['rife_scdetect']
+    sceneDetection = data['sc']
+    frameskip = data['skip']
     
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
-if sceneDetection == True:
+if sceneDetection:
     clip = core.misc.SCDetect(clip=clip, threshold=0.100)
+
+if frameskip:
+    offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
+    offs1 = core.std.CopyFrameProps(offs1, clip)
+    # use ssim for similarity calc
+    clip = core.vmaf.Metric(clip, offs1, 2)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 

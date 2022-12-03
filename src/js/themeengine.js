@@ -17,8 +17,8 @@ var togglePreview = document.getElementById("preview-check");
 var toggleOled = document.getElementById("oled-mode");
 var toggleRifeTta = document.getElementById("rife-tta-check");
 var toggleRifeUhd = document.getElementById("rife-uhd-check");
-var toggleRifeSc = document.getElementById("rife-sc-check");
-var toggleCainSc = document.getElementById("cain-sc-check");
+var scCheck = document.getElementById("sc-check");
+var skipCheck = document.getElementById("skip-check");
 var togglefp16 = document.getElementById("fp16-check");
 var toggleShapes = document.getElementById('shape-check');
 var toggleTiling = document.getElementById('tiling-check');
@@ -54,12 +54,12 @@ function blueSelect() {
     toggleOled.style.setProperty('--toggle-color', "#1e5cce");
     toggleRifeTta.style.setProperty('--toggle-color', "#1e5cce");
     toggleRifeUhd.style.setProperty('--toggle-color', "#1e5cce");
-    toggleRifeSc.style.setProperty('--toggle-color', "#1e5cce");
-    toggleCainSc.style.setProperty('--toggle-color', "#1e5cce");
     togglefp16.style.setProperty('--toggle-color', "#1e5cce");
     toggleShapes.style.setProperty('--toggle-color', "#1e5cce");
     toggleTiling.style.setProperty('--toggle-color', "#1e5cce");
     customModelCheck.style.setProperty('--toggle-color', "#1e5cce");
+    scCheck.style.setProperty('--toggle-color', "#1e5cce");
+    skipCheck.style.setProperty('--toggle-color', "#1e5cce");
     trimCheck.style.setProperty('--toggle-color', "#1e5cce");
     pythonCheck.style.setProperty('--toggle-color', "#1e5cce");
     progressDone.style.setProperty('--bar-color', "#1e5cce");
@@ -112,8 +112,6 @@ function pinkSelect() {
     toggleOled.style.setProperty('--toggle-color', "#ce1e6c");
     toggleRifeTta.style.setProperty('--toggle-color', "#ce1e6c");
     toggleRifeUhd.style.setProperty('--toggle-color', "#ce1e6c");
-    toggleRifeSc.style.setProperty('--toggle-color', "#ce1e6c");
-    toggleCainSc.style.setProperty('--toggle-color', "#ce1e6c");
     togglefp16.style.setProperty('--toggle-color', "#ce1e6c");
     toggleShapes.style.setProperty('--toggle-color', "#ce1e6c");
     toggleTiling.style.setProperty('--toggle-color', "#ce1e6c");
@@ -121,6 +119,8 @@ function pinkSelect() {
     trimCheck.style.setProperty('--toggle-color', "#ce1e6c");
     pythonCheck.style.setProperty('--toggle-color', "#ce1e6c");
     progressDone.style.setProperty('--bar-color', "#ce1e6c");
+    scCheck.style.setProperty('--toggle-color', "#ce1e6c");
+    skipCheck.style.setProperty('--toggle-color', "#ce1e6c");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#ce1e6c";
@@ -169,8 +169,6 @@ function greenSelect() {
     toggleOled.style.setProperty('--toggle-color', "#9ece1e");
     toggleRifeTta.style.setProperty('--toggle-color', "#9ece1e");
     toggleRifeUhd.style.setProperty('--toggle-color', "#9ece1e");
-    toggleRifeSc.style.setProperty('--toggle-color', "#9ece1e");
-    toggleCainSc.style.setProperty('--toggle-color', "#9ece1e");
     togglefp16.style.setProperty('--toggle-color', "#9ece1e");
     toggleShapes.style.setProperty('--toggle-color', "#9ece1e");
     toggleTiling.style.setProperty('--toggle-color', "#9ece1e");
@@ -178,6 +176,8 @@ function greenSelect() {
     trimCheck.style.setProperty('--toggle-color', "#9ece1e");
     pythonCheck.style.setProperty('--toggle-color', "#9ece1e");
     progressDone.style.setProperty('--bar-color', "#9ece1e");
+    scCheck.style.setProperty('--toggle-color', "#9ece1e");
+    skipCheck.style.setProperty('--toggle-color', "#9ece1e");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#9ece1e";
@@ -226,8 +226,6 @@ function purpleSelect() {
     toggleOled.style.setProperty('--toggle-color', "#601ece");
     toggleRifeTta.style.setProperty('--toggle-color', "#601ece");
     toggleRifeUhd.style.setProperty('--toggle-color', "#601ece");
-    toggleRifeSc.style.setProperty('--toggle-color', "#601ece");
-    toggleCainSc.style.setProperty('--toggle-color', "#601ece");
     togglefp16.style.setProperty('--toggle-color', "#601ece");
     toggleShapes.style.setProperty('--toggle-color', "#601ece");
     toggleTiling.style.setProperty('--toggle-color', "#601ece");
@@ -235,6 +233,8 @@ function purpleSelect() {
     trimCheck.style.setProperty('--toggle-color', "#601ece");
     pythonCheck.style.setProperty('--toggle-color', "#601ece");
     progressDone.style.setProperty('--bar-color', "#601ece");
+    scCheck.style.setProperty('--toggle-color', "#601ece");
+    skipCheck.style.setProperty('--toggle-color', "#601ece");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#601ece";
@@ -284,8 +284,6 @@ function orangeSelect() {
     toggleOled.style.setProperty('--toggle-color', "#e36812");
     toggleRifeTta.style.setProperty('--toggle-color', "#e36812");
     toggleRifeUhd.style.setProperty('--toggle-color', "#e36812");
-    toggleRifeSc.style.setProperty('--toggle-color', "#e36812");
-    toggleCainSc.style.setProperty('--toggle-color', "#e36812");
     togglefp16.style.setProperty('--toggle-color', "#e36812");
     toggleShapes.style.setProperty('--toggle-color', "#e36812");
     toggleTiling.style.setProperty('--toggle-color', "#e36812");
@@ -293,6 +291,8 @@ function orangeSelect() {
     trimCheck.style.setProperty('--toggle-color', "#e36812");
     pythonCheck.style.setProperty('--toggle-color', "#e36812");
     progressDone.style.setProperty('--bar-color', "#e36812");
+    scCheck.style.setProperty('--toggle-color', "#e36812");
+    skipCheck.style.setProperty('--toggle-color', "#e36812");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#e36812";
@@ -341,8 +341,6 @@ function yellowSelect() {
     toggleOled.style.setProperty('--toggle-color', "#cece1b");
     toggleRifeTta.style.setProperty('--toggle-color', "#cece1b");
     toggleRifeUhd.style.setProperty('--toggle-color', "#cece1b");
-    toggleRifeSc.style.setProperty('--toggle-color', "#cece1b");
-    toggleCainSc.style.setProperty('--toggle-color', "#cece1b");
     togglefp16.style.setProperty('--toggle-color', "#cece1b");
     toggleShapes.style.setProperty('--toggle-color', "#cece1b");
     toggleTiling.style.setProperty('--toggle-color', "#cece1b");
@@ -350,6 +348,8 @@ function yellowSelect() {
     trimCheck.style.setProperty('--toggle-color', "#cece1b");
     pythonCheck.style.setProperty('--toggle-color', "#cece1b");
     progressDone.style.setProperty('--bar-color', "#cece1b");
+    scCheck.style.setProperty('--toggle-color', "#cece1b");
+    skipCheck.style.setProperty('--toggle-color', "#cece1b");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#cece1b";
@@ -398,8 +398,6 @@ function redSelect() {
     toggleOled.style.setProperty('--toggle-color', "#ce2a1e");
     toggleRifeTta.style.setProperty('--toggle-color', "#ce2a1e");
     toggleRifeUhd.style.setProperty('--toggle-color', "#ce2a1e");
-    toggleRifeSc.style.setProperty('--toggle-color', "#ce2a1e");
-    toggleCainSc.style.setProperty('--toggle-color', "#ce2a1e");
     togglefp16.style.setProperty('--toggle-color', "#ce2a1e");
     toggleShapes.style.setProperty('--toggle-color', "#ce2a1e");
     toggleTiling.style.setProperty('--toggle-color', "#ce2a1e");
@@ -407,6 +405,8 @@ function redSelect() {
     trimCheck.style.setProperty('--toggle-color', "#ce2a1e");
     pythonCheck.style.setProperty('--toggle-color', "#ce2a1e");
     progressDone.style.setProperty('--bar-color', "#ce2a1e");
+    scCheck.style.setProperty('--toggle-color', "#ce2a1e");
+    skipCheck.style.setProperty('--toggle-color', "#ce2a1e");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#ce2a1e";
@@ -455,8 +455,6 @@ function sandSelect() {
     toggleOled.style.setProperty('--toggle-color', "#E9DAC1");
     toggleRifeTta.style.setProperty('--toggle-color', "#E9DAC1");
     toggleRifeUhd.style.setProperty('--toggle-color', "#E9DAC1");
-    toggleRifeSc.style.setProperty('--toggle-color', "#E9DAC1");
-    toggleCainSc.style.setProperty('--toggle-color', "#E9DAC1");
     togglefp16.style.setProperty('--toggle-color', "#E9DAC1");
     toggleShapes.style.setProperty('--toggle-color', "#E9DAC1");
     toggleTiling.style.setProperty('--toggle-color', "#E9DAC1");
@@ -464,6 +462,8 @@ function sandSelect() {
     trimCheck.style.setProperty('--toggle-color', "#E9DAC1");
     pythonCheck.style.setProperty('--toggle-color', "#E9DAC1");
     progressDone.style.setProperty('--bar-color', "#E9DAC1");
+    scCheck.style.setProperty('--toggle-color', "#E9DAC1");
+    skipCheck.style.setProperty('--toggle-color', "#E9DAC1");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#E9DAC1";
@@ -512,8 +512,6 @@ function mintSelect() {
     toggleOled.style.setProperty('--toggle-color', "#8FE3CF");
     toggleRifeTta.style.setProperty('--toggle-color', "#8FE3CF");
     toggleRifeUhd.style.setProperty('--toggle-color', "#8FE3CF");
-    toggleRifeSc.style.setProperty('--toggle-color', "#8FE3CF");
-    toggleCainSc.style.setProperty('--toggle-color', "#8FE3CF");
     togglefp16.style.setProperty('--toggle-color', "#8FE3CF");
     toggleShapes.style.setProperty('--toggle-color', "#8FE3CF");
     toggleTiling.style.setProperty('--toggle-color', "#8FE3CF");
@@ -521,6 +519,8 @@ function mintSelect() {
     trimCheck.style.setProperty('--toggle-color', "#8FE3CF");
     pythonCheck.style.setProperty('--toggle-color', "#8FE3CF");
     progressDone.style.setProperty('--bar-color', "#8FE3CF");
+    scCheck.style.setProperty('--toggle-color', "#8FE3CF");
+    skipCheck.style.setProperty('--toggle-color', "#8FE3CF");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#8FE3CF";
@@ -569,8 +569,6 @@ function salmonSelect() {
     toggleOled.style.setProperty('--toggle-color', "#FFB3B3");
     toggleRifeTta.style.setProperty('--toggle-color', "#FFB3B3");
     toggleRifeUhd.style.setProperty('--toggle-color', "#FFB3B3");
-    toggleRifeSc.style.setProperty('--toggle-color', "#FFB3B3");
-    toggleCainSc.style.setProperty('--toggle-color', "#FFB3B3");
     togglefp16.style.setProperty('--toggle-color', "#FFB3B3");
     toggleShapes.style.setProperty('--toggle-color', "#FFB3B3");
     toggleTiling.style.setProperty('--toggle-color', "#FFB3B3");
@@ -578,6 +576,8 @@ function salmonSelect() {
     trimCheck.style.setProperty('--toggle-color', "#FFB3B3");
     pythonCheck.style.setProperty('--toggle-color', "#FFB3B3");
     progressDone.style.setProperty('--bar-color', "#FFB3B3");
+    scCheck.style.setProperty('--toggle-color', "#FFB3B3");
+    skipCheck.style.setProperty('--toggle-color', "#FFB3B3");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#FFB3B3";
@@ -626,8 +626,6 @@ function eggSelect() {
     toggleOled.style.setProperty('--toggle-color', "#FFEF82");
     toggleRifeTta.style.setProperty('--toggle-color', "#FFEF82");
     toggleRifeUhd.style.setProperty('--toggle-color', "#FFEF82");
-    toggleRifeSc.style.setProperty('--toggle-color', "#FFEF82");
-    toggleCainSc.style.setProperty('--toggle-color', "#FFEF82");
     togglefp16.style.setProperty('--toggle-color', "#FFEF82");
     toggleShapes.style.setProperty('--toggle-color', "#FFEF82");
     toggleTiling.style.setProperty('--toggle-color', "#FFEF82");
@@ -635,6 +633,8 @@ function eggSelect() {
     trimCheck.style.setProperty('--toggle-color', "#FFEF82");
     pythonCheck.style.setProperty('--toggle-color', "#FFEF82");
     progressDone.style.setProperty('--bar-color', "#FFEF82");
+    scCheck.style.setProperty('--toggle-color', "#FFEF82");
+    skipCheck.style.setProperty('--toggle-color', "#FFEF82");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#FFEF82";
@@ -683,8 +683,6 @@ function lavenderSelect() {
     toggleOled.style.setProperty('--toggle-color', "#AFB4FF");
     toggleRifeTta.style.setProperty('--toggle-color', "#AFB4FF");
     toggleRifeUhd.style.setProperty('--toggle-color', "#AFB4FF");
-    toggleRifeSc.style.setProperty('--toggle-color', "#AFB4FF");
-    toggleCainSc.style.setProperty('--toggle-color', "#AFB4FF");
     togglefp16.style.setProperty('--toggle-color', "#AFB4FF");
     toggleShapes.style.setProperty('--toggle-color', "#AFB4FF");
     toggleTiling.style.setProperty('--toggle-color', "#AFB4FF");
@@ -692,6 +690,8 @@ function lavenderSelect() {
     trimCheck.style.setProperty('--toggle-color', "#AFB4FF");
     pythonCheck.style.setProperty('--toggle-color', "#AFB4FF");
     progressDone.style.setProperty('--bar-color', "#AFB4FF");
+    scCheck.style.setProperty('--toggle-color', "#AFB4FF");
+    skipCheck.style.setProperty('--toggle-color', "#AFB4FF");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#AFB4FF";
@@ -740,8 +740,6 @@ function roseSelect() {
     toggleOled.style.setProperty('--toggle-color', "#FF5D5D");
     toggleRifeTta.style.setProperty('--toggle-color', "#FF5D5D");
     toggleRifeUhd.style.setProperty('--toggle-color', "#FF5D5D");
-    toggleRifeSc.style.setProperty('--toggle-color', "#FF5D5D");
-    toggleCainSc.style.setProperty('--toggle-color', "#FF5D5D");
     togglefp16.style.setProperty('--toggle-color', "#FF5D5D");
     toggleShapes.style.setProperty('--toggle-color', "#FF5D5D");
     toggleTiling.style.setProperty('--toggle-color', "#FF5D5D");
@@ -749,6 +747,8 @@ function roseSelect() {
     trimCheck.style.setProperty('--toggle-color', "#FF5D5D");
     pythonCheck.style.setProperty('--toggle-color', "#FF5D5D");
     progressDone.style.setProperty('--bar-color', "#FF5D5D");
+    scCheck.style.setProperty('--toggle-color', "#FF5D5D");
+    skipCheck.style.setProperty('--toggle-color', "#FF5D5D");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#FF5D5D";
@@ -797,8 +797,6 @@ function greySelect() {
     toggleOled.style.setProperty('--toggle-color', "#696969");
     toggleRifeTta.style.setProperty('--toggle-color', "#696969");
     toggleRifeUhd.style.setProperty('--toggle-color', "#696969");
-    toggleRifeSc.style.setProperty('--toggle-color', "#696969");
-    toggleCainSc.style.setProperty('--toggle-color', "#696969");
     togglefp16.style.setProperty('--toggle-color', "#696969");
     toggleShapes.style.setProperty('--toggle-color', "#696969");
     toggleTiling.style.setProperty('--toggle-color', "#696969");
@@ -806,6 +804,8 @@ function greySelect() {
     trimCheck.style.setProperty('--toggle-color', "#696969");
     pythonCheck.style.setProperty('--toggle-color', "#696969");
     progressDone.style.setProperty('--bar-color', "#696969");
+    scCheck.style.setProperty('--toggle-color', "#696969");
+    skipCheck.style.setProperty('--toggle-color', "#696969");
 
     for (var i = 0; i < queueProgressBar.length; i++) {
         queueProgressBar[i].style.background = "#696969";

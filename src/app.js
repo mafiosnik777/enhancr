@@ -88,7 +88,8 @@ if (!fs.existsSync(path.join(appDataPath, '/.enhancr/settings.json'))) {
         theme: 'blue',
         rifeTta: false,
         rifeUhd: false,
-        rifeSc: true,
+        sc: true,
+        skip: false,
         cainSc: true,
         fp16: true,
         num_streams: 2,
@@ -128,7 +129,7 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
       console.log("discord rpc initialized - user: ", client.environment.user.username);
     });
     client.setActivity({
-      details: osInfo + " " + process.arch + "・enhancr - 0.9.1",
+      details: osInfo + " " + process.arch + "・enhancr - 0.9.2",
       assets: {
         large_image: "enhancr",
         large_text: "enhancr",
@@ -144,7 +145,7 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     });
     ipcMain.on("rpc-done", function (event) {
       client.setActivity({
-        details: osInfo + " " + process.arch + "・enhancr - 0.9.1",
+        details: osInfo + " " + process.arch + "・enhancr - 0.9.2",
         assets: {
           large_image: "enhancr",
           large_text: "enhancr",
@@ -162,13 +163,13 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     var date = new Date();
     ipcMain.on("rpc-interpolation", function (event, fps, engine, percentage) {
       client.setActivity({
-        details: "Interpolating" + "・enhancr - 0.9.1",
+        details: "Interpolating" + "・enhancr - 0.9.2",
         state: engine + " - " + fps + " fps" + " - " + percentage + "%",
         assets: {
           large_image: "interpolate",
           large_text: "Interpolating",
           small_image: "enhancr",
-          small_text: "enhancr - 0.9.1"
+          small_text: "enhancr - 0.9.2"
         },
         buttons: [
           {
@@ -181,13 +182,13 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     })
     ipcMain.on("rpc-upscaling", function (event, fps, engine, percentage) {
       client.setActivity({
-        details: "Upscaling" + "・enhancr - 0.9.1",
+        details: "Upscaling" + "・enhancr - 0.9.2",
         state: engine + " - " + fps + " fps" + " - " + percentage + "%",
         assets: {
           large_image: "upscale",
           large_text: "Upscaling",
           small_image: "enhancr",
-          small_text: "enhancr - 0.9.1"
+          small_text: "enhancr - 0.9.2"
         },
         buttons: [
           {
@@ -200,13 +201,13 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     });
     ipcMain.on("rpc-restoration", function (event, fps, engine, percentage) {
       client.setActivity({
-        details: "Restoring" + "・enhancr - 0.9.1",
+        details: "Restoring" + "・enhancr - 0.9.2",
         state: engine + " - " + fps + " fps" + " - " + percentage + "%",
         assets: {
           large_image: "restore",
           large_text: "Restoring",
           small_image: "enhancr",
-          small_text: "enhancr - 0.9.1"
+          small_text: "enhancr - 0.9.2"
         },
         buttons: [
           {

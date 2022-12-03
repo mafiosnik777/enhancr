@@ -25,7 +25,7 @@ var x264Btn = document.getElementById("x264"),
     AV1Btn = document.getElementById("AV1"),
     VP9Btn = document.getElementById("VP9"),
     ProResBtn = document.getElementById("ProRes"),
-    NVENCBtn = document.getElementById("NVENC");
+    LosslessBtn = document.getElementById("Lossless");
 
 var hider = document.getElementById("hider");
 var outputContainerInput = document.getElementById("output-container");
@@ -648,7 +648,7 @@ function changeCodecH264() {
     AV1Btn.style.color = "rgb(208, 208, 208)";
     VP9Btn.style.color = "rgb(208, 208, 208)";
     ProResBtn.style.color = "rgb(208, 208, 208)";
-    NVENCBtn.style.color = "rgb(208, 208, 208)";
+    LosslessBtn.style.color = "rgb(208, 208, 208)";
     x264Btn.style.color = theme;
 
     // autosave codec in project file
@@ -679,7 +679,7 @@ function changeCodecH265() {
     AV1Btn.style.color = "rgb(208, 208, 208)";
     VP9Btn.style.color = "rgb(208, 208, 208)";
     ProResBtn.style.color = "rgb(208, 208, 208)";
-    NVENCBtn.style.color = "rgb(208, 208, 208)";
+    LosslessBtn.style.color = "rgb(208, 208, 208)";
     x265Btn.style.color = theme;
 
     // autosave codec in project file
@@ -709,7 +709,7 @@ function changeCodecAV1() {
     x265Btn.style.color = "rgb(208, 208, 208)";
     VP9Btn.style.color = "rgb(208, 208, 208)";
     ProResBtn.style.color = "rgb(208, 208, 208)";
-    NVENCBtn.style.color = "rgb(208, 208, 208)";
+    LosslessBtn.style.color = "rgb(208, 208, 208)";
     AV1Btn.style.color = theme;
 
     // autosave codec in project file
@@ -740,7 +740,7 @@ function changeCodecVP9() {
     x265Btn.style.color = "rgb(208, 208, 208)";
     AV1Btn.style.color = "rgb(208, 208, 208)";
     ProResBtn.style.color = "rgb(208, 208, 208)";
-    NVENCBtn.style.color = "rgb(208, 208, 208)";
+    LosslessBtn.style.color = "rgb(208, 208, 208)";
     VP9Btn.style.color = theme;
 
     // autosave codec in project file
@@ -782,7 +782,7 @@ function changeCodecProRes() {
     console.log("Codec written to project file.");
 }
 
-function changeCodecNVENC() {
+function changeCodecLossless() {
     try {
         const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
@@ -791,22 +791,22 @@ function changeCodecNVENC() {
         return;
     }
 
-    ffmpegParams.value = json.codecs[0].NVENC;
+    ffmpegParams.value = json.codecs[0].Lossless;
 
     var theme = getTheme();
 
-    sessionStorage.setItem('codecInterpolation', 'NVENC');
+    sessionStorage.setItem('codecInterpolation', 'Lossless');
 
     x264Btn.style.color = "rgb(208, 208, 208)";
     x265Btn.style.color = "rgb(208, 208, 208)";
     AV1Btn.style.color = "rgb(208, 208, 208)";
     ProResBtn.style.color = "rgb(208, 208, 208)";
     VP9Btn.style.color = "rgb(208, 208, 208)";
-    NVENCBtn.style.color = theme;
+    LosslessBtn.style.color = theme;
     // autosave codec in project file
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
-    data.interpolation[0].codec = "NVENC";
+    data.interpolation[0].codec = "Lossless";
     data.interpolation[0].params = ffmpegParams.value;
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Codec written to project file.");
@@ -818,7 +818,7 @@ x265Btn.addEventListener("click", changeCodecH265);
 AV1Btn.addEventListener("click", changeCodecAV1);
 VP9Btn.addEventListener("click", changeCodecVP9);
 ProResBtn.addEventListener("click", changeCodecProRes);
-NVENCBtn.addEventListener("click", changeCodecNVENC);
+LosslessBtn.addEventListener("click", changeCodecLossless);
 
 var scaleInput = document.getElementById("factor-selector"),
     scaleDropdown = document.getElementById("factor-dropdown"),
@@ -831,7 +831,7 @@ var x265BtnUp = document.getElementById("x265-up"),
     AV1BtnUp = document.getElementById("AV1-up"),
     VP9BtnUp = document.getElementById("VP9-up"),
     ProResBtnUp = document.getElementById("ProRes-up"),
-    NVENCBtnUp = document.getElementById("NVENC-up"),
+    LosslessBtnUp = document.getElementById("Lossless-up"),
     x264BtnUp = document.getElementById("x264-up");
 
 var engineInputUpscale = document.getElementById("engine-upscale");
@@ -919,7 +919,7 @@ function changeCodecH264Upscale() {
     AV1BtnUp.style.color = "rgb(208, 208, 208)";
     VP9BtnUp.style.color = "rgb(208, 208, 208)";
     ProResBtnUp.style.color = "rgb(208, 208, 208)";
-    NVENCBtnUp.style.color = "rgb(208, 208, 208)";
+    LosslessBtnUp.style.color = "rgb(208, 208, 208)";
     x264BtnUp.style.color = theme;
 
     // autosave codec in project file
@@ -950,7 +950,7 @@ function changeCodecH265Upscale() {
     AV1BtnUp.style.color = "rgb(208, 208, 208)";
     VP9BtnUp.style.color = "rgb(208, 208, 208)";
     ProResBtnUp.style.color = "rgb(208, 208, 208)";
-    NVENCBtnUp.style.color = "rgb(208, 208, 208)";
+    LosslessBtnUp.style.color = "rgb(208, 208, 208)";
     x265BtnUp.style.color = theme;
 
     // autosave codec in project file
@@ -981,7 +981,7 @@ function changeCodecAV1Upscale() {
     x265BtnUp.style.color = "rgb(208, 208, 208)";
     VP9BtnUp.style.color = "rgb(208, 208, 208)";
     ProResBtnUp.style.color = "rgb(208, 208, 208)";
-    NVENCBtnUp.style.color = "rgb(208, 208, 208)";
+    LosslessBtnUp.style.color = "rgb(208, 208, 208)";
     AV1BtnUp.style.color = theme;
 
     // autosave codec in project file
@@ -1012,7 +1012,7 @@ function changeCodecVP9Upscale() {
     x265BtnUp.style.color = "rgb(208, 208, 208)";
     AV1BtnUp.style.color = "rgb(208, 208, 208)";
     ProResBtnUp.style.color = "rgb(208, 208, 208)";
-    NVENCBtnUp.style.color = "rgb(208, 208, 208)";
+    LosslessBtnUp.style.color = "rgb(208, 208, 208)";
     VP9BtnUp.style.color = theme;
 
     // autosave codec in project file
@@ -1054,7 +1054,7 @@ function changeCodecProResUpscale() {
     console.log("Codec written to project file.");
 }
 
-function changeCodecNVENCUpscale() {
+function changeCodecLosslessUpscale() {
     try {
         const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
@@ -1063,22 +1063,22 @@ function changeCodecNVENCUpscale() {
         return;
     }
 
-    ffmpegParamsUpscale.value = json.codecs[0].NVENC;
+    ffmpegParamsUpscale.value = json.codecs[0].Lossless;
 
     var theme = getTheme();
 
-    sessionStorage.setItem('codecUpscaling', 'NVENC');
+    sessionStorage.setItem('codecUpscaling', 'Lossless');
 
     x264BtnUp.style.color = "rgb(208, 208, 208)";
     x265BtnUp.style.color = "rgb(208, 208, 208)";
     AV1BtnUp.style.color = "rgb(208, 208, 208)";
     ProResBtnUp.style.color = "rgb(208, 208, 208)";
     VP9BtnUp.style.color = "rgb(208, 208, 208)";
-    NVENCBtnUp.style.color = theme;
+    LosslessBtnUp.style.color = theme;
     // autosave codec in project file
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
-    data.upscaling[0].codec = "NVENC";
+    data.upscaling[0].codec = "Lossless";
     data.upscaling[0].params = ffmpegParamsUpscale.value;
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Codec written to project file.");
@@ -1089,7 +1089,7 @@ x265BtnUp.addEventListener("click", changeCodecH265Upscale);
 AV1BtnUp.addEventListener("click", changeCodecAV1Upscale);
 VP9BtnUp.addEventListener("click", changeCodecVP9Upscale);
 ProResBtnUp.addEventListener("click", changeCodecProResUpscale);
-NVENCBtnUp.addEventListener("click", changeCodecNVENCUpscale);
+LosslessBtnUp.addEventListener("click", changeCodecLosslessUpscale);
 
 var hiderUpscale = document.getElementById("hider-upscale"),
     containerDropdownUpscale = document.getElementById("container-dropdown-upscale");
@@ -1359,7 +1359,7 @@ var x265BtnRes = document.getElementById("x265-res"),
     AV1BtnRes = document.getElementById("AV1-res"),
     VP9BtnRes = document.getElementById("VP9-res"),
     ProResBtnRes = document.getElementById("ProRes-res"),
-    NVENCBtnRes = document.getElementById("NVENC-res"),
+    LosslessBtnRes = document.getElementById("Lossless-res"),
     x264BtnRes = document.getElementById("x264-res");
 
 // Get ffmpeg parameters
@@ -1384,7 +1384,7 @@ function changeCodecH264Restoration() {
     AV1BtnRes.style.color = "rgb(208, 208, 208)";
     VP9BtnRes.style.color = "rgb(208, 208, 208)";
     ProResBtnRes.style.color = "rgb(208, 208, 208)";
-    NVENCBtnRes.style.color = "rgb(208, 208, 208)";
+    LosslessBtnRes.style.color = "rgb(208, 208, 208)";
     x264BtnRes.style.color = theme;
 
     // autosave codec in project file
@@ -1415,7 +1415,7 @@ function changeCodecH265Restoration() {
     AV1BtnRes.style.color = "rgb(208, 208, 208)";
     VP9BtnRes.style.color = "rgb(208, 208, 208)";
     ProResBtnRes.style.color = "rgb(208, 208, 208)";
-    NVENCBtnRes.style.color = "rgb(208, 208, 208)";
+    LosslessBtnRes.style.color = "rgb(208, 208, 208)";
     x265BtnRes.style.color = theme;
 
     // autosave codec in project file
@@ -1446,7 +1446,7 @@ function changeCodecAV1Restoration() {
     x265BtnRes.style.color = "rgb(208, 208, 208)";
     VP9BtnRes.style.color = "rgb(208, 208, 208)";
     ProResBtnRes.style.color = "rgb(208, 208, 208)";
-    NVENCBtnRes.style.color = "rgb(208, 208, 208)";
+    LosslessBtnRes.style.color = "rgb(208, 208, 208)";
     AV1BtnRes.style.color = theme;
 
     // autosave codec in project file
@@ -1477,7 +1477,7 @@ function changeCodecVP9Restoration() {
     x265BtnRes.style.color = "rgb(208, 208, 208)";
     AV1BtnRes.style.color = "rgb(208, 208, 208)";
     ProResBtnRes.style.color = "rgb(208, 208, 208)";
-    NVENCBtnRes.style.color = "rgb(208, 208, 208)";
+    LosslessBtnRes.style.color = "rgb(208, 208, 208)";
     VP9BtnRes.style.color = theme;
 
     // autosave codec in project file
@@ -1519,7 +1519,7 @@ function changeCodecProResRestoration() {
     console.log("Codec written to project file.");
 }
 
-function changeCodecNVENCRestoration() {
+function changeCodecLosslessRestoration() {
     try {
         const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
@@ -1528,22 +1528,22 @@ function changeCodecNVENCRestoration() {
         return;
     }
 
-    ffmpegParamsRestoration.value = json.codecs[0].NVENC;
+    ffmpegParamsRestoration.value = json.codecs[0].Lossless;
 
     var theme = getTheme();
 
-    sessionStorage.setItem('codecRestoration', 'NVENC');
+    sessionStorage.setItem('codecRestoration', 'Lossless');
 
     x264BtnRes.style.color = "rgb(208, 208, 208)";
     x265BtnRes.style.color = "rgb(208, 208, 208)";
     AV1BtnRes.style.color = "rgb(208, 208, 208)";
     ProResBtnRes.style.color = "rgb(208, 208, 208)";
     VP9BtnRes.style.color = "rgb(208, 208, 208)";
-    NVENCBtnRes.style.color = theme;
+    LosslessBtnRes.style.color = theme;
     // autosave codec in project file
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
-    data.restoration[0].codec = "NVENC";
+    data.restoration[0].codec = "Lossless";
     data.restoration[0].params = ffmpegParamsRestoration.value;
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Codec written to project file.");
@@ -1554,7 +1554,7 @@ x265BtnRes.addEventListener("click", changeCodecH265Restoration);
 AV1BtnRes.addEventListener("click", changeCodecAV1Restoration);
 VP9BtnRes.addEventListener("click", changeCodecVP9Restoration);
 ProResBtnRes.addEventListener("click", changeCodecProResRestoration);
-NVENCBtnRes.addEventListener("click", changeCodecNVENCRestoration);
+LosslessBtnRes.addEventListener("click", changeCodecLosslessRestoration);
 
 var hiderRestore = document.getElementById("hider-restore"),
     containerDropdownRestoration = document.getElementById("container-dropdown-restoration");

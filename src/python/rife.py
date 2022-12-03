@@ -27,7 +27,8 @@ with open(os.path.join(tmp_dir, "tmp.json"), encoding='utf-8') as f:
     rife_model = data['model']
     TTA = data['rife_tta']
     UHD = data['rife_uhd']
-    sceneDetection = data['rife_scdetect']
+    sceneDetection = data['sc']
+    frameskip = data['skip']
     
 # get rife model
 if rife_model == 'RIFE - v2.3':
@@ -55,7 +56,7 @@ clip = core.misc.SCDetect(clip=clip, threshold=0.200)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-clip = core.rife.RIFE(clip, model=model, factor_num=2, gpu_id=0, gpu_thread=2, tta=TTA, uhd=UHD, skip=True, sc=sceneDetection)
+clip = core.rife.RIFE(clip, model=model, factor_num=2, gpu_id=0, gpu_thread=2, tta=TTA, uhd=UHD, skip=frameskip, sc=sceneDetection)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 

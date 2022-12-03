@@ -10,65 +10,6 @@ var preview = document.getElementById("preview");
 
 const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
 
-// Read settings.json on launch
-fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) => {
-  if (err) throw err;
-  let json = JSON.parse(settings);
-  // Set values
-  document.getElementById("preview-check").checked = json.settings[0].preview;
-  if (document.getElementById("preview-check").checked == true) {
-    preview.style.display = "block";
-    sessionStorage.setItem('previewSetting', 'true');
-  } else {
-    preview.style.display = "none";
-    sessionStorage.setItem('previewSetting', 'false');
-  }
-  if (json.settings[0].disableBlur === false) {
-    document.getElementById("oled-mode").checked = false;
-  } else {
-    document.getElementById("oled-mode").checked = true;
-  }
-  try {
-    document.getElementById("toggle-rpc").checked = json.settings[0].rpc;
-    document.getElementById("rife-tta-check").checked = json.settings[0].rifeTta;
-    document.getElementById("rife-uhd-check").checked = json.settings[0].rifeUhd;
-    document.getElementById("rife-sc-check").checked = json.settings[0].rifeSc;
-    document.getElementById("cain-sc-check").checked = json.settings[0].cainSc;
-    document.getElementById("fp16-check").checked = json.settings[0].fp16;
-    document.getElementById("num-streams").value = json.settings[0].num_streams;
-    document.getElementById("denoise-strength").value = json.settings[0].denoiseStrength;
-    document.getElementById("deblock-strength").value = json.settings[0].deblockStrength;
-    document.getElementById("tile-res").value = json.settings[0].tileRes;
-    document.getElementById("tiling-check").checked = json.settings[0].tiling;
-    document.getElementById("shape-res").value = json.settings[0].shapeRes;
-    document.getElementById("shape-check").checked = json.settings[0].shapes;
-    document.getElementById("custom-model-check").checked = json.settings[0].customModel;
-    document.getElementById("trim-check").checked = json.settings[0].trimAccurate;
-    document.getElementById("python-check").checked = json.settings[0].systemPython;
-  } catch (error) {
-    console.error(error);
-    console.log('Incompatible settings.json detected, save settings to overwrite.')
-  }
-
-});
-
-const bytesToMegaBytes = bytes => bytes / (1024 ** 2);
-
-var cpu = document.getElementById("settings-cpu-span");
-var gpu = document.getElementById("settings-gpu-span");
-var mem = document.getElementById("settings-memory-span");
-var os = document.getElementById("settings-os-span");
-var display = document.getElementById("settings-display-span");
-
-async function loadSettingsInfo() {
-  var cpuInfo = await sysinfo.cpu().then(data => cpu.innerHTML = " " + data.manufacturer + " " + data.brand + " - " + data.physicalCores + "C/" + data.cores + "T");
-  var gpuInfo = await sysinfo.graphics().then(data => gpu.innerHTML = " " + data.controllers[0].model + " - " + data.controllers[0].vram + " MB");
-  var memInfo = await sysinfo.mem().then(data => mem.innerHTML = " " + Math.round(bytesToMegaBytes(data.total)) + " MB");
-  var osInfo = await sysinfo.osInfo().then(data => os.innerHTML = " " + data.distro + " " + data.arch);
-  var displayInfo = await sysinfo.graphics().then(data => display.innerHTML = " " + data.displays[0].currentResX + " x " + data.displays[0].currentResY + ", " + data.displays[0].currentRefreshRate + " Hz");
-}
-loadSettingsInfo();
-
 function saveSettings() {
   var previewCheck = document.getElementById("preview-check").checked;
   var blurCheck = document.getElementById("oled-mode").checked;
@@ -76,9 +17,10 @@ function saveSettings() {
 
   var rifeTtaCheck = document.getElementById("rife-tta-check").checked;
   var rifeUhdCheck = document.getElementById("rife-uhd-check").checked;
-  var rifeScCheck = document.getElementById("rife-sc-check").checked;
-  var cainScCheck = document.getElementById("cain-sc-check").checked;
   var fp16Check = document.getElementById("fp16-check").checked;
+
+  var scCheck = document.getElementById("sc-check").checked;
+  var skipCheck = document.getElementById("skip-check").checked;
 
   var numStreams = document.getElementById("num-streams").value;
   var denoiseCheck = document.getElementById('denoise-strength').value;
@@ -114,8 +56,8 @@ function saveSettings() {
         theme: theme,
         rifeTta: rifeTtaCheck,
         rifeUhd: rifeUhdCheck,
-        rifeSc: rifeScCheck,
-        cainSc: cainScCheck,
+        sc: scCheck,
+        skip: skipCheck,
         fp16: fp16Check,
         num_streams: numStreams,
         denoiseStrength: denoiseCheck,
@@ -145,6 +87,65 @@ function saveSettings() {
 
 saveBtn.addEventListener("click", saveSettings);
 
+// Read settings.json on launch
+fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) => {
+  if (err) throw err;
+  let json = JSON.parse(settings);
+  // Set values
+  document.getElementById("preview-check").checked = json.settings[0].preview;
+  if (document.getElementById("preview-check").checked == true) {
+    preview.style.display = "block";
+    sessionStorage.setItem('previewSetting', 'true');
+  } else {
+    preview.style.display = "none";
+    sessionStorage.setItem('previewSetting', 'false');
+  }
+  if (json.settings[0].disableBlur === false) {
+    document.getElementById("oled-mode").checked = false;
+  } else {
+    document.getElementById("oled-mode").checked = true;
+  }
+  try {
+    document.getElementById("toggle-rpc").checked = json.settings[0].rpc;
+    document.getElementById("rife-tta-check").checked = json.settings[0].rifeTta;
+    document.getElementById("rife-uhd-check").checked = json.settings[0].rifeUhd;
+    document.getElementById("fp16-check").checked = json.settings[0].fp16;
+    document.getElementById("num-streams").value = json.settings[0].num_streams;
+    document.getElementById("denoise-strength").value = json.settings[0].denoiseStrength;
+    document.getElementById("deblock-strength").value = json.settings[0].deblockStrength;
+    document.getElementById("tile-res").value = json.settings[0].tileRes;
+    document.getElementById("tiling-check").checked = json.settings[0].tiling;
+    document.getElementById("shape-res").value = json.settings[0].shapeRes;
+    document.getElementById("shape-check").checked = json.settings[0].shapes;
+    document.getElementById("custom-model-check").checked = json.settings[0].customModel;
+    document.getElementById("trim-check").checked = json.settings[0].trimAccurate;
+    document.getElementById("python-check").checked = json.settings[0].systemPython;
+    document.getElementById("sc-check").checked = json.settings[0].sc;
+    document.getElementById("skip-check").checked = json.settings[0].skip;
+  } catch (error) {
+    console.error(error);
+    console.log('Incompatible settings.json detected, saving settings to overwrite incompatible one.')
+    saveSettings();
+  }
+});
+
+const bytesToMegaBytes = bytes => bytes / (1024 ** 2);
+
+var cpu = document.getElementById("settings-cpu-span");
+var gpu = document.getElementById("settings-gpu-span");
+var mem = document.getElementById("settings-memory-span");
+var os = document.getElementById("settings-os-span");
+var display = document.getElementById("settings-display-span");
+
+async function loadSettingsInfo() {
+  var cpuInfo = await sysinfo.cpu().then(data => cpu.innerHTML = " " + data.manufacturer + " " + data.brand + " - " + data.physicalCores + "C/" + data.cores + "T");
+  var gpuInfo = await sysinfo.graphics().then(data => gpu.innerHTML = " " + data.controllers[0].model + " - " + data.controllers[0].vram + " MB");
+  var memInfo = await sysinfo.mem().then(data => mem.innerHTML = " " + Math.round(bytesToMegaBytes(data.total)) + " MB");
+  var osInfo = await sysinfo.osInfo().then(data => os.innerHTML = " " + data.distro + " " + data.arch);
+  var displayInfo = await sysinfo.graphics().then(data => display.innerHTML = " " + data.displays[0].currentResX + " x " + data.displays[0].currentResY + ", " + data.displays[0].currentRefreshRate + " Hz");
+}
+loadSettingsInfo();
+
 let customModelBtn = document.getElementById('open-custom-model-folder');
 
 customModelBtn.addEventListener('click', () => {
@@ -156,7 +157,7 @@ const settingsList = document.getElementById('settings-list');
 const theming = document.getElementById('theming');
 
 const rifeSettings = document.getElementById('rife-list');
-const cainSettings = document.getElementById('cain-list');
+const interpolationSettings = document.getElementById('interpolation-settings-list');
 const tensorrtSettings = document.getElementById('tensorrt-list');
 
 const dpirSettings = document.getElementById('dpir-list');
@@ -171,7 +172,7 @@ function changePage() {
     settingsList.style.visibility = 'hidden';
     theming.style.visibility = 'hidden';
     rifeSettings.style.visibility = 'visible';
-    cainSettings.style.visibility = 'visible';
+    interpolationSettings.style.visibility = 'visible';
     tensorrtSettings.style.visibility = 'hidden';
     dpirSettings.style.visibility = 'visible';
   } else if (pageSwitcher.innerHTML == '<span>Page 2 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>') {
@@ -179,7 +180,7 @@ function changePage() {
     settingsList.style.visibility = 'hidden';
     theming.style.visibility = 'hidden';
     rifeSettings.style.visibility = 'hidden';
-    cainSettings.style.visibility = 'hidden';
+    interpolationSettings.style.visibility = 'hidden';
     dpirSettings.style.visibility = 'hidden';
     tensorrtSettings.style.visibility = 'visible';
     tilingSettings.style.visibility = 'visible';
@@ -208,12 +209,12 @@ function changePage() {
     tilingSettings.style.visibility = 'hidden';
     shapeSettings.style.visibility = 'hidden';
     rifeSettings.style.visibility = 'visible';
-    cainSettings.style.visibility = 'visible';
+    interpolationSettings.style.visibility = 'visible';
     dpirSettings.style.visibility = 'visible';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 2 / 4</span>') {
     pageSwitcher.innerHTML = '<span>Page 1 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
     rifeSettings.style.visibility = 'hidden';
-    cainSettings.style.visibility = 'hidden';
+    interpolationSettings.style.visibility = 'hidden';
     dpirSettings.style.visibility = 'hidden';
     settingsList.style.visibility = 'visible';
     theming.style.visibility = 'visible';
@@ -270,8 +271,8 @@ var rpcToggle = document.getElementById("toggle-rpc");
 
 var rifeTtaToggle = document.getElementById("rife-tta-check");
 var rifeUhdToggle = document.getElementById("rife-uhd-check");
-var rifeScToggle = document.getElementById("rife-sc-check");
-var cainScToggle = document.getElementById("cain-sc-check");
+var scCheck = document.getElementById("sc-check");
+var skipCheck = document.getElementById("skip-check");
 var fp16Toggle = document.getElementById("fp16-check");
 var streamLine = document.getElementById("num-streams");
 var denoiseToggle = document.getElementById("denoise-strength");
@@ -297,10 +298,10 @@ rifeTtaToggle.addEventListener('click', function () {
 rifeUhdToggle.addEventListener('click', function () {
   sessionStorage.setItem('settingsSaved', 'false');
 })
-rifeScToggle.addEventListener('click', function () {
+scCheck.addEventListener('click', function () {
   sessionStorage.setItem('settingsSaved', 'false');
 })
-cainScToggle.addEventListener('click', function () {
+skipCheck.addEventListener('click', function () {
   sessionStorage.setItem('settingsSaved', 'false');
 })
 fp16Toggle.addEventListener('click', function () {

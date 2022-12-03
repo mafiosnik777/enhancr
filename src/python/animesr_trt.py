@@ -39,6 +39,7 @@ clip_pos2 = clip.std.Trim(first=0,last=clip.num_frames-2)
 clipstack =  [clip_pos1,clip_pos2]
 
 if tiling == False:
+    #clip = core.ort.Model(clipstack, network_path="D:\\repo\\enhancr\\src\\python\\bin\\vapoursynth64\\plugins\\models\\animesr\\animesr_v2.onnx", num_streams=streams, provider="CUDA", fp16=True)
     clip = core.trt.Model(clipstack, engine_path=engine, num_streams=streams)
 else:
     clip = core.trt.Model(clipstack, engine_path=engine, num_streams=streams, tilesize=[tileHeight, tileWidth])

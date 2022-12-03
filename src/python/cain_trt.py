@@ -47,13 +47,20 @@ with open(os.path.join(tmp_dir, "tmp.json"), encoding='utf-8') as f:
     frame_rate = data['framerate']
     engine = data['engine']
     streams = data['streams']
-    sceneDetection = data['cain_scdetect']
+    sceneDetection = data['sc']
+    frameskip = data['skip']
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
+if frameskip:
+    offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
+    offs1 = core.std.CopyFrameProps(offs1, clip)
+    # use ssim for similarity calc
+    clip = core.vmaf.Metric(clip, offs1, 2)
+
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-if sceneDetection == True:
+if sceneDetection:
     clip = core.misc.SCDetect(clip=clip, threshold=0.100)
 
 clip1 = core.std.DeleteFrames(clip, frames=0)
@@ -70,7 +77,7 @@ clip2 = core.std.Interleave([clip, clip2])
 
 output = vfi_frame_merger(clip1, clip2)
 
-output = vs.core.resize.Bicubic(output, format=vs.YUV422P10, matrix_s="709")
+output = vs.core.resize.Bicubic(output, format=vs.YUV422P8, matrix_s="709")
 
 print("Starting video output..", file=sys.stderr)
 output.set_output()

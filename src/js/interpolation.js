@@ -312,8 +312,8 @@ class Interpolation {
                 streams: numStreams.value,
                 rife_tta: document.getElementById("rife-tta-check").checked,
                 rife_uhd: document.getElementById("rife-uhd-check").checked,
-                rife_scdetect: document.getElementById("rife-sc-check").checked,
-                cain_scdetect: document.getElementById("cain-sc-check").checked,
+                sc: document.getElementById("sc-check").checked,
+                skip: document.getElementById("skip-check").checked,
                 tiling: document.getElementById("tiling-check").checked,
                 tileHeight: (document.getElementById("tile-res").value).split('x')[1],
                 tileWidth: (document.getElementById("tile-res").value).split('x')[0]
