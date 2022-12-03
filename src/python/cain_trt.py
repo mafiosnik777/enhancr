@@ -41,7 +41,7 @@ else:
     tmp_dir = tempfile.gettempdir() + "/enhancr/"
 
 # load json with input file path and framerate
-with open(os.path.join(tmp_dir, "tmp.json"), encoding='utf-8') as f:
+with open(os.path.join(tmp), encoding='utf-8') as f:
     data = json.load(f)
     video_path = data['file']
     frame_rate = data['framerate']

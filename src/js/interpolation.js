@@ -11,18 +11,6 @@ const { spawn } = require('child_process');
 const terminal = document.getElementById("terminal-text");
 const enhancrPrefix = "[enhancr]";
 
-function getTmpPath() {
-    if (process.platform == 'win32') {
-        return os.tmpdir() + "\\enhancr\\";
-    } else {
-        return os.tmpdir() + "/enhancr/";
-    }
-}
-let temp = getTmpPath();
-let previewPath = path.join(temp, '/preview');
-let previewDataPath = previewPath + '/data%02d.ts';
-const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
-
 const modal = document.querySelector("#modal");
 const blankModal = document.querySelector("#blank-modal");
 const processOverlay = document.getElementById("process-overlay");
@@ -42,6 +30,13 @@ sessionStorage.setItem('stopped', 'false');
 
 class Interpolation {
     static async process(file, model, output, params, extension, engine, fileOut, index) {
+        let cacheInputText = document.getElementById('cache-input-text');
+        var cache = path.normalize(cacheInputText.textContent);
+
+        let previewPath = path.join(cache, '/preview');
+        let previewDataPath = previewPath + '/data%02d.ts';
+        const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
+
         let stopped = sessionStorage.getItem('stopped');
         if (!(stopped == 'true')) {
             // set flag for started interpolation process
@@ -61,16 +56,16 @@ class Interpolation {
             }
 
             // create paths if not existing
-            if (!fse.existsSync(temp)) {
-                fse.mkdirSync(temp);
+            if (!fse.existsSync(cache)) {
+                fse.mkdirSync(cache);
             };
             if (!fse.existsSync(output)) {
                 fse.mkdirSync(output)
             };
 
-            // clear temporary files
-            fse.emptyDirSync(temp);
-            console.log("Cleared temporary files");
+            // clear cacheorary files
+            fse.emptyDirSync(cache);
+            console.log("Cleared cacheorary files");
 
             if (!fse.existsSync(previewPath)) {
                 fse.mkdirSync(previewPath);
@@ -79,7 +74,7 @@ class Interpolation {
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for interpolation process..';
 
             // scan media for subtitles
-            const subsPath = path.join(temp, "subs.ass");
+            const subsPath = path.join(cache, "subs.ass");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for subtitles..`;
                 execSync(`ffmpeg -y -loglevel error -i ${file} -c:s copy ${subsPath}`);
@@ -88,7 +83,7 @@ class Interpolation {
             };
 
             // scan media for audio
-            const audioPath = path.join(temp, "audio.mka");
+            const audioPath = path.join(cache, "audio.mka");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for audio..`;
                 execSync(`ffmpeg -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
@@ -120,7 +115,7 @@ class Interpolation {
             var convert = path.join(__dirname, '..', "\\python/torch/convert.py");
             var cainModel = document.getElementById('model-span').innerHTML == 'RVP - v1.0';
             var pth = cainModel ? path.join(__dirname, '..', "/python/torch/weights/rvpv1.pth") : path.join(__dirname, '..', "/python/torch/weights/cvp.pth");
-            var out = path.join(temp, 'cain' + width + "x" + height + '.onnx');
+            var out = path.join(cache, 'cain' + width + "x" + height + '.onnx');
             var groups = model ? 2 : 3;
 
             // get engine path
@@ -264,7 +259,7 @@ class Interpolation {
                 terminal.innerHTML += '\r\n[enhancr] Trimming video with timestamps ' + '"' + sessionStorage.getItem(`trim${index}`) + '"';
                 let timestampStart = (sessionStorage.getItem(`trim${index}`)).split('-')[0];
                 let timestampEnd = (sessionStorage.getItem(`trim${index}`)).split('-')[1];
-                let trimmedOut = path.join(temp, path.parse(file).name + '.mkv');
+                let trimmedOut = path.join(cache, path.parse(file).name + '.mkv');
                 try {
                     function trim() {
                         return new Promise(function (resolve) {
@@ -301,8 +296,8 @@ class Interpolation {
                 }
             }
 
-            // temp file for passing info to the AI
-            const jsonPath = path.join(temp, "tmp.json");
+            // cache file for passing info to the AI
+            const jsonPath = path.join(cache, "tmp.json");
             let json = {
                 file: file,
                 model: model,
@@ -379,7 +374,7 @@ class Interpolation {
             }
             let vspipe = pickVspipe();
 
-            let tmpOutPath = path.join(temp, Date.now() + extension);
+            let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
                 openModal(modal);
                 terminal.innerHTML += "\r\n[Error] Input video contains subtitles, but output container is not .mkv, cancelling.";
@@ -392,9 +387,9 @@ class Interpolation {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `"${vspipe}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
-                            var cmd = `"${vspipe}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
+                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
                         }
                         let term = spawn(cmd, [], {
                             shell: true,
@@ -464,9 +459,9 @@ class Interpolation {
                     })
                 }
                 await interpolate();
-                // clear temporary files
-                fse.emptyDirSync(temp);
-                console.log("Cleared temporary files");
+                // clear cacheorary files
+                fse.emptyDirSync(cache);
+                console.log("Cleared cacheorary files");
                 // timeout for 2 seconds after interpolation
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }

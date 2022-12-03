@@ -228,14 +228,13 @@ function toggleModels() {
   settingsSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 4</span>';
   document.getElementById('realesrgan-list').style.visibility = 'visible';
   document.getElementById('language-list').style.visibility = 'visible';
-  document.getElementById('trim-list').style.visibility = 'visible';
-  document.getElementById('trim-list').style.visibility = 'visible';
+  document.getElementById('cache-list').style.visibility = 'visible';
   document.getElementById('python-list').style.visibility = 'visible';
   document.getElementById('shapes-list').style.visibility = 'hidden';
   document.getElementById('tiling-list').style.visibility = 'hidden';
   document.getElementById('tensorrt-list').style.visibility = 'hidden';
   document.getElementById('rife-list').style.visibility = 'hidden';
-  document.getElementById('cain-list').style.visibility = 'hidden';
+  document.getElementById('interpolation-settings-list').style.visibility = 'hidden';
   document.getElementById('dpir-list').style.visibility = 'hidden';
   document.getElementById('settings-list').style.visibility = 'hidden';
   document.getElementById('theming').style.visibility = 'hidden';

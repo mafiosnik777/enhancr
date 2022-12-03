@@ -368,14 +368,13 @@
         class="fa-solid fa-circle-question tiling-question"><span class="tooltip-text" id="custom-model-question">Enable to load custom ESRGAN model in onnx format</span></i></span></li>
       <span id="open-custom-model-folder"><i class="fa-solid fa-folder-open"></i> Open custom models folder</span>
     </ul>
-    <ul style="list-style-type:none; visibility: hidden;" id="trim-list" class="animate__animated animate__fadeIn">
-      <div id="trim-side">Trim</div>
-      <li id="trim-li"><input type="checkbox" id="trim-check" /><span> Trim using accurate cut <i id="preview-question"
-            class="fa-solid fa-circle-question"><span class="tooltip-text" id="trim-question">Default is keyframe cut (inacurrate but doesn't re-encode)</span></i></span></li>
+    <ul style="list-style-type:none; visibility: hidden;" id="cache-list" class="animate__animated animate__fadeIn">
+      <div id="cache-side">Cache</div>
+      <li id="cache-li"><span><div id="cache-label">Cache Location</span></div><div id="cache-input"><span id="cache-input-text"></span><i class="fa-solid fa-ellipsis ellipsis-small"></i></div></li>
     </ul>
     <ul style="list-style-type:none; visibility: hidden;" id="python-list" class="animate__animated animate__fadeIn">
       <div id="python-side"><i class="fa-brands fa-python"></i></div>
-      <li id="trim-li"><input type="checkbox" id="python-check" /><span> Use system python instead of packaged environment <i id="preview-question"
+      <li id="cache-li"><input type="checkbox" id="python-check" /><span> Use system python instead of packaged environment <i id="preview-question"
         class="fa-solid fa-circle-question"><span class="tooltip-text" id="python-question">Don't touch this, unless you know what you're doing</span></i></span></li>
     </ul>
     <ul style="list-style-type:none; visibility: hidden;" id="language-list" class="animate__animated animate__fadeIn">

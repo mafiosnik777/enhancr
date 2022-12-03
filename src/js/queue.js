@@ -742,7 +742,7 @@ let running = false;
 async function processQueue() {
   if (running == false) {
     running = true;
-    await PromisePool
+    const { errors } = await PromisePool
       .withConcurrency(1)
       .for(queue)
       .onTaskStarted((item) => {
@@ -820,6 +820,7 @@ async function processQueue() {
           sessionStorage.setItem('stopFlag', 'true');
         }
       })
+      
   } else {
     sessionStorage.setItem('stopped', 'true');
     find('name', 'VSPipe', false).then(function (list) {

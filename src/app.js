@@ -77,6 +77,15 @@ if (!fs.existsSync(path.join(appDataPath, '/.enhancr/projects.json'))) {
   });
 };
 
+function getTmpPath() {
+  if (process.platform == 'win32') {
+      return os.tmpdir() + "\\enhancr\\";
+  } else {
+      return os.tmpdir() + "/enhancr/";
+  }
+}
+let temp = getTmpPath();
+
 // create settings file
 if (!fs.existsSync(path.join(appDataPath, '/.enhancr/settings.json'))) {
   var settings = {
@@ -97,6 +106,7 @@ if (!fs.existsSync(path.join(appDataPath, '/.enhancr/settings.json'))) {
         deblockStrength: 15,
         tileRes: "512x512",
         tiling: false,
+        temp: temp,
         shapeRes: "1080x1920",
         shapes: false,
         trimAccurate: false,
@@ -631,6 +641,51 @@ ipcMain.on("file-request-res", (event) => {
         if (!file.canceled) {
           const filepath = file.filePaths[0].toString();
           event.reply("file-res", filepath);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+});
+
+ipcMain.on("temp-dialog", (event) => {
+  // If the platform is 'win32' or 'Linux'
+  if (process.platform !== "darwin") {
+    // Resolves to a Promise<Object>
+    dialog
+      .showOpenDialog({
+        title: "Choose cache folder",
+        buttonLabel: "Select Directory",
+        // Specifying the File Selector Property
+        properties: ["openDirectory"],
+      })
+      .then((file) => {
+        // Stating whether dialog operation was
+        // cancelled or not.
+        console.log(file.canceled);
+        if (!file.canceled) {
+          const filepath = file.filePaths[0].toString();
+          console.log(filepath);
+          event.reply("temp-dir", filepath);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    // If the platform is 'darwin' (macOS)
+    dialog
+      .showOpenDialog({
+        title: "Choose cache folder",
+        buttonLabel: "Select Directory",
+        // Selector Property In macOS
+        properties: ["openDirectory"],
+      })
+      .then((file) => {
+        if (!file.canceled) {
+          const filepath = file.filePaths[0].toString();
+          event.reply("temp-dir", filepath);
         }
       })
       .catch((err) => {

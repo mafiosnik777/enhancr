@@ -4,21 +4,13 @@ const path = require('path');
 
 var preview = document.getElementById('preview');
 
-function getTmpPath() {
-    if (process.platform == 'win32') {
-        return os.tmpdir() + "\\enhancr\\";
-    } else {
-        return os.tmpdir() + "/enhancr/";
-    }
-}
-
-var tempPath = getTmpPath();
-var previewPath = path.join(tempPath, '/preview');
-
 class Preview {
     static listenForPreview() {
         var previewInterval = setInterval(function () {
             if (document.getElementById('preview-check').checked) {
+                let cacheInputText = document.getElementById('cache-input-text');
+                var cache = path.normalize(cacheInputText.textContent);
+                var previewPath = path.join(cache, '/preview');
                 if (fs.existsSync(path.join(previewPath, '/master.m3u8'))) {
                     if (Hls.isSupported()) {
                         var hls = new Hls();

@@ -3191,6 +3191,17 @@
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
+#cache-input-text {
+  font-size: 7pt;
+  padding-left: 6px;
+  color: #8c8c8c;
+  position: absolute;
+  top: 15%;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 324px;
+}
+
 #rpc-li-item {
   white-space: nowrap;
 }
@@ -3673,7 +3684,7 @@ input[type=checkbox]:checked::before {
   position: absolute;
 }
 
-#trim-list {
+#cache-list {
   margin-top: 3.5px;
   padding: 32px 125px 6px 10px;
   display: inline-block;
@@ -3788,7 +3799,7 @@ input[type=checkbox]:checked::before {
   top: 29%;
 }
 
-#trim-li {
+#cache-li {
   margin-left: 27px;
   position: absolute;
   top: 27%;
@@ -4029,9 +4040,40 @@ input[type=checkbox]:checked::before {
   font-weight: 500;
 }
 
-#trim-side {
+#cache-label {
+  position: relative;
+  white-space: nowrap;
+  left: 10%;
+  margin-top: 1.5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+#cache-input {
+  position: absolute;
+  top: 10%;
+  left: 123%;
+  background-color: rgba(99, 99, 99, 0.35);
+  height: 15px;
+  width: 380%;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#cache-input i {
+  right: 2%;
+  position: absolute;
+  top: 19%;
+  color: #8c8c8c;
+}
+
+#cache-input:hover {
+  background-color: rgba(120, 120, 120, 0.35);
+}
+
+#cache-side {
   transform: rotate(-90deg);
-  font-size: 9pt;
+  font-size: 8pt;
   top: 7%;
   left: -0.4%;
   background: rgba(0, 0, 0, 0.2);
@@ -4080,7 +4122,7 @@ input[type=checkbox]:checked::before {
   font-weight: 500;
 }
 
-#trim-question {
+#cache-question {
   top: -32% !important;
   width: 165px !important;
 }
@@ -4104,7 +4146,7 @@ input[type=checkbox]:checked::before {
   background-color: var(--toggle-color);
 }
 
-#trim-check:checked {
+#cache-check:checked {
   /* Fallback */
   background-color: #3b94ff;
   /* Dynamic value */

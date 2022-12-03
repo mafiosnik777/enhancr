@@ -7,6 +7,7 @@ const { BrowserWindow } = remote;
 
 var saveBtn = document.getElementById("settings-button");
 var preview = document.getElementById("preview");
+let cacheInputText = document.getElementById('cache-input-text');
 
 const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
 
@@ -32,7 +33,6 @@ function saveSettings() {
   var shapeResolution = document.getElementById("shape-res").value;
   var shapesCheck = document.getElementById("shape-check").checked;
   var customModelCheck = document.getElementById("custom-model-check").checked;
-  var trimCheck = document.getElementById("trim-check").checked;
   var pythonCheck = document.getElementById("python-check").checked;
 
   var theme = sessionStorage.getItem('theme');
@@ -46,7 +46,7 @@ function saveSettings() {
     preview.style.display = "none";
     sessionStorage.setItem('previewSetting', 'false');
   }
-
+  
   var settings = {
     settings: [
       {
@@ -64,10 +64,10 @@ function saveSettings() {
         deblockStrength: deblockCheck,
         tileRes: tileResolution,
         tiling: tilingCheck,
+        temp: cacheInputText.textContent,
         shapeRes: shapeResolution,
         shapes: shapesCheck,
         customModel: customModelCheck,
-        trimAccurate: trimCheck,
         systemPython: pythonCheck,
         language: "english"
       },
@@ -86,6 +86,18 @@ function saveSettings() {
 }
 
 saveBtn.addEventListener("click", saveSettings);
+
+const os = require('os');
+const { ipcRenderer, ipcMain } = require("electron");
+
+function getTmpPath() {
+  if (process.platform == 'win32') {
+      return os.tmpdir() + "\\enhancr\\";
+  } else {
+      return os.tmpdir() + "/enhancr/";
+  }
+}
+let temp = getTmpPath();
 
 // Read settings.json on launch
 fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) => {
@@ -118,10 +130,14 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     document.getElementById("shape-res").value = json.settings[0].shapeRes;
     document.getElementById("shape-check").checked = json.settings[0].shapes;
     document.getElementById("custom-model-check").checked = json.settings[0].customModel;
-    document.getElementById("trim-check").checked = json.settings[0].trimAccurate;
     document.getElementById("python-check").checked = json.settings[0].systemPython;
     document.getElementById("sc-check").checked = json.settings[0].sc;
     document.getElementById("skip-check").checked = json.settings[0].skip;
+    if (json.settings[0].temp == undefined) {
+      document.getElementById("cache-input-text").innerHTML = temp;
+    } else {
+      document.getElementById("cache-input-text").textContent = json.settings[0].temp;
+    }
   } catch (error) {
     console.error(error);
     console.log('Incompatible settings.json detected, saving settings to overwrite incompatible one.')
@@ -134,17 +150,27 @@ const bytesToMegaBytes = bytes => bytes / (1024 ** 2);
 var cpu = document.getElementById("settings-cpu-span");
 var gpu = document.getElementById("settings-gpu-span");
 var mem = document.getElementById("settings-memory-span");
-var os = document.getElementById("settings-os-span");
+var osSpan = document.getElementById("settings-os-span");
 var display = document.getElementById("settings-display-span");
 
 async function loadSettingsInfo() {
   var cpuInfo = await sysinfo.cpu().then(data => cpu.innerHTML = " " + data.manufacturer + " " + data.brand + " - " + data.physicalCores + "C/" + data.cores + "T");
   var gpuInfo = await sysinfo.graphics().then(data => gpu.innerHTML = " " + data.controllers[0].model + " - " + data.controllers[0].vram + " MB");
   var memInfo = await sysinfo.mem().then(data => mem.innerHTML = " " + Math.round(bytesToMegaBytes(data.total)) + " MB");
-  var osInfo = await sysinfo.osInfo().then(data => os.innerHTML = " " + data.distro + " " + data.arch);
+  var osInfo = await sysinfo.osInfo().then(data => osSpan.innerHTML = " " + data.distro + " " + data.arch);
   var displayInfo = await sysinfo.graphics().then(data => display.innerHTML = " " + data.displays[0].currentResX + " x " + data.displays[0].currentResY + ", " + data.displays[0].currentRefreshRate + " Hz");
 }
 loadSettingsInfo();
+
+let cacheInput = document.getElementById('cache-input');
+cacheInput.addEventListener('click', () => {
+  ipcRenderer.send('temp-dialog');
+  sessionStorage.setItem('settingsSaved', 'false');
+  // Handle event reply from main process with selected temp dir
+  ipcRenderer.on("temp-dir", (event, file) => {
+    cacheInputText.textContent = file;
+  })
+}) 
 
 let customModelBtn = document.getElementById('open-custom-model-folder');
 
@@ -191,7 +217,7 @@ function changePage() {
     tilingSettings.style.visibility = 'hidden';
     shapeSettings.style.visibility = 'hidden';
     document.getElementById('realesrgan-list').style.visibility = 'visible';
-    document.getElementById('trim-list').style.visibility = 'visible';
+    document.getElementById('cache-list').style.visibility = 'visible';
     document.getElementById('language-list').style.visibility = 'visible';
     document.getElementById('python-list').style.visibility = 'visible';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 4</span>') {
@@ -200,7 +226,7 @@ function changePage() {
     tilingSettings.style.visibility = 'visible';
     shapeSettings.style.visibility = 'visible';
     document.getElementById('realesrgan-list').style.visibility = 'hidden';
-    document.getElementById('trim-list').style.visibility = 'hidden';
+    document.getElementById('cache-list').style.visibility = 'hidden';
     document.getElementById('language-list').style.visibility = 'hidden';
     document.getElementById('python-list').style.visibility = 'hidden';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 3 / 4</span>') {

@@ -24,7 +24,6 @@ var toggleShapes = document.getElementById('shape-check');
 var toggleTiling = document.getElementById('tiling-check');
 var customModelCheck = document.getElementById('custom-model-check');
 var pythonCheck = document.getElementById('python-check');
-var trimCheck = document.getElementById('trim-check');
 
 var mediaInfoText = document.getElementsByClassName("info-text");
 var tooltips = document.getElementsByClassName("tooltip-text");
@@ -60,7 +59,6 @@ function blueSelect() {
     customModelCheck.style.setProperty('--toggle-color', "#1e5cce");
     scCheck.style.setProperty('--toggle-color', "#1e5cce");
     skipCheck.style.setProperty('--toggle-color', "#1e5cce");
-    trimCheck.style.setProperty('--toggle-color', "#1e5cce");
     pythonCheck.style.setProperty('--toggle-color', "#1e5cce");
     progressDone.style.setProperty('--bar-color', "#1e5cce");
 
@@ -116,7 +114,6 @@ function pinkSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#ce1e6c");
     toggleTiling.style.setProperty('--toggle-color', "#ce1e6c");
     customModelCheck.style.setProperty('--toggle-color', "#ce1e6c");
-    trimCheck.style.setProperty('--toggle-color', "#ce1e6c");
     pythonCheck.style.setProperty('--toggle-color', "#ce1e6c");
     progressDone.style.setProperty('--bar-color', "#ce1e6c");
     scCheck.style.setProperty('--toggle-color', "#ce1e6c");
@@ -173,7 +170,6 @@ function greenSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#9ece1e");
     toggleTiling.style.setProperty('--toggle-color', "#9ece1e");
     customModelCheck.style.setProperty('--toggle-color', "#9ece1e");
-    trimCheck.style.setProperty('--toggle-color', "#9ece1e");
     pythonCheck.style.setProperty('--toggle-color', "#9ece1e");
     progressDone.style.setProperty('--bar-color', "#9ece1e");
     scCheck.style.setProperty('--toggle-color', "#9ece1e");
@@ -230,7 +226,6 @@ function purpleSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#601ece");
     toggleTiling.style.setProperty('--toggle-color', "#601ece");
     customModelCheck.style.setProperty('--toggle-color', "#601ece");
-    trimCheck.style.setProperty('--toggle-color', "#601ece");
     pythonCheck.style.setProperty('--toggle-color', "#601ece");
     progressDone.style.setProperty('--bar-color', "#601ece");
     scCheck.style.setProperty('--toggle-color', "#601ece");
@@ -288,7 +283,6 @@ function orangeSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#e36812");
     toggleTiling.style.setProperty('--toggle-color', "#e36812");
     customModelCheck.style.setProperty('--toggle-color', "#e36812");
-    trimCheck.style.setProperty('--toggle-color', "#e36812");
     pythonCheck.style.setProperty('--toggle-color', "#e36812");
     progressDone.style.setProperty('--bar-color', "#e36812");
     scCheck.style.setProperty('--toggle-color', "#e36812");
@@ -345,7 +339,6 @@ function yellowSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#cece1b");
     toggleTiling.style.setProperty('--toggle-color', "#cece1b");
     customModelCheck.style.setProperty('--toggle-color', "#cece1b");
-    trimCheck.style.setProperty('--toggle-color', "#cece1b");
     pythonCheck.style.setProperty('--toggle-color', "#cece1b");
     progressDone.style.setProperty('--bar-color', "#cece1b");
     scCheck.style.setProperty('--toggle-color', "#cece1b");
@@ -402,7 +395,6 @@ function redSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#ce2a1e");
     toggleTiling.style.setProperty('--toggle-color', "#ce2a1e");
     customModelCheck.style.setProperty('--toggle-color', "#ce2a1e");
-    trimCheck.style.setProperty('--toggle-color', "#ce2a1e");
     pythonCheck.style.setProperty('--toggle-color', "#ce2a1e");
     progressDone.style.setProperty('--bar-color', "#ce2a1e");
     scCheck.style.setProperty('--toggle-color', "#ce2a1e");
@@ -459,7 +451,6 @@ function sandSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#E9DAC1");
     toggleTiling.style.setProperty('--toggle-color', "#E9DAC1");
     customModelCheck.style.setProperty('--toggle-color', "#E9DAC1");
-    trimCheck.style.setProperty('--toggle-color', "#E9DAC1");
     pythonCheck.style.setProperty('--toggle-color', "#E9DAC1");
     progressDone.style.setProperty('--bar-color', "#E9DAC1");
     scCheck.style.setProperty('--toggle-color', "#E9DAC1");
@@ -516,7 +507,6 @@ function mintSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#8FE3CF");
     toggleTiling.style.setProperty('--toggle-color', "#8FE3CF");
     customModelCheck.style.setProperty('--toggle-color', "#8FE3CF");
-    trimCheck.style.setProperty('--toggle-color', "#8FE3CF");
     pythonCheck.style.setProperty('--toggle-color', "#8FE3CF");
     progressDone.style.setProperty('--bar-color', "#8FE3CF");
     scCheck.style.setProperty('--toggle-color', "#8FE3CF");
@@ -573,7 +563,6 @@ function salmonSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#FFB3B3");
     toggleTiling.style.setProperty('--toggle-color', "#FFB3B3");
     customModelCheck.style.setProperty('--toggle-color', "#FFB3B3");
-    trimCheck.style.setProperty('--toggle-color', "#FFB3B3");
     pythonCheck.style.setProperty('--toggle-color', "#FFB3B3");
     progressDone.style.setProperty('--bar-color', "#FFB3B3");
     scCheck.style.setProperty('--toggle-color', "#FFB3B3");
@@ -630,7 +619,6 @@ function eggSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#FFEF82");
     toggleTiling.style.setProperty('--toggle-color', "#FFEF82");
     customModelCheck.style.setProperty('--toggle-color', "#FFEF82");
-    trimCheck.style.setProperty('--toggle-color', "#FFEF82");
     pythonCheck.style.setProperty('--toggle-color', "#FFEF82");
     progressDone.style.setProperty('--bar-color', "#FFEF82");
     scCheck.style.setProperty('--toggle-color', "#FFEF82");
@@ -687,7 +675,6 @@ function lavenderSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#AFB4FF");
     toggleTiling.style.setProperty('--toggle-color', "#AFB4FF");
     customModelCheck.style.setProperty('--toggle-color', "#AFB4FF");
-    trimCheck.style.setProperty('--toggle-color', "#AFB4FF");
     pythonCheck.style.setProperty('--toggle-color', "#AFB4FF");
     progressDone.style.setProperty('--bar-color', "#AFB4FF");
     scCheck.style.setProperty('--toggle-color', "#AFB4FF");
@@ -744,7 +731,6 @@ function roseSelect() {
     toggleShapes.style.setProperty('--toggle-color', "#FF5D5D");
     toggleTiling.style.setProperty('--toggle-color', "#FF5D5D");
     customModelCheck.style.setProperty('--toggle-color', "#FF5D5D");
-    trimCheck.style.setProperty('--toggle-color', "#FF5D5D");
     pythonCheck.style.setProperty('--toggle-color', "#FF5D5D");
     progressDone.style.setProperty('--bar-color', "#FF5D5D");
     scCheck.style.setProperty('--toggle-color', "#FF5D5D");
@@ -801,7 +787,6 @@ function greySelect() {
     toggleShapes.style.setProperty('--toggle-color', "#696969");
     toggleTiling.style.setProperty('--toggle-color', "#696969");
     customModelCheck.style.setProperty('--toggle-color', "#696969");
-    trimCheck.style.setProperty('--toggle-color', "#696969");
     pythonCheck.style.setProperty('--toggle-color', "#696969");
     progressDone.style.setProperty('--bar-color', "#696969");
     scCheck.style.setProperty('--toggle-color', "#696969");

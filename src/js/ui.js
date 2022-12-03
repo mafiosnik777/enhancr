@@ -628,8 +628,20 @@ function getTheme() {
     }
 }
 
-function changeCodecH264() {
+const gpuInfo = require('gpu-info');
+gpuInfo().then(function(data) {
+    if ((data[0].VideoProcessor).includes('NVIDIA')) {
+        sessionStorage.setItem('gpu', 'NVIDIA');
+    }
+    if ((data[0].VideoProcessor).includes('AMD')) {
+        sessionStorage.setItem('gpu', 'AMD');
+    }
+    if ((data[0].VideoProcessor).includes('Intel')) {
+        sessionStorage.setItem('gpu', 'Intel');
+    }
+});
 
+function changeCodecH264() {
     try {
         const jsonString = fs.readFileSync(path.join(__dirname, '..', "/src/codecs.json"));
         var json = JSON.parse(jsonString);
