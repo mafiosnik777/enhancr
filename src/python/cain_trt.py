@@ -63,19 +63,20 @@ clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 if sceneDetection:
     clip = core.misc.SCDetect(clip=clip, threshold=0.100)
 
-clip1 = core.std.DeleteFrames(clip, frames=0)
-clip2 = core.std.StackHorizontal([clip1, clip])
+clip_pos1 = clip[1:]
+clip_pos2 = clip.std.Trim(first=0,last=clip.num_frames-2)
+clipstack =  [clip_pos1,clip_pos2]
 
-clip2 = core.trt.Model(
-   clip2,
+output = core.trt.Model(
+   clipstack,
    engine_path=engine,
    num_streams=int(streams)*4,
 )
-clip2=core.std.Crop(clip2,right=clip.width)
-clip1 = core.std.Interleave([clip, clip])
-clip2 = core.std.Interleave([clip, clip2])
+output=core.std.Interleave([clip,output])
 
-output = vfi_frame_merger(clip1, clip2)
+clip1 = core.std.Interleave([clip, clip])
+
+output = vfi_frame_merger(clip1, output)
 
 output = vs.core.resize.Bicubic(output, format=vs.YUV422P8, matrix_s="709")
 

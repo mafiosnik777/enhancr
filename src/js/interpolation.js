@@ -114,13 +114,12 @@ class Interpolation {
 
             var convert = path.join(__dirname, '..', "\\python/torch/convert.py");
             var cainModel = document.getElementById('model-span').innerHTML == 'RVP - v1.0';
-            var pth = cainModel ? path.join(__dirname, '..', "/python/torch/weights/rvpv1.pth") : path.join(__dirname, '..', "/python/torch/weights/cvp.pth");
-            var out = path.join(cache, 'cain' + width + "x" + height + '.onnx');
+            var onnx = cainModel ? path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx");
             var groups = model ? 2 : 3;
 
             // get engine path
             function getEnginePath() {
-                return path.join(appDataPath, '/.enhancr/models/engine', 'cain' + '-' + path.basename(pth, '.pth') + '-' + width + 'x' + height + '-' + fp + '.engine');
+                return path.join(appDataPath, '/.enhancr/models/engine', 'cain' + '-' + path.basename(onnx, '.onnx') + '-' + width + 'x' + height + '-' + fp + '.engine');
             }
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
@@ -129,31 +128,14 @@ class Interpolation {
 
             const progressSpan = document.getElementById("progress-span");
 
-            // engine conversion (pth -> onnx -> engine) (cain-trt)
+            // engine conversion (onnx -> engine) (cain-trt)
             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
-                        var cmd = `"${python}" "${convert}" --input "${pth}" --output "${out}" --height ${height} --width ${width} --groups ${groups}`;
-                        let term = spawn(cmd, [], {
-                            shell: true,
-                            stdio: ['inherit', 'pipe', 'pipe'],
-                            windowsHide: true
-                        });
-                        process.stdout.write('');
-                        term.stdout.on('data', (data) => {
-                            process.stdout.write(`${data}`);
-                            terminal.innerHTML += data;
-                        });
-                        term.stderr.on('data', (data) => {
-                            process.stderr.write(`${data}`);
-                            progressSpan.innerHTML = path.basename(file) + ' | Converting model to onnx..';
-                            terminal.innerHTML += data;
-                        });
-                        term.on("close", () => {
                             if (fp16.checked == true) {
-                                var engineCmd = `"${trtexec}" --fp16 --onnx="${out}" --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             } else {
-                                var engineCmd = `"${trtexec}" --onnx="${out}" --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var engineCmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             }
                             let engineTerm = spawn(engineCmd, [], {
                                 shell: true,
@@ -174,7 +156,6 @@ class Interpolation {
                                 sessionStorage.setItem('conversion', 'success');
                                 resolve();
                             });
-                        })
                     })
                 }
                 await convertToEngine();

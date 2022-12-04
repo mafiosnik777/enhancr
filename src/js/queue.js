@@ -742,7 +742,7 @@ let running = false;
 async function processQueue() {
   if (running == false) {
     running = true;
-    const { errors } = await PromisePool
+    await PromisePool
       .withConcurrency(1)
       .for(queue)
       .onTaskStarted((item) => {
