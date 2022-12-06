@@ -363,6 +363,7 @@ class Restoration {
                                     terminal.innerHTML += `[enhancr] Completed restoring`;
                                     var notification = new Notification("Restoration completed", { icon: "./assets/enhancr.png", body: path.basename(file) });
                                     sessionStorage.setItem('status', 'done');
+                                    ipcRenderer.send('rpc-done');
                                     successTitle.innerHTML = path.basename(sessionStorage.getItem("inputPathRestore"));
                                     thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbRestoration.png?' + Date.now());
                                     resolve();

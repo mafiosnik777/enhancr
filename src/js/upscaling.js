@@ -365,6 +365,7 @@ class Upscaling {
                                     const upscalingBtnSpan = document.getElementById("upscaling-button-text");
                                     var notification = new Notification("Upscaling completed", { icon: "./assets/enhancr.png", body: path.basename(file) });
                                     sessionStorage.setItem('status', 'done');
+                                    ipcRenderer.send('rpc-done');
                                     successTitle.innerHTML = path.basename(sessionStorage.getItem("upscaleInputPath"));
                                     thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Date.now());
                                     resolve();

@@ -264,7 +264,6 @@ class Interpolation {
                                 terminal.innerHTML += data;
                             });
                             term.on("close", () => {
-                                ipcRenderer.send('rpc-done');
                                 file = trimmedOut;
                                 terminal.innerHTML += '\r\n[enhancr] Trimmed video successfully.';
                                 resolve();
@@ -431,6 +430,7 @@ class Interpolation {
                                         body: path.basename(file)
                                     });
                                     sessionStorage.setItem('status', 'done');
+                                    ipcRenderer.send('rpc-done');
                                     successTitle.innerHTML = path.basename(sessionStorage.getItem("inputPath"));
                                     thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Date.now());
                                     resolve();
