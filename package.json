@@ -6,6 +6,7 @@
   "description": "Interpolation/Upscaling AI",
   "main": "src/app.js",
   "scripts": {
+    "preinstall": "export GYP_MSVS_VERSION=2017 || set GYP_MSVS_VERSION=2017",
     "start": "cross-env GYP_MSVS_VERSION=2017 electron-forge start",
     "package": "cross-env GYP_MSVS_VERSION=2017 electron-forge package",
     "make": "cross-env GYP_MSVS_VERSION=2017 electron-forge make"
