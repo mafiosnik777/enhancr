@@ -6,8 +6,6 @@ const os = require('os');
 
 const electron = require('electron');
 
-var colors = require('colors');
-
 electron.app.commandLine.appendSwitch("enable-transparent-visuals");
 
 const remoteMain = require('@electron/remote/main');
