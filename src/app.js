@@ -1,13 +1,11 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
-const fs = require("fs");
-const fse = require("fs-extra");
+const fs = require("fs-extra");
 const find = require('find-process');
 const os = require('os');
 
+const { EasyPresence } = require('easy-presence')
 const electron = require('electron');
-
-var colors = require('colors');
 
 electron.app.commandLine.appendSwitch("enable-transparent-visuals");
 
@@ -15,9 +13,15 @@ const remoteMain = require('@electron/remote/main');
 remoteMain.initialize();
 
 const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share");
+const appVersion = app.getVersion()
+
+const createDirs = [
+  'models/RealESRGAN',
+  'models/engine',
+  'thumbs']
 
 // Skip loading screen (dev mode)
-var devMode = true;
+const devMode = !app.isPackaged
 
 if (process.platform == "win32") {
   app.setAppUserModelId("enhancr");
@@ -36,24 +40,11 @@ function getOSInfo() {
 }
 
 // create paths if not existing
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr/models'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models/RealESRGAN'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr/models/RealESRGAN'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models/engine'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr/models/engine'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/thumbs'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr/thumbs'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models/', 'Make sure all models are .onnx files'))) {
-  fse.writeFile(path.join(appDataPath, '/.enhancr/models/', 'Make sure all models are .onnx files'), '');
-};
+createDirs.forEach((dir) => {
+  fs.ensureDirSync(path.join(appDataPath, '/.enhancr', dir))
+})
+
+fs.ensureFileSync(path.join(appDataPath, '/.enhancr/models/', 'Make sure all models are .onnx files'))
 
 // create projects storage
 if (!fs.existsSync(path.join(appDataPath, '/.enhancr/projects.json'))) {
@@ -134,12 +125,12 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
 
   if (json.settings[0].rpc == true) {
     // discord rpc
-    var client = new (require("easy-presence").EasyPresence)("1046415937886228558");
+    var client = new EasyPresence("1046415937886228558");
     client.on("connected", () => {
       console.log("discord rpc initialized - user: ", client.environment.user.username);
     });
     client.setActivity({
-      details: osInfo + " " + process.arch + "・enhancr - 0.9.2",
+      details: osInfo + " " + process.arch + "・enhancr - " + appVersion,
       assets: {
         large_image: "enhancr",
         large_text: "enhancr",
@@ -153,9 +144,10 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
       ],
       timestamps: { start: new Date() }
     });
+
     ipcMain.on("rpc-done", function (event) {
       client.setActivity({
-        details: osInfo + " " + process.arch + "・enhancr - 0.9.2",
+        details: osInfo + " " + process.arch + "・enhancr -" + appVersion,
         assets: {
           large_image: "enhancr",
           large_text: "enhancr",
@@ -173,13 +165,13 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     var date = new Date();
     ipcMain.on("rpc-interpolation", function (event, fps, engine, percentage) {
       client.setActivity({
-        details: "Interpolating" + "・enhancr - 0.9.2",
+        details: "Interpolating" + "・enhancr - " + appVersion,
         state: engine + " - " + fps + " fps" + " - " + percentage + "%",
         assets: {
           large_image: "interpolate",
           large_text: "Interpolating",
           small_image: "enhancr",
-          small_text: "enhancr - 0.9.2"
+          small_text: "enhancr - " + appVersion
         },
         buttons: [
           {
@@ -192,13 +184,13 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     })
     ipcMain.on("rpc-upscaling", function (event, fps, engine, percentage) {
       client.setActivity({
-        details: "Upscaling" + "・enhancr - 0.9.2",
+        details: "Upscaling" + "・enhancr - " + appVersion,
         state: engine + " - " + fps + " fps" + " - " + percentage + "%",
         assets: {
           large_image: "upscale",
           large_text: "Upscaling",
           small_image: "enhancr",
-          small_text: "enhancr - 0.9.2"
+          small_text: "enhancr - " + appVersion
         },
         buttons: [
           {
@@ -211,13 +203,13 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     });
     ipcMain.on("rpc-restoration", function (event, fps, engine, percentage) {
       client.setActivity({
-        details: "Restoring" + "・enhancr - 0.9.2",
+        details: "Restoring" + "・enhancr - " + appVersion,
         state: engine + " - " + fps + " fps" + " - " + percentage + "%",
         assets: {
           large_image: "restore",
           large_text: "Restoring",
           small_image: "enhancr",
-          small_text: "enhancr - 0.9.2"
+          small_text: "enhancr - " + appVersion
         },
         buttons: [
           {
