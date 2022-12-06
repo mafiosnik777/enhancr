@@ -2,14 +2,14 @@
   "name": "enhancr",
   "productName": "enhancr",
   "version": "0.9.2",
+  "private": true,
   "description": "Interpolation/Upscaling AI",
   "main": "src/app.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "start": "dotenv electron-forge start",
+    "package": "dotenv electron-forge package",
+    "make": "dotenv electron-forge make",
+    "publish": "dotenv electron-forge publish"
   },
   "keywords": [],
   "author": {
@@ -70,8 +70,7 @@
     "mime": "^3.0.0",
     "mv": "^2.1.1",
     "node-ffprobe": "^3.0.0",
-    "npm": "^8.19.2",
-    "systeminformation": "^5.11.21"
+    "systeminformation": "^5.16.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.68",
@@ -79,7 +78,8 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.68",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.68",
     "@electron-forge/maker-zip": "^6.0.0-beta.68",
-    "electron": "^21.2.0",
+    "dotenv-cli": "^6.0.0",
+    "electron": "~21.0.0",
     "electron-reloader": "^1.2.3"
   }
 }
