@@ -1,7 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const path = require("path");
-const fs = require("fs");
-const fse = require("fs-extra");
+const fs = require("fs-extra");
 const find = require('find-process');
 const os = require('os');
 
@@ -15,6 +14,11 @@ const remoteMain = require('@electron/remote/main');
 remoteMain.initialize();
 
 const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share");
+
+const createDirs = [
+  'models/RealESRGAN',
+  'models/engine',
+  'thumbs']
 
 // Skip loading screen (dev mode)
 var devMode = true;
@@ -36,24 +40,11 @@ function getOSInfo() {
 }
 
 // create paths if not existing
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr/models'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models/RealESRGAN'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr/models/RealESRGAN'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models/engine'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr/models/engine'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/thumbs'))) {
-  fse.mkdirSync(path.join(appDataPath, '/.enhancr/thumbs'));
-};
-if (!fse.existsSync(path.join(appDataPath, '/.enhancr/models/', 'Make sure all models are .onnx files'))) {
-  fse.writeFile(path.join(appDataPath, '/.enhancr/models/', 'Make sure all models are .onnx files'), '');
-};
+createDirs.forEach((dir) => {
+  fs.ensureDirSync(path.join(appDataPath, '/.enhancr', dir))
+})
+
+fs.ensureFileSync(path.join(appDataPath, '/.enhancr/models/', 'Make sure all models are .onnx files'))
 
 // create projects storage
 if (!fs.existsSync(path.join(appDataPath, '/.enhancr/projects.json'))) {
