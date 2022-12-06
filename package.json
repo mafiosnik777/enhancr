@@ -51,6 +51,7 @@
     "@electron/remote": "^2.0.8",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^1.4.1",
+    "@fortawesome/fontawesome-free": "~6.2.1",
     "@supercharge/promise-pool": "^2.3.2",
     "animate.css": "^4.1.1",
     "aspect-ratio": "^2.1.1",
