@@ -119,7 +119,7 @@ class Interpolation {
 
             // get engine path
             function getEnginePath() {
-                return path.join(appDataPath, '/.enhancr/models/engine', 'cain' + '-' + path.basename(onnx, '.onnx') + '-' + width + 'x' + height + '-' + fp + '.engine');
+                return path.join(appDataPath, '/.enhancr/models/engine', 'cain' + '_' + path.basename(onnx, '.onnx') + '_' + width + 'x' + height + '_' + fp + '.engine');
             }
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
@@ -405,7 +405,7 @@ class Interpolation {
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
-                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i ${tmpOutPath} -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${out}"`;
+                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${out}"`;
                                 let muxTerm = spawn(muxCmd, [], {
                                     shell: true,
                                     stdio: ['inherit', 'pipe', 'pipe'],
@@ -442,7 +442,7 @@ class Interpolation {
                 await interpolate();
                 // clear cacheorary files
                 fse.emptyDirSync(cache);
-                console.log("Cleared cacheorary files");
+                console.log("Cleared temporary files");
                 // timeout for 2 seconds after interpolation
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }

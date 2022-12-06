@@ -315,9 +315,9 @@ class Upscaling {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m ${engine} - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
-                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m ${engine} - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
+                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         // merge stdout & stderr & write data to terminal
@@ -346,7 +346,7 @@ class Upscaling {
                                 let mkv = extension == ".mkv";
                                 let mkvFix = mkv ? "-max_interleave_delta 0" : "";
 
-                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i ${tmpOutPath} -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
+                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
 
                                 // merge stdout & stderr & write data to terminal
@@ -376,7 +376,7 @@ class Upscaling {
                 await upscale();
                 // clear cacheorary files
                 // fse.emptyDirSync(cache);
-                console.log("Cleared cacheorary files");
+                console.log("Cleared temporary files");
                 // timeout for 2 seconds after upscale
                 await new Promise(resolve => setTimeout(resolve, 2000));
             }
