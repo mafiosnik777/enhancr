@@ -145,9 +145,9 @@ class Upscaling {
                     return new Promise(function (resolve) {
                         if (engine == 'Upscaling - RealESRGAN (TensorRT)') {
                             if (fp16.checked == true) {
-                                var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             } else {
-                                var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --verbose --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                                var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             }
                         } else {
                             var cmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${shapeDimensionsOpt} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;

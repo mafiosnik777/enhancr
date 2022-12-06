@@ -366,13 +366,13 @@ if (process.platform == "win32") {
           mainWindow.webContents.openDevTools({ mode: "detach" });
         }
         mainWindow.loadFile(path.join(__dirname, initialHtml));
-        console.log("✔".green + " Sucessfully loaded " + initialHtml);
+        console.log("✔" + " Sucessfully loaded " + initialHtml);
 
         // Swap out windows (dev mode disabled)
         function swap() {
           mainWindow.loadFile(path.join(__dirname, "./pages/welcome.html"));
           console.log(
-            "✔".green + " Initialization done! Swapping out windows."
+            "✔" + " Initialization done! Swapping out windows."
           );
         }
         if (devMode == false) {
@@ -424,13 +424,13 @@ if (process.platform == "win32") {
           mainWindow.webContents.openDevTools({ mode: "detach" });
         }
         mainWindow.loadFile(path.join(__dirname, initialHtml));
-        console.log("✔".green + " Sucessfully loaded " + initialHtml);
+        console.log("✔" + " Sucessfully loaded " + initialHtml);
 
         // Swap out windows (dev mode disabled)
         function swap() {
           mainWindow.loadFile(path.join(__dirname, "./pages/welcome.html"));
           console.log(
-            "✔".green + " Initialization done! Swapping out windows."
+            "✔" + " Initialization done! Swapping out windows."
           );
         }
         if (devMode == false) {
