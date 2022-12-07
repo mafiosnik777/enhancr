@@ -9,3 +9,4 @@ out/
 .vscode
 src/python/ffmpeg
 src/python/ffmpeg/*
+*-error.log
