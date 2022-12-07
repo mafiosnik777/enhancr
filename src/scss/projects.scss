@@ -75,27 +75,26 @@ $macosblue: #1e5cce;
 }
 
 #hover-create-toggle {
-    background: rgba(60, 60, 60, 0.3);
-    border-radius: 8px;
-    width: 500px;
-    height: 52px;
-    position: absolute;
     bottom: 29%;
     left: 11.5%;
-    display: block;
-    cursor: pointer;
 }
 
 #hover-open-toggle {
-    background: none;
+    bottom: 19%;
+    left: 11.5%;
+}
+
+.welcome-toggle {
+    display: block;
+    cursor: pointer;
     border-radius: 8px;
     width: 500px;
     height: 52px;
     position: absolute;
-    bottom: 19%;
-    left: 11.5%;
-    display: block;
-    cursor: pointer;
+}
+
+#hover-create-toggle:hover, #hover-open-toggle:hover {
+    background: rgba(60, 60, 60, 0.3);
 }
 
 #create-header {

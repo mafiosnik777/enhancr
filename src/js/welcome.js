@@ -33,20 +33,6 @@ function setProject(index, project) {
 var createToggle = document.getElementById("hover-create-toggle");
 var openToggle = document.getElementById("hover-open-toggle");
 
-function createToggleHover() {
-  createToggle.style.background = "rgba(60, 60, 60, 0.3)";
-  openToggle.style.background = "none";
-}
-
-createToggle.addEventListener("mouseover", createToggleHover);
-
-function openToggleHover() {
-  openToggle.style.background = "rgba(60, 60, 60, 0.3)";
-  createToggle.style.background = "none";
-}
-
-openToggle.addEventListener("mouseover", openToggleHover);
-
 var body = document.querySelector("body");
 
 if (process.platform == "linux") {
