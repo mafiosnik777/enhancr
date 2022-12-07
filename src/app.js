@@ -25,6 +25,7 @@ const devMode = !app.isPackaged
 
 if (process.platform == "win32") {
   app.setAppUserModelId("enhancr");
+  app.setPath("userData", path.resolve(appDataPath, '.enhancr/chromedata'));
 }
 
 function getOSInfo() {
