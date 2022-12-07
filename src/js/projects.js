@@ -406,6 +406,9 @@ function loadUpscaling() {
   if (data.upscaling[0].engine === "waifu2x") {
     upscaleEngineSpan.textContent = "Upscaling - waifu2x (NCNN)"
   }
+  if (data.upscaling[0].engine === "realesrgan-ncnn") {
+    upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (NCNN)"
+  }
   if (data.upscaling[0].engine === "realesrgan") {
     upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (TensorRT)"
   }

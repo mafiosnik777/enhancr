@@ -850,6 +850,7 @@ var engineInputUpscale = document.getElementById("engine-upscale");
 var engineDropdownUpscale = document.getElementById("engine-dropdown-upscale");
 var waifu2xOption = document.getElementById("waifu2x-tensorrt");
 var realesrganOption = document.getElementById("realesrgan-tensorrt");
+var realesrganNcnnOption = document.getElementById("realesrgan-ncnn");
 
 var upscaleOutputPath = document.getElementById("upscale-output-path");
 var upscaleOutputPathText = document.getElementById("upscale-output-path-text");
@@ -1221,7 +1222,24 @@ waifu2xOption.addEventListener("click", function() {
     console.log("Engine written to project file.");
 });
 
-// change engine (realesrgan)
+// change engine (realesrgan-ncnn)
+realesrganNcnnOption.addEventListener("click", function() {
+    upscaleEngineText.textContent = "Upscaling - RealESRGAN (NCNN)";
+    hiderUpscale.style.visibility = "hidden";
+    engineDropdownUpscale.style.visibility = "hidden";
+    factor2.style.display = "block";
+    factor3.style.display = "block";
+    factor4.style.display = "block";
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.upscaling[0].engine = "realesrgan-ncnn";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (realesrgan-trt)
 realesrganOption.addEventListener("click", function() {
     upscaleEngineText.textContent = "Upscaling - RealESRGAN (TensorRT)";
     hiderUpscale.style.visibility = "hidden";

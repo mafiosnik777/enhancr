@@ -264,7 +264,7 @@ function renderQueueItem() {
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
               shell.openPath(outputPath);
             } else if (queue[index].mode == 'upscaling') {
-              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)") {
+              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
               } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                 model = "waifu2x"
@@ -368,7 +368,7 @@ function renderQueueItem() {
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
                   } else {
-                    if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)") {
+                    if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                       model = "RealESRGAN"
                     } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                       model = "waifu2x"
@@ -405,7 +405,7 @@ function renderQueueItem() {
                 var interpolationVideoInputText = document.getElementById("input-video-text");
                 if (sessionStorage.getItem(`out${index}`) == null) {
                   if (queue[index].mode == 'upscaling') {
-                    if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)") {
+                    if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                       model = "RealESRGAN"
                     } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                       model = "waifu2x"
@@ -472,7 +472,7 @@ function renderQueueItem() {
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
               remote.shell.showItemInFolder(outputPath);
             } else if (queue[index].mode == 'upscaling') {
-              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)") {
+              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
               } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                 model = "waifu2x"
@@ -538,7 +538,7 @@ function renderQueueItem() {
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
             } else if (queue[index].mode == 'upscaling') {
-              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)") {
+              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
               } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
                 model = "waifu2x"

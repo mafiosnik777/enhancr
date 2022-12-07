@@ -45,7 +45,7 @@ class Upscaling {
         let previewPath = path.join(cache, '/preview');
         let previewDataPath = previewPath + '/data%02d.ts';
         const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
-        
+
         let stopped = sessionStorage.getItem('stopped');
         if (!(stopped == 'true')) {
             // set flag for started upscaling process
@@ -134,7 +134,15 @@ class Upscaling {
 
             // get engine path
             function getEnginePath() {
-                return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '.engine');
+                if (engine == "Upscaling - RealESRGAN (NCNN)") {
+                    if (!(document.getElementById('custom-model-check').checked)) {
+                        return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    } else {
+                        return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
+                    }
+                } else {
+                    return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '.engine');
+                }
             }
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
@@ -227,6 +235,7 @@ class Upscaling {
             let json = {
                 file: file,
                 engine: engineOut,
+                fp16: fp16.checked,
                 scale: scale,
                 streams: numStreams.value,
                 onnx: onnx,
@@ -261,6 +270,9 @@ class Upscaling {
 
             // determine ai engine
             function pickEngine() {
+                if (engine == "Upscaling - RealESRGAN (NCNN)") {
+                    return path.join(__dirname, '..', "/python/esrgan_ncnn.py");
+                }
                 if (engine == "Upscaling - RealESRGAN (TensorRT)") {
                     return path.join(__dirname, '..', "/python/esrgan.py");
                 }
