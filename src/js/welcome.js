@@ -58,9 +58,7 @@ ipcRenderer.on('openproject', (event, project) => {
     recentProjects.unshift(project);
 
     // Remove projects from history past 7 files (for now)
-    if (recentProjects.length > 7) {
-        recentProjects.splice(8, recentProjects.length - 7);
-    }
+    if (recentProjects.length > 7) recentProjects.splice(8);
 
     localStorage.setItem('projects', JSON.stringify(recentProjects));
     loadProject(project);

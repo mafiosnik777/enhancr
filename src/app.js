@@ -47,28 +47,6 @@ createDirs.forEach((dir) => {
 
 fs.ensureFileSync(path.join(appDataPath, '/.enhancr/models/', 'Make sure all models are .onnx files'))
 
-// create projects storage
-if (!fs.existsSync(path.join(appDataPath, '/.enhancr/projects.json'))) {
-  var projects = {
-    recent0: "",
-    recent1: "",
-    recent2: "",
-    recent3: "",
-    recent4: "",
-    recent5: "",
-    recent6: "",
-    recent7: ""
-  };
-  var data = JSON.stringify(projects);
-  fs.writeFile(path.join(appDataPath, '/.enhancr/projects.json'), data, (err) => {
-    if (err) {
-      console.log("Error writing file", err);
-    } else {
-      console.log("JSON data is written to the file successfully");
-    }
-  });
-};
-
 function getTmpPath() {
   if (process.platform == 'win32') {
       return os.tmpdir() + "\\enhancr\\";
