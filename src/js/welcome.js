@@ -11,8 +11,6 @@ const versionText = document.getElementById('version');
 const recentsContainer = document.getElementById('recents-container');
 const recentItemTemplate = document.getElementById('recent-item-template');
 
-const appLogo = document.getElementsByClassName('app-icon');
-
 /* window.addEventListener('error', (event) => {
     appLogo[0].style.animation = '';
 }); */
