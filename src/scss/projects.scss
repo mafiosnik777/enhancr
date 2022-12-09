@@ -208,15 +208,3 @@ $macosblue: #1e5cce;
 #no-recents:has(+ .recent) {
     display: none;
 }
-
-// Transition to main
-.main-transition #recents-container {
-    transform: translateX(100%);
-    transition: transform 0.25s ease-in-out;
-}
-
-.main-transition .project-side-container {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
-}
-

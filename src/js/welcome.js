@@ -32,12 +32,7 @@ function parseJSON(str, defaults) {
 
 function loadProject(projectPath) {
     sessionStorage.setItem('currentProject', projectPath);
-
-    document.body.classList.add('main-transition');
-
-    setTimeout(() => {
-        window.location.replace('../app.html');
-    }, 310);
+    window.location.replace('../app.html');
 }
 
 const recentProjects = parseJSON(localStorage.getItem('projects'), []);
