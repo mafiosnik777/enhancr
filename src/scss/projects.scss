@@ -217,6 +217,6 @@ $macosblue: #1e5cce;
 
 .main-transition .project-side-container {
     transform: translateX(-100%);
-    transition: transform 0.25s ease-in;
+    transition: transform 0.3s ease-in-out;
 }
 

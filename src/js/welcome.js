@@ -37,7 +37,7 @@ function loadProject(projectPath) {
 
     setTimeout(() => {
         window.location.replace('../app.html');
-    }, 250);
+    }, 310);
 }
 
 const recentProjects = parseJSON(localStorage.getItem('projects'), []);
