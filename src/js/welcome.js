@@ -1,333 +1,86 @@
-var path = require("path");
-const { ipcRenderer } = require("electron");
-const fs = require("fs");
+const { ipcRenderer } = require('electron');
+const { app } = require('@electron/remote');
 
-const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
+// Elements
+// const lightModeLayer = document.getElementById('light-mode');
+const createToggle = document.getElementById('hover-create-toggle');
+const openToggle = document.getElementById('hover-open-toggle');
+
+const versionText = document.getElementById('version');
+
+const recentsContainer = document.getElementById('recents-container');
+const recentItemTemplate = document.getElementById('recent-item-template');
 
 const appLogo = document.getElementsByClassName('app-icon');
 
-var lightModeLayer = document.getElementById('light-mode');
+/* window.addEventListener('error', (event) => {
+    appLogo[0].style.animation = '';
+}); */
 
-window.addEventListener("error", (event) => {
-  appLogo[0].style.animation = "";
+/* if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    console.log('light mode detected');
+    lightModeLayer.style.visibility = 'visible';
+} */
+
+function parseJSON(str, defaults) {
+    if (!str) return defaults;
+
+    try {
+        return JSON.parse(str);
+    } catch {
+        return defaults;
+    }
+}
+
+function loadProject(projectPath) {
+    sessionStorage.setItem('currentProject', projectPath);
+    window.location.replace('../app.html');
+}
+
+const recentProjects = parseJSON(localStorage.getItem('projects'), []);
+
+if (navigator.userAgentData.platform === 'Linux') document.body.style.backgroundColor = '#333333';
+
+// Button functionality
+createToggle.addEventListener('click', () => {
+    ipcRenderer.send('create-project');
 });
 
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches == false) {
-  console.log('light mode detected')
-  lightModeLayer.style.visibility = 'visible';
-}
-
-function getProject(index) {
-  const json = fs.readFileSync(path.join(appDataPath, '/.enhancr/projects.json'), "utf8");
-  const jsonData = JSON.parse(json);
-  return jsonData[index];
-}
-
-function setProject(index, project) {
-  const json = fs.readFileSync(path.join(appDataPath, '/.enhancr/projects.json'), "utf8");
-  const jsonData = JSON.parse(json);
-  jsonData[index] = project;
-  fs.writeFileSync(path.join(appDataPath, '/.enhancr/projects.json'), JSON.stringify(jsonData));
-}
-
-var createToggle = document.getElementById("hover-create-toggle");
-var openToggle = document.getElementById("hover-open-toggle");
-
-var body = document.querySelector("body");
-
-if (process.platform == "linux") {
-  body.style.backgroundColor = "#333333";
-}
-
-// send ipc request from renderer to main process (create project)
-function createProject() {
-  ipcRenderer.send("create-project");
-}
-createToggle.addEventListener("click", createProject);
-
-// Handle event reply from main process
-ipcRenderer.on("project", (event, project) => {
-  sessionStorage.setItem("currentProject", project);
-  if (getProject("recent0") == "") {
-    setProject("recent0", project);
-  } else if (getProject("recent1") == "" && getProject("recent1") !== project) {
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", project);
-  } else if (getProject("recent2") == "" && getProject("recent2") !== project) {
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", project);
-  } else if (getProject("recent3") == "" && getProject("recent3") !== project) {
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", project);
-  } else if (getProject("recent4") == "" && getProject("recent4") !== project) {
-    setProject("recent4", getProject("recent3"));
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", project);
-  } else if (getProject("recent5") == "" && getProject("recent5") !== project) {
-    setProject("recent5", getProject("recent4"));
-    setProject("recent4", getProject("recent3"));
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", project);
-  } else if (getProject("recent6") == "" && getProject("recent6") !== project) {
-    setProject("recent6", getProject("recent5"));
-    setProject("recent5", getProject("recent4"));
-    setProject("recent4", getProject("recent3"));
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", project);
-  } else if (getProject("recent7") == "" && getProject("recent7") !== project) {
-    setProject("recent7", getProject("recent6"));
-    setProject("recent6", getProject("recent5"));
-    setProject("recent6", getProject("recent5"));
-    setProject("recent5", getProject("recent4"));
-    setProject("recent4", getProject("recent3"));
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", project);
-  } else {
-    console.log("Project already in recents.")
-  }
+openToggle.addEventListener('click', () => {
+    ipcRenderer.send('open-project');
 });
 
-// send ipc request from renderer to main process (open project)
-function openProject() {
-  ipcRenderer.send("open-project");
-}
-openToggle.addEventListener("click", openProject);
+// Received from ipcMain dialog
+ipcRenderer.on('openproject', (event, project) => {
+    // Push to top if opened recently
+    if (recentProjects.includes(project)) {
+        recentProjects.splice(recentProjects.indexOf(project), 1);
+    }
 
-// Handle event reply from main process
-ipcRenderer.on("openproject", (event, openproject) => {
-  sessionStorage.setItem("currentProject", openproject);
-  if (getProject("recent0") == "") {
-    setProject("recent0", openproject);
-  } else if (getProject("recent1") == "" && getProject("recent1") !== openproject) {
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", openproject);
-  } else if (getProject("recent2") == "" && getProject("recent2") !== openproject) {
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", openproject);
-  } else if (getProject("recent3") == "" && getProject("recent3") !== openproject) {
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", openproject);
-  } else if (getProject("recent4") == "" && getProject("recent4") !== openproject) {
-    setProject("recent4", getProject("recent3"));
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", openproject);
-  } else if (getProject("recent5") == "" && getProject("recent5") !== openproject) {
-    setProject("recent5", getProject("recent4"));
-    setProject("recent4", getProject("recent3"));
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", openproject);
-  } else if (getProject("recent6") == "" && getProject("recent6") !== openproject) {
-    setProject("recent6", getProject("recent5"));
-    setProject("recent5", getProject("recent4"));
-    setProject("recent4", getProject("recent3"));
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", openproject);
-  } else if (getProject("recent7") == "" && getProject("recent7") !== openproject) {
-    setProject("recent7", getProject("recent6"));
-    setProject("recent6", getProject("recent5"));
-    setProject("recent6", getProject("recent5"));
-    setProject("recent5", getProject("recent4"));
-    setProject("recent4", getProject("recent3"));
-    setProject("recent3", getProject("recent2"));
-    setProject("recent2", getProject("recent1"));
-    setProject("recent1", getProject("recent0"));
-    setProject("recent0", openproject);
-  } else {
-    console.log("Project already in recents.")
-  }
-  window.location.replace("../app.html");
+    recentProjects.unshift(project);
+
+    // Remove projects from history past 7 files (for now, L90)
+
+    localStorage.setItem('projects', JSON.stringify(recentProjects));
+    loadProject(project);
 });
 
-// recents
-var recent0 = document.getElementById("recent-0"),
-  recent1 = document.getElementById("recent-1"),
-  recent2 = document.getElementById("recent-2"),
-  recent3 = document.getElementById("recent-3"),
-  recent4 = document.getElementById("recent-4"),
-  recent5 = document.getElementById("recent-5"),
-  recent6 = document.getElementById("recent-6"),
-  recent7 = document.getElementById("recent-7");
+recentProjects.forEach((project, i) => {
+    const clonedRecentItem = recentItemTemplate.content.cloneNode(true);
+    const recentItem = clonedRecentItem.querySelector('.recent');
+    const delay = 1 + (i * 0.3);
 
-var title0 = document.getElementById("title0"),
-  title1 = document.getElementById("title1"),
-  title2 = document.getElementById("title2"),
-  title3 = document.getElementById("title3"),
-  title4 = document.getElementById("title4"),
-  title5 = document.getElementById("title5"),
-  title6 = document.getElementById("title6"),
-  title7 = document.getElementById("title7");
+    recentItem.style.animationDelay = `${delay}s`;
+    // path.basename alternative
+    recentItem.querySelector('.project-title').textContent = project.split(/[\\/]/).pop();
+    recentItem.querySelector('.project-path').textContent = project;
 
-var path0 = document.getElementById("path0"),
-  path1 = document.getElementById("path1"),
-  path2 = document.getElementById("path2"),
-  path3 = document.getElementById("path3"),
-  path4 = document.getElementById("path4"),
-  path5 = document.getElementById("path5"),
-  path6 = document.getElementById("path6"),
-  path7 = document.getElementById("path7");
+    recentItem.addEventListener('click', () => {
+        loadProject(project);
+    });
 
-var noRecents = document.getElementById("no-recents");
+    recentsContainer.appendChild(clonedRecentItem);
+});
 
-if (getProject("recent0") == "") {
-  recent0.style.visibility = "hidden";
-} else {
-  recent0.style.visibility = "visible";
-  noRecents.style.visibility = "hidden";
-  title0.textContent = path.basename(getProject("recent0"), ".enhncr");
-  if (getProject("recent0").length >= 30) {
-    path0.textContent = "../" + path.basename(path.dirname(getProject("recent0"))) + "/" + path.basename(getProject("recent0"));
-  } else {
-    path0.textContent = getProject("recent0");
-  }
-}
-
-if (getProject("recent1") == "") {
-  recent1.style.visibility = "hidden";
-} else {
-  recent1.style.visibility = "visible";
-  title1.textContent = path.basename(getProject("recent1"), ".enhncr");
-  if (getProject("recent1").length >= 30) {
-    path1.textContent = "../" + path.basename(path.dirname(getProject("recent1"))) + "/" + path.basename(getProject("recent1"));
-  } else {
-    path1.textContent = getProject("recent1");
-  }
-};
-
-if (getProject("recent2") == "") {
-  recent2.style.visibility = "hidden";
-} else {
-  recent2.style.visibility = "visible";
-  title2.textContent = path.basename(getProject("recent2"), ".enhncr");
-  if (getProject("recent2").length >= 30) {
-    path2.textContent = "../" + path.basename(path.dirname(getProject("recent2"))) + "/" + path.basename(getProject("recent2"));
-  } else {
-    path2.textContent = getProject("recent2");
-  }
-}
-
-if (getProject("recent3") == "") {
-  recent3.style.visibility = "hidden";
-} else {
-  recent3.style.visibility = "visible";
-  title3.textContent = path.basename(getProject("recent3"), ".enhncr");
-  if (getProject("recent3").length >= 30) {
-    path3.textContent = "../" + path.basename(path.dirname(getProject("recent3"))) + + "/" + path.basename(getProject("recent3"));
-  } else {
-    path3.textContent = getProject("recent3");
-  }
-}
-
-if (getProject("recent4") == "") {
-  recent4.style.visibility = "hidden";
-} else {
-  recent4.style.visibility = "visible";
-  title4.textContent = path.basename(getProject("recent4"), ".enhncr");
-  if (getProject("recent4").length >= 30) {
-    path4.textContent = "../" + path.basename(path.dirname(getProject("recent4"))) + "/" + path.basename(getProject("recent4"));
-  } else {
-    path4.textContent = getProject("recent4");
-  }
-}
-
-if (getProject("recent5") == "") {
-  recent5.style.visibility = "hidden";
-} else {
-  recent5.style.visibility = "visible";
-  title5.textContent = path.basename(getProject("recent5"), ".enhncr");
-  if (getProject("recent0").length >= 30) {
-    path5.textContent = "../" + path.basename(path.dirname(getProject("recent5"))) + "/" + path.basename(getProject("recent5"));
-  } else {
-    path5.textContent = getProject("recent5");
-  }
-}
-
-if (getProject("recent6") == "") {
-  recent6.style.visibility = "hidden";
-} else {
-  recent6.style.visibility = "visible";
-  title6.textContent = path.basename(getProject("recent6"), ".enhncr");
-  if (getProject("recent0").length >= 30) {
-    path6.textContent = "../" + path.basename(path.dirname(getProject("recent6"))) + "/" + path.basename(getProject("recent6"));
-  } else {
-    path6.textContent = getProject("recent6");
-  }
-}
-
-if (getProject("recent7") == "") {
-  recent7.style.visibility = "hidden";
-} else {
-  recent7.style.visibility = "visible";
-  title7.textContent = path.basename(getProject("recent7"), ".enhncr");
-  if (getProject("recent7").length >= 30) {
-    path7.textContent = "../" + path.basename(path.dirname(getProject("recent0"))) + "/" + path.basename(getProject("recent7"));
-  } else {
-    path7.textContent = getProject("recent7");
-  }
-}
-
-setTimeout(function () {
-  appLogo[0].classList.remove('animate__fadeInDown');
-}, 1000);
-
-function load0() {
-  sessionStorage.setItem("currentProject", getProject("recent0"));
-  window.location.replace("../app.html");
-}
-function load1() {
-  sessionStorage.setItem("currentProject", getProject("recent1"));
-  window.location.replace("../app.html");
-}
-function load2() {
-  sessionStorage.setItem("currentProject", getProject("recent2"));
-  window.location.replace("../app.html");
-}
-function load3() {
-  sessionStorage.setItem("currentProject", getProject("recent3"));
-  window.location.replace("../app.html");
-}
-function load4() {
-  sessionStorage.setItem("currentProject", getProject("recent4"));
-  window.location.replace("../app.html");
-}
-function load5() {
-  sessionStorage.setItem("currentProject", getProject("recent5"));
-  window.location.replace("../app.html");
-}
-function load6() {
-  sessionStorage.setItem("currentProject", getProject("recent6"));
-  window.location.replace("../app.html");
-}
-function load7() {
-  sessionStorage.setItem("currentProject", getProject("recent7"));
-  window.location.replace("../app.html");
-}
-
-recent0.addEventListener("click", load0);
-recent1.addEventListener("click", load1);
-recent2.addEventListener("click", load2);
-recent3.addEventListener("click", load3);
-recent4.addEventListener("click", load4);
-recent5.addEventListener("click", load5);
-recent6.addEventListener("click", load6);
-recent7.addEventListener("click", load7);
-
+// TODO: find a better way to get version without remote
+versionText.textContent = versionText.textContent.replace('{{version}}', app.getVersion());

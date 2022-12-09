@@ -1,5 +1,15 @@
 $macosblue: #1e5cce;
 
+@keyframes fly-1 {
+    from {
+      transform: translateY(0);
+    }
+  
+    to {
+      transform: translateY(-0.2em);
+    }
+}
+
 .project-side-container {
     position: absolute;
     background: rgba(0, 0, 0, 0.25);
@@ -19,39 +29,12 @@ $macosblue: #1e5cce;
     z-index: 1;
     top: 20%;
     left: 41%;
-    animation: fly-1 0.6s ease-in-out infinite alternate
-}
-
-#recent-0 {
-    visibility: hidden;
-}
-
-#recent-1 {
-    visibility: hidden;
-}
-
-#recent-2 {
-    visibility: hidden;
-}
-
-#recent-3 {
-    visibility: hidden;
-}
-
-#recent-4 {
-    visibility: hidden;
-}
-
-#recent-5 {
-    visibility: hidden;
-}
-
-#recent-6 {
-    visibility: hidden;
-}
-
-#recent-7 {
-    visibility: hidden;
+    animation-name: fadeInDown, fly-1;
+    animation-duration: 1s, 0.8s;
+    animation-delay: 0s, 1s;
+    animation-timing-function: ease-in-out, ease-in-out;
+    animation-iteration-count: 1, infinite;
+    animation-direction: normal, alternate;
 }
 
 #welcome {
@@ -214,20 +197,15 @@ $macosblue: #1e5cce;
 }
 
 #no-recents {
-        position: absolute;
-        top: 50%;
-        left: 25%;
-        font-size: 9pt;
-        font-weight: 300;
-        color: darkgrey;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    font-size: 9pt;
+    font-weight: 300;
+    color: darkgrey;
 }
 
-@keyframes fly-1 {
-  from {
-    transform: translateY(0.1em);
-  }
-
-  to {
-    transform: translateY(-0.1em);
-  }
+#no-recents:has(+ .recent) {
+    display: none;
 }
+
