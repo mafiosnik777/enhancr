@@ -69,6 +69,9 @@ const overlay = document.getElementById("overlay")
 
 var openProj = document.getElementById("new");
 
+// set app version
+document.getElementById('build-version').textContent = remote.app.getVersion()
+
 // send ipc request from renderer to main process (open project)
 function openProject() {
     ipcRenderer.send("open-project");

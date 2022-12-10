@@ -6,46 +6,15 @@
   "description": "Interpolation/Upscaling AI",
   "main": "src/app.js",
   "scripts": {
-    "start": "cross-env GYP_MSVS_VERSION=2017 electron-forge start",
-    "package": "cross-env GYP_MSVS_VERSION=2017 electron-forge package",
-    "make": "cross-env GYP_MSVS_VERSION=2017 electron-forge make"
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "keywords": [],
   "author": {
     "name": "mafiosnik"
   },
-  "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {
-        "icon": "./src/assets/enhancr-icon",
-        "asar": false
-      },
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "enhancr"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    },
-    "asar": false
-  },
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@electron/remote": "^2.0.8",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
@@ -65,7 +34,6 @@
     "hls.js": "^1.1.5",
     "mediainfo.js": "^0.1.8",
     "mime": "^3.0.0",
-    "node-ffprobe": "^3.0.0",
     "systeminformation": "^5.16.1"
   },
   "devDependencies": {
@@ -74,8 +42,8 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.68",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.68",
     "@electron-forge/maker-zip": "^6.0.0-beta.68",
-    "cross-env": "^7.0.3",
     "electron": "~21.0.0",
-    "electron-reloader": "^1.2.3"
+    "electron-reloader": "^1.2.3",
+    "sass": "^1.56.1"
   }
 }

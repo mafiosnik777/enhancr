@@ -1,0 +1,35 @@
+{
+  "interpolation": [
+    {
+      "inputFile": "",
+      "outputPath": "",
+      "codec": "H264",
+      "outputContainer": "",
+      "engine": "",
+      "model": "",
+      "params": ""
+    }
+  ],
+  "upscaling": [
+    {
+      "inputFile": "",
+      "outputPath": "",
+      "codec": "H264",
+      "outputContainer": "",
+      "engine": "",
+      "scale": "",
+      "params": ""
+    }
+  ],
+  "restoration": [
+    {
+      "inputFile": "",
+      "outputPath": "",
+      "codec": "H264",
+      "outputContainer": "",
+      "engine": "",
+      "model": "",
+      "params": ""
+    }
+  ]
+}
