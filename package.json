@@ -34,7 +34,6 @@
     "hls.js": "^1.1.5",
     "mediainfo.js": "^0.1.8",
     "mime": "^3.0.0",
-    "node-ffprobe": "^3.0.0",
     "systeminformation": "^5.16.1"
   },
   "devDependencies": {
