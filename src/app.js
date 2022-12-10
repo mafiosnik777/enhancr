@@ -46,10 +46,10 @@ settings = settings.settings[0];
 
 // Ensure dirs/files
 createDirs.forEach((dir) => {
-    fs.ensureDirSync(path.join(appDataPath, '/.enhancr', dir));
+    fs.ensureDirSync(path.join(appDataPath, dir));
 });
 
-fs.ensureFileSync(path.join(appDataPath, '/.enhancr/models/', 'Make sure all models are .onnx files'));
+fs.ensureFileSync(path.join(appDataPath, 'models', 'Make sure all models are .onnx files'));
 
 // Initialize
 const discordPresence = require('./main/discord-presence')(settings.rpc);
