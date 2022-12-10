@@ -14,7 +14,7 @@
   "author": {
     "name": "mafiosnik"
   },
-  "license": "MIT",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@electron/remote": "^2.0.8",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
