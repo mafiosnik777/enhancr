@@ -59,7 +59,7 @@ function setPresence(status, { fps, engine, percentage } = {}) {
 }
 
 rpcClient.on('connected', () => {
-    console.log('discord rpc initialized - user:', rpcClient.environment.user.username);
+    console.log('Discord RPC initialized - User:', rpcClient.environment.user.username);
 });
 
 module.exports = (startupEnabled) => {
