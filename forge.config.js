@@ -28,12 +28,23 @@ module.exports = {
     },
     hooks: {
         generateAssets: async () => {
+            const compiledScss = sass.compile('./src/scss/app.scss', {
+                style: 'compressed',
+                sourceMap: true,
+            });
+
+            compiledScss.css += '\n/*# sourceMappingURL=app.min.css.map */';
+
             await fs.ensureDir(assetBuildDir);
             await fs.emptyDir(assetBuildDir);
 
             await fs.writeFile(
                 path.resolve(assetBuildDir, 'app.min.css'),
-                sass.compile('./src/scss/app.scss', { style: 'compressed', sourceMap: true }).css,
+                compiledScss.css,
+            );
+            await fs.writeFile(
+                path.resolve(assetBuildDir, 'app.min.css.map'),
+                JSON.stringify(compiledScss.sourceMap),
             );
         },
     },
