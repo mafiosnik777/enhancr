@@ -33,7 +33,7 @@ module.exports = {
 
             await fs.writeFile(
                 path.resolve(assetBuildDir, 'app.min.css'),
-                sass.compile('./src/scss/app.scss', { style: 'compressed' }).css,
+                sass.compile('./src/scss/app.scss', { style: 'compressed', sourceMap: true }).css,
             );
         },
     },
