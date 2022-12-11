@@ -48,6 +48,20 @@ openToggle.addEventListener('click', () => {
     ipcRenderer.send('open-project');
 });
 
+function createToggleHover() {
+    createToggle.style.background = "rgba(60, 60, 60, 0.3)";
+    openToggle.style.background = "none";
+}
+
+createToggle.addEventListener("mouseover", createToggleHover);
+
+function openToggleHover() {
+    openToggle.style.background = "rgba(60, 60, 60, 0.3)";
+    createToggle.style.background = "none";
+}
+
+openToggle.addEventListener("mouseover", openToggleHover);
+
 // Received from ipcMain dialog
 ipcRenderer.on('openproject', (event, project) => {
     // Push to top if opened recently
