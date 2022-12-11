@@ -104,10 +104,8 @@ $macosblue: #1e5cce;
 #media-header {
   padding: 14px;
   padding-top: 14px;
-  padding-bottom: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 406px;
+  padding-bottom: 6px;
+  max-width: 419px;
 
   #header-text {
     font-size: 7.25pt;
@@ -122,6 +120,10 @@ $macosblue: #1e5cce;
     box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
     transition: background 300ms linear;
     color: #d0d0d0;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
 
     #file-name {
       color: #d0d0d0;
@@ -138,10 +140,8 @@ $macosblue: #1e5cce;
 #media-header-upscale {
   padding: 14px;
   padding-top: 14px;
-  padding-bottom: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 406px;
+  padding-bottom: 6px;
+  max-width: 419px;
 
   #header-text-upscale {
     font-size: 7.25pt;
@@ -155,6 +155,10 @@ $macosblue: #1e5cce;
     padding-bottom: 7px;
     box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
     color: #d0d0d0;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
 
     #file-name-upscale {
       color: #d0d0d0;
@@ -171,10 +175,8 @@ $macosblue: #1e5cce;
 #media-header-restoration {
   padding: 14px;
   padding-top: 14px;
-  padding-bottom: 12px;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 406px;
+  padding-bottom: 6px;
+  max-width: 419px;
 
   #header-text-restore {
     font-size: 7.25pt;
@@ -188,6 +190,10 @@ $macosblue: #1e5cce;
     padding-bottom: 7px;
     box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
     color: #d0d0d0;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
 
     #file-name-restore {
       color: #d0d0d0;
@@ -215,12 +221,12 @@ ul {
 }
 
 #mediainfo-side {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0,0,0,.2);
   position: absolute;
-  width: 7%;
-  height: 67%;
-  left: 3%;
-  top: 26%;
+  width: 7.5%;
+  height: 100%;
+  left: 0%;
+  top: 0%;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
 }
@@ -228,7 +234,7 @@ ul {
 #mediainfo-side-upscale {
   background: rgba(0, 0, 0, 0.2);
   position: absolute;
-  width: 7.5%;
+  width: 6.8%;
   height: 66%;
   left: 3.4%;
   top: 26%;
@@ -237,12 +243,12 @@ ul {
 }
 
 #mediainfo-side-restore {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0,0,0,.2);
   position: absolute;
-  width: 9.5%;
-  height: 66%;
-  left: 4.4%;
-  top: 26%;
+  width: 7.5%;
+  height: 100%;
+  left: 0%;
+  top: 0%;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
 }
@@ -270,7 +276,8 @@ li {
   padding-left: 15px;
   background: rgba(0, 0, 0, 0.12);
   border-radius: 10px;
-  width: 63.5%;
+  width: 63.4%;
+  position: absolute;
 
   li {
     margin-left: 28px;
@@ -284,7 +291,7 @@ li {
   padding-left: 15px;
   background: rgba(0, 0, 0, 0.12);
   border-radius: 10px;
-  width: 70.5%;
+  width: 64%;
 
   li {
     margin-left: 28px;
@@ -298,7 +305,8 @@ li {
   padding-left: 15px;
   background: rgba(0, 0, 0, 0.12);
   border-radius: 10px;
-  width: 88.5%;
+  width: 64%;
+  position: absolute;
 
   li {
     margin-left: 28px;
