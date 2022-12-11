@@ -73,6 +73,7 @@ app.once('ready', () => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            backgroundThrottling: false
         },
         resizable: false,
         icon: path.join(__dirname, '/assets/enhancr-icon.png'),
@@ -80,22 +81,23 @@ app.once('ready', () => {
         enableWebSQL: false,
     };
 
+    const isWin11 = os.release().split('.')[2] >= 22000;
+
     // Platform-specific options
     // eslint-disable-next-line default-case
     switch (process.platform) {
         case 'win32': {
-            windowOptions.transparent = true;
+            if (!isWin11) windowOptions.transparent = false;
 
             if (settings.disableBlur) break;
-            const isWin11 = os.release().split('.')[2] >= 22000;
-            const effect = isWin11 ? 'acryllic' : 'blur';
+            const effect = isWin11 ? 'acrylic' : 'blur';
 
             windowOptions = {
                 ...windowOptions,
                 vibrancy: {
                     theme: 'dark',
                     effect,
-                    useCustomWindowRefreshMethod: false,
+                    useCustomWindowRefreshMethod: true,
                     disableOnBlur: false,
                 },
             };
@@ -117,6 +119,7 @@ app.once('ready', () => {
                 backgroundColor: '#00000000',
                 vibrancy: 'under-window',
                 titleBarStyle: 'hiddenInset',
+                transparency: true
             };
 
             windowOptions.webPreferences.enableBlinkFeatures = 'AudioVideoTracks';
