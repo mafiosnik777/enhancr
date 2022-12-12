@@ -23,6 +23,7 @@ module.exports = {
         asar: false,
         ignore: [
             'src/scss',
+            /\.map$/i,
             ...ignoredPaths,
         ],
     },

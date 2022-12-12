@@ -112,12 +112,7 @@ class Upscaling {
             //get onnx input path
             function getOnnxPath() {
                 if (!(document.getElementById('custom-model-check').checked)) {
-                    if (engine == 'Upscaling - RealESRGAN (TensorRT)') {
                         return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
-                    } else if (engine == 'Upscaling - AnimeSR (TensorRT)') {
-                        return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/animesr/animesr_v2.onnx");
-                    }
-
                 } else {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
@@ -148,18 +143,14 @@ class Upscaling {
             sessionStorage.setItem('engineOut', engineOut);
 
             // convert onnx to trt engine
-            if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)' || !fse.existsSync(engineOut) && engine == 'Upscaling - AnimeSR (TensorRT)') {
+            if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
-                        if (engine == 'Upscaling - RealESRGAN (TensorRT)') {
                             if (fp16.checked == true) {
                                 var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             } else {
                                 var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
                             }
-                        } else {
-                            var cmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${shapeDimensionsOpt} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
-                        }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
                         term.stdout.on('data', (data) => {
@@ -257,9 +248,8 @@ class Upscaling {
                 model = "RealESRGAN"
             } else if (engine == "Upscaling - waifu2x (NCNN)") {
                 model = "waifu2x"
-            } else if (engine == "Upscaling - AnimeSR (TensorRT)") {
-                model = "AnimeSR"
             }
+
             // resolve output file path
             if (fileOut == null) {
                 let outPath = path.join(output, path.parse(file).name + `_${model}-${scale}x${extension}`);
@@ -278,9 +268,6 @@ class Upscaling {
                 }
                 if (engine == "Upscaling - waifu2x (NCNN)") {
                     return path.join(__dirname, '..', "/python/waifu2x.py");
-                }
-                if (engine == "Upscaling - AnimeSR (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/animesr_trt.py");
                 }
             }
             var engine = pickEngine();

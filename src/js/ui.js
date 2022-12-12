@@ -1259,25 +1259,6 @@ realesrganOption.addEventListener("click", function() {
     console.log("Engine written to project file.");
 });
 
-let animeSRoption = document.getElementById('animesr-tensorrt');
-
-// change engine (animesr)
-animeSRoption.addEventListener("click", function() {
-    upscaleEngineText.textContent = "Upscaling - AnimeSR (TensorRT)";
-    hiderUpscale.style.visibility = "hidden";
-    engineDropdownUpscale.style.visibility = "hidden";
-    factor2.style.display = "block";
-    factor3.style.display = "block";
-    factor4.style.display = "block";
-
-    // autosave
-    var currentProject = sessionStorage.getItem("currentProject");
-    const data = JSON.parse(fs.readFileSync(currentProject));
-    data.upscaling[0].engine = "animesr";
-    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
-    console.log("Engine written to project file.");
-});
-
 //toggle scale dropdown
 scaleInput.addEventListener("click", function() {
     hiderUpscale.style.visibility = "visible";

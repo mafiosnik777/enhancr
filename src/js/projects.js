@@ -412,9 +412,6 @@ function loadUpscaling() {
   if (data.upscaling[0].engine === "realesrgan") {
     upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (TensorRT)"
   }
-  if (data.upscaling[0].engine === "animesr") {
-    upscaleEngineSpan.textContent = "Upscaling - AnimeSR (TensorRT)"
-  }
 }
 loadUpscaling();
 
