@@ -638,6 +638,7 @@ function getTheme() {
 
 function setGPU() {
     const gpuInfo = require('gpu-info');
+    let unsupportedCheck = document.getElementById('unsupported-check');
     gpuInfo().then(function (data) {
         var hasNVIDIA = false;
         var hasAMD = false;
@@ -657,7 +658,7 @@ function setGPU() {
         if (hasNVIDIA) {
             sessionStorage.setItem('gpu', 'NVIDIA');
         }
-        if (hasAMD) {
+        if (hasAMD && !unsupportedCheck.checked) {
             sessionStorage.setItem('gpu', 'AMD');
             document.getElementById('cain-trt').style.display = 'none';
             document.getElementById('rife-trt').style.display = 'none';
@@ -668,7 +669,7 @@ function setGPU() {
             document.getElementById('realesrgan-ncnn').click();
             document.getElementById('anime-video-ncnn').click();
         }
-        if (hasIntel) {
+        if (hasIntel && !unsupportedCheck.checked) {
             sessionStorage.setItem('gpu', 'Intel');
             document.getElementById('cain-trt').style.display = 'none';
             document.getElementById('rife-trt').style.display = 'none';

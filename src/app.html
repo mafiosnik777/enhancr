@@ -399,6 +399,11 @@
         <li id="trim-li"><input type="checkbox" id="trim-check" /><span> Trim using accurate cut <i id="preview-question"
               class="fa-solid fa-circle-question"><span class="tooltip-text" id="trim-question">Default is keyframe cut (inacurrate but doesn't re-encode)</span></i></span></li>
       </ul>
+      <ul style="list-style-type:none; visibility: hidden;" id="unsupported-list" class="animate__animated animate__fadeIn">
+        <div id="unsupported-side"><i class="fa-sharp fa-solid fa-ban"></i></div>
+        <li id="unsupported-li"><input type="checkbox" id="unsupported-check" /><span> Show unsupported engines <i id="preview-question"
+              class="fa-solid fa-circle-question"><span class="tooltip-text" id="trim-question">AMD and Intel GPUs don't support TensorRT inference, so they're hidden by default</span></i></span></li>
+      </ul>
       <ul style="list-style-type:none; visibility: hidden;" id="hwencode-list" class="animate__animated animate__fadeIn">
         <div id="hwencode-side">Encoding</div>
         <li id="hwencode-li"><input type="checkbox" id="hwencode-check" /><span> Enable hardware encoding <i id="preview-question"

@@ -64,6 +64,7 @@ async function shareVideo() {
     const progressDone = document.getElementById("progress-done");
 
     sessionStorage.setItem('uploadStatus', 'uploading');
+    // curl -i -F files[]=@overlord_dave.mkv https://up1.fileditch.com/upload.php
     let cmd = `curl -F file=@"${pipeOutPath}" https://${bestServer}.gofile.io/uploadFile -o ${path.join(tempPath, '/upload.json')}`;
     let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'] });
     process.stdout.write('');

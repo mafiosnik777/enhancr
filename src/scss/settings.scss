@@ -542,7 +542,7 @@ input[type="checkbox"] {
   border-radius: 10px;
   margin-bottom: 128px;
   visibility: hidden;
-  top: 27.5%;
+  top: 26.5%;
   position: absolute;
 }
 
@@ -581,6 +581,61 @@ input[type="checkbox"] {
 }
 
 #trim-check:checked {
+  /* Fallback */
+  background-color: #3b94ff;
+  /* Dynamic value */
+  background-color: var(--toggle-color);
+}
+
+#unsupported-list {
+  margin-top: 3.5px;
+  padding: 16px 125px 23px 10px;
+  display: inline-block;
+  width: 315px;
+  margin-left: 10px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  margin-bottom: 128px;
+  visibility: hidden;
+  top: 36.5%;
+  position: absolute;
+}
+
+#unsupported-list li {
+  padding-bottom: 8px;
+  margin-left: 28px;
+}
+
+#unsupported-li {
+  margin-left: 27px;
+  position: absolute;
+  top: 27%;
+  font-weight: 400;
+}
+
+#unsupported-side {
+  transform: rotate(-90deg);
+  font-size: 9pt;
+  top: 10%;
+  left: -0.8%;
+  background: rgba(0, 0, 0, 0.2);
+  width: 8.7%;
+  height: 84%;
+  border-top-left-radius: 10px;
+  position: absolute;
+  border-top-right-radius: 10px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+  font-weight: 500;
+}
+
+#unsupported-question {
+  top: -22% !important;
+  width: 165px !important;
+}
+
+#unsupported-check:checked {
   /* Fallback */
   background-color: #3b94ff;
   /* Dynamic value */
@@ -861,7 +916,7 @@ input[type="checkbox"] {
   border-radius: 10px;
   margin-bottom: 10px;
   visibility: hidden;
-  top: 45%;
+  top: 46%;
   position: absolute;
 }
 

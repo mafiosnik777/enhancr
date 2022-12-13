@@ -40,6 +40,7 @@ function saveSettings() {
   var sensitivityCheck = document.getElementById("sensitivity-check").checked;
   var sensitivity = document.getElementById("sensitivity").checked;
   var hwEncodeCheck = document.getElementById("hwencode-check").checked;
+  var unsupportedCheck = document.getElementById("unsupported-check").checked;
 
   var theme = sessionStorage.getItem('theme');
 
@@ -78,6 +79,7 @@ function saveSettings() {
         sensitivityValue: sensitivity,
         sensitivity: sensitivityCheck,
         customModel: customModelCheck,
+        unsupportedEngines: unsupportedCheck,
         systemPython: pythonCheck,
         language: "english"
       },
@@ -148,6 +150,7 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     document.getElementById("hwencode-check").checked = json.settings[0].hwEncode || false;
     document.getElementById("sensitivity").checked = json.settings[0].sensitivityValue || 0.100;
     document.getElementById("sensitivity-check").checked = json.settings[0].sensitivity || false;
+    document.getElementById("unsupported-check").checked = json.settings[0].unsupportedEngines || false;
   } catch (error) {
     console.error(error);
     console.log('Incompatible settings.json detected, saving settings to overwrite incompatible one.')
@@ -262,6 +265,7 @@ function changePage() {
     document.getElementById('trim-list').style.visibility = 'visible';
     hwEncodeSettings.style.visibility = 'visible';
     document.getElementById('sensitivity-list').style.visibility = 'visible';
+    document.getElementById('unsupported-list').style.visibility = 'visible';
     tensorrtSettings.style.visibility = 'hidden';
     tilingSettings.style.visibility = 'hidden';
     shapeSettings.style.visibility = 'hidden';
@@ -274,6 +278,7 @@ function changePage() {
     document.getElementById('trim-list').style.visibility = 'hidden';
     hwEncodeSettings.style.visibility = 'hidden';
     document.getElementById('sensitivity-list').style.visibility  = 'hidden';
+    document.getElementById('unsupported-list').style.visibility = 'hidden';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 5 / 5</span>') {
     pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 5</span>';
     document.getElementById('realesrgan-list').style.visibility = 'hidden';
@@ -283,9 +288,12 @@ function changePage() {
     document.getElementById('trim-list').style.visibility = 'visible';
     hwEncodeSettings.style.visibility = 'visible';
     document.getElementById('sensitivity-list').style.visibility  = 'visible';
+    document.getElementById('unsupported-list').style.visibility = 'visible';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 5</span>') {
     pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 3 / 5</span>';
     document.getElementById('trim-list').style.visibility = 'hidden';
+    document.getElementById('unsupported-list').style.visibility = 'hidden';
+    document.getElementById('sensitivity-list').style.visibility  = 'hidden';
     hwEncodeSettings.style.visibility = 'hidden';
     tensorrtSettings.style.visibility = 'visible';
     tilingSettings.style.visibility = 'visible';
