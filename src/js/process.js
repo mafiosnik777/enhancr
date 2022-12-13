@@ -37,7 +37,9 @@ class Process {
             try {
                 if (status == "done") {
                     console.log("Completed restoring, interval has been cleared.");
-                    progressSpan.textContent = path.basename(sessionStorage.getItem('currentFile')) + " | Complete"
+                    var filename = path.basename(sessionStorage.getItem('currentFile'));
+                    if (filename.length > 60) filename = filename.substr(0, 60) + "...";
+                    progressSpan.textContent = filename + " | Complete"
                     console.log("Tmp folder cleared.");
                     win.setProgressBar(-1, {
                         mode: "none"
@@ -100,8 +102,10 @@ class Process {
                     queueProgress.innerHTML = percentage + '%';
                     let queueProgressOverlay = document.getElementById(`queue-item-progress-overlay${currentIndex}`);
                     queueProgressOverlay.style.width = percentage + '%';
+                    var filename = path.basename(sessionStorage.getItem('currentFile'));
+                    if (filename.length > 60) filename = filename.substr(0, 60) + "...";
                     progressSpan.textContent =
-                        path.basename(sessionStorage.getItem('currentFile')) + " | " + percentage + "%";
+                        filename + " | " + percentage + "%";
                     const fpsMeter = document.getElementById("fps-meter");
                     const fpsMeterText = document.getElementById("fps-text");
                     const etaElement = document.getElementById("eta");
@@ -138,7 +142,9 @@ class Process {
             try {
                 if (status == "done") {
                     console.log("Completed upscaling, interval has been cleared.");
-                    progressSpan.textContent = path.basename(sessionStorage.getItem('currentFile')) + " | Complete"
+                    var filename = path.basename(sessionStorage.getItem('currentFile'));
+                    if (filename.length > 60) filename = filename.substr(0, 60) + "...";
+                    progressSpan.textContent = filename + " | Complete"
                     console.log("Tmp folder cleared.");
                     win.setProgressBar(-1, {
                         mode: "none"
@@ -202,8 +208,10 @@ class Process {
                     queueProgress.innerHTML = percentage + '%';
                     let queueProgressOverlay = document.getElementById(`queue-item-progress-overlay${currentIndex}`);
                     queueProgressOverlay.style.width = percentage + '%';
+                    var filename = path.basename(sessionStorage.getItem('currentFile'));
+                    if (filename.length > 60) filename = filename.substr(0, 60) + "...";
                     progressSpan.textContent =
-                        path.basename(sessionStorage.getItem('currentFile')) + " | " + percentage + "%";
+                        filename + " | " + percentage + "%";
                     const fpsMeter = document.getElementById("fps-meter");
                     const fpsMeterText = document.getElementById("fps-text");
                     const etaElement = document.getElementById("eta");
@@ -244,7 +252,9 @@ class Process {
                 try {
                     if (status !== null && status == "done") {
                         console.log("Completed interpolation, interval has been cleared.");
-                        progressSpan.textContent = path.basename(sessionStorage.getItem('currentFile')) + " | Complete"
+                        var filename = path.basename(sessionStorage.getItem('currentFile'));
+                        if (filename.length > 60) filename = filename.substr(0, 60) + "...";
+                        progressSpan.textContent = filename + " | Complete"
                         console.log("Tmp folder cleared.");
                         win.setProgressBar(-1, {
                             mode: "none"
@@ -306,8 +316,10 @@ class Process {
                         queueProgress.innerHTML = percentage + '%';
                         let queueProgressOverlay = document.getElementById(`queue-item-progress-overlay${currentIndex}`);
                         queueProgressOverlay.style.width = percentage + '%';
+                        var filename = path.basename(sessionStorage.getItem('currentFile'));
+                        if (filename.length > 60) filename = filename.substr(0, 60) + "...";
                         progressSpan.textContent =
-                            path.basename(sessionStorage.getItem('currentFile')) + " | " + percentage + "%";
+                            filename + " | " + percentage + "%";
                         const fpsMeter = document.getElementById("fps-meter");
                         const fpsMeterText = document.getElementById("fps-text");
                         const etaElement = document.getElementById("eta");

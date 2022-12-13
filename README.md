@@ -39,8 +39,6 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**RealESRGAN (TensorRT)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
->**AnimeSR (TensorRT)** - [TencentARC](https://github.com/TencentARC)/**[AnimeSR](https://github.com/TencentARC/AnimeSR)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**[AnimeSR-TensorRT](https://github.com/mafiosnik777/AnimeSR-TensorRT)**
-
 *Thanks to [HubertSontowski](https://github.com/HubertSotnowski) for helping out with implementing AnimeSR*
 
 ## Restoration
