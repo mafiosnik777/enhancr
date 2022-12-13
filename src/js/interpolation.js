@@ -101,11 +101,11 @@ class Interpolation {
             let dimensions = document.getElementById('dimensions');
             var width = parseInt((dimensions.innerHTML).split(' x')[0]);
             var height = parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
-            var padding;
+            var padding = false;
             var roundedWidth;
             var roundedHeight;
-            var toPadWidth;
-            var toPadHeight;
+            var toPadWidth = 0;
+            var toPadHeight = 0;
 
             let floatingPoint = document.getElementById('fp16-check').checked;
             let fp = floatingPoint ? "fp16" : "fp32";
