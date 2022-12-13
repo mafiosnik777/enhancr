@@ -124,6 +124,8 @@ const blurLayer = document.getElementById('light-mode')
 let winOsBuild = parseInt(os.release().split(".")[2]);
 if (winOsBuild >= 22000 && process.platform == 'win32') {
     blurLayer.style.visibility = 'hidden';
+} else {
+    blurLayer.style.visibility = 'visible';
 }
 
 // drag and drop files
