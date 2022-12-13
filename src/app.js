@@ -138,13 +138,13 @@ app.once('ready', () => {
     if (settings.disableBlur) {
         // Appear seamless when changing pages, but corners may be visible for a few frames.
         mainWindow.webContents.on('will-navigate', () => {
-            mainWindow.setBackgroundColor('#242424');
+            mainWindow.setBackgroundColor('#222222');
         });
 
         // #1D1D1D = #242424 + rgb(28, 28, 28, .85)
         mainWindow.webContents.on('did-finish-load', () => {
             mainWindow.webContents.insertCSS('#light-mode { background: #1D1D1D !important }').then(() => {
-                mainWindow.setBackgroundColor('#00000000');
+                mainWindow.setBackgroundColor('#222222');
             });
         });
     }
