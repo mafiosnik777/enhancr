@@ -405,6 +405,14 @@
               class="fa-solid fa-circle-question"><span class="tooltip-text" id="hwencode-question">If this is checked enhancr will try to use hardware encoders for your media, if supported.</span></i></span></li>
         <li id="hwencode-indicators"><span id="H264-hw"><i class="fa-solid fa-xmark"></i> H264</span><span id="H265-hw"><i class="fa-solid fa-xmark"></i> H265</span><span id="AV1-hw"><i class="fa-solid fa-xmark"></i> AV1</span></li>
       </ul>
+      <ul style="list-style-type:none;" id="sensitivity-list" class="animate__animated animate__fadeIn">
+        <div id="sensitivity-side">Sensitivity</div>
+        <li><input type="text" class="input-text" id="sensitivity" value="0.100"><span> Scene Change Sensitivity <i
+              id="preview-question" class="fa-solid fa-circle-question"><span class="tooltip-text"
+                id="sensitivity-question">Lower value equals more sensitivity / more detected scene changes</span></i></span>
+        </li>
+        <li><input type="checkbox" id="sensitivity-check" /><span> Override default value</span></li>
+      </ul>
       <ul style="list-style-type:none; visibility: hidden;" id="realesrgan-list"
         class="animate__animated animate__fadeIn">
         <div id="realesrgan-side">RealESRGAN</div>

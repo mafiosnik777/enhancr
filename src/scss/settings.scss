@@ -851,6 +851,25 @@ input[type="checkbox"] {
   margin-left: 28px;
 }
 
+#sensitivity-list {
+  margin-top: 3.5px;
+  padding: 12px 125px 6px 10px;
+  display: inline-block;
+  width: 315px;
+  margin-left: 10px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  visibility: hidden;
+  top: 45%;
+  position: absolute;
+}
+
+#sensitivity-list li {
+  padding-bottom: 8px;
+  margin-left: 28px;
+}
+
 #tiling-list {
   margin-top: 3.5px;
   padding: 12px 125px 6px 10px;
@@ -1198,6 +1217,26 @@ input[type="checkbox"] {
   }
 }
 
+#sensitivity {
+  all: unset;
+  background-color: rgba(99, 99, 99, 0.35);
+  height: 15px;
+  width: 13.5%;
+  border-radius: 10px;
+  caret-color: #1e5cce;
+  outline: 0px solid transparent;
+  font-size: 9pt;
+  padding-left: 6px;
+  color: #8c8c8c;
+  font-weight: 700;
+  margin-right: 5px;
+  margin-left: 5px;
+
+  &:hover {
+    background-color: rgba(120, 120, 120, 0.35);
+  }
+}
+
 #arrow-left {
   margin-left: 0px !important;
   margin-right: 5px;
@@ -1234,6 +1273,10 @@ input[type="checkbox"] {
 
 #streams-question {
   top: -1% !important;
+  width: 205px !important;
+}
+#sensitivity-question {
+  top: 7% !important;
   width: 205px !important;
 }
 
@@ -1311,6 +1354,23 @@ input[type="checkbox"] {
 #tensorrt-side {
   transform: rotate(-90deg);
   font-size: 9pt;
+  top: 27%;
+  left: -4.25%;
+  background: rgba(0, 0, 0, 0.2);
+  width: 15%;
+  height: 45%;
+  border-top-left-radius: 10px;
+  position: absolute;
+  border-top-right-radius: 10px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+  font-weight: 500;
+}
+
+#sensitivity-side {
+  transform: rotate(-90deg);
+  font-size: 8pt;
   top: 27%;
   left: -4.25%;
   background: rgba(0, 0, 0, 0.2);

@@ -29,6 +29,8 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     UHD = data['rife_uhd']
     sceneDetection = data['sc']
     frameskip = data['skip']
+    sensitivity = data['sensitivity']
+    sensitivityValue = data['sensitivityValue']
     
 # get rife model
 if rife_model == 'RIFE - v2.3':
@@ -52,7 +54,11 @@ elif rife_model == 'RIFE - v4.6':
     
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
-clip = core.misc.SCDetect(clip=clip, threshold=0.200)
+if sceneDetection:
+    if sensitivity:
+        clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
+    else:
+        clip = core.misc.SCDetect(clip=clip, threshold=0.100)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 

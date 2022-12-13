@@ -101,11 +101,16 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     streams = data['streams']
     sceneDetection = data['sc']
     frameskip = data['skip']
+    sensitivity = data['sensitivity']
+    sensitivityValue = data['sensitivityValue']
     
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
 if sceneDetection:
-    clip = core.misc.SCDetect(clip=clip, threshold=0.100)
+    if sensitivity:
+        clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
+    else:
+        clip = core.misc.SCDetect(clip=clip, threshold=0.100)
 
 if frameskip:
     offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]

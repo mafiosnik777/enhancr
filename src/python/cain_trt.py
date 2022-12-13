@@ -50,6 +50,8 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     sceneDetection = data['sc']
     frameskip = data['skip']
     padding = data['padding']
+    sensitivity = data['sensitivity']
+    sensitivityValue = data['sensitivityValue']
     ToPadWidth = data['toPadWidth']
     ToPadHeight = data['toPadHeight']
 
@@ -64,7 +66,10 @@ if frameskip:
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
 if sceneDetection:
-    clip = core.misc.SCDetect(clip=clip, threshold=0.100)
+    if sensitivity:
+        clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
+    else:
+        clip = core.misc.SCDetect(clip=clip, threshold=0.100)
 
 if padding:
     clip = core.std.AddBorders(clip, right=ToPadWidth, top=ToPadHeight)

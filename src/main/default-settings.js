@@ -24,6 +24,8 @@ module.exports = {
             shapes: false,
             trimAccurate: false,
             hwEncode: false,
+            sensitivityValue: 0.100,
+            sensitivity: false,
             customModel: false,
             systemPython: false,
             language: 'english',

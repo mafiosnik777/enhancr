@@ -315,6 +315,8 @@ class Interpolation {
                 toPadWidth: toPadWidth,
                 toPadHeight: toPadHeight,
                 streams: numStreams.value,
+                sensitivity: document.getElementById('sensitivity-check').checked,
+                sensitivityValue: document.getElementById('sensitivity').value,
                 rife_tta: document.getElementById("rife-tta-check").checked,
                 rife_uhd: document.getElementById("rife-uhd-check").checked,
                 sc: document.getElementById("sc-check").checked,

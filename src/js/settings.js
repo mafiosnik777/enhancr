@@ -37,6 +37,9 @@ function saveSettings() {
   var pythonCheck = document.getElementById("python-check").checked;
   var trimCheck = document.getElementById("trim-check").checked;
   var hwEncodeCheck = document.getElementById("hwencode-check").checked;
+  var sensitivityCheck = document.getElementById("sensitivity-check").checked;
+  var sensitivity = document.getElementById("sensitivity").checked;
+  var hwEncodeCheck = document.getElementById("hwencode-check").checked;
 
   var theme = sessionStorage.getItem('theme');
 
@@ -72,6 +75,8 @@ function saveSettings() {
         shapes: shapesCheck,
         trimAccurate: trimCheck,
         hwEncode: hwEncodeCheck,
+        sensitivityValue: sensitivity,
+        sensitivity: sensitivityCheck,
         customModel: customModelCheck,
         systemPython: pythonCheck,
         language: "english"
@@ -141,6 +146,8 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     document.getElementById("cache-input-text").textContent = json.settings[0].temp || temp;
     document.getElementById("trim-check").checked = json.settings[0].trimAccurate || false;
     document.getElementById("hwencode-check").checked = json.settings[0].hwEncode || false;
+    document.getElementById("sensitivity").checked = json.settings[0].sensitivityValue || 0.100;
+    document.getElementById("sensitivity-check").checked = json.settings[0].sensitivity || false;
   } catch (error) {
     console.error(error);
     console.log('Incompatible settings.json detected, saving settings to overwrite incompatible one.')
@@ -254,6 +261,7 @@ function changePage() {
     pageSwitcher.innerHTML = '<span>Page 4 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
     document.getElementById('trim-list').style.visibility = 'visible';
     hwEncodeSettings.style.visibility = 'visible';
+    document.getElementById('sensitivity-list').style.visibility = 'visible';
     tensorrtSettings.style.visibility = 'hidden';
     tilingSettings.style.visibility = 'hidden';
     shapeSettings.style.visibility = 'hidden';
@@ -265,6 +273,7 @@ function changePage() {
     document.getElementById('python-list').style.visibility = 'visible';
     document.getElementById('trim-list').style.visibility = 'hidden';
     hwEncodeSettings.style.visibility = 'hidden';
+    document.getElementById('sensitivity-list').style.visibility  = 'hidden';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 5 / 5</span>') {
     pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 5</span>';
     document.getElementById('realesrgan-list').style.visibility = 'hidden';
@@ -273,6 +282,7 @@ function changePage() {
     document.getElementById('python-list').style.visibility = 'hidden';
     document.getElementById('trim-list').style.visibility = 'visible';
     hwEncodeSettings.style.visibility = 'visible';
+    document.getElementById('sensitivity-list').style.visibility  = 'visible';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 5</span>') {
     pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 3 / 5</span>';
     document.getElementById('trim-list').style.visibility = 'hidden';

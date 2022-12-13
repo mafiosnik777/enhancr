@@ -26,6 +26,8 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     sceneDetection = data['sc']
     model = data['model']
     frameskip = data['skip']
+    sensitivity = data['sensitivity']
+    sensitivityValue = data['sensitivityValue']
 
 if model == 'RVP - v1.0':
     cainModel = 0
@@ -34,8 +36,11 @@ if model == 'CVP - v6.0':
     
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
-sceneDetectionThreshold = 0.200
-clip = core.misc.SCDetect(clip=clip, threshold=sceneDetectionThreshold)
+if sceneDetection:
+    if sensitivity:
+        clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
+    else:
+        clip = core.misc.SCDetect(clip=clip, threshold=0.100)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV444PS, matrix_in_s="709")
 
