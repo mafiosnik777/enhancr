@@ -1,8 +1,8 @@
 {"codecs":[
         {
-            "x264":"-c:v libx264 -preset slow -x264-params direct=spatial -pix_fmt yuv420p -qp 16",
-            "x265":"-c:v libx265 -preset medium -pix_fmt yuv420p -qp 18",
-            "AV1":"-c:v libsvtav1 -preset 8 -qp 20 -svtav1-params tune=0:enable-tf=0:enable-overlays=1 -pix_fmt yuv420p10le",
+            "x264":"-c:v libx264 -crf 16 -preset slow -x264-params direct=spatial:me=umh -pix_fmt yuv420p",
+            "x265":"-c:v libx265 -crf 18 -preset medium -pix_fmt yuv420p",
+            "AV1":"-c:v libsvtav1 -qp 20 -preset 7 -svtav1-params tune=0:enable-tf=0:enable-overlays=1:enable-qm=1 -pix_fmt yuv420p10le",
             "VP9":"-c:v libvpx-vp9 -b:v 0 -crf 18 -cpu-used 3 -aq-mode 1 -pix_fmt yuv420p",
             "ProRes":"-c:v prores_ks -profile:v 4 -vendor apl0 -bits_per_mb 8000 -pix_fmt yuva444p10le",
             "Lossless":"-c:v ffv1 -coder 2 -context 1 -level 3 -slices 12 -g 1",
