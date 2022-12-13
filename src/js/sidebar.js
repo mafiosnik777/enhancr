@@ -225,7 +225,7 @@ function toggleModels() {
   upscalingTab.style.display = "none";
   restorationTab.style.display = "none";
   settingsTab.style.display = "block";
-  settingsSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 4</span>';
+  settingsSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 5 / 5</span>';
   document.getElementById('realesrgan-list').style.visibility = 'visible';
   document.getElementById('language-list').style.visibility = 'visible';
   document.getElementById('cache-list').style.visibility = 'visible';

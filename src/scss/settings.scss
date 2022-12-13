@@ -532,6 +532,170 @@ input[type="checkbox"] {
   position: absolute;
 }
 
+#trim-list {
+  margin-top: 3.5px;
+  padding: 16px 125px 23px 10px;
+  display: inline-block;
+  width: 315px;
+  margin-left: 10px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  margin-bottom: 128px;
+  visibility: hidden;
+  top: 27.5%;
+  position: absolute;
+}
+
+#trim-list li {
+  padding-bottom: 8px;
+  margin-left: 28px;
+}
+
+#trim-li {
+  margin-left: 27px;
+  position: absolute;
+  top: 27%;
+  font-weight: 400;
+}
+
+#trim-side {
+  transform: rotate(-90deg);
+  font-size: 9pt;
+  top: 10%;
+  left: -0.8%;
+  background: rgba(0, 0, 0, 0.2);
+  width: 8.7%;
+  height: 84%;
+  border-top-left-radius: 10px;
+  position: absolute;
+  border-top-right-radius: 10px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+  font-weight: 500;
+}
+
+#trim-question {
+  top: -22% !important;
+  width: 165px !important;
+}
+
+#trim-check:checked {
+  /* Fallback */
+  background-color: #3b94ff;
+  /* Dynamic value */
+  background-color: var(--toggle-color);
+}
+
+#hwencode-list {
+  margin-top: 3.5px;
+  padding: 16px 125px 50px 10px;
+  display: inline-block;
+  width: 315px;
+  margin-left: 10px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  margin-bottom: 128px;
+  visibility: hidden;
+  top: 11%;
+  position: absolute;
+}
+
+#hwencode-indiscators {
+  position: absolute;
+  top: 58%;
+}
+
+#hwencode-list li {
+  margin-left: 28px;
+  position: absolute;
+  top: 18%;
+}
+
+#hwencode-li {
+  margin-left: 27px;
+  position: absolute;
+  top: 27%;
+  font-weight: 400;
+}
+
+#hwencode-side {
+  transform: rotate(-90deg);
+  font-size: 9pt;
+  top: 26%;
+  left: -3.5%;
+  background: rgba(0, 0, 0, 0.2);
+  width: 14.7%;
+  height: 49%;
+  border-top-left-radius: 10px;
+  position: absolute;
+  border-top-right-radius: 10px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+  font-weight: 500;
+}
+
+#hwencode-question {
+  top: -60% !important;
+  width: 165px !important;
+}
+
+#hwencode-check:checked {
+  /* Fallback */
+  background-color: #3b94ff;
+  /* Dynamic value */
+  background-color: var(--toggle-color);
+}
+
+#hwencode-indicators {
+  position: absolute;
+  top: 60% !important;
+  left: 3.5%;
+}
+
+#H264-hw {
+  background: rgb(47 47 47 / 62%);
+  padding: 2px 6px;
+  border-radius: 6px;
+
+  i {
+    color: #ca3433;
+  }
+}
+
+.green {
+  i {
+    color: #9ece1e !important;
+  }
+}
+
+.yellow {
+  color:gold !important;
+}
+
+#H265-hw {
+  margin-left: 24px;
+  background: rgb(47 47 47 / 62%);
+  padding: 2px 6px;
+  border-radius: 6px;
+
+  i {
+    color: #ca3433;
+  }
+}
+
+#AV1-hw {
+  margin-left: 26px;
+  background: rgb(47 47 47 / 62%);
+  padding: 2px 6px;
+  border-radius: 6px;
+
+  i {
+    color: #ca3433;
+  }
+}
+
 #cache-list {
   margin-top: 3.5px;
   padding: 32px 125px 6px 10px;
@@ -927,7 +1091,7 @@ input[type="checkbox"] {
 
 #cache-side {
   transform: rotate(-90deg);
-  font-size: 8pt; 
+  font-size: 8pt;
   top: 7%;
   left: -0.4%;
   background: rgba(0, 0, 0, 0.2);

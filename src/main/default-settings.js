@@ -23,6 +23,7 @@ module.exports = {
             shapeRes: '1080x1920',
             shapes: false,
             trimAccurate: false,
+            hwEncode: false,
             customModel: false,
             systemPython: false,
             language: 'english',

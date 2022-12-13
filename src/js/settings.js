@@ -4,6 +4,7 @@ const path = require("path");
 const shell = require("electron").shell;
 const remote = require('@electron/remote');
 const { BrowserWindow } = remote;
+const nvencDevice = require("@mafiosnik/nvenc-codecs");
 
 var saveBtn = document.getElementById("settings-button");
 var preview = document.getElementById("preview");
@@ -34,6 +35,8 @@ function saveSettings() {
   var shapesCheck = document.getElementById("shape-check").checked;
   var customModelCheck = document.getElementById("custom-model-check").checked;
   var pythonCheck = document.getElementById("python-check").checked;
+  var trimCheck = document.getElementById("trim-check").checked;
+  var hwEncodeCheck = document.getElementById("hwencode-check").checked;
 
   var theme = sessionStorage.getItem('theme');
 
@@ -46,7 +49,7 @@ function saveSettings() {
     preview.style.display = "none";
     sessionStorage.setItem('previewSetting', 'false');
   }
-  
+
   var settings = {
     settings: [
       {
@@ -67,6 +70,8 @@ function saveSettings() {
         temp: cacheInputText.textContent,
         shapeRes: shapeResolution,
         shapes: shapesCheck,
+        trimAccurate: trimCheck,
+        hwEncode: hwEncodeCheck,
         customModel: customModelCheck,
         systemPython: pythonCheck,
         language: "english"
@@ -92,9 +97,9 @@ const { ipcRenderer, ipcMain } = require("electron");
 
 function getTmpPath() {
   if (process.platform == 'win32') {
-      return os.tmpdir() + "\\enhancr\\";
+    return os.tmpdir() + "\\enhancr\\";
   } else {
-      return os.tmpdir() + "/enhancr/";
+    return os.tmpdir() + "/enhancr/";
   }
 }
 let temp = getTmpPath();
@@ -118,26 +123,24 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     document.getElementById("oled-mode").checked = true;
   }
   try {
-    document.getElementById("toggle-rpc").checked = json.settings[0].rpc;
-    document.getElementById("rife-tta-check").checked = json.settings[0].rifeTta;
-    document.getElementById("rife-uhd-check").checked = json.settings[0].rifeUhd;
-    document.getElementById("fp16-check").checked = json.settings[0].fp16;
-    document.getElementById("num-streams").value = json.settings[0].num_streams;
-    document.getElementById("denoise-strength").value = json.settings[0].denoiseStrength;
-    document.getElementById("deblock-strength").value = json.settings[0].deblockStrength;
-    document.getElementById("tile-res").value = json.settings[0].tileRes;
-    document.getElementById("tiling-check").checked = json.settings[0].tiling;
-    document.getElementById("shape-res").value = json.settings[0].shapeRes;
-    document.getElementById("shape-check").checked = json.settings[0].shapes;
-    document.getElementById("custom-model-check").checked = json.settings[0].customModel;
-    document.getElementById("python-check").checked = json.settings[0].systemPython;
-    document.getElementById("sc-check").checked = json.settings[0].sc;
-    document.getElementById("skip-check").checked = json.settings[0].skip;
-    if (json.settings[0].temp == undefined) {
-      document.getElementById("cache-input-text").innerHTML = temp;
-    } else {
-      document.getElementById("cache-input-text").textContent = json.settings[0].temp;
-    }
+    document.getElementById("toggle-rpc").checked = json.settings[0].rpc || true;
+    document.getElementById("rife-tta-check").checked = json.settings[0].rifeTta || false;
+    document.getElementById("rife-uhd-check").checked = json.settings[0].rifeUhd || false;
+    document.getElementById("fp16-check").checked = json.settings[0].fp16 || true;
+    document.getElementById("num-streams").value = json.settings[0].num_streams || 2;
+    document.getElementById("denoise-strength").value = json.settings[0].denoiseStrength || 20;
+    document.getElementById("deblock-strength").value = json.settings[0].deblockStrength || 15;
+    document.getElementById("tile-res").value = json.settings[0].tileRes || '512x512';
+    document.getElementById("tiling-check").checked = json.settings[0].tiling || false;
+    document.getElementById("shape-res").value = json.settings[0].shapeRes || '1080x1920';
+    document.getElementById("shape-check").checked = json.settings[0].shapes || false;
+    document.getElementById("custom-model-check").checked = json.settings[0].customModel || false;
+    document.getElementById("python-check").checked = json.settings[0].systemPython || false;
+    document.getElementById("sc-check").checked = json.settings[0].sc || true;
+    document.getElementById("skip-check").checked = json.settings[0].skip || false;
+    document.getElementById("cache-input-text").textContent = json.settings[0].temp || temp;
+    document.getElementById("trim-check").checked = json.settings[0].trimAccurate || false;
+    document.getElementById("hwencode-check").checked = json.settings[0].hwEncode || false;
   } catch (error) {
     console.error(error);
     console.log('Incompatible settings.json detected, saving settings to overwrite incompatible one.')
@@ -152,6 +155,41 @@ var gpu = document.getElementById("settings-gpu-span");
 var mem = document.getElementById("settings-memory-span");
 var osSpan = document.getElementById("settings-os-span");
 var display = document.getElementById("settings-display-span");
+
+const gpuInfo = require('gpu-info');
+gpuInfo().then(function (data) {
+  var hasNVIDIA = false;
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].VideoProcessor.includes("NVIDIA")) {
+      hasNVIDIA = true;
+      break;
+    }
+  }
+  if (hasNVIDIA) {
+    sessionStorage.setItem('gpu', "NVIDIA")
+    if (nvencDevice.supports('AV1')) {
+      document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-check"></i> AV1';
+      document.getElementById('AV1-hw').classList.add('green');
+    }
+    if (nvencDevice.supports('HEVC')) {
+      document.getElementById('H265-hw').innerHTML = '<i class="fa-solid fa-check"></i> H265';
+      document.getElementById('H265-hw').classList.add('green');
+    }
+    if (nvencDevice.supports('H264')) {
+      document.getElementById('H264-hw').innerHTML = '<i class="fa-solid fa-check"></i> H264';
+      document.getElementById('H264-hw').classList.add('green');
+    }
+  } else {
+    document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-question"></i> AV1';
+    document.getElementById('AV1-hw').classList.add('yellow');
+    document.getElementById('H265-hw').innerHTML = '<i class="fa-solid fa-question"></i> H265';
+    document.getElementById('H265-hw').classList.add('yellow');
+    document.getElementById('H264-hw').innerHTML = '<i class="fa-solid fa-question"></i> H264';
+    document.getElementById('H264-hw').classList.add('yellow');
+  }
+});
+
+
 
 async function loadSettingsInfo() {
   var cpuInfo = await sysinfo.cpu().then(data => cpu.innerHTML = " " + data.manufacturer + " " + data.brand + " - " + data.physicalCores + "C/" + data.cores + "T");
@@ -170,7 +208,7 @@ cacheInput.addEventListener('click', () => {
   ipcRenderer.on("temp-dir", (event, file) => {
     cacheInputText.textContent = file;
   })
-}) 
+})
 
 let customModelBtn = document.getElementById('open-custom-model-folder');
 
@@ -189,20 +227,21 @@ const tensorrtSettings = document.getElementById('tensorrt-list');
 const dpirSettings = document.getElementById('dpir-list');
 const tilingSettings = document.getElementById('tiling-list');
 const shapeSettings = document.getElementById('shapes-list');
+const hwEncodeSettings = document.getElementById('hwencode-list');
 
 let toggle = false;
 
 function changePage() {
-  if (pageSwitcher.innerHTML == '<span>Page 1 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>') {
-    pageSwitcher.innerHTML = '<span>Page 2 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
+  if (pageSwitcher.innerHTML == '<span>Page 1 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>') {
+    pageSwitcher.innerHTML = '<span>Page 2 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
     settingsList.style.visibility = 'hidden';
     theming.style.visibility = 'hidden';
     rifeSettings.style.visibility = 'visible';
     interpolationSettings.style.visibility = 'visible';
     tensorrtSettings.style.visibility = 'hidden';
     dpirSettings.style.visibility = 'visible';
-  } else if (pageSwitcher.innerHTML == '<span>Page 2 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>') {
-    pageSwitcher.innerHTML = '<span>Page 3 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
+  } else if (pageSwitcher.innerHTML == '<span>Page 2 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>') {
+    pageSwitcher.innerHTML = '<span>Page 3 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
     settingsList.style.visibility = 'hidden';
     theming.style.visibility = 'hidden';
     rifeSettings.style.visibility = 'hidden';
@@ -211,34 +250,46 @@ function changePage() {
     tensorrtSettings.style.visibility = 'visible';
     tilingSettings.style.visibility = 'visible';
     shapeSettings.style.visibility = 'visible';
-  } else if (pageSwitcher.innerHTML == '<span>Page 3 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>') {
-    pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 4</span>'
+  } else if (pageSwitcher.innerHTML == '<span>Page 3 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>') {
+    pageSwitcher.innerHTML = '<span>Page 4 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
+    document.getElementById('trim-list').style.visibility = 'visible';
+    hwEncodeSettings.style.visibility = 'visible';
     tensorrtSettings.style.visibility = 'hidden';
     tilingSettings.style.visibility = 'hidden';
     shapeSettings.style.visibility = 'hidden';
+  } else if (pageSwitcher.innerHTML == '<span>Page 4 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>') {
+    pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 5 / 5</span>';
     document.getElementById('realesrgan-list').style.visibility = 'visible';
     document.getElementById('cache-list').style.visibility = 'visible';
     document.getElementById('language-list').style.visibility = 'visible';
     document.getElementById('python-list').style.visibility = 'visible';
-  } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 4</span>') {
-    pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 3 / 4</span>';
-    tensorrtSettings.style.visibility = 'visible';
-    tilingSettings.style.visibility = 'visible';
-    shapeSettings.style.visibility = 'visible';
+    document.getElementById('trim-list').style.visibility = 'hidden';
+    hwEncodeSettings.style.visibility = 'hidden';
+  } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 5 / 5</span>') {
+    pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 5</span>';
     document.getElementById('realesrgan-list').style.visibility = 'hidden';
     document.getElementById('cache-list').style.visibility = 'hidden';
     document.getElementById('language-list').style.visibility = 'hidden';
     document.getElementById('python-list').style.visibility = 'hidden';
-  } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 3 / 4</span>') {
-    pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 2 / 4</span>';
+    document.getElementById('trim-list').style.visibility = 'visible';
+    hwEncodeSettings.style.visibility = 'visible';
+  } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 5</span>') {
+    pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 3 / 5</span>';
+    document.getElementById('trim-list').style.visibility = 'hidden';
+    hwEncodeSettings.style.visibility = 'hidden';
+    tensorrtSettings.style.visibility = 'visible';
+    tilingSettings.style.visibility = 'visible';
+    shapeSettings.style.visibility = 'visible';
+  } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 3 / 5</span>') {
+    pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 2 / 5</span>';
     tensorrtSettings.style.visibility = 'hidden';
     tilingSettings.style.visibility = 'hidden';
     shapeSettings.style.visibility = 'hidden';
     rifeSettings.style.visibility = 'visible';
     interpolationSettings.style.visibility = 'visible';
     dpirSettings.style.visibility = 'visible';
-  } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 2 / 4</span>') {
-    pageSwitcher.innerHTML = '<span>Page 1 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
+  } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 2 / 5</span>') {
+    pageSwitcher.innerHTML = '<span>Page 1 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span>'
     rifeSettings.style.visibility = 'hidden';
     interpolationSettings.style.visibility = 'hidden';
     dpirSettings.style.visibility = 'hidden';

@@ -15,7 +15,7 @@ const ignoredPaths = fs.readdirSync(__dirname).filter((pathname) => (
     !includePaths.includes(pathname)
 ));
 
-if (process.platform === 'win32') process.env.GYP_MSVS_VERSION = '2017';
+if (process.platform === 'win32') process.env.GYP_MSVS_VERSION = '2022';
 
 module.exports = {
     packagerConfig: {

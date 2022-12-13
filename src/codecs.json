@@ -8,12 +8,13 @@
             "Lossless":"-c:v ffv1 -coder 2 -context 1 -level 3 -slices 12 -g 1",
             "h264_nvenc": "-c:v h264_nvenc -preset p6 -b_adapt 1 -rc-lookahead 30 -qp 18 -qp_cb_offset -2 -qp_cr_offset -2 -pix_fmt nv12",
             "hevc_nvenc": "-c:v hevc_nvenc -preset p6 -b_adapt 1 -rc-lookahead 30 -qp 18 -qp_cb_offset -2 -qp_cr_offset -2 -pix_fmt nv12",
-            "av1_nvenc":"",
+            "av1_nvenc":"-c:v av1_nvenc -preset p7 -tune:v hq -rc:v vbr -cq:v 12 -b:v 250M -pix_fmt nv12",
             "h264_amf": "-c:v h264_amf -quality balanced -profile high -rc cqp -qp 20 -pix_fmt nv12",
             "hevc_amf": "-c:v hevc_amf -quality balanced -profile main -rc cqp -qp 20 -pix_fmt nv12",
+            "av1_amf": "-c:v av1_amf -quality balanced -profile main -rc cqp -qp 20 -pix_fmt nv12",
             "h264_qsv": "-c:v h264_qsv -preset slow -look_ahead 30 -q 25 -pix_fmt nv12",
             "hevc_qsv": "-c:v hevc_qsv -preset slow -look_ahead 30 -q 25 -pix_fmt nv12",
-            "av1_qsv":""
+            "av1_qsv":"-c:v av1_qsv -preset slow -look_ahead 30 -q 25 -pix_fmt nv12"
         }
     ]
 }

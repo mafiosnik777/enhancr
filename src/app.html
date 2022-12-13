@@ -269,7 +269,7 @@
     </div>
     <!-- Settings -->
     <div class="settings" id="settings-tab">
-      <div id="settings-switcher"><span>Page 1 / 4 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span></div>
+      <div id="settings-switcher"><span>Page 1 / 5 <i class="fa-solid fa-arrow-right" id="arrow-right"></i></span></div>
       <div id="settings-header"><span id="settings-header-text" class="theme-header"><i class="fa-solid fa-gear"></i>
           Settings</span></div>
       <div id="settings-button"><span id="settings-button-text">Save settings</span></div>
@@ -392,6 +392,17 @@
         <li><input type="text" id="deblock-strength" value="15" /><span> Deblock Strength <i id="preview-question"
               class="fa-solid fa-circle-question"><span class="tooltip-text" id="deblock-question">Recommended Values:
                 10 - 25</span></i></span></li>
+      </ul>
+      <ul style="list-style-type:none; visibility: hidden;" id="trim-list" class="animate__animated animate__fadeIn">
+        <div id="trim-side">Trim</div>
+        <li id="trim-li"><input type="checkbox" id="trim-check" /><span> Trim using accurate cut <i id="preview-question"
+              class="fa-solid fa-circle-question"><span class="tooltip-text" id="trim-question">Default is keyframe cut (inacurrate but doesn't re-encode)</span></i></span></li>
+      </ul>
+      <ul style="list-style-type:none; visibility: hidden;" id="hwencode-list" class="animate__animated animate__fadeIn">
+        <div id="hwencode-side">Encoding</div>
+        <li id="hwencode-li"><input type="checkbox" id="hwencode-check" /><span> Enable hardware encoding <i id="preview-question"
+              class="fa-solid fa-circle-question"><span class="tooltip-text" id="hwencode-question">If this is checked enhancr will try to use hardware encoders for your media, if supported.</span></i></span></li>
+        <li id="hwencode-indicators"><span id="H264-hw"><i class="fa-solid fa-xmark"></i> H264</span><span id="H265-hw"><i class="fa-solid fa-xmark"></i> H265</span><span id="AV1-hw"><i class="fa-solid fa-xmark"></i> AV1</span></li>
       </ul>
       <ul style="list-style-type:none; visibility: hidden;" id="realesrgan-list"
         class="animate__animated animate__fadeIn">

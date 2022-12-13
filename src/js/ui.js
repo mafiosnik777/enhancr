@@ -217,7 +217,7 @@ document.addEventListener('dragover', (e) => {
     dropSpan.style.visibility = 'visible';
 });
 
-document.addEventListener('dragenter', (event) => {});
+document.addEventListener('dragenter', (event) => { });
 
 document.addEventListener('dragleave', (event) => {
     dropOverlay.style.opacity = 0;
@@ -274,11 +274,11 @@ if (process.platform !== "darwin") {
 
 // Window controls
 const minimize = document.getElementById("minimize");
-minimize.addEventListener("click", function() {
+minimize.addEventListener("click", function () {
     ipcRenderer.send("minimize-window");
 });
 const close = document.getElementById("close");
-close.addEventListener("click", function() {
+close.addEventListener("click", function () {
     ipcRenderer.send("close-window");
 });
 
@@ -301,7 +301,7 @@ function toggleOutputDropdown() {
 outputContainerInput.addEventListener("click", toggleOutputDropdown);
 
 // change containers according to selection
-mp4Option.addEventListener("click", function() {
+mp4Option.addEventListener("click", function () {
     outputContainerSpan.textContent = ".mp4";
     hider.style.visibility = "hidden";
     containerDropdown.style.visibility = "hidden";
@@ -315,7 +315,7 @@ mp4Option.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-mkvOption.addEventListener("click", function() {
+mkvOption.addEventListener("click", function () {
     outputContainerSpan.textContent = ".mkv";
     hider.style.visibility = "hidden";
     containerDropdown.style.visibility = "hidden";
@@ -329,7 +329,7 @@ mkvOption.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-movOption.addEventListener("click", function() {
+movOption.addEventListener("click", function () {
     outputContainerSpan.textContent = ".mov";
     hider.style.visibility = "hidden";
     containerDropdown.style.visibility = "hidden";
@@ -343,7 +343,7 @@ movOption.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-webmOption.addEventListener("click", function() {
+webmOption.addEventListener("click", function () {
     outputContainerSpan.textContent = ".webm";
     hider.style.visibility = "hidden";
     containerDropdown.style.visibility = "hidden";
@@ -357,7 +357,7 @@ webmOption.addEventListener("click", function() {
 });
 
 // toggle engine dropdown
-engineInput.addEventListener("click", function() {
+engineInput.addEventListener("click", function () {
     hider.style.visibility = "visible";
     engineDropdown.style.visibility = "visible";
 });
@@ -370,7 +370,7 @@ var rvpv1Option = document.getElementById("rvp-v1");
 var cvpv6Option = document.getElementById("cvp-v6");
 
 // change engine (cain)
-cain.addEventListener("click", function() {
+cain.addEventListener("click", function () {
     interpolationEngineSpan.textContent = "Channel Attention - CAIN (NCNN)";
     hider.style.visibility = "hidden";
     engineDropdown.style.visibility = "hidden";
@@ -379,7 +379,7 @@ cain.addEventListener("click", function() {
     rife46Option.style.display = 'none';
     cvpv6Option.style.display = 'block';
     rvpv1Option.style.display = 'block';
-    
+
 
     modelSpan.textContent = 'RVP - v1.0';
 
@@ -393,7 +393,7 @@ cain.addEventListener("click", function() {
 });
 
 // change engine (cain-trt)
-cainTrt.addEventListener("click", function() {
+cainTrt.addEventListener("click", function () {
     interpolationEngineSpan.textContent = "Channel Attention - CAIN (TensorRT)";
     hider.style.visibility = "hidden";
     engineDropdown.style.visibility = "hidden";
@@ -418,7 +418,7 @@ var rife = document.getElementById("rife");
 var rifeTrt = document.getElementById("rife-trt");
 
 // change engine (rife)
-rife.addEventListener("click", function() {
+rife.addEventListener("click", function () {
     interpolationEngineSpan.textContent = "Optical Flow - RIFE (NCNN)";
     hider.style.visibility = "hidden";
     engineDropdown.style.visibility = "hidden";
@@ -440,7 +440,7 @@ rife.addEventListener("click", function() {
 });
 
 // change engine (rife)
-rifeTrt.addEventListener("click", function() {
+rifeTrt.addEventListener("click", function () {
     interpolationEngineSpan.textContent = "Optical Flow - RIFE (TensorRT)";
     hider.style.visibility = "hidden";
     engineDropdown.style.visibility = "hidden";
@@ -462,13 +462,13 @@ rifeTrt.addEventListener("click", function() {
 });
 
 //toggle model dropdown
-modelInput.addEventListener("click", function() {
+modelInput.addEventListener("click", function () {
     hider.style.visibility = "visible";
     modelDropdown.style.visibility = "visible";
 });
 
 //change models according to selection
-rife23Option.addEventListener("click", function() {
+rife23Option.addEventListener("click", function () {
     modelSpan.textContent = "RIFE - v2.3";
     hider.style.visibility = "hidden";
     modelDropdown.style.visibility = "hidden";
@@ -480,7 +480,7 @@ rife23Option.addEventListener("click", function() {
     console.log("Model written to project file.");
 });
 
-rife4Option.addEventListener("click", function() {
+rife4Option.addEventListener("click", function () {
     modelSpan.textContent = "RIFE - v4.0";
     hider.style.visibility = "hidden";
     modelDropdown.style.visibility = "hidden";
@@ -492,7 +492,7 @@ rife4Option.addEventListener("click", function() {
     console.log("Model written to project file.");
 });
 
-rife46Option.addEventListener("click", function() {
+rife46Option.addEventListener("click", function () {
     modelSpan.textContent = "RIFE - v4.6";
     hider.style.visibility = "hidden";
     modelDropdown.style.visibility = "hidden";
@@ -506,7 +506,7 @@ rife46Option.addEventListener("click", function() {
 
 var rvpv1Option = document.getElementById("rvp-v1");
 
-rvpv1Option.addEventListener("click", function() {
+rvpv1Option.addEventListener("click", function () {
     modelSpan.textContent = "RVP - v1.0";
     hider.style.visibility = "hidden";
     modelDropdown.style.visibility = "hidden";
@@ -518,7 +518,7 @@ rvpv1Option.addEventListener("click", function() {
     console.log("Model written to project file.");
 });
 
-cvpv6Option.addEventListener("click", function() {
+cvpv6Option.addEventListener("click", function () {
     modelSpan.textContent = "CVP - v6.0";
     hider.style.visibility = "hidden";
     modelDropdown.style.visibility = "hidden";
@@ -636,18 +636,101 @@ function getTheme() {
     }
 }
 
-const gpuInfo = require('gpu-info');
-gpuInfo().then(function(data) {
-    if ((data[0].VideoProcessor).includes('NVIDIA')) {
-        sessionStorage.setItem('gpu', 'NVIDIA');
+function setGPU() {
+    const gpuInfo = require('gpu-info');
+    gpuInfo().then(function (data) {
+        var hasNVIDIA = false;
+        var hasAMD = false;
+        var hasIntel = false;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].VideoProcessor.includes("NVIDIA")) {
+                hasNVIDIA = true;
+                break;
+            } else if (data[i].VideoProcessor.includes("AMD") && !hasNVIDIA) {
+                hasAMD = true;
+                break;
+            } else if (data[i].VideoProcessor.includes("Intel") && !hasAMD && !hasNVIDIA) {
+                hasIntel = true;
+                break;
+            }
+        }
+        if (hasNVIDIA) {
+            sessionStorage.setItem('gpu', 'NVIDIA');
+        }
+        if (hasAMD) {
+            sessionStorage.setItem('gpu', 'AMD');
+        }
+        if (hasIntel) {
+            sessionStorage.setItem('gpu', 'Intel');
+        }
+    });
+}
+setGPU();
+
+function supportsCodec(codec) {
+    if (codec == 'H264') {
+        if (document.getElementById('H264-hw').innerHTML == '<i class="fa-solid fa-check"></i> H264') {
+            return true;
+        } else if (document.getElementById('H264-hw').innerHTML == '<i class="fa-solid fa-question"></i> H264') {
+            return true;
+        } else {
+            return false;
+        }
     }
-    if ((data[0].VideoProcessor).includes('AMD')) {
-        sessionStorage.setItem('gpu', 'AMD');
+    if (codec == 'H265') {
+        if (document.getElementById('H265-hw').innerHTML == '<i class="fa-solid fa-check"></i> H265') {
+            return true;
+        } else if (document.getElementById('H265-hw').innerHTML == '<i class="fa-solid fa-question"></i> H265') {
+            return true;
+        } else {
+            return false;
+        }
     }
-    if ((data[0].VideoProcessor).includes('Intel')) {
-        sessionStorage.setItem('gpu', 'Intel');
+    if (codec == 'AV1') {
+        if (document.getElementById('AV1-hw').innerHTML == '<i class="fa-solid fa-check"></i> AV1') {
+            return true;
+        } else if (document.getElementById('AV1-hw').innerHTML == '<i class="fa-solid fa-question"></i> AV1') {
+            return true;
+        } else {
+            return false;
+        }
     }
-});
+
+}
+
+function getHWEncoder(gpu, codec) {
+    if (gpu == "NVIDIA") {
+        if (codec == "H264" && supportsCodec('H264')) {
+            return "json.codecs[0].h264_nvenc";
+        }
+        if (codec == "H265" && supportsCodec('H265')) {
+            return "json.codecs[0].hevc_nvenc";
+        }
+        if (codec == "AV1" && supportsCodec('AV1')) {
+            return "json.codecs[0].av1_nvenc";
+        }
+    } else if (gpu == "AMD") {
+        if (codec == "H264" && supportsCodec('H264')) {
+            return "json.codecs[0].h264_amf";
+        }
+        if (codec == "H265" && supportsCodec('H265')) {
+            return "json.codecs[0].hevc_amf";
+        }
+        if (codec == "AV1" && supportsCodec('AV1')) {
+            return "json.codecs[0].av1_amf";
+        }
+    } else if (gpu == "Intel") {
+        if (codec == "H264" && supportsCodec('H264')) {
+            return "json.codecs[0].h264_qsv";
+        }
+        if (codec == "H265" && supportsCodec('H265')) {
+            return "json.codecs[0].hevc_qsv";
+        }
+        if (codec == "AV1" && supportsCodec('AV1')) {
+            return "json.codecs[0].av1_qsv";
+        }
+    }
+}
 
 function changeCodecH264() {
     try {
@@ -657,8 +740,11 @@ function changeCodecH264() {
         console.log(err);
         return;
     }
-
-    ffmpegParams.value = json.codecs[0].x264;
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "H264"));
+    let codec = hwEncode ? hwParams || json.codecs[0].x264 : json.codecs[0].x264;
+    ffmpegParams.value = codec;
 
     var theme = getTheme();
 
@@ -688,8 +774,11 @@ function changeCodecH265() {
         console.log(err);
         return;
     }
-
-    ffmpegParams.value = json.codecs[0].x265;
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "H265"));
+    let codec = hwEncode ? hwParams || json.codecs[0].x265 : json.codecs[0].x265;
+    ffmpegParams.value = codec;
 
     var theme = getTheme();
 
@@ -718,8 +807,11 @@ function changeCodecAV1() {
         console.log(err);
         return;
     }
-
-    ffmpegParams.value = json.codecs[0].AV1;
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "AV1"));
+    let codec = hwEncode ? hwParams || json.codecs[0].AV1 : json.codecs[0].AV1;
+    ffmpegParams.value = codec;
 
     sessionStorage.setItem('codecInterpolation', 'AV1');
 
@@ -929,10 +1021,13 @@ function changeCodecH264Upscale() {
         console.log(err);
         return;
     }
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "H264"));
+    let codec = hwEncode ? hwParams || json.codecs[0].x264 : json.codecs[0].x264;
+    ffmpegParamsUpscale.value = codec;
 
     var theme = getTheme();
-
-    ffmpegParamsUpscale.value = json.codecs[0].x264;
 
     sessionStorage.setItem('codecUpscaling', 'x264');
 
@@ -960,10 +1055,13 @@ function changeCodecH265Upscale() {
         console.log(err);
         return;
     }
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "H265"));
+    let codec = hwEncode ? hwParams || json.codecs[0].x265 : json.codecs[0].x265;
+    ffmpegParamsUpscale.value = codec;
 
     var theme = getTheme();
-
-    ffmpegParamsUpscale.value = json.codecs[0].x265;
 
     sessionStorage.setItem('codecUpscaling', 'x265');
 
@@ -991,8 +1089,11 @@ function changeCodecAV1Upscale() {
         console.log(err);
         return;
     }
-
-    ffmpegParamsUpscale.value = json.codecs[0].AV1;
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "AV1"));
+    let codec = hwEncode ? hwParams || json.codecs[0].AV1 : json.codecs[0].AV1;
+    ffmpegParamsUpscale.value = codec;
 
     var theme = getTheme();
 
@@ -1145,7 +1246,7 @@ var mediaInfoContainerUp = document.getElementById("mediainfo-containerUp");
 var outputContainerSpanUp = document.getElementById("container-span-up");
 
 // change containers according to selection
-mp4OptionUp.addEventListener("click", function() {
+mp4OptionUp.addEventListener("click", function () {
     outputContainerSpanUp.textContent = ".mp4";
     hiderUpscale.style.visibility = "hidden";
     containerDropdownUpscale.style.visibility = "hidden";
@@ -1159,7 +1260,7 @@ mp4OptionUp.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-mkvOptionUp.addEventListener("click", function() {
+mkvOptionUp.addEventListener("click", function () {
     outputContainerSpanUp.textContent = ".mkv";
     hiderUpscale.style.visibility = "hidden";
     containerDropdownUpscale.style.visibility = "hidden";
@@ -1173,7 +1274,7 @@ mkvOptionUp.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-movOptionUp.addEventListener("click", function() {
+movOptionUp.addEventListener("click", function () {
     outputContainerSpanUp.textContent = ".mov";
     hiderUpscale.style.visibility = "hidden";
     containerDropdownUpscale.style.visibility = "hidden";
@@ -1187,7 +1288,7 @@ movOptionUp.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-webmOptionUp.addEventListener("click", function() {
+webmOptionUp.addEventListener("click", function () {
     outputContainerSpanUp.textContent = ".webm";
     hiderUpscale.style.visibility = "hidden";
     containerDropdownUpscale.style.visibility = "hidden";
@@ -1206,13 +1307,13 @@ var factor3 = document.getElementById("factor3");
 var factor4 = document.getElementById("factor4");
 
 // toggle engine dropdown
-engineInputUpscale.addEventListener("click", function() {
+engineInputUpscale.addEventListener("click", function () {
     hiderUpscale.style.visibility = "visible";
     engineDropdownUpscale.style.visibility = "visible";
 });
 
 // change engine (waifu2x)
-waifu2xOption.addEventListener("click", function() {
+waifu2xOption.addEventListener("click", function () {
     upscaleEngineText.textContent = "Upscaling - waifu2x (NCNN)";
     hiderUpscale.style.visibility = "hidden";
     engineDropdownUpscale.style.visibility = "hidden";
@@ -1231,7 +1332,7 @@ waifu2xOption.addEventListener("click", function() {
 });
 
 // change engine (realesrgan-ncnn)
-realesrganNcnnOption.addEventListener("click", function() {
+realesrganNcnnOption.addEventListener("click", function () {
     upscaleEngineText.textContent = "Upscaling - RealESRGAN (NCNN)";
     hiderUpscale.style.visibility = "hidden";
     engineDropdownUpscale.style.visibility = "hidden";
@@ -1248,7 +1349,7 @@ realesrganNcnnOption.addEventListener("click", function() {
 });
 
 // change engine (realesrgan-trt)
-realesrganOption.addEventListener("click", function() {
+realesrganOption.addEventListener("click", function () {
     upscaleEngineText.textContent = "Upscaling - RealESRGAN (TensorRT)";
     hiderUpscale.style.visibility = "hidden";
     engineDropdownUpscale.style.visibility = "hidden";
@@ -1265,13 +1366,13 @@ realesrganOption.addEventListener("click", function() {
 });
 
 //toggle scale dropdown
-scaleInput.addEventListener("click", function() {
+scaleInput.addEventListener("click", function () {
     hiderUpscale.style.visibility = "visible";
     scaleDropdown.style.visibility = "visible";
 });
 
 //change scale according to selection
-scale2Option.addEventListener("click", function() {
+scale2Option.addEventListener("click", function () {
     scaleSpan.textContent = "2x";
     hiderUpscale.style.visibility = "hidden";
     scaleDropdown.style.visibility = "hidden";
@@ -1284,7 +1385,7 @@ scale2Option.addEventListener("click", function() {
     console.log("Scale written to project file.");
 });
 
-scale3Option.addEventListener("click", function() {
+scale3Option.addEventListener("click", function () {
     scaleSpan.textContent = "3x";
     hiderUpscale.style.visibility = "hidden";
     scaleDropdown.style.visibility = "hidden";
@@ -1296,7 +1397,7 @@ scale3Option.addEventListener("click", function() {
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Scale written to project file.");
 });
-scale4Option.addEventListener("click", function() {
+scale4Option.addEventListener("click", function () {
     scaleSpan.textContent = "4x";
     hiderUpscale.style.visibility = "hidden";
     scaleDropdown.style.visibility = "hidden";
@@ -1392,10 +1493,13 @@ function changeCodecH264Restoration() {
         console.log(err);
         return;
     }
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "H264"));
+    let codec = hwEncode ? hwParams || json.codecs[0].x264 : json.codecs[0].x264;
+    ffmpegParamsRestoration.value = codec;
 
     var theme = getTheme();
-
-    ffmpegParamsRestoration.value = json.codecs[0].x264;
 
     sessionStorage.setItem('codecRestoration', 'x264');
 
@@ -1423,10 +1527,13 @@ function changeCodecH265Restoration() {
         console.log(err);
         return;
     }
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "H265"));
+    let codec = hwEncode ? hwParams || json.codecs[0].x265 : json.codecs[0].x265;
+    ffmpegParamsRestoration.value = codec;
 
     var theme = getTheme();
-
-    ffmpegParamsRestoration.value = json.codecs[0].x265;
 
     sessionStorage.setItem('codecRestoration', 'x265');
 
@@ -1454,8 +1561,11 @@ function changeCodecAV1Restoration() {
         console.log(err);
         return;
     }
-
-    ffmpegParamsRestoration.value = json.codecs[0].AV1;
+    let gpu = sessionStorage.getItem('gpu');
+    let hwEncode = document.getElementById('hwencode-check').checked;
+    let hwParams = eval(getHWEncoder(gpu, "AV1"));
+    let codec = hwEncode ? hwParams || json.codecs[0].AV1 : json.codecs[0].AV1;
+    ffmpegParamsRestoration.value = codec;
 
     var theme = getTheme();
 
@@ -1575,6 +1685,68 @@ VP9BtnRes.addEventListener("click", changeCodecVP9Restoration);
 ProResBtnRes.addEventListener("click", changeCodecProResRestoration);
 LosslessBtnRes.addEventListener("click", changeCodecLosslessRestoration);
 
+// set codec on startup if hardware encode is checked
+function setCodecs() {
+    if (document.getElementById('hwencode-check').checked) {
+        let interpolationCodec = sessionStorage.getItem('codecInterpolation');
+        let upscalingCodec = sessionStorage.getItem('codecUpscaling');
+        let restorationCodec = sessionStorage.getItem('codecRestoration');
+
+        let codecs = [interpolationCodec, upscalingCodec, restorationCodec];
+        for (let index = 0; index < codecs.length; index++) {
+            let codec = codecs[index];
+            switch (index) {
+                case 0:
+                    switch (codec) {
+                        case 'x264':
+                            changeCodecH264();
+                            break;
+                        case 'x265':
+                            changeCodecH265();
+                            break;
+                        case 'AV1':
+                            changeCodecAV1();
+                            break;
+                    }
+                    break;
+                case 1:
+                    switch (codec) {
+                        case 'x264':
+                            changeCodecH264Upscale();
+                            break;
+                        case 'x265':
+                            changeCodecH265Upscale();
+                            break;
+                        case 'AV1':
+                            changeCodecAV1Upscale();
+                            break;
+                    }
+                    break;
+                case 2:
+                    switch (codec) {
+                        case 'x264':
+                            changeCodecH264Restoration();
+                            break;
+                        case 'x265':
+                            changeCodecH265Restoration();
+                            break;
+                        case 'AV1':
+                            changeCodecAV1Restoration();
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+};
+setTimeout(setCodecs, 2000)
+
+const hwEncodeCheck = document.getElementById('hwencode-check');
+
+hwEncodeCheck.addEventListener('click', () => {
+    if (hwEncodeCheck.checked) setCodecs();
+})
+
 var hiderRestore = document.getElementById("hider-restore"),
     containerDropdownRestoration = document.getElementById("container-dropdown-restoration");
 
@@ -1607,7 +1779,7 @@ var mediaInfoContainerRes = document.getElementById("mediainfo-containerRes");
 var outputContainerSpanRes = document.getElementById("container-span-res");
 
 // change containers according to selection
-mp4OptionRes.addEventListener("click", function() {
+mp4OptionRes.addEventListener("click", function () {
     outputContainerSpanRes.textContent = ".mp4";
     hiderRestore.style.visibility = "hidden";
     containerDropdownRestoration.style.visibility = "hidden";
@@ -1621,7 +1793,7 @@ mp4OptionRes.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-mkvOptionRes.addEventListener("click", function() {
+mkvOptionRes.addEventListener("click", function () {
     outputContainerSpanRes.textContent = ".mkv";
     hiderRestore.style.visibility = "hidden";
     containerDropdownRestoration.style.visibility = "hidden";
@@ -1635,7 +1807,7 @@ mkvOptionRes.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-movOptionRes.addEventListener("click", function() {
+movOptionRes.addEventListener("click", function () {
     outputContainerSpanRes.textContent = ".mov";
     hiderRestore.style.visibility = "hidden";
     containerDropdownRestoration.style.visibility = "hidden";
@@ -1649,7 +1821,7 @@ movOptionRes.addEventListener("click", function() {
     console.log("Output container written to project file.");
 });
 
-webmOptionRes.addEventListener("click", function() {
+webmOptionRes.addEventListener("click", function () {
     outputContainerSpanUp.textContent = ".webm";
     hiderRestore.style.visibility = "hidden";
     containerDropdownRestoration.style.visibility = "hidden";
@@ -1668,7 +1840,7 @@ const engineDropdownRestore = document.getElementById('engine-dropdown-restorati
 
 
 // toggle engine dropdown
-engineInputRestore.addEventListener("click", function() {
+engineInputRestore.addEventListener("click", function () {
     hiderRestore.style.visibility = "visible";
     engineDropdownRestore.style.visibility = "visible";
 });
@@ -1682,7 +1854,7 @@ const denoise = document.getElementById('denoise');
 const deblock = document.getElementById('deblock');
 
 // change engine (dpir)
-dpirOption.addEventListener("click", function() {
+dpirOption.addEventListener("click", function () {
     restoreEngineText.textContent = "Restoration - DPIR (TensorRT)";
     hiderRestore.style.visibility = "hidden";
     engineDropdownRestore.style.visibility = "hidden";
@@ -1700,7 +1872,7 @@ dpirOption.addEventListener("click", function() {
 });
 
 // change engine (animevideo)
-animevideoOption.addEventListener("click", function() {
+animevideoOption.addEventListener("click", function () {
     restoreEngineText.textContent = "Restoration - AnimeVideo (TensorRT)";
     hiderRestore.style.visibility = "hidden";
     engineDropdownRestore.style.visibility = "hidden";
@@ -1719,32 +1891,32 @@ animevideoOption.addEventListener("click", function() {
 
 const modelInputRes = document.getElementById('model-selector-restoration');
 
-denoiseSharpen.addEventListener("click", function() {
+denoiseSharpen.addEventListener("click", function () {
     modelSpanRes.textContent = "Denoise/Sharpen";
     modelDropdownRes.style.visibility = "hidden";
     hiderRestore.style.visibility = "hidden";
 });
 
-denoise.addEventListener("click", function() {
+denoise.addEventListener("click", function () {
     modelSpanRes.textContent = "Denoise";
     modelDropdownRes.style.visibility = "hidden";
     hiderRestore.style.visibility = "hidden";
 });
 
-deblock.addEventListener("click", function() {
+deblock.addEventListener("click", function () {
     modelSpanRes.textContent = "Deblock";
     modelDropdownRes.style.visibility = "hidden";
     hiderRestore.style.visibility = "hidden";
 });
 
 //toggle model dropdown
-modelInputRes.addEventListener("click", function() {
+modelInputRes.addEventListener("click", function () {
     hiderRestore.style.visibility = "visible";
     modelDropdownRes.style.visibility = "visible";
 });
 
 // save ffmpeg params on change
-ffmpegParams.addEventListener("change", function() {
+ffmpegParams.addEventListener("change", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.interpolation[0].params = ffmpegParams.value;
@@ -1752,7 +1924,7 @@ ffmpegParams.addEventListener("change", function() {
     console.log("Params written to project file.");
 });
 
-ffmpegParamsUpscale.addEventListener("change", function() {
+ffmpegParamsUpscale.addEventListener("change", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.upsclaing[0].params = ffmpegParamsUpscale.value;
@@ -1760,7 +1932,7 @@ ffmpegParamsUpscale.addEventListener("change", function() {
     console.log("Params written to project file.");
 });
 
-ffmpegParamsRestoration.addEventListener("change", function() {
+ffmpegParamsRestoration.addEventListener("change", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.restoration[0].params = ffmpegParamsRestoration.value;
