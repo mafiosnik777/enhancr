@@ -659,9 +659,25 @@ function setGPU() {
         }
         if (hasAMD) {
             sessionStorage.setItem('gpu', 'AMD');
+            document.getElementById('cain-trt').style.display = 'none';
+            document.getElementById('rife-trt').style.display = 'none';
+            document.getElementById('realesrgan-tensorrt').style.display = 'none';
+            document.getElementById('dpir').style.display = 'none';
+            document.getElementById('anime-video').style.display = 'none';
+            document.getElementById('rife').click();
+            document.getElementById('realesrgan-ncnn').click();
+            document.getElementById('anime-video-ncnn').click();
         }
         if (hasIntel) {
             sessionStorage.setItem('gpu', 'Intel');
+            document.getElementById('cain-trt').style.display = 'none';
+            document.getElementById('rife-trt').style.display = 'none';
+            document.getElementById('realesrgan-tensorrt').style.display = 'none';
+            document.getElementById('dpir').style.display = 'none';
+            document.getElementById('anime-video').style.display = 'none';
+            document.getElementById('rife').click();
+            document.getElementById('realesrgan-ncnn').click();
+            document.getElementById('anime-video-ncnn').click();
         }
     });
 }
@@ -1847,6 +1863,7 @@ engineInputRestore.addEventListener("click", function () {
 
 const dpirOption = document.getElementById('dpir');
 const animevideoOption = document.getElementById('anime-video');
+const animevideoNcnnOption = document.getElementById('anime-video-ncnn');
 const restoreEngineText = document.getElementById('restoration-engine-text');
 const modelSpanRes = document.getElementById('model-span-restoration');
 const denoiseSharpen = document.getElementById('denoise-sharpen');
@@ -1885,6 +1902,24 @@ animevideoOption.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.restoration[0].engine = "animevideo";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (animevideo-ncnn)
+animevideoNcnnOption.addEventListener("click", function () {
+    restoreEngineText.textContent = "Restoration - AnimeVideo (NCNN)";
+    hiderRestore.style.visibility = "hidden";
+    engineDropdownRestore.style.visibility = "hidden";
+    modelSpanRes.textContent = "Denoise/Sharpen";
+    denoiseSharpen.style.display = 'block';
+    denoise.style.display = 'none';
+    deblock.style.display = 'none';
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.restoration[0].engine = "animevideo-ncnn";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });

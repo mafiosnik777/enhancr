@@ -276,6 +276,8 @@ function renderQueueItem() {
                 model = "DPIR"
               } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
                 model = "AnimeVideo"
+              } else {
+                model = "AnimeVideo"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
               shell.openPath(outputPath);
@@ -323,6 +325,8 @@ function renderQueueItem() {
                     if (queue[index].engine == "Restoration - DPIR (TensorRT)") {
                       model = "DPIR"
                     } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
+                      model = "AnimeVideo"
+                    } else {
                       model = "AnimeVideo"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
@@ -412,6 +416,8 @@ function renderQueueItem() {
                       model = "DPIR"
                     } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
                       model = "AnimeVideo"
+                    } else {
+                      model = "AnimeVideo"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
                   }
@@ -478,6 +484,8 @@ function renderQueueItem() {
                 model = "DPIR"
               } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
                 model = "AnimeVideo"
+              } else {
+                model = "AnimeVideo"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
               remote.shell.showItemInFolder(outputPath);
@@ -540,6 +548,8 @@ function renderQueueItem() {
               if (queue[index].engine == "Restoration - DPIR (TensorRT)") {
                 model = "DPIR"
               } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
+                model = "AnimeVideo"
+              } else {
                 model = "AnimeVideo"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);

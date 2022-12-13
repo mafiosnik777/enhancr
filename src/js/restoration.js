@@ -112,9 +112,11 @@ class Restoration {
                 if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Denoise') {
                     return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx");
                 } else if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Deblock') {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx")
+                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx");
                 } else if (engine == 'Restoration - AnimeVideo (TensorRT)') {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
+                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                } else if (engine == 'Restoration - AnimeVideo (NCNN)') {
+                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                 }
             }
             var onnx = getOnnxPath();
@@ -128,7 +130,11 @@ class Restoration {
 
             // get engine path
             function getEnginePath() {
-                return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '.engine');
+                if (engine == 'Restoration - AnimeVideo (NCNN)') {
+                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                } else {
+                    return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '.engine');
+                }
             }
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
@@ -136,7 +142,7 @@ class Restoration {
             let fp16 = document.getElementById('fp16-check');
 
             // convert onnx to trt engine
-            if (!fse.existsSync(engineOut)) {
+            if (!fse.existsSync(engineOut) && engine != 'Restoration - AnimeVideo (NCNN)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
@@ -230,6 +236,7 @@ class Restoration {
                 framerate: fps,
                 streams: numStreams.value,
                 model: model,
+                fp16: fp16.checked,
                 strength: parseInt(strengthParam),
                 tiling: document.getElementById("tiling-check").checked,
                 tileHeight: (document.getElementById("tile-res").value).split('x')[1],
@@ -248,6 +255,8 @@ class Restoration {
                 model = "DPIR"
             } else if (engine == "Restoration - AnimeVideo (TensorRT)") {
                 model = "AnimeVideo"
+            } else {
+                model = "AnimeVideo"
             }
 
             // resolve output file path
@@ -265,6 +274,9 @@ class Restoration {
                 }
                 if (engine == "Restoration - AnimeVideo (TensorRT)") {
                     return path.join(__dirname, '..', "python/esrgan.py");
+                }
+                if (engine == "Restoration - AnimeVideo (NCNN)") {
+                    return path.join(__dirname, '..', "python/esrgan_ncnn.py");
                 }
             }
             var engine = pickEngine();
