@@ -6,14 +6,10 @@ $macosblue: #1e5cce;
 
 #media-container-upscale {
   visibility: hidden;
-  position: absolute;
-  top: 0%;
 }
 
 #media-container-restoration {
   visibility: hidden;
-  position: absolute;
-  top: 0%;
 }
 
 #nomedia {
@@ -106,6 +102,7 @@ $macosblue: #1e5cce;
   padding-top: 14px;
   padding-bottom: 6px;
   max-width: 419px;
+  position: absolute;
 
   #header-text {
     font-size: 7.25pt;
@@ -142,6 +139,7 @@ $macosblue: #1e5cce;
   padding-top: 14px;
   padding-bottom: 6px;
   max-width: 419px;
+  position: absolute;
 
   #header-text-upscale {
     font-size: 7.25pt;
@@ -177,6 +175,7 @@ $macosblue: #1e5cce;
   padding-top: 14px;
   padding-bottom: 6px;
   max-width: 419px;
+  position: absolute;
 
   #header-text-restore {
     font-size: 7.25pt;
@@ -221,7 +220,7 @@ ul {
 }
 
 #mediainfo-side {
-  background: rgba(0,0,0,.2);
+  background: rgba(0, 0, 0, .2);
   position: absolute;
   width: 7.5%;
   height: 100%;
@@ -234,16 +233,16 @@ ul {
 #mediainfo-side-upscale {
   background: rgba(0, 0, 0, 0.2);
   position: absolute;
-  width: 6.8%;
-  height: 66%;
-  left: 3.4%;
-  top: 26%;
+  width: 7.5%;
+  height: 100%;
+  left: 0%;
+  top: 0%;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
 }
 
 #mediainfo-side-restore {
-  background: rgba(0,0,0,.2);
+  background: rgba(0, 0, 0, .2);
   position: absolute;
   width: 7.5%;
   height: 100%;
@@ -276,8 +275,9 @@ li {
   padding-left: 15px;
   background: rgba(0, 0, 0, 0.12);
   border-radius: 10px;
-  width: 63.4%;
+  width: 64%;
   position: absolute;
+  bottom: -2%;
 
   li {
     margin-left: 28px;
@@ -292,6 +292,8 @@ li {
   background: rgba(0, 0, 0, 0.12);
   border-radius: 10px;
   width: 64%;
+  position: absolute;
+  bottom: -2%;
 
   li {
     margin-left: 28px;
@@ -307,6 +309,7 @@ li {
   border-radius: 10px;
   width: 64%;
   position: absolute;
+  bottom: -2%;
 
   li {
     margin-left: 28px;
