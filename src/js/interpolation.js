@@ -99,11 +99,38 @@ class Interpolation {
 
             // get width & height
             let dimensions = document.getElementById('dimensions');
-            let width = parseInt((dimensions.innerHTML).split(' x')[0]);
-            let height = parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
+            var width = parseInt((dimensions.innerHTML).split(' x')[0]);
+            var height = parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
+            var padding;
+            var roundedWidth;
+            var roundedHeight;
+            var toPadWidth;
+            var toPadHeight;
+
             let floatingPoint = document.getElementById('fp16-check').checked;
             let fp = floatingPoint ? "fp16" : "fp32";
+
             let systemPython = document.getElementById('python-check').checked;
+            
+
+            // check if dimensions are divisible by 8
+            function isDivisibleBy8(num) {
+                return num % 8 === 0;
+            }
+            function roundUpToNextMultipleOf8(num) {
+                return Math.ceil(num / 8) * 8;
+            }
+            
+            if (!isDivisibleBy8(width) || !isDivisibleBy8(height)) padding = true;
+
+            if (padding && engine == "Channel Attention - CAIN (TensorRT)") {
+                roundedWidth = roundUpToNextMultipleOf8(width);
+                roundedHeight = roundUpToNextMultipleOf8(height);
+                toPadHeight = roundedHeight - height;
+                toPadWidth = roundedWidth - width;
+                width = roundedWidth;
+                height = roundedHeight
+            }
 
             if (systemPython == true) {
                 var python = "python";
@@ -284,6 +311,9 @@ class Interpolation {
                 engine: engineOut,
                 rife_engine: rifeEngine,
                 framerate: fps,
+                padding: padding,
+                toPadWidth: toPadWidth,
+                toPadHeight: toPadHeight,
                 streams: numStreams.value,
                 rife_tta: document.getElementById("rife-tta-check").checked,
                 rife_uhd: document.getElementById("rife-uhd-check").checked,
@@ -441,7 +471,7 @@ class Interpolation {
                 }
                 await interpolate();
                 // clear cacheorary files
-                fse.emptyDirSync(cache);
+                // fse.emptyDirSync(cache);
                 console.log("Cleared temporary files");
                 // timeout for 2 seconds after interpolation
                 await new Promise(resolve => setTimeout(resolve, 2000));

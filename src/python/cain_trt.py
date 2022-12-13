@@ -49,6 +49,9 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     streams = data['streams']
     sceneDetection = data['sc']
     frameskip = data['skip']
+    padding = data['padding']
+    ToPadWidth = data['toPadWidth']
+    ToPadHeight = data['toPadHeight']
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
@@ -62,6 +65,9 @@ clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
 if sceneDetection:
     clip = core.misc.SCDetect(clip=clip, threshold=0.100)
+
+if padding:
+    clip = core.std.AddBorders(clip, right=ToPadWidth, top=ToPadHeight)
 
 clip_pos1 = clip[1:]
 clip_pos2 = clip.std.Trim(first=0,last=clip.num_frames-2)
@@ -77,6 +83,9 @@ output=core.std.Interleave([clip,output])
 clip1 = core.std.Interleave([clip, clip])
 
 output = vfi_frame_merger(clip1, output)
+
+if padding:
+    output = core.std.Crop(clip, right=ToPadWidth, top=ToPadHeight)
 
 output = vs.core.resize.Bicubic(output, format=vs.YUV422P8, matrix_s="709")
 
