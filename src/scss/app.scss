@@ -47,12 +47,26 @@ body {
   height: 100%;
   width: 100%;
   position: absolute;
-  background: rgba(28,28,28,0.85);
+  background: rgba(28, 28, 28, 0.85);
   top: 0;
   left: 0;
   z-index: -1;
   border-radius: 10px;
   visibility: hidden;
+}
+
+#win10-border {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  z-index: 69;
+  outline: 1.5px solid rgb(80 80 80 / 75%);
+  outline-offset: -1.5px;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 #drop-span {

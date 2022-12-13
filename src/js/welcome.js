@@ -40,13 +40,16 @@ function loadProject(projectPath) {
 const recentProjects = parseJSON(localStorage.getItem('projects'), []);
 
 const blurLayer = document.getElementById('light-mode')
+const border = document.getElementById('win10-border');
 
 // change blur on win 11/10
 let winOsBuild = parseInt(os.release().split(".")[2]);
-if (winOsBuild >= 22000 && process.platform == 'win32' || process.platform == 'linux') {
+if (winOsBuild >= 22000 && process.platform == 'win32') {
     blurLayer.style.visibility = 'hidden';
+    border.style.visibility = 'hidden';
 } else {
     blurLayer.style.visibility = 'visible';
+    border.style.visibility = 'visible';
 }
 
 // Button functionality

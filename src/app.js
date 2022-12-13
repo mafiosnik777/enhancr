@@ -87,7 +87,7 @@ app.once('ready', () => {
     // eslint-disable-next-line default-case
     switch (process.platform) {
         case 'win32': {
-            if (!isWin11) windowOptions.transparent = false;
+            if (!isWin11) windowOptions.transparent = true;
 
             if (settings.disableBlur) break;
             const effect = isWin11 ? 'acrylic' : 'blur';
