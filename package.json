@@ -1,7 +1,7 @@
 {
   "name": "enhancr",
   "productName": "enhancr",
-  "version": "0.9.3",
+  "version": "0.9.3a",
   "private": true,
   "description": "Interpolation/Upscaling AI",
   "main": "src/app.js",
@@ -20,7 +20,7 @@
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@ffprobe-installer/ffprobe": "^1.4.1",
     "@fortawesome/fontawesome-free": "~6.2.1",
-    "@mafiosnik/nvenc-codecs": "^1.0.2",
+    "@mafiosnik/nvenc-codecs": "^1.0.4",
     "@supercharge/promise-pool": "^2.3.2",
     "animate.css": "^4.1.1",
     "aspect-ratio": "^2.1.1",

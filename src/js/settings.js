@@ -170,20 +170,24 @@ function detectHWEncodingCaps() {
   var waitUntilGPUInitialization = setInterval(() => {
     if (sessionStorage.getItem('hasNVIDIA') != null) {
       if (sessionStorage.getItem('hasNVIDIA') == "true") {
-        if (nvencDevice.supports('AV1')) {
-          document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-check"></i> AV1';
-          document.getElementById('AV1-hw').classList.add('green');
-          clearInterval(waitUntilGPUInitialization);
-        }
-        if (nvencDevice.supports('HEVC')) {
-          document.getElementById('H265-hw').innerHTML = '<i class="fa-solid fa-check"></i> H265';
-          document.getElementById('H265-hw').classList.add('green');
-          clearInterval(waitUntilGPUInitialization);
-        }
-        if (nvencDevice.supports('H264')) {
-          document.getElementById('H264-hw').innerHTML = '<i class="fa-solid fa-check"></i> H264';
-          document.getElementById('H264-hw').classList.add('green');
-          clearInterval(waitUntilGPUInitialization);
+        if (nvencDevice.supports('AV1').includes('Driver does not support the reqired nvenc API version')) {
+          alert('Driver does not support the required NVENC API version. The minimum required NVIDIA Driver for NVENC is 436.15 or newer. Please update your GPU drivers to use hardware encoding.');
+        } else {
+          if (nvencDevice.supports('AV1')) {
+            document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-check"></i> AV1';
+            document.getElementById('AV1-hw').classList.add('green');
+            clearInterval(waitUntilGPUInitialization);
+          }
+          if (nvencDevice.supports('HEVC')) {
+            document.getElementById('H265-hw').innerHTML = '<i class="fa-solid fa-check"></i> H265';
+            document.getElementById('H265-hw').classList.add('green');
+            clearInterval(waitUntilGPUInitialization);
+          }
+          if (nvencDevice.supports('H264')) {
+            document.getElementById('H264-hw').innerHTML = '<i class="fa-solid fa-check"></i> H264';
+            document.getElementById('H264-hw').classList.add('green');
+            clearInterval(waitUntilGPUInitialization);
+          }
         }
       } else {
         document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-question"></i> AV1';
