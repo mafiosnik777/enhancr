@@ -662,6 +662,7 @@ function addToQueueInterpolation() {
   const ffmpegParams = document.getElementById("ffmpeg-params");
   const outputContainer = document.getElementById("container-span");
   const interpolationEngine = document.getElementById("interpolation-engine-text");
+  const dimensions = document.getElementById('dimensions');
 
   queue.push({
     mode: 'interpolation',
@@ -671,6 +672,7 @@ function addToQueueInterpolation() {
     params: ffmpegParams.value,
     extension: outputContainer.innerHTML,
     engine: interpolationEngine.innerHTML,
+    dimensions: dimensions.innerHTML,
     status: '0'
   })
   console.log(queue);
@@ -795,7 +797,7 @@ async function processQueue() {
           console.log(item);
           switch (item.mode) {
             case 'interpolation':
-              await Interpolation.process(item.file, item.model, item.output, item.params, item.extension, item.engine, sessionStorage.getItem(`out${index}`), index);
+              await Interpolation.process(item.file, item.model, item.output, item.params, item.extension, item.engine, item.dimensions, sessionStorage.getItem(`out${index}`), index);
               break;
             case 'upscaling':
               await Upscaling.process(item.scale, item.dimensions, item.file, item.output, item.params, item.extension, item.engine, sessionStorage.getItem(`out${index}`), index);

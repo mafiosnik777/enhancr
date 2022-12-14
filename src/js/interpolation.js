@@ -29,7 +29,7 @@ const preview = document.getElementById('preview-check');
 sessionStorage.setItem('stopped', 'false');
 
 class Interpolation {
-    static async process(file, model, output, params, extension, engine, fileOut, index) {
+    static async process(file, model, output, params, extension, engine, dimensions, fileOut, index) {
         let cacheInputText = document.getElementById('cache-input-text');
         var cache = path.normalize(cacheInputText.textContent);
 
