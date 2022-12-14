@@ -99,7 +99,12 @@ recentProjects.forEach((project, i) => {
     recentItem.style.animationDelay = `${delay}s`;
 
     recentItem.querySelector('.project-title').textContent = path.parse(project).name;
-    recentItem.querySelector('.project-path').textContent = project;
+    if(project.length >= 30) {
+        recentItem.querySelector('.project-path').textContent = "../" + path.basename(path.dirname(project)) + "/" + path.basename(project);
+    } else {
+        recentItem.querySelector('.project-path').textContent = project;
+    }
+    
 
     recentItem.addEventListener('click', () => {
         loadProject(project);
