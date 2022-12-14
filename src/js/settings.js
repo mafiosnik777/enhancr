@@ -166,44 +166,55 @@ var mem = document.getElementById("settings-memory-span");
 var osSpan = document.getElementById("settings-os-span");
 var display = document.getElementById("settings-display-span");
 
-const gpuInfo = require('gpu-info');
-gpuInfo().then(function (data) {
-  var hasNVIDIA = false;
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].VideoProcessor.includes("NVIDIA")) {
-      hasNVIDIA = true;
-      break;
+function detectHWEncodingCaps() {
+  var waitUntilGPUInitialization = setInterval(() => {
+    if (sessionStorage.getItem('hasNVIDIA') != null) {
+      if (sessionStorage.getItem('hasNVIDIA') == "true") {
+        if (nvencDevice.supports('AV1')) {
+          document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-check"></i> AV1';
+          document.getElementById('AV1-hw').classList.add('green');
+          clearInterval(waitUntilGPUInitialization);
+        }
+        if (nvencDevice.supports('HEVC')) {
+          document.getElementById('H265-hw').innerHTML = '<i class="fa-solid fa-check"></i> H265';
+          document.getElementById('H265-hw').classList.add('green');
+          clearInterval(waitUntilGPUInitialization);
+        }
+        if (nvencDevice.supports('H264')) {
+          document.getElementById('H264-hw').innerHTML = '<i class="fa-solid fa-check"></i> H264';
+          document.getElementById('H264-hw').classList.add('green');
+          clearInterval(waitUntilGPUInitialization);
+        }
+      } else {
+        document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-question"></i> AV1';
+        document.getElementById('AV1-hw').classList.add('yellow');
+        document.getElementById('H265-hw').innerHTML = '<i class="fa-solid fa-question"></i> H265';
+        document.getElementById('H265-hw').classList.add('yellow');
+        document.getElementById('H264-hw').innerHTML = '<i class="fa-solid fa-question"></i> H264';
+        document.getElementById('H264-hw').classList.add('yellow');
+        clearInterval(waitUntilGPUInitialization);
+      }
     }
-  }
-  if (hasNVIDIA) {
-    sessionStorage.setItem('gpu', "NVIDIA")
-    if (nvencDevice.supports('AV1')) {
-      document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-check"></i> AV1';
-      document.getElementById('AV1-hw').classList.add('green');
-    }
-    if (nvencDevice.supports('HEVC')) {
-      document.getElementById('H265-hw').innerHTML = '<i class="fa-solid fa-check"></i> H265';
-      document.getElementById('H265-hw').classList.add('green');
-    }
-    if (nvencDevice.supports('H264')) {
-      document.getElementById('H264-hw').innerHTML = '<i class="fa-solid fa-check"></i> H264';
-      document.getElementById('H264-hw').classList.add('green');
-    }
-  } else {
-    document.getElementById('AV1-hw').innerHTML = '<i class="fa-solid fa-question"></i> AV1';
-    document.getElementById('AV1-hw').classList.add('yellow');
-    document.getElementById('H265-hw').innerHTML = '<i class="fa-solid fa-question"></i> H265';
-    document.getElementById('H265-hw').classList.add('yellow');
-    document.getElementById('H264-hw').innerHTML = '<i class="fa-solid fa-question"></i> H264';
-    document.getElementById('H264-hw').classList.add('yellow');
-  }
-});
-
-
+  }, 1000);
+}
+setTimeout(detectHWEncodingCaps, 5000);
 
 async function loadSettingsInfo() {
   var cpuInfo = await sysinfo.cpu().then(data => cpu.innerHTML = " " + data.manufacturer + " " + data.brand + " - " + data.physicalCores + "C/" + data.cores + "T");
-  var gpuInfo = await sysinfo.graphics().then(data => gpu.innerHTML = " " + data.controllers[0].model + " - " + data.controllers[0].vram + " MB");
+  var gpuInfo = sysinfo.graphics().then(data => {
+    // check for gpus and set final gpu based on hierarchy
+    for (let i = 0; i < data.controllers.length; i++) {
+      if (data.controllers[i].vendor.includes("Intel")) {
+        gpu.innerHTML = " " + data.controllers[i].model + " - " + data.controllers[i].vram + " MB";
+      }
+      if (data.controllers[i].vendor.includes("AMD") || data.controllers[i].vendor.includes("Advanced Micro Devices")) {
+        gpu.innerHTML = " " + data.controllers[i].model + " - " + data.controllers[i].vram + " MB";
+      }
+      if (data.controllers[i].vendor.includes("NVIDIA")) {
+        gpu.innerHTML = " " + data.controllers[i].model + " - " + data.controllers[i].vram + " MB";
+      }
+    }
+  });
   var memInfo = await sysinfo.mem().then(data => mem.innerHTML = " " + Math.round(bytesToMegaBytes(data.total)) + " MB");
   var osInfo = await sysinfo.osInfo().then(data => osSpan.innerHTML = " " + data.distro + " " + data.arch);
   var displayInfo = await sysinfo.graphics().then(data => display.innerHTML = " " + data.displays[0].currentResX + " x " + data.displays[0].currentResY + ", " + data.displays[0].currentRefreshRate + " Hz");
@@ -277,7 +288,7 @@ function changePage() {
     document.getElementById('python-list').style.visibility = 'visible';
     document.getElementById('trim-list').style.visibility = 'hidden';
     hwEncodeSettings.style.visibility = 'hidden';
-    document.getElementById('sensitivity-list').style.visibility  = 'hidden';
+    document.getElementById('sensitivity-list').style.visibility = 'hidden';
     document.getElementById('unsupported-list').style.visibility = 'hidden';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 5 / 5</span>') {
     pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 5</span>';
@@ -287,13 +298,13 @@ function changePage() {
     document.getElementById('python-list').style.visibility = 'hidden';
     document.getElementById('trim-list').style.visibility = 'visible';
     hwEncodeSettings.style.visibility = 'visible';
-    document.getElementById('sensitivity-list').style.visibility  = 'visible';
+    document.getElementById('sensitivity-list').style.visibility = 'visible';
     document.getElementById('unsupported-list').style.visibility = 'visible';
   } else if (pageSwitcher.innerHTML == '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 4 / 5</span>') {
     pageSwitcher.innerHTML = '<span><i class="fa-solid fa-arrow-left" id="arrow-left"></i> Page 3 / 5</span>';
     document.getElementById('trim-list').style.visibility = 'hidden';
     document.getElementById('unsupported-list').style.visibility = 'hidden';
-    document.getElementById('sensitivity-list').style.visibility  = 'hidden';
+    document.getElementById('sensitivity-list').style.visibility = 'hidden';
     hwEncodeSettings.style.visibility = 'hidden';
     tensorrtSettings.style.visibility = 'visible';
     tilingSettings.style.visibility = 'visible';

@@ -631,8 +631,8 @@ input[type="checkbox"] {
 }
 
 #unsupported-question {
-    top: -42% !important;
-    width: 165px !important;
+  top: -42% !important;
+  width: 165px !important;
 }
 
 #unsupported-check:checked {
@@ -726,7 +726,9 @@ input[type="checkbox"] {
 }
 
 .yellow {
-  color:gold !important;
+  i {
+    color: gold !important;
+  }
 }
 
 #H265-hw {
@@ -1330,6 +1332,7 @@ input[type="checkbox"] {
   top: -1% !important;
   width: 205px !important;
 }
+
 #sensitivity-question {
   top: 7% !important;
   width: 205px !important;

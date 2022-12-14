@@ -635,52 +635,79 @@ function getTheme() {
         return '#696969';
     }
 }
+const json = {
+    controllers: [
+      {
+        vendor: 'Intel Corporation',
+        model: 'Intel(R) Iris(R) Xe Graphics',
+        bus: 'PCI',
+        vram: 1024,
+        vramDynamic: true,
+        subDeviceId: '13341462'
+      },
+      {
+        vendor: 'NVIDIA',
+        model: 'NVIDIA GeForce RTX 3060 Laptop GPU',
+        bus: 'PCI',
+        vram: 6144,
+        vramDynamic: true,
+        subDeviceId: '13341462'
+      }
+    ],
+    "displays": [
+      {
+        vendor: '(Standard monitor types)',
+        model: 'Generic PnP Monitor',
+        deviceName: '\\\\.\\DISPLAY1',
+        main: true,
+        builtin: true,
+        connection: 'INTERNAL',
+        resolutionX: 1920,
+        resolutionY: 1080,
+        sizeX: 38,
+        sizeY: 22,
+        pixelDepth: 32,
+        currentResX: 1920,
+        currentResY: 1080,
+        positionX: 0,
+        positionY: 0,
+        currentRefreshRate: 144
+      }
+    ]
+}
 
 function setGPU() {
-    const gpuInfo = require('gpu-info');
     let unsupportedCheck = document.getElementById('unsupported-check');
-    gpuInfo().then(function (data) {
-        var hasNVIDIA = false;
-        var hasAMD = false;
-        var hasIntel = false;
-        for (var i = 0; i < data.length; i++) {
-            if (data[i].VideoProcessor.includes("NVIDIA")) {
-                hasNVIDIA = true;
-                break;
-            } else if (data[i].VideoProcessor.includes("AMD") && !hasNVIDIA) {
-                hasAMD = true;
-                break;
-            } else if (data[i].VideoProcessor.includes("Intel") && !hasAMD && !hasNVIDIA) {
-                hasIntel = true;
-                break;
-            }
-        }
-        if (hasNVIDIA) {
-            sessionStorage.setItem('gpu', 'NVIDIA');
-        }
-        if (hasAMD && !unsupportedCheck.checked) {
-            sessionStorage.setItem('gpu', 'AMD');
-            document.getElementById('cain-trt').style.display = 'none';
-            document.getElementById('rife-trt').style.display = 'none';
-            document.getElementById('realesrgan-tensorrt').style.display = 'none';
-            document.getElementById('dpir').style.display = 'none';
-            document.getElementById('anime-video').style.display = 'none';
-            document.getElementById('rife').click();
-            document.getElementById('realesrgan-ncnn').click();
-            document.getElementById('anime-video-ncnn').click();
-        }
-        if (hasIntel && !unsupportedCheck.checked) {
-            sessionStorage.setItem('gpu', 'Intel');
-            document.getElementById('cain-trt').style.display = 'none';
-            document.getElementById('rife-trt').style.display = 'none';
-            document.getElementById('realesrgan-tensorrt').style.display = 'none';
-            document.getElementById('dpir').style.display = 'none';
-            document.getElementById('anime-video').style.display = 'none';
-            document.getElementById('rife').click();
-            document.getElementById('realesrgan-ncnn').click();
-            document.getElementById('anime-video-ncnn').click();
-        }
-    });
+    const si = require('systeminformation');
+    si.graphics().then(data => sessionStorage.setItem('hasNVIDIA', data.controllers.some((controller) => controller.vendor.includes("NVIDIA"))));
+    si.graphics().then(data => sessionStorage.setItem('hasAMD', data.controllers.some((controller) => controller.vendor.includes("AMD"))));
+    si.graphics().then(data => sessionStorage.setItem('hasIntel', data.controllers.some((controller) => controller.vendor.includes("Intel"))));
+    // check for gpus and set final gpu based on hierarchy
+    if (sessionStorage.getItem('hasIntel') == "true" && !unsupportedCheck.checked) {
+        sessionStorage.setItem('gpu', 'Intel');
+        document.getElementById('cain-trt').style.display = 'none';
+        document.getElementById('rife-trt').style.display = 'none';
+        document.getElementById('realesrgan-tensorrt').style.display = 'none';
+        document.getElementById('dpir').style.display = 'none';
+        document.getElementById('anime-video').style.display = 'none';
+        document.getElementById('rife').click();
+        document.getElementById('realesrgan-ncnn').click();
+        document.getElementById('anime-video-ncnn').click();
+    }
+    if (sessionStorage.getItem('hasAMD') == "true" && !unsupportedCheck.checked) {
+        sessionStorage.setItem('gpu', 'AMD');
+        document.getElementById('cain-trt').style.display = 'none';
+        document.getElementById('rife-trt').style.display = 'none';
+        document.getElementById('realesrgan-tensorrt').style.display = 'none';
+        document.getElementById('dpir').style.display = 'none';
+        document.getElementById('anime-video').style.display = 'none';
+        document.getElementById('rife').click();
+        document.getElementById('realesrgan-ncnn').click();
+        document.getElementById('anime-video-ncnn').click();
+    }
+    if (sessionStorage.getItem('hasNVIDIA') == "true") {
+        sessionStorage.setItem('gpu', 'NVIDIA')
+    }
 }
 setGPU();
 
