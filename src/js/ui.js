@@ -635,53 +635,13 @@ function getTheme() {
         return '#696969';
     }
 }
-const json = {
-    controllers: [
-      {
-        vendor: 'Intel Corporation',
-        model: 'Intel(R) Iris(R) Xe Graphics',
-        bus: 'PCI',
-        vram: 1024,
-        vramDynamic: true,
-        subDeviceId: '13341462'
-      },
-      {
-        vendor: 'NVIDIA',
-        model: 'NVIDIA GeForce RTX 3060 Laptop GPU',
-        bus: 'PCI',
-        vram: 6144,
-        vramDynamic: true,
-        subDeviceId: '13341462'
-      }
-    ],
-    "displays": [
-      {
-        vendor: '(Standard monitor types)',
-        model: 'Generic PnP Monitor',
-        deviceName: '\\\\.\\DISPLAY1',
-        main: true,
-        builtin: true,
-        connection: 'INTERNAL',
-        resolutionX: 1920,
-        resolutionY: 1080,
-        sizeX: 38,
-        sizeY: 22,
-        pixelDepth: 32,
-        currentResX: 1920,
-        currentResY: 1080,
-        positionX: 0,
-        positionY: 0,
-        currentRefreshRate: 144
-      }
-    ]
-}
 
-function setGPU() {
+async function setGPU() {
     let unsupportedCheck = document.getElementById('unsupported-check');
     const si = require('systeminformation');
-    si.graphics().then(data => sessionStorage.setItem('hasNVIDIA', data.controllers.some((controller) => controller.vendor.includes("NVIDIA"))));
-    si.graphics().then(data => sessionStorage.setItem('hasAMD', data.controllers.some((controller) => controller.vendor.includes("AMD"))));
-    si.graphics().then(data => sessionStorage.setItem('hasIntel', data.controllers.some((controller) => controller.vendor.includes("Intel"))));
+    await si.graphics().then(data => sessionStorage.setItem('hasNVIDIA', data.controllers.some((controller) => controller.vendor.includes("NVIDIA"))));
+    await si.graphics().then(data => sessionStorage.setItem('hasAMD', data.controllers.some((controller) => controller.vendor.includes("AMD"))));
+    await si.graphics().then(data => sessionStorage.setItem('hasIntel', data.controllers.some((controller) => controller.vendor.includes("Intel"))));
     // check for gpus and set final gpu based on hierarchy
     if (sessionStorage.getItem('hasIntel') == "true" && !unsupportedCheck.checked) {
         sessionStorage.setItem('gpu', 'Intel');
@@ -785,6 +745,7 @@ function changeCodecH264() {
         return;
     }
     let gpu = sessionStorage.getItem('gpu');
+    console.log(gpu);
     let hwEncode = document.getElementById('hwencode-check').checked;
     let hwParams = eval(getHWEncoder(gpu, "H264"));
     let codec = hwEncode ? hwParams || json.codecs[0].x264 : json.codecs[0].x264;
@@ -1731,59 +1692,70 @@ LosslessBtnRes.addEventListener("click", changeCodecLosslessRestoration);
 
 // set codec on startup if hardware encode is checked
 function setCodecs() {
-    if (document.getElementById('hwencode-check').checked) {
-        let interpolationCodec = sessionStorage.getItem('codecInterpolation');
-        let upscalingCodec = sessionStorage.getItem('codecUpscaling');
-        let restorationCodec = sessionStorage.getItem('codecRestoration');
+    var waitforGPUInitialization = setInterval(() => {
+        if (sessionStorage.getItem('gpu') != null) {
+                let interpolationCodec = sessionStorage.getItem('codecInterpolation');
+                let upscalingCodec = sessionStorage.getItem('codecUpscaling');
+                let restorationCodec = sessionStorage.getItem('codecRestoration');
 
-        let codecs = [interpolationCodec, upscalingCodec, restorationCodec];
-        for (let index = 0; index < codecs.length; index++) {
-            let codec = codecs[index];
-            switch (index) {
-                case 0:
-                    switch (codec) {
-                        case 'x264':
-                            changeCodecH264();
+                let codecs = [interpolationCodec, upscalingCodec, restorationCodec];
+                for (let index = 0; index < codecs.length; index++) {
+                    let codec = codecs[index];
+                    switch (index) {
+                        case 0:
+                            switch (codec) {
+                                case 'x264':
+                                    changeCodecH264();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                                case 'x265':
+                                    changeCodecH265();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                                case 'AV1':
+                                    changeCodecAV1();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                            }
                             break;
-                        case 'x265':
-                            changeCodecH265();
+                        case 1:
+                            switch (codec) {
+                                case 'x264':
+                                    changeCodecH264Upscale();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                                case 'x265':
+                                    changeCodecH265Upscale();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                                case 'AV1':
+                                    changeCodecAV1Upscale();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                            }
                             break;
-                        case 'AV1':
-                            changeCodecAV1();
+                        case 2:
+                            switch (codec) {
+                                case 'x264':
+                                    changeCodecH264Restoration();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                                case 'x265':
+                                    changeCodecH265Restoration();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                                case 'AV1':
+                                    changeCodecAV1Restoration();
+                                    clearInterval(waitforGPUInitialization);
+                                    break;
+                            }
                             break;
                     }
-                    break;
-                case 1:
-                    switch (codec) {
-                        case 'x264':
-                            changeCodecH264Upscale();
-                            break;
-                        case 'x265':
-                            changeCodecH265Upscale();
-                            break;
-                        case 'AV1':
-                            changeCodecAV1Upscale();
-                            break;
-                    }
-                    break;
-                case 2:
-                    switch (codec) {
-                        case 'x264':
-                            changeCodecH264Restoration();
-                            break;
-                        case 'x265':
-                            changeCodecH265Restoration();
-                            break;
-                        case 'AV1':
-                            changeCodecAV1Restoration();
-                            break;
-                    }
-                    break;
-            }
+                }
         }
-    }
+    }, 1000)
 };
-setTimeout(setCodecs, 2000)
+setCodecs();
 
 const hwEncodeCheck = document.getElementById('hwencode-check');
 
