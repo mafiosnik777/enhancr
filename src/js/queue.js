@@ -833,6 +833,7 @@ async function processQueue() {
     }).then(function () {
       exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
       enhancr.terminal('Stopped queue successfully.\r\n')
+      ipcRenderer.send('rpc-done');
       terminal.scrollTop = terminal.scrollHeight;
       running = false;
     });
