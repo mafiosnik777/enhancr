@@ -805,21 +805,21 @@ async function processQueue() {
           }
         }
       })
-      // .then(function () {
-      //   exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
-      //   if (queue.length == 0) {
-      //     enhancr.terminal('Queue is empty. Add media to queue to get started.\r\n');
-      //   } else {
-      //     enhancr.terminal('Completed processing queue successfully.\r\n');
-      //   }
-      //   terminal.scrollTop = terminal.scrollHeight;
-      //   running = false;
-      //   if (sessionStorage.getItem('stopped') == 'true') {
-      //     sessionStorage.setItem('stopped', 'false');
-      //     // set stop flag for process.js
-      //     sessionStorage.setItem('stopFlag', 'true');
-      //   }
-      // })
+      .then(function () {
+        exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
+        if (queue.length == 0) {
+          enhancr.terminal('Queue is empty. Add media to queue to get started.\r\n');
+        } else {
+          enhancr.terminal('Completed processing queue successfully.\r\n');
+        }
+        terminal.scrollTop = terminal.scrollHeight;
+        running = false;
+        if (sessionStorage.getItem('stopped') == 'true') {
+          sessionStorage.setItem('stopped', 'false');
+          // set stop flag for process.js
+          sessionStorage.setItem('stopFlag', 'true');
+        }
+      })
       
   } else {
     sessionStorage.setItem('stopped', 'true');
