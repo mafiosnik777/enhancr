@@ -344,16 +344,16 @@ class Interpolation {
             // determine ai engine
             function pickEngine() {
                 if (engine == "Channel Attention - CAIN (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/cain_trt.py");
+                    return path.join(__dirname, '..', "/python/inference/cain_trt.py");
                 }
                 if (engine == "Channel Attention - CAIN (NCNN)") {
-                    return path.join(__dirname, '..', "/python/cain.py");
+                    return path.join(__dirname, '..', "/python/inference/cain.py");
                 }
                 if (engine == "Optical Flow - RIFE (NCNN)") {
-                    return path.join(__dirname, '..', "/python/rife.py");
+                    return path.join(__dirname, '..', "/python/inference/rife.py");
                 }
                 if (engine == "Optical Flow - RIFE (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/rife_trt.py");
+                    return path.join(__dirname, '..', "/python/inference/rife_trt.py");
                 }
             }
             var engine = pickEngine();

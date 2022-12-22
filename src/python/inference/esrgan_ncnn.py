@@ -35,7 +35,8 @@ clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
 if tiling == False:
-    clip = core.ncnn.Model(clip, network_path=engine, num_streams=1, fp16=fp16)
+    # clip = core.ncnn.Model(clip, network_path=engine, num_streams=1, fp16=fp16)
+    clip = core.ort.Model(clip, network_path=engine, num_streams=1, fp16=fp16, provider="CUDA")
 else:
     clip = core.ncnn.Model(clip, network_path=engine, num_streams=1, fp16=fp16, tilesize=[tileHeight, tileWidth])
 

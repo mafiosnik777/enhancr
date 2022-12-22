@@ -270,13 +270,13 @@ class Restoration {
             // determine ai engine
             function pickEngine() {
                 if (engine == "Restoration - DPIR (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/dpir.py");
+                    return path.join(__dirname, '..', "/python/inference/dpir.py");
                 }
                 if (engine == "Restoration - AnimeVideo (TensorRT)") {
-                    return path.join(__dirname, '..', "python/esrgan.py");
+                    return path.join(__dirname, '..', "python/inference/esrgan.py");
                 }
                 if (engine == "Restoration - AnimeVideo (NCNN)") {
-                    return path.join(__dirname, '..', "python/esrgan_ncnn.py");
+                    return path.join(__dirname, '..', "python/inference/esrgan_ncnn.py");
                 }
             }
             var engine = pickEngine();

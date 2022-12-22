@@ -107,15 +107,57 @@ class Upscaling {
             }
             let trtexec = getTrtExecPath();
 
+            //get python path
+            function getPythonPath() {
+                return path.join(__dirname, '..', "/python/bin/python.exe");
+            }
+            let python = getPythonPath();
+
             let fp16 = document.getElementById('fp16-check');
+            var customModel = path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
+
+            //get conversion script
+            function getConversionScript() {
+                return path.join(__dirname, '..', "/python/utils/convertModel.py");
+            }
+            let convertModel = getConversionScript();
+
+            // convert pth to onnx
+            if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth") {
+                function convertToOnnx() {
+                    return new Promise(function (resolve) {
+                        var cmd = `${python} ${convertModel} --input=${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)} --output=${path.join(cache, path.parse(customModel).name + '.onnx')}`;
+                        let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
+                        process.stdout.write('');
+                        term.stdout.on('data', (data) => {
+                            process.stdout.write(`${data}`);
+                            terminal.innerHTML += data;
+                        });
+                        term.stderr.on('data', (data) => {
+                            process.stderr.write(`${data}`);
+                            progressSpan.innerHTML = path.basename(file) + ' | Converting pth to onnx..';
+                            terminal.innerHTML += data;
+                        });
+                        term.on("close", () => {
+                            resolve();
+                        });
+                    })
+                }
+                await convertToOnnx();
+            }
 
             //get onnx input path
             function getOnnxPath() {
                 if (!(document.getElementById('custom-model-check').checked)) {
-                        return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                 } else {
-                    terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
-                    return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
+                    terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
+                    if (path.extname(customModel) == ".pth") {
+                        return path.join(cache, path.parse(customModel).name + '.onnx');
+                    } else {
+                        return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
+                    }
+                    
                 }
             }
             let onnx = getOnnxPath();
@@ -146,11 +188,11 @@ class Upscaling {
             if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
-                            if (fp16.checked == true) {
-                                var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
-                            } else {
-                                var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
-                            }
+                        if (fp16.checked == true) {
+                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT`;
+                        } else {
+                            var cmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x3x1920x1080 --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
+                        }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
                         term.stdout.on('data', (data) => {
@@ -261,13 +303,13 @@ class Upscaling {
             // determine ai engine
             function pickEngine() {
                 if (engine == "Upscaling - RealESRGAN (NCNN)") {
-                    return path.join(__dirname, '..', "/python/esrgan_ncnn.py");
+                    return path.join(__dirname, '..', "/python/inference/esrgan_ncnn.py");
                 }
                 if (engine == "Upscaling - RealESRGAN (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/esrgan.py");
+                    return path.join(__dirname, '..', "/python/inference/esrgan.py");
                 }
                 if (engine == "Upscaling - waifu2x (NCNN)") {
-                    return path.join(__dirname, '..', "/python/waifu2x.py");
+                    return path.join(__dirname, '..', "/python/inference/waifu2x.py");
                 }
             }
             var engine = pickEngine();

@@ -24,7 +24,7 @@ module.exports = {
             shapes: false,
             trimAccurate: false,
             hwEncode: false,
-            sensitivityValue: 0.100,
+            sensitivityValue: 0.180,
             sensitivity: false,
             customModel: false,
             unsupportedEngines: false,

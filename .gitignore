@@ -8,5 +8,6 @@ upload.json
 
 src/python/ffmpeg
 src/python/ffmpeg/*
+src/python/utils/arch/__pycache__
 
 *-error.log
