@@ -20,6 +20,7 @@ module.exports = (mainWindow) => {
     ipcMain.on('create-project', (event) => {
         const saveDialog = dialog.showSaveDialog(mainWindow, {
             title: 'Create new project',
+            defaultPath: 'Untitled',
             filters: [{ name: 'enhancr Project File', extensions: ['enhncr'] }],
         });
 
