@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs-extra');
 
 // Elements
-// const lightModeLayer = document.getElementById('light-mode');
+const lightModeLayer = document.getElementById('light-mode');
 const createToggle = document.getElementById('hover-create-toggle');
 const openToggle = document.getElementById('hover-open-toggle');
 
@@ -18,10 +18,10 @@ const recentItemTemplate = document.getElementById('recent-item-template');
     appLogo[0].style.animation = '';
 }); */
 
-/* if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
     console.log('light mode detected');
     lightModeLayer.style.visibility = 'visible';
-} */
+}
 
 function parseJSON(str, defaults) {
     if (!str) return defaults;

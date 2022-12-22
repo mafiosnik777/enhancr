@@ -131,8 +131,13 @@ if (winOsBuild >= 22000 && process.platform == 'win32') {
     border.style.visibility = 'visible';
 }
 
-// drag and drop files
+// light mode
+if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    console.log('light mode detected');
+    blurLayer.style.visibility = 'visible';
+}
 
+// drag and drop files
 var dropOverlay = document.getElementById('overlay');
 var dropSpan = document.getElementById('drop-span')
 var dropIcon = document.getElementById('drop-icon')
