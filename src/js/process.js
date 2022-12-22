@@ -27,7 +27,9 @@ sessionStorage.setItem('stopFlag', 'false');
 class Process {
     static startProcessRestoration() {
         thumbRestoration.style.visibility = "hidden";
-        processOverlay.style.visibility = "visible";
+        if (sessionStorage.getItem('status') != 'error') {
+            processOverlay.style.visibility = "visible";
+        }
         var restoreInterval = setInterval(function () {
             var terminal = document.getElementById("terminal-text");
             sessionStorage.setItem("terminalScrolling", "true");
@@ -132,7 +134,9 @@ class Process {
     static startProcessUpscaling() {
         thumbInterpolation.style.visibility = "hidden";
         thumbUpscaling.style.visibility = "hidden";
-        processOverlay.style.visibility = "visible";
+        if (sessionStorage.getItem('status') != 'error') {
+            processOverlay.style.visibility = "visible";
+        }
         var upscaleInterval = setInterval(function () {
             var terminal = document.getElementById("terminal-text");
             sessionStorage.setItem("terminalScrolling", "true");
@@ -238,7 +242,9 @@ class Process {
         thumbInterpolation.style.visibility = "hidden";
         thumbUpscaling.style.visibility = "hidden";
         thumbRestoration.style.visibility = "hidden";
-        processOverlay.style.visibility = "visible";
+        if (sessionStorage.getItem('status') != 'error') {
+            processOverlay.style.visibility = "visible";
+        }
         let videoFrameRateOut = document.getElementById('framerate').innerHTML.split('➜ ')[1];
         if (sessionStorage.getItem('status') == "upscaling" || sessionStorage.getItem('status') == "interpolation" || sessionStorage.getItem('status') == "restoring") {
             console.log('process already running');

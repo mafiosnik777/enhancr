@@ -61,7 +61,7 @@ class Upscaling {
                 openModal(blankModal);
                 terminal.innerHTML += "\r\n[Error] Output path not specified, cancelling.";
                 sessionStorage.setItem('status', 'error');
-                processOverlay.style.visibility = "hidden";
+                throw new Error('Output path not specified');
             }
 
             // create paths if not existing
@@ -348,7 +348,7 @@ class Upscaling {
                 openModal(modal);
                 terminal.innerHTML += "\r\n[enhancr] Input video contains subtitles, but output container is not .mkv, cancelling.";
                 sessionStorage.setItem('status', 'error');
-                processOverlay.style.visibility = "hidden";
+                throw new Error('Input video contains subtitles, but output container is not .mkv');
             } else {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Starting upscaling process..` + '\r\n';
 
