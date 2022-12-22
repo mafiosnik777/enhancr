@@ -37,7 +37,7 @@ createDirs.forEach((dir) => {
     fs.ensureDirSync(path.join(appDataPath, dir));
 });
 
-fs.ensureFileSync(path.join(appDataPath, 'models', 'Make sure all models are .onnx files'));
+fs.unlink(path.join(appDataPath, 'models', 'Make sure all models are .onnx files'));
 
 // Read settings
 try {
