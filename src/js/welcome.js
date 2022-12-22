@@ -2,6 +2,7 @@ const { ipcRenderer } = require('electron');
 const { app } = require('@electron/remote');
 const os = require('os');
 const path = require('path');
+const fs = require('fs-extra');
 
 // Elements
 // const lightModeLayer = document.getElementById('light-mode');
@@ -109,8 +110,8 @@ recentProjects.forEach((project, i) => {
     recentItem.addEventListener('click', () => {
         loadProject(project);
     });
-
-    recentsContainer.appendChild(clonedRecentItem);
+    // only render recentItem if project still exists
+    if (fs.existsSync(project)) recentsContainer.appendChild(clonedRecentItem);
 });
 
 // TODO: find a better way to get version without remote
