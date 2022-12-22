@@ -1,3 +1,4 @@
+const { app } = require('@electron/remote');
 var fse = require('fs-extra');
 var path = require('path');
 const os = require('os');
@@ -12,7 +13,7 @@ window.addEventListener("error", (event) => {
     fse.appendFileSync(path.join(appDataPath, '/.enhancr/', 'log.txt'), '\n\n [renderer process error] \n\n' + stringifyObject(event) + '\n\n');
 });
 
-fse.writeFile(path.join(appDataPath, '/.enhancr/', 'log.txt'), 'enhancr build 0.9.3a (pre-release)\n\n' + terminal.innerHTML);
+fse.writeFile(path.join(appDataPath, '/.enhancr/', 'log.txt'), `enhancr build ${app.getVersion()} (pre-release)\n\n` + terminal.innerHTML);
 fse.writeFile(os.tmpdir() + '/tmpLog.txt', terminal.innerHTML);
 
 async function log() {
