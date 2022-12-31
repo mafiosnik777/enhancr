@@ -100,24 +100,11 @@ Input size: 1920x1080 @ 2x
 
 <sup>4</sup> <sub>Ryzen 9 5950X - ASUS RTX 4090 Strix OC - @ ~3100MHz with curve to achieve maximum performance</sub>
 
-# FAQ (Frequently Asked Questions)
+# Troubleshooting and FAQ (Frequently Asked Questions)
 
-> Why do I have to convert engines for CAIN (TensorRT) multiple times?
+This section has moved to the wiki: https://github.com/mafiosnik777/enhancr/wiki
 
-This is a workaround to make CAIN work on TensorRT inference. It doesn't support dynamic shapes, and you have to convert an engine file for every new video resolution. 
-It's a bit inconvenient at first, but definitely worth the 4x-5x speed boost compared to NCNN, especially from the point on once all the engines for your most used resolutions are converted.
-
-> Where can I get custom upscaling models?
-
-I can't include most models in enhancr because of Licensing. Custom models can be obtained [here](https://upscale.wiki/wiki/Model_Database) and loaded inside the models tab.
-
-> I'm running out of memory when trying to run a TensorRT inference, what should I do?
-
-Either lower concurrent streams in settings or set up tiling in combination with a smaller engine resolution to decrease Video Memory usage.
-
-> I get "Python exception: operator (): no valid optimization profile found"
-
-This means that shapes are not fitting, make sure you are using custom shapes in settings if you go over 1080p input or use correct tiling settings if you use tiling.
+Check it out to learn more about getting the most out of enhancr or how to fix various problems.
 
 # Inferences
 
