@@ -82,23 +82,25 @@ Support for Apple Silicon is planned as well, but I currently only have an Intel
 
 Input size: 1920x1080 @ 2x
 
-|| RTX 2060 Super<sup>1</sup> | RTX 3070<sup>2</sup> | RTX 3090 Ti<sup>3</sup> | RTX 4090<sup>4</sup>
-|--|--|--|--|--|
-| RIFE / rife-v4.6 (NCNN) | 53.78 fps | 64.08 fps | 86.24 fps | 136.13 fps |
-| RIFE / rife-v4.6 (TensorRT) | 70.34 fps | 94.63 fps | 122.68 fps | 170.91 fps |
-| CAIN / cvp-v6 (NCNN) | 9.42 fps | 10.56 fps | 17.36 fps | 44.87 fps |
-| CAIN / cvp-v6 (TensorRT) | 45.41 fps | 63.84 fps | 112.87 fps | 183.46 fps |
-| waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps | 9.36 fps | 15.48 fps | 39.77 fps |
-| RealESRGAN / animevideov3 (TensorRT) | 7.64 fps | 9.10 fps | 18.66 fps | 38.67 fps |
-| DPIR / Denoise (TensorRT) | 4.38 fps | 6.45 fps | 11.64 fps | 27.41 fps |
+|| RTX 2060 Super <sup>1</sup> | RTX 3070 <sup>2</sup>| RTX A4000 <sup>3</sup> | RTX 3090 Ti <sup>4</sup> | RTX 4090 <sup>5</sup>
+|--|--|--|--|--|--|
+| RIFE / rife-v4.6 (NCNN) | 53.78 fps | 64.08 fps | 80.56 fps | 86.24 fps | 136.13 fps |
+| RIFE / rife-v4.6 (TensorRT) | 70.34 fps | 94.63 fps | 86.47 fps | 122.68 fps | 170.91 fps |
+| CAIN / cvp-v6 (NCNN) | 9.42 fps | 10.56 fps | 13.42 fps | 17.36 fps | 44.87 fps |
+| CAIN / cvp-v6 (TensorRT) | 45.41 fps | 63.84 fps | 81.23 fps | 112.87 fps | 183.46 fps |
+| waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps | 9.36 fps | 9.81 fps | 15.48 fps | 39.77 fps |
+| RealESRGAN / animevideov3 (TensorRT) | 7.64 fps | 9.10 fps | 8.49 fps | 18.66 fps | 38.67 fps |
+| DPIR / Denoise (TensorRT) | 4.38 fps | 6.45 fps | 5.39 fps | 11.64 fps | 27.41 fps |
 
 <sup>1</sup> <sub>Ryzen 5 3600X - Gainward RTX 2060 Super @ Stock</sub>
 
 <sup>2</sup> <sub>Ryzen 7 3800X - Gigabyte RTX 3070 Eagle OC @ Stock</sub>
 
-<sup>3</sup> <sub>i9 12900KF - ASUS RTX 3090 Ti Strix OC @ ~2220MHz</sub>
+<sup>3</sup> <sub>Ryzen 5 3600X - PNY RTX A4000 @ Stock </sub>
 
-<sup>4</sup> <sub>Ryzen 9 5950X - ASUS RTX 4090 Strix OC - @ ~3100MHz with curve to achieve maximum performance</sub>
+<sup>4</sup> <sub>i9 12900KF - ASUS RTX 3090 Ti Strix OC @ ~2220MHz</sub>
+
+<sup>5</sup> <sub>Ryzen 9 5950X - ASUS RTX 4090 Strix OC - @ ~3100MHz with curve to achieve maximum performance</sub>
 
 # Troubleshooting and FAQ (Frequently Asked Questions)
 
