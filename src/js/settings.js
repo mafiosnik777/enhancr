@@ -130,27 +130,27 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     document.getElementById("oled-mode").checked = true;
   }
   try {
-    document.getElementById("toggle-rpc").checked = json.settings[0].rpc || true;
-    document.getElementById("rife-tta-check").checked = json.settings[0].rifeTta || false;
-    document.getElementById("rife-uhd-check").checked = json.settings[0].rifeUhd || false;
-    document.getElementById("fp16-check").checked = json.settings[0].fp16 || true;
-    document.getElementById("num-streams").value = json.settings[0].num_streams || 2;
-    document.getElementById("denoise-strength").value = json.settings[0].denoiseStrength || 20;
-    document.getElementById("deblock-strength").value = json.settings[0].deblockStrength || 15;
-    document.getElementById("tile-res").value = json.settings[0].tileRes || '512x512';
-    document.getElementById("tiling-check").checked = json.settings[0].tiling || false;
-    document.getElementById("shape-res").value = json.settings[0].shapeRes || '1080x1920';
-    document.getElementById("shape-check").checked = json.settings[0].shapes || false;
-    document.getElementById("custom-model-check").checked = json.settings[0].customModel || false;
-    document.getElementById("python-check").checked = json.settings[0].systemPython || false;
-    document.getElementById("sc-check").checked = json.settings[0].sc || true;
-    document.getElementById("skip-check").checked = json.settings[0].skip || false;
-    document.getElementById("cache-input-text").textContent = json.settings[0].temp || temp;
-    document.getElementById("trim-check").checked = json.settings[0].trimAccurate || false;
-    document.getElementById("hwencode-check").checked = json.settings[0].hwEncode || false;
-    document.getElementById("sensitivity").checked = json.settings[0].sensitivityValue || 0.100;
-    document.getElementById("sensitivity-check").checked = json.settings[0].sensitivity || false;
-    document.getElementById("unsupported-check").checked = json.settings[0].unsupportedEngines || false;
+    document.getElementById("toggle-rpc").checked = json.settings[0].rpc;
+    document.getElementById("rife-tta-check").checked = json.settings[0].rifeTta;
+    document.getElementById("rife-uhd-check").checked = json.settings[0].rifeUhd;
+    document.getElementById("fp16-check").checked = json.settings[0].fp16;
+    document.getElementById("num-streams").value = json.settings[0].num_streams;
+    document.getElementById("denoise-strength").value = json.settings[0].denoiseStrength;
+    document.getElementById("deblock-strength").value = json.settings[0].deblockStrength;
+    document.getElementById("tile-res").value = json.settings[0].tileRes;
+    document.getElementById("tiling-check").checked = json.settings[0].tiling;
+    document.getElementById("shape-res").value = json.settings[0].shapeRes;
+    document.getElementById("shape-check").checked = json.settings[0].shapes;
+    document.getElementById("custom-model-check").checked = json.settings[0].customModel;
+    document.getElementById("python-check").checked = json.settings[0].systemPython;
+    document.getElementById("sc-check").checked = json.settings[0].sc;
+    document.getElementById("skip-check").checked = json.settings[0].skip;
+    document.getElementById("cache-input-text").textContent = json.settings[0].temp;
+    document.getElementById("trim-check").checked = json.settings[0].trimAccurate;
+    document.getElementById("hwencode-check").checked = json.settings[0].hwEncode;
+    document.getElementById("sensitivity").checked = json.settings[0].sensitivityValue;
+    document.getElementById("sensitivity-check").checked = json.settings[0].sensitivity;
+    document.getElementById("unsupported-check").checked = json.settings[0].unsupportedEngines;
   } catch (error) {
     console.error(error);
     console.log('Incompatible settings.json detected, saving settings to overwrite incompatible one.')

@@ -1233,6 +1233,13 @@ input[type="checkbox"] {
   background-color: var(--toggle-color);
 }
 
+#sensitivity-check:checked {
+  /* Fallback */
+  background-color: #3b94ff;
+  /* Dynamic value */
+  background-color: var(--toggle-color);
+}
+
 #cain-sc-check:checked {
   /* Fallback */
   background-color: #3b94ff;
