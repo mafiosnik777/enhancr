@@ -226,7 +226,6 @@ function renderQueueItem() {
             thumb.style.visibility = 'visible';
             let menu = document.getElementById(`context-menu-queue${index}`);
             menu.style.visibility = 'hidden';
-            console.log(thumb);
           }
         })
       }

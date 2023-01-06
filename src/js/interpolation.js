@@ -1,9 +1,6 @@
 const fse = require('fs-extra');
-const os = require('os');
 const path = require("path");
 const { ipcRenderer } = require("electron");
-
-const find = require('find-process');
 
 const execSync = require('child_process').execSync;
 const { spawn } = require('child_process');
@@ -13,14 +10,14 @@ const enhancrPrefix = "[enhancr]";
 
 const modal = document.querySelector("#modal");
 const blankModal = document.querySelector("#blank-modal");
-const processOverlay = document.getElementById("process-overlay");
 
 function openModal(modal) {
     if (modal == undefined) return
     modal.classList.add('active')
     overlay.classList.add('active')
 }
-const successModal = document.getElementById("modal-success");
+
+
 const successTitle = document.getElementById("success-title");
 const thumbModal = document.getElementById("thumb-modal");
 
@@ -64,13 +61,15 @@ class Interpolation {
                 fse.mkdirSync(output)
             };
 
-            // clear cacheorary files
+            // clear temporary files
             fse.emptyDirSync(cache);
-            console.log("Cleared cacheorary files");
+            console.log("Cleared temporary files");
 
             if (!fse.existsSync(previewPath)) {
                 fse.mkdirSync(previewPath);
             };
+
+            const ffmpeg = path.join(__dirname, '..', "python/ffmpeg/ffmpeg.exe");
 
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for interpolation process..';
 
@@ -78,7 +77,7 @@ class Interpolation {
             const subsPath = path.join(cache, "subs.ass");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for subtitles..`;
-                execSync(`ffmpeg -y -loglevel error -i ${file} -c:s copy ${subsPath}`);
+                execSync(`${ffmpeg} -y -loglevel error -i ${file} -c:s copy ${subsPath}`);
             } catch (err) {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` No subtitles were found, skipping subtitle extraction..`;
             };
@@ -87,7 +86,7 @@ class Interpolation {
             const audioPath = path.join(cache, "audio.mka");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for audio..`;
-                execSync(`ffmpeg -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
+                execSync(`${ffmpeg} -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
             } catch (err) {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` No audio stream was found, skipping copying audio..`;
             };
@@ -111,7 +110,7 @@ class Interpolation {
             let fp = floatingPoint ? "fp16" : "fp32";
 
             let systemPython = document.getElementById('python-check').checked;
-            
+
 
             // check if dimensions are divisible by 8
             function isDivisibleBy8(num) {
@@ -120,7 +119,7 @@ class Interpolation {
             function roundUpToNextMultipleOf8(num) {
                 return Math.ceil(num / 8) * 8;
             }
-            
+
             if (!isDivisibleBy8(width) || !isDivisibleBy8(height)) padding = true;
 
             if (padding && engine == "Channel Attention - CAIN (TensorRT)") {
@@ -150,30 +149,30 @@ class Interpolation {
             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
-                            if (fp16.checked == true) {
-                                var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
-                            } else {
-                                var engineCmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
-                            }
-                            let engineTerm = spawn(engineCmd, [], {
-                                shell: true,
-                                stdio: ['inherit', 'pipe', 'pipe'],
-                                windowsHide: true
-                            });
-                            process.stdout.write('');
-                            engineTerm.stdout.on('data', (data) => {
-                                process.stdout.write(`${data}`);
-                                terminal.innerHTML += data;
-                            });
-                            engineTerm.stderr.on('data', (data) => {
-                                process.stderr.write(`${data}`);
-                                progressSpan.innerHTML = path.basename(file) + ' | Converting onnx to engine..';
-                                terminal.innerHTML += data;
-                            });
-                            engineTerm.on("close", () => {
-                                sessionStorage.setItem('conversion', 'success');
-                                resolve();
-                            });
+                        if (fp16.checked == true) {
+                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
+                        } else {
+                            var engineCmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
+                        }
+                        let engineTerm = spawn(engineCmd, [], {
+                            shell: true,
+                            stdio: ['inherit', 'pipe', 'pipe'],
+                            windowsHide: true
+                        });
+                        process.stdout.write('');
+                        engineTerm.stdout.on('data', (data) => {
+                            process.stdout.write(`${data}`);
+                            terminal.innerHTML += data;
+                        });
+                        engineTerm.stderr.on('data', (data) => {
+                            process.stderr.write(`${data}`);
+                            progressSpan.innerHTML = path.basename(file) + ' | Converting onnx to engine..';
+                            terminal.innerHTML += data;
+                        });
+                        engineTerm.on("close", () => {
+                            sessionStorage.setItem('conversion', 'success');
+                            resolve();
+                        });
                     })
                 }
                 await convertToEngine();
@@ -250,8 +249,6 @@ class Interpolation {
             let fps = parseFloat((document.getElementById('framerate').innerHTML).split(" ")[0]);
 
             const numStreams = document.getElementById('num-streams');
-
-            const ffmpeg = path.join(__dirname, '..', "python/ffmpeg/ffmpeg.exe");
 
             // trim video if timestamps are set by user
             if (!(sessionStorage.getItem(`trim${index}`) == null)) {
@@ -406,7 +403,14 @@ class Interpolation {
                         });
                         term.stderr.on('data', (data) => {
                             process.stderr.write(`[Pipe] ${data}`);
-                            terminal.innerHTML += '[Pipe] ' + data;
+                            // remove leading and trailing whitespace, including newline characters
+                            let dataString = data.toString().trim(); 
+                            if (dataString.startsWith('Frame:')) {
+                                // Replace the last line of the textarea with the updated line
+                                terminal.innerHTML = terminal.innerHTML.replace(/([\s\S]*\n)[\s\S]*$/, '$1' + '[Pipe] ' + dataString);
+                            } else if (!(dataString.startsWith('CUDA lazy loading is not enabled.'))) {
+                                terminal.innerHTML += '\n[Pipe] ' + dataString;
+                            }
                             sessionStorage.setItem('progress', data);
                         });
                         term.on("close", () => {
@@ -437,11 +441,11 @@ class Interpolation {
                                 // merge stdout & stderr & write data to terminal
                                 process.stdout.write('');
                                 muxTerm.stdout.on('data', (data) => {
-                                    process.stdout.write(`[Pipe] ${data}`);
+                                    process.stdout.write(`[Muxer] ${data}`);
                                 });
                                 muxTerm.stderr.on('data', (data) => {
-                                    process.stderr.write(`[Pipe] ${data}`);
-                                    terminal.innerHTML += '[Pipe] ' + data;
+                                    process.stderr.write(`[Muxer] ${data}`);
+                                    terminal.innerHTML += '[Muxer] ' + data;
                                     sessionStorage.setItem('progress', data);
                                 });
                                 muxTerm.on("close", () => {
@@ -463,7 +467,6 @@ class Interpolation {
                     })
                 }
                 await interpolate();
-                // clear cacheorary files
                 // fse.emptyDirSync(cache);
                 console.log("Cleared temporary files");
                 // timeout for 2 seconds after interpolation

@@ -73,7 +73,7 @@ class Restoration {
                 fse.mkdirSync(output)
             };
 
-            // clear cacheorary files
+            // clear temporary files
             fse.emptyDirSync(cache);
             console.log(enhancrPrefix + " tmp directory cleared");
 
@@ -83,11 +83,13 @@ class Restoration {
 
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for restoration process..';
 
+            const ffmpeg = path.join(__dirname, '..', "python/ffmpeg/ffmpeg.exe");
+
             // scan media for subtitles
             const subsPath = path.join(cache, "subs.ass");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for subtitles..`;
-                execSync(`ffmpeg -y -loglevel error -i ${file} -map 0:s:0 ${subsPath}`);
+                execSync(`${ffmpeg} -y -loglevel error -i ${file} -map 0:s:0 ${subsPath}`);
             } catch (err) {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` No subtitles were found, skipping subtitle extraction..`;
             };
@@ -96,7 +98,7 @@ class Restoration {
             const audioPath = path.join(cache, "audio.mka");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for audio..`;
-                execSync(`ffmpeg -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
+                execSync(`${ffmpeg} -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
             } catch (err) {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` No audio stream was found, skipping copying audio..`;
             };
@@ -178,8 +180,6 @@ class Restoration {
             let fps = parseFloat((document.getElementById('framerate').innerHTML).split(" ")[0]);
 
             const numStreams = document.getElementById('num-streams');
-
-            const ffmpeg = path.join(__dirname, '..', "python/ffmpeg/ffmpeg.exe");
 
             // trim video if timestamps are set by user
             if (!(sessionStorage.getItem(`trim${index}`) == null)) {
@@ -338,7 +338,14 @@ class Restoration {
                         });
                         term.stderr.on('data', (data) => {
                             process.stderr.write(`[Pipe] ${data}`);
-                            terminal.innerHTML += '[Pipe] ' + data;
+                            // remove leading and trailing whitespace, including newline characters
+                            let dataString = data.toString().trim();
+                            if (dataString.startsWith('Frame:')) {
+                                // Replace the last line of the textarea with the updated line
+                                terminal.innerHTML = terminal.innerHTML.replace(/([\s\S]*\n)[\s\S]*$/, '$1' + '[Pipe] ' + dataString);
+                            } else if (!(dataString.startsWith('CUDA lazy loading is not enabled.'))) {
+                                terminal.innerHTML += '\n[Pipe] ' + dataString;
+                            }
                             sessionStorage.setItem('progress', data);
                         });
                         term.on("close", () => {
@@ -385,7 +392,7 @@ class Restoration {
                     });
                 }
                 await restore();
-                // clear cacheorary files
+                // clear temporary files
                 fse.emptyDirSync(cache);
                 console.log("Cleared temporary cache files");
                 // timeout for 2 seconds after restoration

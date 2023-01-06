@@ -3,10 +3,7 @@ const os = require('os');
 const path = require("path");
 const { ipcRenderer } = require("electron");
 
-const find = require('find-process');
-
 const execSync = require('child_process').execSync;
-const exec = require('child_process').exec;
 const { spawn } = require('child_process');
 
 const ffmpeg = require("fluent-ffmpeg");
@@ -21,7 +18,6 @@ const progressSpan = document.getElementById("progress-span");
 
 const blankModal = document.querySelector("#blank-modal");
 const modal = document.querySelector("#modal");
-const processOverlay = document.getElementById("process-overlay");
 
 function openModal(modal) {
     if (modal == undefined) return
@@ -29,7 +25,6 @@ function openModal(modal) {
     overlay.classList.add('active')
 }
 
-const successModal = document.getElementById("modal-success");
 const successTitle = document.getElementById("success-title");
 const thumbModal = document.getElementById("thumb-modal");
 
@@ -73,7 +68,7 @@ class Upscaling {
                 fse.mkdirSync(output)
             };
 
-            // clear cacheorary files
+            // clear temporary files
             fse.emptyDirSync(cache);
             console.log(enhancrPrefix + " tmp directory cleared");
 
@@ -83,11 +78,13 @@ class Upscaling {
 
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for upscaling process..';
 
+            const ffmpeg = path.join(__dirname, '..', "python/ffmpeg/ffmpeg.exe");
+
             // scan media for subtitles
             const subsPath = path.join(cache, "subs.ass");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for subtitles..`;
-                execSync(`ffmpeg -y -loglevel error -i ${file} -map 0:s:0 ${subsPath}`);
+                execSync(`${ffmpeg} -y -loglevel error -i ${file} -map 0:s:0 ${subsPath}`);
             } catch (err) {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` No subtitles were found, skipping subtitle extraction..`;
             };
@@ -96,7 +93,7 @@ class Upscaling {
             const audioPath = path.join(cache, "audio.mka");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for audio..`;
-                execSync(`ffmpeg -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
+                execSync(`${ffmpeg} -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
             } catch (err) {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` No audio stream was found, skipping copying audio..`;
             };
@@ -219,8 +216,6 @@ class Upscaling {
             terminal.innerHTML += '\r\n' + enhancrPrefix + ` Mode: ${engine}`;
 
             const numStreams = document.getElementById('num-streams');
-
-            const ffmpeg = path.join(__dirname, '..', "python/ffmpeg/ffmpeg.exe");
 
             // trim video if timestamps are set by user
             if (!(sessionStorage.getItem(`trim${index}`) == null)) {
@@ -368,7 +363,14 @@ class Upscaling {
                         });
                         term.stderr.on('data', (data) => {
                             process.stderr.write(`[Pipe] ${data}`);
-                            terminal.innerHTML += '[Pipe] ' + data;
+                            // remove leading and trailing whitespace, including newline characters
+                            let dataString = data.toString().trim(); 
+                            if (dataString.startsWith('Frame:')) {
+                                // Replace the last line of the textarea with the updated line
+                                terminal.innerHTML = terminal.innerHTML.replace(/([\s\S]*\n)[\s\S]*$/, '$1' + '[Pipe] ' + dataString);
+                            } else if (!(dataString.startsWith('CUDA lazy loading is not enabled.'))) {
+                                terminal.innerHTML += '\n[Pipe] ' + dataString;
+                            }
                             sessionStorage.setItem('progress', data);
                         });
                         term.on("close", () => {
@@ -416,7 +418,6 @@ class Upscaling {
                     });
                 }
                 await upscale();
-                // clear cacheorary files
                 // fse.emptyDirSync(cache);
                 console.log("Cleared temporary files");
                 // timeout for 2 seconds after upscale

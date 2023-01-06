@@ -1967,7 +1967,7 @@ ffmpegParams.addEventListener("change", function () {
 ffmpegParamsUpscale.addEventListener("change", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
-    data.upsclaing[0].params = ffmpegParamsUpscale.value;
+    data.upscaling[0].params = ffmpegParamsUpscale.value;
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Params written to project file.");
 });

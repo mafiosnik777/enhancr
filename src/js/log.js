@@ -7,13 +7,25 @@ const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? proce
 
 const terminal = document.getElementById("terminal-text");
 
-const diff = (diffBefore, diffAfter) => diffBefore.split(diffAfter).join('')
+const diff = (diffBefore, diffAfter) => {
+    const beforeLines = diffBefore.split('\n');
+    const afterLines = diffAfter.split('\n');
+    const diffLines = [];
+    
+    for (let i = 0; i < beforeLines.length; i++) {
+      if (beforeLines[i] !== afterLines[i]) {
+            diffLines.push(beforeLines[i] + '\n');
+        }
+    }
+    
+    return diffLines.join('\n');
+}
 
 window.addEventListener("error", (event) => {
     fse.appendFileSync(path.join(appDataPath, '/.enhancr/', 'log.txt'), '\n\n [renderer process error] \n\n' + stringifyObject(event) + '\n\n');
 });
 
-fse.writeFile(path.join(appDataPath, '/.enhancr/', 'log.txt'), `enhancr build ${app.getVersion()} (pre-release)\n\n` + terminal.innerHTML);
+fse.writeFile(path.join(appDataPath, '/.enhancr/', 'log.txt'), `enhancr build ${app.getVersion()} (pre-release)\n\n`);
 fse.writeFile(os.tmpdir() + '/tmpLog.txt', terminal.innerHTML);
 
 async function log() {
