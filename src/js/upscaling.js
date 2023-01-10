@@ -389,7 +389,7 @@ class Upscaling {
                                 let mkv = extension == ".mkv";
                                 let mkvFix = mkv ? "-max_interleave_delta 0" : "";
 
-                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1 -map 0 -map -0:v -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
+                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1 -map 0 -map -0:v -dn -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
 
                                 // merge stdout & stderr & write data to terminal
