@@ -13,7 +13,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 - Live Preview of output media
 - Allows chaining of interpolation, upscaling & restoration
 - Offers the possibility to trim videos before processing
-- Can load custom ESRGAN models in onnx & pth format
+- Can load custom ESRGAN models in onnx & pth format and converts them automatically
 - Has Scene Detection built-in, to skip interpolation on scene change frames & mitigate artifacts
 - Color Themes for user customization
 - Discord Rich Presence, to show all your friends progress, current speed & what you're currently enhancing
@@ -24,6 +24,10 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 >**RIFE (NCNN)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VapourSynth-RIFE-ncnn-Vulkan](https://github.com/styler00dollar/VapourSynth-RIFE-ncnn-Vulkan)**
 
 >**RIFE (TensorRT)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
+
+>**GMFUpSS (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFupSS](https://github.com/98mxr/GMFupSS)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
+
+>**GMFSS_Union (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
 >**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-ncnn-vulkan** (unreleased)
 
@@ -88,6 +92,8 @@ Input size: 1920x1080 @ 2x
 | RIFE / rife-v4.6 (TensorRT) | 70.34 fps | 94.63 fps | 86.47 fps | 122.68 fps | 170.91 fps |
 | CAIN / cvp-v6 (NCNN) | 9.42 fps | 10.56 fps | 13.42 fps | 17.36 fps | 44.87 fps |
 | CAIN / cvp-v6 (TensorRT) | 45.41 fps | 63.84 fps | 81.23 fps | 112.87 fps | 183.46 fps |
+| GMFSS / Up (PyTorch) | - | - | 4.32 fps | - | - |
+| GMFSS / Union (PyTorch) | - | - | 3.68 fps | - | - |
 | waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps | 9.36 fps | 9.81 fps | 15.48 fps | 39.77 fps |
 | RealESRGAN / animevideov3 (TensorRT) | 7.64 fps | 9.10 fps | 8.49 fps | 18.66 fps | 38.67 fps |
 | DPIR / Denoise (TensorRT) | 4.38 fps | 6.45 fps | 5.39 fps | 11.64 fps | 27.41 fps |

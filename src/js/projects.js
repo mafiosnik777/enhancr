@@ -184,6 +184,7 @@ function loadInterpolation() {
   var rife46Option = document.getElementById("rife-46");
   var rvpv1Option = document.getElementById("rvp-v1");
   var cvpv6Option = document.getElementById("cvp-v6");
+  var gmfssUpOption = document.getElementById("gmf-up");
 
   var interpolationEngineSpan = document.getElementById("interpolation-engine-text");
   // fill engine input
@@ -192,22 +193,34 @@ function loadInterpolation() {
     rife23Option.style.display = 'none';
     rife4Option.style.display = 'none';
     rife46Option.style.display = 'none';
+    gmfssUpOption.style.display = 'none';
   }
   if (data.interpolation[0].engine === "cain-trt") {
     interpolationEngineSpan.textContent = "Channel Attention - CAIN (TensorRT)";
     rife23Option.style.display = 'none';
     rife4Option.style.display = 'none';
     rife46Option.style.display = 'none';
+    gmfssUpOption.style.display = 'none';
   }
   if (data.interpolation[0].engine === "rife") {
     interpolationEngineSpan.textContent = "Optical Flow - RIFE (NCNN)";
     rvpv1Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
+    gmfssUpOption.style.display = 'none';
   }
   if (data.interpolation[0].engine === "rife-trt") {
     interpolationEngineSpan.textContent = "Optical Flow - RIFE (TensorRT)";
     rife23Option.style.display = 'none';
     rife4Option.style.display = 'none';
+    rvpv1Option.style.display = 'none';
+    cvpv6Option.style.display = 'none';
+    gmfssUpOption.style.display = 'none';
+  }
+  if (data.interpolation[0].engine === "gmfss") {
+    interpolationEngineSpan.textContent = "GMFlow - GMFSS (PyTorch)";
+    rife23Option.style.display = 'none';
+    rife4Option.style.display = 'none';
+    rife46Option.style.display = 'none';
     rvpv1Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
   }
@@ -216,6 +229,7 @@ function loadInterpolation() {
     rife23Option.style.display = 'none';
     rife4Option.style.display = 'none';
     rife46Option.style.display = 'none';
+    gmfssUpOption.style.display = 'none';
   }
 
   // fill model input

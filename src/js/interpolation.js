@@ -17,7 +17,6 @@ function openModal(modal) {
     overlay.classList.add('active')
 }
 
-
 const successTitle = document.getElementById("success-title");
 const thumbModal = document.getElementById("thumb-modal");
 
@@ -93,7 +92,7 @@ class Interpolation {
 
             //get trtexec path
             function getTrtExecPath() {
-                return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/vsmlrt-cuda/trtexec.exe");
+                return path.join(__dirname, '..', "/python/bin/vsmlrt/vsmlrt-cuda/trtexec.exe");
             }
             let trtexec = getTrtExecPath();
 
@@ -303,6 +302,7 @@ class Interpolation {
                 toPadWidth: toPadWidth,
                 toPadHeight: toPadHeight,
                 streams: numStreams.value,
+                halfPrecision: fp16,
                 sensitivity: document.getElementById('sensitivity-check').checked,
                 sensitivityValue: document.getElementById('sensitivity').value,
                 rife_tta: document.getElementById("rife-tta-check").checked,
@@ -330,6 +330,8 @@ class Interpolation {
                 model = "RIFE"
             } else if (engine == "Channel Attention - CAIN (TensorRT)") {
                 model = "CAIN"
+            } else if (engine == "GMFlow - GMFSS (PyTorch)") {
+                model = "GMFSS"
             }
             // resolve output file path
             if (fileOut == null) {
@@ -353,6 +355,9 @@ class Interpolation {
                 if (engine == "Optical Flow - RIFE (TensorRT)") {
                     return path.join(__dirname, '..', "/python/inference/rife_trt.py");
                 }
+                if (engine == "GMFlow - GMFSS (PyTorch)") {
+                    return path.join(__dirname, '..', "/python/inference/gmfss.py");
+                }
             }
             var engine = pickEngine();
 
@@ -374,6 +379,8 @@ class Interpolation {
             }
             let vspipe = pickVspipe();
 
+            let cudaToolkit = `set "CUDA_PATH"="${path.join(__dirname, '..', "\\python\\cudatoolkit\\")}"`;
+
             let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
                 openModal(modal);
@@ -387,14 +394,14 @@ class Interpolation {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `${cudaToolkit} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
-                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
+                            var cmd = `${cudaToolkit} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
                         }
                         let term = spawn(cmd, [], {
                             shell: true,
                             stdio: ['inherit', 'pipe', 'pipe'],
-                            windowsHide: true
+                            windowsHide: true,
                         });
                         // merge stdout & stderr & write data to terminal
                         process.stdout.write('');

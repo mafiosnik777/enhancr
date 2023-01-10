@@ -29,7 +29,11 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     tileHeight = int(data['tileHeight'])
     tileWidth = int(data['tileWidth'])
 
-    
+
+cwd = os.getcwd()
+vsmlrt_path = os.path.join(cwd, '..', 'cudatoolkit', 'bin', 'vstrt.dll')
+core.std.LoadPlugin(path=vsmlrt_path)
+
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
