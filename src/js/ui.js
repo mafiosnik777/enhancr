@@ -137,81 +137,181 @@ if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
     blurLayer.style.visibility = 'visible';
 }
 
+sessionStorage.setItem("multiInput", "false");
+
 // drag and drop files
 var dropOverlay = document.getElementById('overlay');
 var dropSpan = document.getElementById('drop-span')
 var dropIcon = document.getElementById('drop-icon')
 
+let addtoQueueInterpolation = document.getElementById('interpolate-button-text');
+let addtoQueueUpscaling = document.getElementById('upscaling-button-text');
+let addtoQueueRestoration = document.getElementById('restore-button-text');
+
 document.addEventListener('drop', (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    for (const f of event.dataTransfer.files) {
-        var videoInputPath = f.path;
-        if (sessionStorage.getItem('currentTab') == 'interpolation') {
-            sessionStorage.setItem("inputPath", videoInputPath);
-            if (
-                videoInputPath.length >= 55 &&
-                path.basename(videoInputPath).length >= 55
-            ) {
-                videoInputText.textContent =
-                    "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
-            } else if (videoInputPath.length >= 55) {
-                videoInputText.textContent = "../" + path.basename(videoInputPath);
-            } else {
-                videoInputText.textContent = videoInputPath;
-            }
-            // autosave input in project file
-            var currentProject = sessionStorage.getItem("currentProject");
-            const data = JSON.parse(fs.readFileSync(currentProject));
-            data.interpolation[0].inputFile = videoInputPath;
-            fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
-            console.log("Input path written to project file.");
-        } else if (sessionStorage.getItem('currentTab') == 'upscaling') {
-            sessionStorage.setItem("upscaleInputPath", videoInputPath);
-            if (
-                videoInputPath.length >= 55 &&
-                path.basename(videoInputPath).length >= 55
-            ) {
-                upscaleVideoInputText.textContent =
-                    "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
-            } else if (videoInputPath.length >= 55) {
-                upscaleVideoInputText.textContent = "../" + path.basename(videoInputPath);
-            } else {
-                upscaleVideoInputText.textContent = videoInputPath;
-            }
-            // autosave input in project file
-            var currentProject = sessionStorage.getItem("currentProject");
-            const data = JSON.parse(fs.readFileSync(currentProject));
-            data.upscaling[0].inputFile = videoInputPath;
-            fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
-            console.log("Input path written to project file.");
-        } else {
-            sessionStorage.setItem("inputPathRestore", videoInputPath);
-            if (
-                videoInputPath.length >= 55 &&
-                path.basename(videoInputPath).length >= 55
-            ) {
-                restoreVideoInputText.textContent =
-                    "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
-            } else if (videoInputPath.length >= 55) {
-                restoreVideoInputText.textContent = "../" + path.basename(videoInputPath);
-            } else {
-                restoreVideoInputText.textContent = videoInputPath;
-            }
-            // autosave input in project file
-            var currentProject = sessionStorage.getItem("currentProject");
-            const data = JSON.parse(fs.readFileSync(currentProject));
-            data.restoration[0].inputFile = videoInputPath;
-            fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
-            console.log("Input path written to project file.");
-        }
+    let multipleFiles = [];
+    sessionStorage.setItem("multiInput", "false");
 
-        dropOverlay.style.opacity = 0;
-        dropIcon.style.visibility = 'hidden';
-        dropSpan.style.visibility = 'hidden';
-        console.log('File Path of dragged file: ', f.path)
+    for (const item of event.dataTransfer.items) {
+        let entry = item.webkitGetAsEntry()
+        if (sessionStorage.getItem('currentTab') == 'interpolation') {
+            if (event.dataTransfer.items.length > 1 && !entry.isDirectory) {
+                let file = item.getAsFile();
+                multipleFiles.push(file.path);
+            } else if (entry.isFile) {
+                let file = item.getAsFile();
+                var videoInputPath = file.path;
+                sessionStorage.setItem("inputPath", videoInputPath);
+                if (
+                    videoInputPath.length >= 55 &&
+                    path.basename(videoInputPath).length >= 55
+                ) {
+                    videoInputText.textContent =
+                        "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
+                } else if (videoInputPath.length >= 55) {
+                    videoInputText.textContent = "../" + path.basename(videoInputPath);
+                } else {
+                    videoInputText.textContent = videoInputPath;
+                }
+                addtoQueueInterpolation.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue`
+                // autosave input in project file
+                var currentProject = sessionStorage.getItem("currentProject");
+                const data = JSON.parse(fs.readFileSync(currentProject));
+                data.interpolation[0].inputFile = videoInputPath;
+                fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+                console.log("Input path written to project file.");
+            } else if (entry.isDirectory) {
+                sessionStorage.setItem("multiInput", "true");
+                let file = item.getAsFile();
+                let dir = file.path;
+                fs.readdir(dir, function (err, files) {
+                    if (err) {
+                        return console.log('Unable to scan directory: ' + err);
+                    }
+                    videoInputText.textContent = files.length + " files selected";
+                    addtoQueueInterpolation.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue (${files.length})`
+                    let multipleFileDir = [];
+                    files.forEach(function (file) {
+                        multipleFileDir.push(path.join(dir, file))
+                    });
+                    sessionStorage.setItem("interpolationMultiInput", JSON.stringify(multipleFileDir));
+                });
+            }
+        } else if (sessionStorage.getItem('currentTab') == 'upscaling') {
+            if (event.dataTransfer.items.length > 1 && !entry.isDirectory) {
+                let file = item.getAsFile();
+                multipleFiles.push(file.path);
+            } else if (entry.isFile) {
+                let file = item.getAsFile();
+                var videoInputPath = file.path;
+                sessionStorage.setItem("upscaleInputPath", videoInputPath);
+                if (
+                    videoInputPath.length >= 55 &&
+                    path.basename(videoInputPath).length >= 55
+                ) {
+                    upscaleVideoInputText.textContent =
+                        "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
+                } else if (videoInputPath.length >= 55) {
+                    upscaleVideoInputText.textContent = "../" + path.basename(videoInputPath);
+                } else {
+                    upscaleVideoInputText.textContent = videoInputPath;
+                }
+                addtoQueueUpscaling.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue`
+                // autosave input in project file
+                var currentProject = sessionStorage.getItem("currentProject");
+                const data = JSON.parse(fs.readFileSync(currentProject));
+                data.upscaling[0].inputFile = videoInputPath;
+                fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+                console.log("Input path written to project file.");
+            } else if (entry.isDirectory) {
+                sessionStorage.setItem("multiInput", "true");
+                let file = item.getAsFile();
+                let dir = file.path;
+                fs.readdir(dir, function (err, files) {
+                    if (err) {
+                        return console.log('Unable to scan directory: ' + err);
+                    }
+                    upscaleVideoInputText.textContent = files.length + " files selected";
+                    addtoQueueUpscaling.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue (${files.length})`
+                    let multipleFileDir = [];
+                    files.forEach(function (file) {
+                        multipleFileDir.push(path.join(dir, file))
+                    });
+                    sessionStorage.setItem("upscalingMultiInput", JSON.stringify(multipleFileDir));
+                });
+            }
+        } else {
+            if (event.dataTransfer.items.length > 1 && !entry.isDirectory) {
+                let file = item.getAsFile();
+                multipleFiles.push(file.path);
+            } else if (entry.isFile) {
+                let file = item.getAsFile();
+                var videoInputPath = file.path;
+                sessionStorage.setItem("inputPathRestore", videoInputPath);
+                if (
+                    videoInputPath.length >= 55 &&
+                    path.basename(videoInputPath).length >= 55
+                ) {
+                    restoreVideoInputText.textContent =
+                        "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
+                } else if (videoInputPath.length >= 55) {
+                    restoreVideoInputText.textContent = "../" + path.basename(videoInputPath);
+                } else {
+                    restoreVideoInputText.textContent = videoInputPath;
+                }
+                addtoQueueRestoration.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue`
+                // autosave input in project file
+                var currentProject = sessionStorage.getItem("currentProject");
+                const data = JSON.parse(fs.readFileSync(currentProject));
+                data.restoration[0].inputFile = videoInputPath;
+                fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+                console.log("Input path written to project file.");
+            } else if (entry.isDirectory) {
+                sessionStorage.setItem("restorationMultiInput", "true");
+                let file = item.getAsFile();
+                let dir = file.path;
+                fs.readdir(dir, function (err, files) {
+                    if (err) {
+                        return console.log('Unable to scan directory: ' + err);
+                    }
+                    restoreVideoInputText.textContent = files.length + " files selected";
+                    addtoQueueRestoration.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue (${files.length})`
+                    let multipleFileDir = [];
+                    files.forEach(function (file) {
+                        multipleFileDir.push(path.join(dir, file))
+                    });
+                    sessionStorage.setItem("restorationMultiInput", JSON.stringify(multipleFileDir));
+                });
+            }
+        }
     }
+
+    if (event.dataTransfer.items.length > 1 && multipleFiles.length != 0) {
+        sessionStorage.setItem("multiInput", "true");
+        if (sessionStorage.getItem('currentTab') == 'interpolation') {
+            videoInputText.textContent = multipleFiles.length + " files selected";
+            addtoQueueInterpolation.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue (${multipleFiles.length})`
+            sessionStorage.setItem("interpolationMultiInput", JSON.stringify(multipleFiles));
+        } else if (sessionStorage.getItem('currentTab') == 'upscaling') {
+            upscaleVideoInputText.textContent = multipleFiles.length + " files selected";
+            addtoQueueUpscaling.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue (${multipleFiles.length})`
+            sessionStorage.setItem("upscalingMultiInput", JSON.stringify(multipleFiles));
+        } else {
+            restoreVideoInputText.textContent = multipleFiles.length + " files selected";
+            addtoQueueRestoration.innerHTML = `<i class="fa-solid fa-bars-staggered"></i> Add to queue (${multipleFiles.length})`
+            sessionStorage.setItem("restorationMultiInput", JSON.stringify(multipleFiles));
+        }
+        multipleFiles.forEach(file => {
+            console.log(file);
+        });
+    }
+
+    dropOverlay.style.opacity = 0;
+    dropIcon.style.visibility = 'hidden';
+    dropSpan.style.visibility = 'hidden';
 });
 
 document.addEventListener('dragover', (e) => {
@@ -1759,64 +1859,64 @@ LosslessBtnRes.addEventListener("click", changeCodecLosslessRestoration);
 function setCodecs() {
     var waitforGPUInitialization = setInterval(() => {
         if (sessionStorage.getItem('gpu') != null) {
-                let interpolationCodec = sessionStorage.getItem('codecInterpolation');
-                let upscalingCodec = sessionStorage.getItem('codecUpscaling');
-                let restorationCodec = sessionStorage.getItem('codecRestoration');
+            let interpolationCodec = sessionStorage.getItem('codecInterpolation');
+            let upscalingCodec = sessionStorage.getItem('codecUpscaling');
+            let restorationCodec = sessionStorage.getItem('codecRestoration');
 
-                let codecs = [interpolationCodec, upscalingCodec, restorationCodec];
-                for (let index = 0; index < codecs.length; index++) {
-                    let codec = codecs[index];
-                    switch (index) {
-                        case 0:
-                            switch (codec) {
-                                case 'x264':
-                                    changeCodecH264();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                                case 'x265':
-                                    changeCodecH265();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                                case 'AV1':
-                                    changeCodecAV1();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                            }
-                            break;
-                        case 1:
-                            switch (codec) {
-                                case 'x264':
-                                    changeCodecH264Upscale();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                                case 'x265':
-                                    changeCodecH265Upscale();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                                case 'AV1':
-                                    changeCodecAV1Upscale();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                            }
-                            break;
-                        case 2:
-                            switch (codec) {
-                                case 'x264':
-                                    changeCodecH264Restoration();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                                case 'x265':
-                                    changeCodecH265Restoration();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                                case 'AV1':
-                                    changeCodecAV1Restoration();
-                                    clearInterval(waitforGPUInitialization);
-                                    break;
-                            }
-                            break;
-                    }
+            let codecs = [interpolationCodec, upscalingCodec, restorationCodec];
+            for (let index = 0; index < codecs.length; index++) {
+                let codec = codecs[index];
+                switch (index) {
+                    case 0:
+                        switch (codec) {
+                            case 'x264':
+                                changeCodecH264();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                            case 'x265':
+                                changeCodecH265();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                            case 'AV1':
+                                changeCodecAV1();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                        }
+                        break;
+                    case 1:
+                        switch (codec) {
+                            case 'x264':
+                                changeCodecH264Upscale();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                            case 'x265':
+                                changeCodecH265Upscale();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                            case 'AV1':
+                                changeCodecAV1Upscale();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                        }
+                        break;
+                    case 2:
+                        switch (codec) {
+                            case 'x264':
+                                changeCodecH264Restoration();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                            case 'x265':
+                                changeCodecH265Restoration();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                            case 'AV1':
+                                changeCodecAV1Restoration();
+                                clearInterval(waitforGPUInitialization);
+                                break;
+                        }
+                        break;
                 }
+            }
         }
     }, 1000)
 };

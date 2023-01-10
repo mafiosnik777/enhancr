@@ -673,21 +673,40 @@ function addToQueueInterpolation() {
   const interpolationEngine = document.getElementById("interpolation-engine-text");
   const dimensions = document.getElementById('dimensions');
 
-  queue.push({
-    mode: 'interpolation',
-    file: sessionStorage.getItem("inputPath"),
-    model: modelSpan.innerHTML,
-    output: sessionStorage.getItem("outputPath"),
-    params: ffmpegParams.value,
-    extension: outputContainer.innerHTML,
-    engine: interpolationEngine.innerHTML,
-    dimensions: dimensions.innerHTML,
-    status: '0'
-  })
+  if (sessionStorage.getItem("multiInput") == "true") {
+    let file = JSON.parse(sessionStorage.getItem('interpolationMultiInput'))
+    for (var i=0; i< file.length; i++) {
+      queue.push({
+        mode: 'interpolation',
+        file: file[i],
+        model: modelSpan.innerHTML,
+        output: sessionStorage.getItem("outputPath"),
+        params: ffmpegParams.value,
+        extension: outputContainer.innerHTML,
+        engine: interpolationEngine.innerHTML,
+        dimensions: dimensions.innerHTML,
+        status: '0'
+      })
+      enhancr.terminal(`'${path.basename(file[i])}': Successfully added to Queue`);
+    }
+  } else {
+    queue.push({
+      mode: 'interpolation',
+      file: sessionStorage.getItem("inputPath"),
+      model: modelSpan.innerHTML,
+      output: sessionStorage.getItem("outputPath"),
+      params: ffmpegParams.value,
+      extension: outputContainer.innerHTML,
+      engine: interpolationEngine.innerHTML,
+      dimensions: dimensions.innerHTML,
+      status: '0'
+    })
+    enhancr.terminal(`'${path.basename(sessionStorage.getItem("inputPath"))}': Successfully added to Queue`);
+  }
+
   console.log(queue);
   let count = queue.reduce((a, c) => c.status == '0' ? ++a : a, 0);
   queueBadge.innerHTML = count;
-  enhancr.terminal(`'${path.basename(sessionStorage.getItem("inputPath"))}': Successfully added to Queue`);
   terminal.scrollTop = terminal.scrollHeight;
   renderQueueItem()
   sessionStorage.setItem('queueLength', queue.length);
@@ -701,21 +720,40 @@ function addToQueueUpscaling() {
   const upscalingEngine = document.getElementById("upscale-engine-text");
   let dimensions = document.getElementById('dimensionsUp');
 
-  queue.push({
-    mode: 'upscaling',
-    file: sessionStorage.getItem("upscaleInputPath"),
-    scale: (scale.innerHTML).slice(0, 1),
-    dimensions: dimensions.innerHTML,
-    output: sessionStorage.getItem("upscaleOutputPath"),
-    params: ffmpegParams.value,
-    extension: outputContainer.innerHTML,
-    engine: upscalingEngine.innerHTML,
-    status: '0'
-  })
+  if (sessionStorage.getItem("multiInput") == "true") {
+    let file = JSON.parse(sessionStorage.getItem('upscalingMultiInput'))
+    for (var i=0; i< file.length; i++) {
+      queue.push({
+        mode: 'upscaling',
+        file: file[i],
+        scale: (scale.innerHTML).slice(0, 1),
+        output: sessionStorage.getItem("upscaleOutputPath"),
+        params: ffmpegParams.value,
+        extension: outputContainer.innerHTML,
+        engine: upscalingEngine.innerHTML,
+        dimensions: dimensions.innerHTML,
+        status: '0'
+      })
+      enhancr.terminal(`'${path.basename(file[i])}': Successfully added to Queue`);
+    }
+  } else {
+    queue.push({
+      mode: 'upscaling',
+      file: sessionStorage.getItem("upscaleInputPath"),
+      scale: (scale.innerHTML).slice(0, 1),
+      output: sessionStorage.getItem("upscaleOutputPath"),
+      params: ffmpegParams.value,
+      extension: outputContainer.innerHTML,
+      engine: upscalingEngine.innerHTML,
+      dimensions: dimensions.innerHTML,
+      status: '0'
+    })
+    enhancr.terminal(`'${path.basename(sessionStorage.getItem("upscaleInputPath"))}': Successfully added to Queue`);
+  }
+
   console.log(queue);
   let count = queue.reduce((a, c) => c.status == '0' ? ++a : a, 0);
   queueBadge.innerHTML = count;
-  enhancr.terminal(`'${path.basename(sessionStorage.getItem("upscaleInputPath"))}': Successfully added to Queue`);
   terminal.scrollTop = terminal.scrollHeight;
   renderQueueItem()
   sessionStorage.setItem('queueLength', queue.length);
@@ -728,20 +766,38 @@ function addToQueueRestoration() {
   const restoreEngine = document.getElementById("restoration-engine-text");
   const modelSpan = document.getElementById("model-span-restoration");
 
-  queue.push({
-    mode: 'restoration',
-    model: modelSpan.innerHTML,
-    file: sessionStorage.getItem("inputPathRestore"),
-    output: sessionStorage.getItem("outputPathRestoration"),
-    params: ffmpegParams.value,
-    extension: outputContainer.innerHTML,
-    engine: restoreEngine.innerHTML,
-    status: '0'
-  })
+  if (sessionStorage.getItem("multiInput") == "true") {
+    let file = JSON.parse(sessionStorage.getItem('restorationMultiInput'))
+    for (var i=0; i< file.length; i++) {
+      queue.push({
+        mode: 'restoration',
+        file: file[i],
+        model: modelSpan.innerHTML,
+        output: sessionStorage.getItem("outputPathRestoration"),
+        params: ffmpegParams.value,
+        extension: outputContainer.innerHTML,
+        engine: restoreEngine.innerHTML,
+        status: '0'
+      })
+      enhancr.terminal(`'${path.basename(file[i])}': Successfully added to Queue`);
+    }
+  } else {
+    queue.push({
+      mode: 'restoration',
+      file: sessionStorage.getItem("inputPathRestore"),
+      model: modelSpan.innerHTML,
+      output: sessionStorage.getItem("outputPathRestoration"),
+      params: ffmpegParams.value,
+      extension: outputContainer.innerHTML,
+      engine: restoreEngine.innerHTML,
+      status: '0'
+    })
+    enhancr.terminal(`'${path.basename(sessionStorage.getItem("inputPathRestore"))}': Successfully added to Queue`);
+  }
+
   console.log(queue);
   let count = queue.reduce((a, c) => c.status == '0' ? ++a : a, 0);
   queueBadge.innerHTML = count;
-  enhancr.terminal(`'${path.basename(sessionStorage.getItem("inputPathRestore"))}': Successfully added to Queue`);
   terminal.scrollTop = terminal.scrollHeight;
   renderQueueItem()
   sessionStorage.setItem('queueLength', queue.length);
