@@ -5,7 +5,7 @@
 
 ![gui-preview-image](https://mafiosnik.needsmental.help/1wLGH7CxEA.png?key=uk7M7TaolACipq)
 
-It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI processes **significantly**. **Pre-packaged, without the need to install Docker or WSL** (Windows Subsystem for Linux) - and **NCNN** inference by Tencent which is lightweight and runs on **NVIDIA**, **AMD** and even **Apple Silicon** - in contrast to the mammoth of an inference PyTorch is, which **only runs on NVIDA GPUs**.
+It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI processes **significantly**. **Pre-packaged, without the need to install Docker or WSL** (Windows Subsystem for Linux) - and **NCNN** inference by Tencent which is lightweight and runs on **NVIDIA**, **AMD** and even **Apple Silicon** - in contrast to the mammoth of an inference PyTorch is, which **only runs on NVIDIA GPUs**.
 
 # Features
 - Encodes video on the fly and reads frames from source video, without the need of extracting frames or loading into memory
@@ -25,9 +25,9 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**RIFE (TensorRT)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
->**GMFUpSS (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFupSS](https://github.com/98mxr/GMFupSS)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
+>**GMFUpSS (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFupSS](https://github.com/98mxr/GMFupSS)** - [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
->**GMFSS_Union (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
+>**GMFSS_Union (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
 >**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-ncnn-vulkan** (unreleased)
 
