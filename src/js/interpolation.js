@@ -214,7 +214,7 @@ class Interpolation {
                         if (fp16.checked == true) {
                             var cmd = `"${trtexec}" --fp16 --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
                         } else {
-                            var cmd = `"${trtexec}" --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x720x1280${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
+                            var cmd = `"${trtexec}" --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
                         }
                         let term = spawn(cmd, [], {
                             shell: true,
