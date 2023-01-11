@@ -666,7 +666,7 @@ function renderQueueItem() {
   });
 }
 
-function addToQueueInterpolation() {
+async function addToQueueInterpolation() {
   const modelSpan = document.getElementById("model-span");
   const ffmpegParams = document.getElementById("ffmpeg-params");
   const outputContainer = document.getElementById("container-span");
@@ -684,7 +684,7 @@ function addToQueueInterpolation() {
         params: ffmpegParams.value,
         extension: outputContainer.innerHTML,
         engine: interpolationEngine.innerHTML,
-        dimensions: dimensions.innerHTML,
+        dimensions: await Media.fetchDimensions(file[i]),
         status: '0'
       })
       enhancr.terminal(`'${path.basename(file[i])}': Successfully added to Queue`);
@@ -731,7 +731,7 @@ function addToQueueUpscaling() {
         params: ffmpegParams.value,
         extension: outputContainer.innerHTML,
         engine: upscalingEngine.innerHTML,
-        dimensions: dimensions.innerHTML,
+        dimensionsUp: dimensions.innerHTML,
         status: '0'
       })
       enhancr.terminal(`'${path.basename(file[i])}': Successfully added to Queue`);
@@ -745,7 +745,7 @@ function addToQueueUpscaling() {
       params: ffmpegParams.value,
       extension: outputContainer.innerHTML,
       engine: upscalingEngine.innerHTML,
-      dimensions: dimensions.innerHTML,
+      dimensionsUp: dimensions.innerHTML,
       status: '0'
     })
     enhancr.terminal(`'${path.basename(sessionStorage.getItem("upscaleInputPath"))}': Successfully added to Queue`);

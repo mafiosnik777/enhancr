@@ -404,6 +404,21 @@ class Media {
             setTimeout(setThumbRestoration, 1000)
         })
     }
+
+    static async fetchDimensions(file) {
+        try {
+            const result = await readMetadata(file);
+            const data = JSON.parse(result);
+    
+            const video = data.media.track.find((item) => item["@type"] === "Video");
+            const {Width, Height} = video;
+    
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+            return Width + " x " + Height + " (" + aspectRatio + ")";
+        } catch(error) {
+            console.log(error);
+        }
+    }
 }
 
 module.exports = Media;
