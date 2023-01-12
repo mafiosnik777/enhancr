@@ -1,7 +1,7 @@
 {
   "name": "enhancr",
   "productName": "enhancr",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "private": true,
   "description": "Interpolation/Upscaling AI",
   "main": "src/app.js",
