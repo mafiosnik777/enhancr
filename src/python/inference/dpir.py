@@ -15,10 +15,6 @@ ossystem = platform.system()
 vs_api_below4 = vs.__api_version__.api_major < 4
 core.num_threads = 8
 
-# already loaded in python
-# if ossystem == "Windows":
-#     core.std.LoadPlugin(path="vsynth/vapoursynth64/plugins/ffms2.dll")
-
 if ossystem == "Windows":
     tmp_dir = tempfile.gettempdir() + "\\enhancr\\"
 else:
@@ -35,7 +31,7 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     strengthParam = data['strength']
 
 cwd = os.getcwd()
-vsmlrt_path = os.path.join(cwd, '..', 'cudatoolkit', 'bin', 'vstrt.dll')
+vsmlrt_path = os.path.join(cwd, '..', 'cudatoolkit', 'v11.8', 'vstrt.dll')
 core.std.LoadPlugin(path=vsmlrt_path)
     
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)

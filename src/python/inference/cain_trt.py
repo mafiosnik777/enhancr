@@ -56,7 +56,7 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     ToPadHeight = data['toPadHeight']
 
 cwd = os.getcwd()
-vsmlrt_path = os.path.join(cwd, '..', 'cudatoolkit', 'bin', 'vstrt.dll')
+vsmlrt_path = os.path.join(cwd, '..', 'cudatoolkit', 'v11.8', 'vstrt.dll')
 core.std.LoadPlugin(path=vsmlrt_path)
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)

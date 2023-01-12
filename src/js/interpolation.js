@@ -92,7 +92,7 @@ class Interpolation {
 
             //get trtexec path
             function getTrtExecPath() {
-                return path.join(__dirname, '..', "/python/cudatoolkit/bin/vsmlrt-cuda/trtexec.exe");
+                return path.join(__dirname, '..', "/python/cudatoolkit/v11.8/bin//trtexec.exe");
             }
             let trtexec = getTrtExecPath();
 
