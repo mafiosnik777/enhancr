@@ -185,6 +185,7 @@ function loadInterpolation() {
   var rvpv1Option = document.getElementById("rvp-v1");
   var cvpv6Option = document.getElementById("cvp-v6");
   var gmfssUpOption = document.getElementById("gmf-up");
+  var gmfssUnionOption = document.getElementById("gmf-union");
 
   var interpolationEngineSpan = document.getElementById("interpolation-engine-text");
   // fill engine input
@@ -194,6 +195,7 @@ function loadInterpolation() {
     rife4Option.style.display = 'none';
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
+    gmfssUnionOption.style.display = 'none';
   }
   if (data.interpolation[0].engine === "cain-trt") {
     interpolationEngineSpan.textContent = "Channel Attention - CAIN (TensorRT)";
@@ -201,12 +203,14 @@ function loadInterpolation() {
     rife4Option.style.display = 'none';
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
+    gmfssUnionOption.style.display = 'none';
   }
   if (data.interpolation[0].engine === "rife") {
     interpolationEngineSpan.textContent = "Optical Flow - RIFE (NCNN)";
     rvpv1Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
+    gmfssUnionOption.style.display = 'none';
   }
   if (data.interpolation[0].engine === "rife-trt") {
     interpolationEngineSpan.textContent = "Optical Flow - RIFE (TensorRT)";
@@ -215,6 +219,7 @@ function loadInterpolation() {
     rvpv1Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
+    gmfssUnionOption.style.display = 'none';
   }
   if (data.interpolation[0].engine === "gmfss") {
     interpolationEngineSpan.textContent = "GMFlow - GMFSS (PyTorch)";
@@ -230,6 +235,7 @@ function loadInterpolation() {
     rife4Option.style.display = 'none';
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
+    gmfssUnionOption.style.display = 'none';
   }
 
   // fill model input
