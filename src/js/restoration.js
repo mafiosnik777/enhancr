@@ -105,20 +105,20 @@ class Restoration {
 
             //get trtexec path
             function getTrtExecPath() {
-                return path.join(__dirname, '..', "/python/cudatoolkit/v11.8/bin//trtexec.exe");
+                return path.join(__dirname, '..', "/python/env/Library/bin/trtexec.exe");
             }
             let trtexec = getTrtExecPath();
 
             //get onnx input path
             function getOnnxPath() {
                 if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Denoise') {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx");
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx");
                 } else if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Deblock') {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx");
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx");
                 } else if (engine == 'Restoration - AnimeVideo (TensorRT)') {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                 } else if (engine == 'Restoration - AnimeVideo (NCNN)') {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                 }
             }
             var onnx = getOnnxPath();
@@ -133,7 +133,7 @@ class Restoration {
             // get engine path
             function getEnginePath() {
                 if (engine == 'Restoration - AnimeVideo (NCNN)') {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                 } else {
                     return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '.engine');
                 }
@@ -287,7 +287,7 @@ class Restoration {
                     if (document.getElementById('python-check').checked) {
                         return "vspipe"
                     } else {
-                        return path.join(__dirname, '..', "\\python\\bin\\VSPipe.exe")
+                        return path.join(__dirname, '..', "\\python\\env\\VSPipe.exe")
                     }
                 }
                 if (process.platform == "linux") {
@@ -312,8 +312,10 @@ class Restoration {
             }
             let height = getHeight();
 
-            let tmpOutPath = path.join(cache, Date.now() + extension);
+            // inject env hook
+            let inject_env = `${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")} && ${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}`
 
+            let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
                 openModal(modal);
                 terminal.innerHTML += "\r\n[enhancr] Input video contains subtitles, but output container is not .mkv, cancelling.";
@@ -326,9 +328,9 @@ class Restoration {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
-                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         // merge stdout & stderr & write data to terminal

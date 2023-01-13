@@ -92,7 +92,7 @@ class Interpolation {
 
             //get trtexec path
             function getTrtExecPath() {
-                return path.join(__dirname, '..', "/python/cudatoolkit/v11.8/bin//trtexec.exe");
+                return path.join(__dirname, '..', "/python/env/Library/bin/trtexec.exe");
             }
             let trtexec = getTrtExecPath();
 
@@ -131,7 +131,7 @@ class Interpolation {
             }
 
             var cainModel = document.getElementById('model-span').innerHTML == 'RVP - v1.0';
-            var onnx = cainModel ? path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx");
+            var onnx = cainModel ? path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx");
 
             // get engine path
             function getEnginePath() {
@@ -179,9 +179,9 @@ class Interpolation {
 
             function getRifeOnnx() {
                 if (document.getElementById('rife-tta-check').checked) {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx");
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx");
                 } else {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx");
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx");
                 }
             }
             let rifeOnnx = getRifeOnnx();
@@ -367,7 +367,7 @@ class Interpolation {
                     if (document.getElementById('python-check').checked) {
                         return "vspipe"
                     } else {
-                        return path.join(__dirname, '..', "\\python\\bin\\VSPipe.exe")
+                        return path.join(__dirname, '..', "\\python\\env\\VSPipe.exe")
                     }
                 }
                 if (process.platform == "linux") {
@@ -379,7 +379,8 @@ class Interpolation {
             }
             let vspipe = pickVspipe();
 
-            let cudaToolkit = `set "CUDA_PATH"="${path.join(__dirname, '..', "\\python\\cudatoolkit\\")}"`;
+            // inject env hook
+            let inject_env = `${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")} && ${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}`
 
             let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
@@ -394,9 +395,9 @@ class Interpolation {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `${cudaToolkit} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
-                            var cmd = `${cudaToolkit} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
                         }
                         let term = spawn(cmd, [], {
                             shell: true,

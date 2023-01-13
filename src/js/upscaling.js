@@ -100,13 +100,13 @@ class Upscaling {
 
             //get trtexec path
             function getTrtExecPath() {
-                return path.join(__dirname, '..', "/python/cudatoolkit/v11.8/bin//trtexec.exe");
+                return path.join(__dirname, '..', "/python/env/Library/bin/trtexec.exe");
             }
             let trtexec = getTrtExecPath();
 
             //get python path
             function getPythonPath() {
-                return path.join(__dirname, '..', "/python/bin/python.exe");
+                return path.join(__dirname, '..', "/python/env/python.exe");
             }
             let python = getPythonPath();
 
@@ -146,7 +146,7 @@ class Upscaling {
             //get onnx input path
             function getOnnxPath() {
                 if (!(document.getElementById('custom-model-check').checked)) {
-                    return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                 } else {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
@@ -170,7 +170,7 @@ class Upscaling {
             function getEnginePath() {
                 if (engine == "Upscaling - RealESRGAN (NCNN)") {
                     if (!(document.getElementById('custom-model-check').checked)) {
-                        return path.join(__dirname, '..', "/python/bin/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                        return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                     } else {
                         return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     }
@@ -315,7 +315,7 @@ class Upscaling {
                     if (document.getElementById('python-check').checked) {
                         return "vspipe"
                     } else {
-                        return path.join(__dirname, '..', "\\python\\bin\\VSPipe.exe")
+                        return path.join(__dirname, '..', "\\python\\env\\VSPipe.exe")
                     }
                 }
                 if (process.platform == "linux") {
@@ -338,6 +338,9 @@ class Upscaling {
             }
             let height = getHeight();
 
+            // inject env hook
+            let inject_env = `${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")} && ${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}`
+
             let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
                 openModal(modal);
@@ -351,9 +354,9 @@ class Upscaling {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
-                            var cmd = `"${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         // merge stdout & stderr & write data to terminal
