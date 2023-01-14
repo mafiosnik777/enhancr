@@ -339,7 +339,7 @@ class Upscaling {
             let height = getHeight();
 
             // inject env hook
-            let inject_env = `${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")} && ${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}`
+            let inject_env = `"${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}"`
 
             let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
