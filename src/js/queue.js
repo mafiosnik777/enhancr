@@ -713,12 +713,12 @@ async function addToQueueInterpolation() {
 }
 interpolationBtn.addEventListener('click', addToQueueInterpolation);
 
-function addToQueueUpscaling() {
+async function addToQueueUpscaling() {
   const scale = document.getElementById("factor-span");
   const ffmpegParams = document.getElementById("ffmpeg-params-upscale");
   const outputContainer = document.getElementById("container-span-up");
   const upscalingEngine = document.getElementById("upscale-engine-text");
-  let dimensions = document.getElementById('dimensionsUp');
+  const dimensions = document.getElementById('dimensionsUp');
 
   if (sessionStorage.getItem("multiInput") == "true") {
     let file = JSON.parse(sessionStorage.getItem('upscalingMultiInput'))
@@ -731,7 +731,7 @@ function addToQueueUpscaling() {
         params: ffmpegParams.value,
         extension: outputContainer.innerHTML,
         engine: upscalingEngine.innerHTML,
-        dimensionsUp: dimensions.innerHTML,
+        dimensions: await Media.fetchDimensions(file[i]),
         status: '0'
       })
       enhancr.terminal(`'${path.basename(file[i])}': Successfully added to Queue`);
@@ -745,7 +745,7 @@ function addToQueueUpscaling() {
       params: ffmpegParams.value,
       extension: outputContainer.innerHTML,
       engine: upscalingEngine.innerHTML,
-      dimensionsUp: dimensions.innerHTML,
+      dimensions: dimensions.innerHTML,
       status: '0'
     })
     enhancr.terminal(`'${path.basename(sessionStorage.getItem("upscaleInputPath"))}': Successfully added to Queue`);
@@ -805,109 +805,109 @@ function addToQueueRestoration() {
 restoreBtn.addEventListener('click', addToQueueRestoration);
 
 let running = false;
-
-async function processQueue() {
-  if (running == false) {
-    running = true;
-    await PromisePool
-      .withConcurrency(1)
-      .for(queue)
-      .onTaskStarted((item) => {
-        if (item.status == '0') {
-          if (sessionStorage.getItem('stopped') == 'false') {
-            console.log('Starting queue');
-            sessionStorage.setItem('currentFile', item.file);
-            sessionStorage.setItem('queueIndex', queue.indexOf(item));
-            exportBtn.innerHTML = '<span id="export-button"><i class="fa-solid fa-circle-stop" id="enhance-icon"></i></i> Stop processing video(s) <span id="key-shortcut">Ctrl + Enter</span></span>'
-            // listen for preview
-            Preview.listenForPreview();
-            // initialize ui for process
+try {
+  async function processQueue() {
+    if (running == false) {
+      running = true;
+      await PromisePool
+        .withConcurrency(1)
+        .for(queue)
+        .onTaskStarted((item) => {
+          if (item.status == '0') {
+            if (sessionStorage.getItem('stopped') == 'false') {
+              console.log('Starting queue');
+              sessionStorage.setItem('currentFile', item.file);
+              sessionStorage.setItem('queueIndex', queue.indexOf(item));
+              exportBtn.innerHTML = '<span id="export-button"><i class="fa-solid fa-circle-stop" id="enhance-icon"></i></i> Stop processing video(s) <span id="key-shortcut">Ctrl + Enter</span></span>'
+              // listen for preview
+              Preview.listenForPreview();
+              // initialize ui for process
+              switch (item.mode) {
+                case 'interpolation':
+                  Process.startProcessInterpolation();
+                  Media.fetchMetadata();
+                  break;
+                case 'upscaling':
+                  sessionStorage.setItem('currentFactor', item.scale);
+                  Process.startProcessUpscaling();
+                  Media.fetchMetadataUpscale();
+                  break;
+                case 'restoration':
+                  Process.startProcessRestoration();
+                  Media.fetchMetadataRestore();
+              }
+              let queueIcon = document.getElementById(`queue-item-remove${queue.indexOf(item)}`);
+              queueIcon.removeAttribute("class");
+              queueIcon.classList.add('fa-solid');
+              queueIcon.classList.add('fa-rotate');
+              queueIcon.classList.add('fa-spin');
+              queueIcon.classList.add('queue-item-spin');
+            };
+          }
+        })
+        .onTaskFinished((item) => {
+          if (item.status == '0') {
+            queueBadge.innerHTML = parseInt(queueBadge.innerHTML) - 1;
+          }
+          item.status = '1';
+          let contextItem0 = document.getElementById(`context-item0-queue${queue.indexOf(item)}`);
+          contextItem0.innerHTML = "<i class='fa-solid fa-film'></i> Play video";
+          let contextItem1 = document.getElementById(`context-item1-queue${queue.indexOf(item)}`);
+          contextItem1.innerHTML = "<i class='fa-solid fa-folder-closed'></i> Open in folder";
+          let contextItem2 = document.getElementById(`context-item2-queue${queue.indexOf(item)}`);
+          contextItem2.innerHTML = "<i class='fa-solid fa-share-nodes'></i> Share";
+        })
+        .process(async (item, index, pool) => {
+          if (item.status == '0') {
+            console.log(item);
             switch (item.mode) {
               case 'interpolation':
-                Process.startProcessInterpolation();
-                Media.fetchMetadata();
+                await Interpolation.process(item.file, item.model, item.output, item.params, item.extension, item.engine, item.dimensions, sessionStorage.getItem(`out${index}`), index);
                 break;
               case 'upscaling':
-                sessionStorage.setItem('currentFactor', item.scale);
-                Process.startProcessUpscaling();
-                Media.fetchMetadataUpscale();
+                await Upscaling.process(item.scale, item.dimensions, item.file, item.output, item.params, item.extension, item.engine, sessionStorage.getItem(`out${index}`), index);
                 break;
               case 'restoration':
-                Process.startProcessRestoration();
-                Media.fetchMetadataRestore();
+                await Restoration.process(item.file, item.model, item.output, item.params, item.extension, item.engine, sessionStorage.getItem(`out${index}`), index);
             }
-            let queueIcon = document.getElementById(`queue-item-remove${queue.indexOf(item)}`);
-            queueIcon.removeAttribute("class");
-            queueIcon.classList.add('fa-solid');
-            queueIcon.classList.add('fa-rotate');
-            queueIcon.classList.add('fa-spin');
-            queueIcon.classList.add('queue-item-spin');
-          };
-        }
-      })
-      .onTaskFinished((item) => {
-        if (item.status == '0') {
-          queueBadge.innerHTML = parseInt(queueBadge.innerHTML) - 1;
-        }
-        item.status = '1';
-        let contextItem0 = document.getElementById(`context-item0-queue${queue.indexOf(item)}`);
-        contextItem0.innerHTML = "<i class='fa-solid fa-film'></i> Play video";
-        let contextItem1 = document.getElementById(`context-item1-queue${queue.indexOf(item)}`);
-        contextItem1.innerHTML = "<i class='fa-solid fa-folder-closed'></i> Open in folder";
-        let contextItem2 = document.getElementById(`context-item2-queue${queue.indexOf(item)}`);
-        contextItem2.innerHTML = "<i class='fa-solid fa-share-nodes'></i> Share";
-      })
-      .process(async (item, index, pool) => {
-        if (item.status == '0') {
-          console.log(item);
-          switch (item.mode) {
-            case 'interpolation':
-              await Interpolation.process(item.file, item.model, item.output, item.params, item.extension, item.engine, item.dimensions, sessionStorage.getItem(`out${index}`), index);
-              break;
-            case 'upscaling':
-              await Upscaling.process(item.scale, item.dimensions, item.file, item.output, item.params, item.extension, item.engine, sessionStorage.getItem(`out${index}`), index);
-              break;
-            case 'restoration':
-              await Restoration.process(item.file, item.model, item.output, item.params, item.extension, item.engine, sessionStorage.getItem(`out${index}`), index);
           }
+        })
+        .then(function () {
+          exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
+          if (queue.length == 0) {
+            enhancr.terminal('Queue is empty. Add media to queue to get started.\r\n');
+          } else {
+            enhancr.terminal('Completed processing queue successfully.\r\n');
+          }
+          terminal.scrollTop = terminal.scrollHeight;
+          running = false;
+          if (sessionStorage.getItem('stopped') == 'true') {
+            sessionStorage.setItem('stopped', 'false');
+            // set stop flag for process.js
+            sessionStorage.setItem('stopFlag', 'true');
+          }
+        })
+        
+    } else {
+      sessionStorage.setItem('stopped', 'true');
+      find('name', 'VSPipe', false).then(function (list) {
+        var i;
+        for (i = 0; i < list.length; i++) {
+          process.kill(list[i].pid);
         }
-      })
-      .then(function () {
+      }).then(function () {
         exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
-        if (queue.length == 0) {
-          enhancr.terminal('Queue is empty. Add media to queue to get started.\r\n');
-        } else {
-          enhancr.terminal('Completed processing queue successfully.\r\n');
-        }
+        enhancr.terminal('Stopped queue successfully.\r\n')
+        ipcRenderer.send('rpc-done');
         terminal.scrollTop = terminal.scrollHeight;
         running = false;
-        if (sessionStorage.getItem('stopped') == 'true') {
-          sessionStorage.setItem('stopped', 'false');
-          // set stop flag for process.js
-          sessionStorage.setItem('stopFlag', 'true');
-        }
-      })
-      
-  } else {
-    sessionStorage.setItem('stopped', 'true');
-    find('name', 'VSPipe', false).then(function (list) {
-      var i;
-      for (i = 0; i < list.length; i++) {
-        process.kill(list[i].pid);
-      }
-    }).then(function () {
-      exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
-      enhancr.terminal('Stopped queue successfully.\r\n')
-      ipcRenderer.send('rpc-done');
-      terminal.scrollTop = terminal.scrollHeight;
-      running = false;
-    });
-  }
-};
-
-
-
-exportBtn.addEventListener('click', processQueue);
+      });
+    }
+  };
+  exportBtn.addEventListener('click', processQueue);
+} catch (error) {
+  console.error(error)
+}
 
 // render queue tab
 queueTab.style.visibility = 'hidden';
