@@ -5,7 +5,7 @@
 
 ![gui-preview-image](https://mafiosnik.needsmental.help/1wLGH7CxEA.png?key=uk7M7TaolACipq)
 
-It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI processes **significantly**. **Pre-packaged, without the need to install Docker or WSL** (Windows Subsystem for Linux) - and **ncnn** inference by Tencent which is lightweight and runs on **NVIDIA**, **AMD** and even **Apple Silicon** - in contrast to the mammoth of an inference PyTorch is, which **only runs on NVIDIA GPUs**.
+It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI processes **significantly**. **Pre-packaged, without the need to install Docker or WSL** (Windows Subsystem for Linux) - and **NCNN** inference by Tencent which is lightweight and runs on **NVIDIA**, **AMD** and even **Apple Silicon** - in contrast to the mammoth of an inference PyTorch is, which **only runs on NVIDIA GPUs**.
 
 # Features
 - Encodes video on the fly and reads frames from source video, without the need of extracting frames or loading into memory
@@ -21,7 +21,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 ## Interpolation
 
->**RIFE (ncnn)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VapourSynth-RIFE-ncnn-Vulkan](https://github.com/styler00dollar/VapourSynth-RIFE-ncnn-Vulkan)**
+>**RIFE (NCNN)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VapourSynth-RIFE-NCNN-Vulkan](https://github.com/styler00dollar/VapourSynth-RIFE-NCNN-Vulkan)**
 
 >**RIFE (TensorRT)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
@@ -29,7 +29,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**GMFSS_Union (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
->**CAIN (ncnn)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-ncnn-vulkan** (unreleased)
+>**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-NCNN-vulkan** (unreleased)
 
 >**CAIN (TensorRT)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [HubertSotnowski](https://github.com/HubertSotnowski)/**[cain-TensorRT](https://github.com/HubertSotnowski/cain-TensorRT)**
 
@@ -37,9 +37,9 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 ## Upscaling
 
->**waifu2x (ncnn)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vapoursynth-waifu2x-ncnn-vulkan](https://github.com/nlzy/vapoursynth-waifu2x-ncnn-vulkan)**
+>**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vapoursynth-waifu2x-NCNN-vulkan](https://github.com/nlzy/vapoursynth-waifu2x-NCNN-vulkan)**
 
->**RealESRGAN (ncnn)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
+>**RealESRGAN (NCNN)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
 >**RealESRGAN (TensorRT)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
@@ -60,7 +60,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 -   Quad Core Intel Kaby Lake/AMD Ryzen or newer with Hyperthreading enabled
 -   16 GB RAM
--   NVIDIA 1000 Series (Pascal) for TensorRT/ncnn or AMD Polaris for ncnn
+-   NVIDIA 1000 Series (Pascal) for TensorRT/NCNN or AMD Polaris for NCNN
 -   Windows 11
 
 # Installation
@@ -116,10 +116,10 @@ Check it out to learn more about getting the most out of enhancr or how to fix v
 
 # Inferences
 
-[TensorRT](https://developer.nvidia.com/tensorrt) is a highly optimized AI inference runtime for NVIDIA GPUs. It uses benchmarking to find the optimal kernel to use for your specific GPU, and there is an extra step to build an engine on the machine you are going to run the AI on. However, the resulting performance is also typically _much much_ better than any PyTorch or ncnn implementation.
+[TensorRT](https://developer.nvidia.com/tensorrt) is a highly optimized AI inference runtime for NVIDIA GPUs. It uses benchmarking to find the optimal kernel to use for your specific GPU, and there is an extra step to build an engine on the machine you are going to run the AI on. However, the resulting performance is also typically _much much_ better than any PyTorch or NCNN implementation.
 
-[ncnn](https://github.com/Tencent/ncnn) is a high-performance neural network inference computing framework optimized for mobile platforms. ncnn does not have any third party dependencies. It is cross-platform, and runs faster than all known open source frameworks on most major platforms. It supports NVIDIA, AMD, Intel Graphics and even Apple Silicon.
-ncnn is currently being used in many Tencent applications, such as QQ, Qzone, WeChat, Pitu and so on.
+[NCNN](https://github.com/Tencent/ncnn) is a high-performance neural network inference computing framework optimized for mobile platforms. NCNN does not have any third party dependencies. It is cross-platform, and runs faster than all known open source frameworks on most major platforms. It supports NVIDIA, AMD, Intel Graphics and even Apple Silicon.
+NCNN is currently being used in many Tencent applications, such as QQ, Qzone, WeChat, Pitu and so on.
 
 # Supporting this project
 
