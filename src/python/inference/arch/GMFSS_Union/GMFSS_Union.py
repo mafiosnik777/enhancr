@@ -18,6 +18,7 @@ class GMFSS_Union:
         self.amount_input_img = 2
 
         torch.set_grad_enabled(False)
+        torch.set_float32_matmul_precision('medium')
         torch.backends.cudnn.enabled = True
         torch.backends.cudnn.benchmark = True
 
