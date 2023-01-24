@@ -21,7 +21,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 ## Interpolation
 
->**RIFE (NCNN)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VapourSynth-RIFE-ncnn-Vulkan](https://github.com/styler00dollar/VapourSynth-RIFE-ncnn-Vulkan)**
+>**RIFE (NCNN)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VapourSynth-RIFE-NCNN-Vulkan](https://github.com/styler00dollar/VapourSynth-RIFE-NCNN-Vulkan)**
 
 >**RIFE (TensorRT)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
@@ -29,7 +29,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**GMFSS_Union (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
->**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-ncnn-vulkan** (unreleased)
+>**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-NCNN-vulkan** (unreleased)
 
 >**CAIN (TensorRT)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [HubertSotnowski](https://github.com/HubertSotnowski)/**[cain-TensorRT](https://github.com/HubertSotnowski/cain-TensorRT)**
 
@@ -37,7 +37,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 ## Upscaling
 
->**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vapoursynth-waifu2x-ncnn-vulkan](https://github.com/nlzy/vapoursynth-waifu2x-ncnn-vulkan)**
+>**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vapoursynth-waifu2x-NCNN-vulkan](https://github.com/nlzy/vapoursynth-waifu2x-NCNN-vulkan)**
 
 >**RealESRGAN (NCNN)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
@@ -66,8 +66,8 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 # Installation
 
 
-Download the installer on [**Patreon**](https://www.patreon.com/mafiosnik) for **newest** pre-packaged builds with **all dependencies**. 
-This repository **does not** provide builds & the embeddable python environment that's included on Patreon.
+To ensure that you have the most recent version of the software and all necessary dependencies, we recommend downloading the installer from [Patreon](https://www.patreon.com/mafiosnik). 
+Please note that builds and an embeddable python environment **are not** provided through this repository.
 
 ![installer](https://mafiosnik.needsmental.help/mEerVMP8LA.png?key=bzdnzy2RYJGOvO)
 
@@ -75,8 +75,8 @@ This repository **does not** provide builds & the embeddable python environment 
 
 # macOS and Linux Support
 
-The GUI was built with cross-platform in mind and references both operating systems already.
-**The current focus lies on delivering a stable & working solution for Windows first, but support for Linux and macOS will follow very soon.**
+The GUI was created with cross-platform compatibility in mind and is compatible with both operating systems.
+**Our primary focus at the moment is ensuring a stable and fully functioning solution for Windows users, but support for Linux and macOS will be made available in the near future.**
 
 ![enhancr-macos](https://mafiosnik.needsmental.help/st6TAP6g9t.png?key=kfq89rqeM2kEdi)
 
@@ -86,14 +86,14 @@ Support for Apple Silicon is planned as well, but I currently only have an Intel
 
 Input size: 1920x1080 @ 2x
 
-|| RTX 2060 Super <sup>1</sup> | RTX 3070 <sup>2</sup>| RTX A4000 <sup>3</sup> | RTX 3090 Ti <sup>4</sup> | RTX 4090 <sup>5</sup>
+|| RTX 2060S <sup>1</sup> | RTX 3070 <sup>2</sup>| RTX A4000 <sup>3</sup> | RTX 3090 Ti <sup>4</sup> | RTX 4090 <sup>5</sup>
 |--|--|--|--|--|--|
 | RIFE / rife-v4.6 (NCNN) | 53.78 fps | 64.08 fps | 80.56 fps | 86.24 fps | 136.13 fps |
 | RIFE / rife-v4.6 (TensorRT) | 70.34 fps | 94.63 fps | 86.47 fps | 122.68 fps | 170.91 fps |
 | CAIN / cvp-v6 (NCNN) | 9.42 fps | 10.56 fps | 13.42 fps | 17.36 fps | 44.87 fps |
 | CAIN / cvp-v6 (TensorRT) | 45.41 fps | 63.84 fps | 81.23 fps | 112.87 fps | 183.46 fps |
-| GMFSS / Up (PyTorch) | - | - | 4.32 fps | - | - |
-| GMFSS / Union (PyTorch) | - | - | 3.68 fps | - | - |
+| GMFSS / Up (PyTorch) | - | - | 4.32 fps | - | 16.35 fps |
+| GMFSS / Union (PyTorch) | - | - | 3.68 fps | - | 13.93 fps |
 | waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps | 9.36 fps | 9.81 fps | 15.48 fps | 39.77 fps |
 | RealESRGAN / animevideov3 (TensorRT) | 7.64 fps | 9.10 fps | 8.49 fps | 18.66 fps | 38.67 fps |
 | DPIR / Denoise (TensorRT) | 4.38 fps | 6.45 fps | 5.39 fps | 11.64 fps | 27.41 fps |
@@ -118,18 +118,16 @@ Check it out to learn more about getting the most out of enhancr or how to fix v
 
 [TensorRT](https://developer.nvidia.com/tensorrt) is a highly optimized AI inference runtime for NVIDIA GPUs. It uses benchmarking to find the optimal kernel to use for your specific GPU, and there is an extra step to build an engine on the machine you are going to run the AI on. However, the resulting performance is also typically _much much_ better than any PyTorch or NCNN implementation.
 
-[ncnn](https://github.com/Tencent/ncnn) is a high-performance neural network inference computing framework optimized for mobile platforms. Ncnn does not have any third party dependencies. It is cross-platform, and runs faster than all known open source frameworks on most major platforms. It supports NVIDIA, AMD, Intel Graphics and even Apple Silicon.
-Ncnn is currently being used in many Tencent applications, such as QQ, Qzone, WeChat, Pitu and so on.
+[NCNN](https://github.com/Tencent/ncnn) is a high-performance neural network inference computing framework optimized for mobile platforms. NCNN does not have any third party dependencies. It is cross-platform, and runs faster than all known open source frameworks on most major platforms. It supports NVIDIA, AMD, Intel Graphics and even Apple Silicon.
+NCNN is currently being used in many Tencent applications, such as QQ, Qzone, WeChat, Pitu and so on.
 
 # Supporting this project
 
-You can support this project over on [**Patreon**](https://www.patreon.com/mafiosnik) or donate via [**PayPal**](https://www.paypal.com/paypalme/mafiosnik) to speed up development and encourage more releases **and/or** contribute yourself by opening a **pull request**.
-I appreciate every form of support towards this project and it means a lot!
+I would be grateful if you could show your support for this project by contributing on [Patreon](https://www.patreon.com/mafiosnik) or through a donation on [PayPal](https://www.paypal.com/paypalme/mafiosnik). Your support will help to accelerate development and bring more updates to the project. Additionally, if you have the skills, you can also contribute by opening a pull request. Regardless of the form of support you choose to give, know that it is greatly appreciated.
 
 # Plans for the future
 
-The code is somewhat messy at some points right now, due to time pressure I stood under, but I'll rewrite affected files one by one with time.
-Of course there will be updates with new features and bugfixes regularly and also implementations of new interesting technologies and models when they release.
+I am continuously working to improve the codebase, including addressing any inconsistencies that may have arisen due to time constraints. Regular updates will be released, including new features, bug fixes, and the incorporation of new technologies and models as they become available. Thank you for your understanding and support.
 
 # Join the discord
 
