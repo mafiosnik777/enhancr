@@ -58,7 +58,7 @@ if sceneDetection:
     if sensitivity:
         clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
     else:
-        clip = core.misc.SCDetect(clip=clip, threshold=0.100)
+        clip = core.misc.SCDetect(clip=clip, threshold=0.180)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 

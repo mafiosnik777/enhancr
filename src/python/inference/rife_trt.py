@@ -110,17 +110,17 @@ core.std.LoadPlugin(path=vsmlrt_path)
     
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
-if sceneDetection:
-    if sensitivity:
-        clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
-    else:
-        clip = core.misc.SCDetect(clip=clip, threshold=0.100)
-
 if frameskip:
     offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
     offs1 = core.std.CopyFrameProps(offs1, clip)
     # use ssim for similarity calc
     clip = core.vmaf.Metric(clip, offs1, 2)
+
+if sceneDetection:
+    if sensitivity:
+        clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
+    else:
+        clip = core.misc.SCDetect(clip=clip, threshold=0.180)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 

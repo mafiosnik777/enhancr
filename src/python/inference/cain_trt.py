@@ -73,7 +73,7 @@ if sceneDetection:
     if sensitivity:
         clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
     else:
-        clip = core.misc.SCDetect(clip=clip, threshold=0.100)
+        clip = core.misc.SCDetect(clip=clip, threshold=0.180)
 
 if padding:
     clip = core.std.AddBorders(clip, right=ToPadWidth, top=ToPadHeight)

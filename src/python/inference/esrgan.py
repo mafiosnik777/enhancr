@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import vapoursynth as vs
 import platform
 import tempfile
 import json
