@@ -148,9 +148,9 @@ class Restoration {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
-                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x4x8x8 --optShapes=input:1x4x${shapeDimensionsOpt} --maxShapes=input:1x4x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
+                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x4x8x8 --optShapes=input:1x4x${shapeDimensionsOpt} --maxShapes=input:1x4x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
                         } else {
-                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x4x8x8 --optShapes=input:1x4x${shapeDimensionsOpt} --maxShapes=input:1x4x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
+                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x4x8x8 --optShapes=input:1x4x${shapeDimensionsOpt} --maxShapes=input:1x4x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
