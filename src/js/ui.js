@@ -472,6 +472,7 @@ var interpolationEngineSpan = document.getElementById(
 );
 
 var rvpv1Option = document.getElementById("rvp-v1");
+var rvpv2Option = document.getElementById("rvp-v2");
 var cvpv6Option = document.getElementById("cvp-v6");
 var gmfssUpOption = document.getElementById("gmf-up");
 var gmfssUnionOption = document.getElementById("gmf-union");
@@ -488,6 +489,7 @@ cain.addEventListener("click", function () {
     gmfssUnionOption.style.display = 'none';
     cvpv6Option.style.display = 'block';
     rvpv1Option.style.display = 'block';
+    rvpv2Option.style.display = 'none';
 
 
     modelSpan.textContent = 'RVP - v1.0';
@@ -512,6 +514,7 @@ cainTrt.addEventListener("click", function () {
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
     rvpv1Option.style.display = 'block';
+    rvpv2Option.style.display = 'block';
     cvpv6Option.style.display = 'block';
 
     modelSpan.textContent = 'CVP - v6.0';
@@ -538,6 +541,7 @@ gmfss.addEventListener("click", function () {
     gmfssUpOption.style.display = 'block';
     gmfssUnionOption.style.display = 'block';
     rvpv1Option.style.display = 'none';
+    rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
 
     modelSpan.textContent = 'GMFSS - Up';
@@ -565,6 +569,7 @@ rife.addEventListener("click", function () {
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
     rvpv1Option.style.display = 'none';
+    rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
 
     modelSpan.textContent = 'RIFE - v4.6';
@@ -589,6 +594,7 @@ rifeTrt.addEventListener("click", function () {
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
     rvpv1Option.style.display = 'none';
+    rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
 
     modelSpan.textContent = 'RIFE - v4.6';
@@ -669,8 +675,6 @@ gmfssUnionOption.addEventListener("click", function () {
     console.log("Model written to project file.");
 });
 
-var rvpv1Option = document.getElementById("rvp-v1");
-
 rvpv1Option.addEventListener("click", function () {
     modelSpan.textContent = "RVP - v1.0";
     hider.style.visibility = "hidden";
@@ -679,6 +683,18 @@ rvpv1Option.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.interpolation[0].model = "RVP - v1.0";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Model written to project file.");
+});
+
+rvpv2Option.addEventListener("click", function () {
+    modelSpan.textContent = "RVP - v2.0";
+    hider.style.visibility = "hidden";
+    modelDropdown.style.visibility = "hidden";
+    // autosave model in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.interpolation[0].model = "RVP - v2.0";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Model written to project file.");
 });

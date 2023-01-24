@@ -109,7 +109,11 @@ class Interpolation {
             let fp = floatingPoint ? "fp16" : "fp32";
 
             let systemPython = document.getElementById('python-check').checked;
-
+            //get python path
+            function getPythonPath() {
+                return path.join(__dirname, '..', "/python/env/python.exe");
+            }
+            let python = getPythonPath();
 
             // check if dimensions are divisible by 8
             function isDivisibleBy8(num) {
@@ -130,8 +134,23 @@ class Interpolation {
                 height = roundedHeight
             }
 
-            var cainModel = document.getElementById('model-span').innerHTML == 'RVP - v1.0';
-            var onnx = cainModel ? path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx");
+            //get conversion script
+            function getConversionScript() {
+                return path.join(__dirname, '..', "/python/utils/convert_model_rvpv2.py");
+            }
+            let convertModel = getConversionScript();
+
+            function getOnnx() {
+                if (model == 'RVP - v1.0') {
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx");
+                } else if (model == 'CVP - v6.0') {
+                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx");
+                } else if (model == 'RVP - v2.0') {
+                    return path.join(cache, 'rvpv2.onnx');
+                }
+            }
+
+            let onnx = getOnnx();
 
             // get engine path
             function getEnginePath() {
@@ -144,14 +163,53 @@ class Interpolation {
 
             const progressSpan = document.getElementById("progress-span");
 
+            // inject env hook
+            let inject_env = `"${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}"`
+
+             // rvpv2 model conversion (pth -> onnx)
+             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)' && model == 'RVP - v2.0') {
+                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Converting model to onnx..\r\n`;
+                function convertToOnnx() {
+                    return new Promise(function (resolve) {
+                        var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth")}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height}"`;
+                        console.log(convertCmd);
+                        let convertTerm = spawn(convertCmd, [], {
+                            shell: true,
+                            stdio: ['inherit', 'pipe', 'pipe'],
+                            windowsHide: true
+                        });
+                        process.stdout.write('');
+                        convertTerm.stdout.on('data', (data) => {
+                            process.stdout.write(`${data}`);
+                            terminal.innerHTML += data;
+                        });
+                        convertTerm.stderr.on('data', (data) => {
+                            process.stderr.write(`${data}`);
+                            progressSpan.innerHTML = path.basename(file) + ' | Converting model to onnx..';
+                            terminal.innerHTML += data;
+                        });
+                        convertTerm.on("close", () => {
+                            sessionStorage.setItem('conversion', 'success');
+                            resolve();
+                        });
+                    })
+                }
+                await convertToOnnx();
+            }
+
             // engine conversion (onnx -> engine) (cain-trt)
             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
-                        if (fp16.checked == true) {
-                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                        if (!model == 'RVP - v2.0') {
+                            var optShapes = `--optShapes=input:1x6x${height}x${width}`
                         } else {
-                            var engineCmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var optShapes = ``
+                        }
+                        if (fp16.checked == true) {
+                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                        } else {
+                            var engineCmd = `"${trtexec}" --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
                         }
                         let engineTerm = spawn(engineCmd, [], {
                             shell: true,
@@ -378,9 +436,6 @@ class Interpolation {
                 }
             }
             let vspipe = pickVspipe();
-
-            // inject env hook
-            let inject_env = `"${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}"`
 
             let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {

@@ -183,6 +183,7 @@ function loadInterpolation() {
   var rife4Option = document.getElementById("rife-4");
   var rife46Option = document.getElementById("rife-46");
   var rvpv1Option = document.getElementById("rvp-v1");
+  var rvpv2Option = document.getElementById("rvp-v2");
   var cvpv6Option = document.getElementById("cvp-v6");
   var gmfssUpOption = document.getElementById("gmf-up");
   var gmfssUnionOption = document.getElementById("gmf-union");
@@ -196,6 +197,7 @@ function loadInterpolation() {
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
+    rvpv2Option.style.display = 'none';
   }
   if (data.interpolation[0].engine === "cain-trt") {
     interpolationEngineSpan.textContent = "Channel Attention - CAIN (TensorRT)";
@@ -208,6 +210,7 @@ function loadInterpolation() {
   if (data.interpolation[0].engine === "rife") {
     interpolationEngineSpan.textContent = "Optical Flow - RIFE (NCNN)";
     rvpv1Option.style.display = 'none';
+    rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
@@ -217,6 +220,7 @@ function loadInterpolation() {
     rife23Option.style.display = 'none';
     rife4Option.style.display = 'none';
     rvpv1Option.style.display = 'none';
+    rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
@@ -227,6 +231,7 @@ function loadInterpolation() {
     rife4Option.style.display = 'none';
     rife46Option.style.display = 'none';
     rvpv1Option.style.display = 'none';
+    rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
   }
   if (data.interpolation[0].engine === "") {

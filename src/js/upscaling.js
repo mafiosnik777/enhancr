@@ -115,7 +115,7 @@ class Upscaling {
 
             //get conversion script
             function getConversionScript() {
-                return path.join(__dirname, '..', "/python/utils/convertModel.py");
+                return path.join(__dirname, '..', "/python/utils/convert_model_esrgan.py");
             }
             let convertModel = getConversionScript();
 
@@ -123,7 +123,7 @@ class Upscaling {
             if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth") {
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
-                        var cmd = `${python} ${convertModel} --input=${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)} --output=${path.join(cache, path.parse(customModel).name + '.onnx')}`;
+                        var cmd = `"${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}"`;
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
                         term.stdout.on('data', (data) => {
