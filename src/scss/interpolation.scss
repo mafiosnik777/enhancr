@@ -66,16 +66,17 @@ $macosblue: #1e5cce;
   position: absolute;
   width: 46%;
   height: 54%;
-  left: 6%;
+  left: 7%;
   top: 10%;
   border-radius: 12.5px;
   visibility: hidden;
+  z-index: 2;
 
   &::after {
     content: " ";
     position: absolute;
     position: absolute;
-    top: 10%;
+    top: 9%;
     right: 100%;
     margin-top: -5px;
     border-width: 7.5px;
@@ -139,7 +140,7 @@ $macosblue: #1e5cce;
   font-size: 6.5pt;
   position: absolute;
   color: #8c8c8c;
-  left: 21.5%;
+  left: 22.5%;
   top: 46.25%;
   background-color: rgba(99, 99, 99, 0.35);
   border-radius: 10px;
@@ -148,13 +149,14 @@ $macosblue: #1e5cce;
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.1);
   padding-top: 2px;
   padding-bottom: 2px;
+  z-index: 2;
 }
 
 #engine-dropdown {
   font-size: 6.5pt;
   position: absolute;
   color: #8c8c8c;
-  left: 13.5%;
+  left: 14.5%;
   top: 50.5%;
   background-color: rgba(99, 99, 99, 0.35);
   border-radius: 10px;
@@ -170,7 +172,7 @@ $macosblue: #1e5cce;
   font-size: 6.5pt;
   position: absolute;
   color: #8c8c8c;
-  left: 13%;
+  left: 14%;
   top: 54.5%;
   background-color: rgba(99, 99, 99, 0.35);
   border-radius: 10px;
