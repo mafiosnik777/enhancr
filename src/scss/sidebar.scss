@@ -2,12 +2,13 @@ $macosblue: #1e5cce;
 
 .side-bar {
   position: absolute;
-  top: 6.63%;
-  left: 0%;
+  top: 9.5%;
+  left: 1%;
   width: 4.75%;
-  height: 86.8%;
+  height: 81.2%;
   --animate-delay: 0.8s;
-  background-color: rgba(0, 0, 0, 0.15) !important;
+  background-color: rgba(0,0,0,.15) !important;
+  border-radius: 10px;
 }
 
 #interpolate-side {
@@ -17,7 +18,7 @@ $macosblue: #1e5cce;
   font-size: 13.5pt;
   color: #d0d0d0;
   transition: 0.2s;
-  z-index: 99;
+  z-index: 5;
 
   &:hover {
     color: var(--side-hover) !important;
@@ -27,12 +28,12 @@ $macosblue: #1e5cce;
 
 .interpolate-side {
   position: absolute;
-  top: 8%;
+  top: 5%;
   left: 31%;
   font-size: 13.5pt;
   color: rgb(129 129 129);
   transition: 0.2s;
-  z-index: 99;
+  z-index: 5;
 
   .tooltip-text {
     visibility: hidden;
@@ -80,7 +81,7 @@ $macosblue: #1e5cce;
   font-size: 13.5pt;
   color: rgb(129, 129, 129);
   transition: 0.2s;
-  z-index: 99;
+  z-index: 5;
 
   &:hover {
     color: var(--side-hover) !important;
@@ -90,12 +91,12 @@ $macosblue: #1e5cce;
 
 .restore-side {
   position: absolute;
-  top: 29%;
+  top: 25.5%;
   left: 31%;
   font-size: 13.5pt;
   color: rgb(129, 129, 129);
   transition: 0.2s;
-  z-index: 99;
+  z-index: 5;
 
   .tooltip-text {
     visibility: hidden;
@@ -141,7 +142,7 @@ $macosblue: #1e5cce;
   position: absolute;
   margin-top: 1px;
   transition: 0.2s;
-  z-index: 69;
+  z-index: 5;
   padding: 5px;
 
   &:hover {
@@ -157,7 +158,7 @@ $macosblue: #1e5cce;
 
 #upscale-side {
   position: absolute;
-  top: 18%;
+  top: 21.5%;
   left: 35%;
   font-size: 15pt;
   color: rgb(129, 129, 129);
@@ -167,7 +168,7 @@ $macosblue: #1e5cce;
 
 .upscale-side {
   position: absolute;
-  top: 18%;
+  top: 15%;
   left: 32%;
   font-size: 13.5pt;
   color: rgb(129, 129, 129);

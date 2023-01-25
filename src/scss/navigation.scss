@@ -10,7 +10,7 @@ $macosblue: #1e5cce;
 }
 
 #win-controls {
-  visibility: visible;
+  visibility: hidden;
 }
 
 #close {
@@ -47,16 +47,16 @@ $macosblue: #1e5cce;
 
 .project-bar {
   position: absolute;
-  top: 0;
+  top: 1%;
   height: auto;
-  width: 100%;
+  width: 98%;
   height: 38px;
   box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
   --animate-delay: 0.8s;
-  background-color: rgba(0, 0, 0, .25) !important;
-  left: 0;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  background-color: rgba(0,0,0,.25) !important;
+  right: 1%;
+  left: 1%;
+  border-radius: 10px;
 }
 
 #project {
@@ -65,15 +65,15 @@ $macosblue: #1e5cce;
   color: #d0d0d0;
   width: auto;
   height: auto;
-  padding: 8px;
+  padding: 6px;
   padding-bottom: 7px;
   border-radius: 10px;
   vertical-align: center;
-  transition: 0.5s;
+  transition: .5s;
   display: inline-block;
-  margin-top: 0.6%;
-  margin-left: 8%;
-  background: rgba(190, 190, 190, 0.15);
+  margin-top: .6%;
+  margin-left: 1%;
+  background: rgba(190,190,190,.15);
   padding-right: 10px;
   z-index: 69;
   -webkit-app-region: no-drag;
@@ -137,7 +137,7 @@ $macosblue: #1e5cce;
   position: absolute;
   color: #b8b8b8;
   font-size: 14.5pt;
-  z-index: 69;
+  z-index: 5;
   -webkit-app-region: no-drag;
 }
 
@@ -211,6 +211,7 @@ $macosblue: #1e5cce;
 
 #project-folder {
   padding-right: 3px;
+  margin-left: 3px;
 }
 
 #project-close {

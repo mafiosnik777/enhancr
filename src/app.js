@@ -1,15 +1,19 @@
-const { app, shell } = require('electron');
-
-if (!app.requestSingleInstanceLock()) app.quit();
-
-const remoteMain = require('@electron/remote/main');
-const { setVibrancy } = require('electron-acrylic-window');
+const { app, shell, BrowserWindow, nativeTheme } = require('electron');
+const vibe = require('@pyke/vibe');
 
 const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 
+const remoteMain = require('@electron/remote/main');
 const setupIpc = require('./main/setup-ipc');
+
+if (!app.requestSingleInstanceLock()) app.quit();
+
+app.commandLine.appendSwitch('high-dpi-support', 1.25)
+app.commandLine.appendSwitch('force-device-scale-factor', 1.25)
+
+nativeTheme.themeSource = 'dark';
 
 const appDataPaths = {
     win32: process.env.APPDATA,
@@ -28,8 +32,6 @@ const initialHtml = devMode ? './pages/welcome.html' : './pages/launch.html';
 
 const appDataPath = path.resolve(appDataPaths[process.platform], '.enhancr');
 const settingsPath = path.resolve(appDataPath, 'settings.json');
-
-let mainWindow;
 let settings;
 
 // Ensure dirs/files
@@ -53,8 +55,8 @@ try {
 settings = settings.settings[0];
 
 // Initialize
+vibe.setup(app);
 const discordPresence = require('./main/discord-presence')(settings.rpc);
-const BrowserWindow = require('./main/browser-window')(!settings.disableBlur);
 
 remoteMain.initialize();
 
@@ -63,12 +65,19 @@ if (process.platform === 'win32') {
     app.setPath('userData', path.resolve(appDataPath, 'chromedata'));
 }
 
-app.once('ready', () => {
-    let vibrancyOptions;
+let frame = () => {
+    if (vibe.platform.isWin11()) return true; else return false;
+}
+
+app.whenReady().then(() => {
     let windowOptions = {
         width: 1024,
         height: 576,
-        frame: false,
+        frame: frame(),
+        show: false,
+        autoHideMenuBar: true,
+        transparent: false,
+        backgroundColor: '#00000000',
         show: false,
         webPreferences: {
             nodeIntegration: true,
@@ -81,30 +90,12 @@ app.once('ready', () => {
         enableWebSQL: false,
     };
 
-    const isWin11 = os.release().split('.')[2] >= 22000;
-
     // Platform-specific options
     // eslint-disable-next-line default-case
     switch (process.platform) {
         case 'win32': {
-            if (!isWin11) windowOptions.transparent = true;
-
-            if (settings.disableBlur) break;
-            const effect = isWin11 ? 'acrylic' : 'blur';
-
             windowOptions = {
                 ...windowOptions,
-                vibrancy: {
-                    theme: 'dark',
-                    effect,
-                    useCustomWindowRefreshMethod: true,
-                    disableOnBlur: false,
-                },
-            };
-
-            vibrancyOptions = {
-                effect,
-                disableOnBlur: false,
             };
             break;
         }
@@ -127,12 +118,12 @@ app.once('ready', () => {
         }
     }
 
-    mainWindow = new BrowserWindow(windowOptions);
+    const mainWindow = new BrowserWindow(windowOptions);
+
+    if (vibe.platform.isWin11()) vibe.applyEffect(mainWindow, 'mica'); else vibe.applyEffect(mainWindow, 'blurbehind');
 
     remoteMain.enable(mainWindow.webContents);
     setupIpc(mainWindow);
-
-    if (vibrancyOptions) setVibrancy(mainWindow, vibrancyOptions);
 
     // Inject css for solid bg (for now)
     if (settings.disableBlur) {

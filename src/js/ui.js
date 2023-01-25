@@ -370,11 +370,11 @@ if (process.platform == "linux") {
 }
 
 //Windows specific code
-if (process.platform !== "darwin") {
-    keyShortcut.textContent = "Ctrl + Enter";
+if (process.platform !== "win32") {
     winControls.style.visibility = "visible";
 } else {
     winControls.style.visibility = "hidden";
+    keyShortcut.textContent = "Ctrl + Enter";
 }
 
 // Window controls
