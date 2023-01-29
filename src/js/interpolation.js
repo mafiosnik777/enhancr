@@ -145,13 +145,12 @@ class Interpolation {
                     return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx");
                 } else if (model == 'CVP - v6.0') {
                     return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx");
-                } else if (model == 'RVP - v2.0') {
+                } else {
                     return path.join(cache, 'rvpv2.onnx');
                 }
             }
 
             let onnx = getOnnx();
-
             // get engine path
             function getEnginePath() {
                 return path.join(appDataPath, '/.enhancr/models/engine', 'cain' + '_' + path.basename(onnx, '.onnx') + '_' + width + 'x' + height + '_' + fp + '.engine');

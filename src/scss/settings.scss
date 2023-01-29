@@ -470,9 +470,9 @@ input[type="checkbox"] {
   display: inline-block;
   width: 315px;
   margin-left: 10px;
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0,0,0,.12);
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 #settings-list li {
@@ -1502,10 +1502,10 @@ input[type="checkbox"] {
 }
 
 #theming {
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0,0,0,.12);
   border-radius: 10px;
   margin-left: 10px;
-  height: 124px;
+  height: 114px;
   margin-right: 10px;
 }
 

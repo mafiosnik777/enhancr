@@ -137,6 +137,21 @@ if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
     blurLayer.style.visibility = 'visible';
 }
 
+const appDataPaths = {
+    win32: process.env.APPDATA,
+    darwin: `${process.env.HOME}/Library/Preferences`,
+    linux: `${process.env.HOME}/.local/share`,
+};
+const appDataPath = path.resolve(appDataPaths[process.platform], '.enhancr');
+
+if (!(localStorage.getItem('patreonUser') == null)) {
+    // set users profile pic
+    let profilePic = path.join(appDataPath, 'profile.jpeg');
+    document.getElementById('patreon-user-img').src = profilePic;
+} else {
+    document.getElementById('patreon-user-img').style.visibility = 'hidden';
+}
+
 sessionStorage.setItem("multiInput", "false");
 
 // drag and drop files
@@ -369,9 +384,12 @@ if (process.platform == "linux") {
     body.style.backgroundColor = "#333333";
 }
 
-//Windows specific code
-if (process.platform !== "win32") {
+//Window controls
+const isWin11 = os.release().split('.')[2] >= 22000;
+const project = document.getElementById('project');
+if (process.platform == "win32" && !isWin11 || process.platform == "linux") {
     winControls.style.visibility = "visible";
+    project.style.marginLeft = '7%';
 } else {
     winControls.style.visibility = "hidden";
     keyShortcut.textContent = "Ctrl + Enter";

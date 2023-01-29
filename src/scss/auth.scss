@@ -1,0 +1,99 @@
+@keyframes fly-1 {
+    from {
+      transform: translateY(0);
+    }
+  
+    to {
+      transform: translateY(-0.2em);
+    }
+}
+
+#auth-button {
+    background: rgb(0 0 0 / 80%);
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 11px;
+    width: 29vw;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 20%);
+    margin: 22% 20%;
+    transition: .2s;
+    cursor: pointer;
+    animation-name: fadeInDown, fly-1;
+    animation-duration: 1s, 0.8s;
+    animation-delay: 0s, 1s;
+    animation-iteration-count: 1, infinite;
+    animation-direction: normal, alternate;
+
+    &:hover {
+        background: #dd5b4a;
+    }
+
+    i {
+        margin-right: 6px;
+    }
+}
+
+#watermark {
+    position: absolute;
+    bottom: 2%;
+    right: 1.5%;
+    color: grey;
+    font-size: 7pt;
+}
+
+#lock-auth {
+    position: absolute;
+    right: 13%;
+    bottom: 50%;
+    font-size: 30pt;
+    color: white;
+}
+
+#auth-progress {
+    width: 100%;
+    height: 100%;
+    background: rgb(0 0 0 / 70%);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.lds-ring {
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    position: absolute;
+    top: 43%;
+    left: 48%;
+    transform: translate(-50%, -50%);
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    margin: 8px;
+    border: 14px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

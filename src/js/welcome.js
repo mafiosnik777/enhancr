@@ -38,6 +38,32 @@ function loadProject(projectPath) {
     window.location.replace('../app.html');
 }
 
+const appDataPaths = {
+    win32: process.env.APPDATA,
+    darwin: `${process.env.HOME}/Library/Preferences`,
+    linux: `${process.env.HOME}/.local/share`,
+};
+const appDataPath = path.resolve(appDataPaths[process.platform], '.enhancr');
+
+if (!(localStorage.getItem('patreonUser') == null)) {
+// set users profile pic
+let profilePic = path.join(appDataPath, 'profile.jpeg');
+document.getElementById('patreon-profile').src = profilePic;
+
+// change profile name
+document.getElementById('profile-span').textContent = localStorage.getItem('patreonUser')
+
+//change tier color
+if (localStorage.getItem('Tier') == '1000') {
+    document.getElementById('tier-icon').style.color = '#c69f31'
+} else {
+    document.getElementById('tier-icon').style.color = 'silver'
+}
+} else {
+    document.getElementById('patreon-profile').style.visibility = 'hidden';
+    document.getElementById('profile-container').style.visibility = 'hidden';
+}
+
 const recentProjects = parseJSON(localStorage.getItem('projects'), []);
 
 const blurLayer = document.getElementById('light-mode')

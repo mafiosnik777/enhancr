@@ -1,7 +1,7 @@
 {
   "name": "enhancr",
   "productName": "enhancr",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "private": true,
   "description": "Interpolation/Upscaling AI",
   "main": "src/app.js",
@@ -27,6 +27,7 @@
     "aspect-ratio": "^2.1.1",
     "axios": "^0.27.2",
     "easy-presence": "^1.2.0-oops1",
+    "electron-browser-storage": "^1.0.7",
     "electron-squirrel-startup": "^1.0.0",
     "find-process": "^1.4.7",
     "fluent-ffmpeg": "^2.1.2",

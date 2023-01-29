@@ -11,9 +11,10 @@ const includePaths = [
     'node_modules',
 ];
 
-const ignoredPaths = fs.readdirSync(__dirname).filter((pathname) => (
-    !includePaths.includes(pathname)
-));
+// TODO: resolve issues with packaging when ignoring paths 
+// const ignoredPaths = fs.readdirSync(__dirname).filter((pathname) => (
+//     !includePaths.includes(pathname)
+// ));
 
 if (process.platform === 'win32') process.env.GYP_MSVS_VERSION = '2022';
 
@@ -24,7 +25,7 @@ module.exports = {
         ignore: [
             'src/scss',
             /\.map$/i,
-            ...ignoredPaths,
+            // ...ignoredPaths,
         ],
     },
     hooks: {

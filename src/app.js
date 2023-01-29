@@ -5,6 +5,8 @@ const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
 
+const { localStorage, sessionStorage } = require('electron-browser-storage');
+
 const remoteMain = require('@electron/remote/main');
 const setupIpc = require('./main/setup-ipc');
 
@@ -28,11 +30,35 @@ const createDirs = [
 ];
 
 const devMode = !app.isPackaged;
-const initialHtml = devMode ? './pages/welcome.html' : './pages/launch.html';
 
 const appDataPath = path.resolve(appDataPaths[process.platform], '.enhancr');
 const settingsPath = path.resolve(appDataPath, 'settings.json');
 let settings;
+
+// this only seems to work in packaged state
+if (!devMode) app.setAsDefaultProtocolClient('enhancr')
+
+const singleInstanceLock = app.requestSingleInstanceLock();
+if (!singleInstanceLock) {
+    app.quit();
+} else {
+    app.on("second-instance", (_, argv) => {
+        console.log(`Instance lock triggered`);
+        if (argv.length > 1) {
+            // Only try this if there is an argv (might be redundant)
+            if (process.platform == "win32" || process.platform === "linux") {
+                try {
+                    console.log(`${argv[argv.length - 1]}`);
+                    BrowserWindow.getFocusedWindow().webContents.send('OAuth', argv[argv.length - 1])
+                } catch {
+                    console.log(
+                        `Direct link to file - FAILED: ${argv}`,
+                    );
+                }
+            }
+        }
+    });
+}
 
 // Ensure dirs/files
 createDirs.forEach((dir) => {
@@ -69,7 +95,8 @@ let frame = () => {
     if (vibe.platform.isWin11()) return true; else return false;
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+
     let windowOptions = {
         width: 1024,
         height: 576,
@@ -155,7 +182,17 @@ app.whenReady().then(() => {
         return { action: 'deny' };
     });
 
-    mainWindow.loadFile(path.join(__dirname, initialHtml));
+    const patreonUntil = await localStorage.getItem('patreonUntil');
+    const validUntil = new Date(patreonUntil);
+    const now = new Date();
+
+    // check if app is packaged -> if not skip auth / if yes check if subscription is still valid
+    if (!devMode && (patreonUntil == null || now < validUntil)) mainWindow.loadFile(path.join(__dirname, './pages/auth.html'))
+    else mainWindow.loadFile(path.join(__dirname, './pages/welcome.html'))
+
+    app.on('open-url', (event, url) => {
+        console.log(`${url}`);
+    })
 });
 
 app.once('window-all-closed', () => {

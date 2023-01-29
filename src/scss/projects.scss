@@ -208,3 +208,26 @@ $macosblue: #1e5cce;
 #no-recents:has(+ .recent) {
     display: none;
 }
+
+#patreon-profile {
+    border-radius: 100px;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 2%;
+    left: 1.5%;
+    box-shadow: 0 4px 20px 0 rgb(0 0 0 / 20%);
+}
+
+#profile-container {
+    position: absolute;
+    color: gray;
+    top: 3.3%;
+    left: 5.25%;
+    font-size: 8pt;
+}
+
+#tier-icon {
+    margin-left: 5px;
+    vertical-align: super;
+}

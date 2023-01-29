@@ -30,6 +30,8 @@
 @use "./terminal";
 // Popup
 @use "./popup";
+// Auth
+@use "./auth";
 
 html {
   background: transparent;
