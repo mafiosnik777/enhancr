@@ -183,11 +183,11 @@ app.whenReady().then(async () => {
     });
 
     const patreonUntil = await localStorage.getItem('patreonUntil');
-    const validUntil = new Date(patreonUntil);
+    const validUntil = new Date(patreonUntil || 0);
     const now = new Date();
 
     // check if app is packaged -> if not skip auth / if yes check if subscription is still valid
-    if (!devMode && (patreonUntil == null || now < validUntil)) mainWindow.loadFile(path.join(__dirname, './pages/auth.html'))
+    if (!devMode && (patreonUntil == null || now > validUntil)) mainWindow.loadFile(path.join(__dirname, './pages/auth.html'))
     else mainWindow.loadFile(path.join(__dirname, './pages/welcome.html'))
 
     app.on('open-url', (event, url) => {
