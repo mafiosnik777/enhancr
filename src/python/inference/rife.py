@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
-from decimal import Decimal
 import os
 import sys
-from decimal import Decimal
-from fractions import Fraction
 import vapoursynth as vs
 import platform
 import tempfile
 import json
-ossystem = platform.system()
 
+from multiprocessing import cpu_count
+
+ossystem = platform.system()
 core = vs.core
-vs_api_below4 = vs.__api_version__.api_major < 4
-core.num_threads = 4
 
 if ossystem == "Windows":
     tmp_dir = tempfile.gettempdir() + "\\enhancr\\"
@@ -27,10 +24,15 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     rife_model = data['model']
     TTA = data['rife_tta']
     UHD = data['rife_uhd']
+    streams = data['streams']
     sceneDetection = data['sc']
     frameskip = data['skip']
     sensitivity = data['sensitivity']
     sensitivityValue = data['sensitivityValue']
+
+def threading():
+  return int(streams) if int(streams) < cpu_count() else cpu_count()
+core.num_threads = cpu_count()
     
 # get rife model
 if rife_model == 'RIFE - v2.3':
@@ -62,9 +64,9 @@ if sceneDetection:
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-clip = core.rife.RIFE(clip, model=model, factor_num=2, gpu_id=0, gpu_thread=2, tta=TTA, uhd=UHD, skip=frameskip, sc=sceneDetection)
+clip = core.rife.RIFE(clip, model=model, factor_num=2, gpu_id=0, gpu_thread=threading(), tta=TTA, uhd=UHD, skip=frameskip, sc=sceneDetection)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 
-print("Starting video output..", file=sys.stderr)
+print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 clip.set_output()

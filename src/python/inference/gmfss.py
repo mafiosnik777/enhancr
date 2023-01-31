@@ -6,6 +6,8 @@ import platform
 import tempfile
 import json
 
+from multiprocessing import cpu_count
+
 # workaround for relative imports with embedded python
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
@@ -16,8 +18,6 @@ from utils.vfi_inference import vfi_inference
 
 ossystem = platform.system()
 core = vs.core
-vs_api_below4 = vs.__api_version__.api_major < 4
-core.num_threads = 4
 
 if ossystem == "Windows":
     tmp_dir = tempfile.gettempdir() + "\\enhancr\\"
@@ -42,6 +42,10 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     precision = data['halfPrecision']
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
+
+def threading():
+  return int(streams) if int(streams) < cpu_count() else cpu_count()
+core.num_threads = cpu_count()
 
 if frameskip:
     offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
@@ -68,5 +72,5 @@ clip = vfi_inference(
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV422P8, matrix_s="709")
 
-print("Starting video output..", file=sys.stderr)
+print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(1), file=sys.stderr)
 clip.set_output()

@@ -6,6 +6,8 @@ import platform
 import tempfile
 import json
 
+from multiprocessing import cpu_count
+
 # workaround for relative imports with embedded python
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
@@ -36,9 +38,11 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     sensitivityValue = data['sensitivityValue']
     ToPadWidth = data['toPadWidth']
     ToPadHeight = data['toPadHeight']
-    precision = data['halfPrecision']
+    halfPrecision = data['halfPrecision']
 
-core.num_threads = 4
+def threading():
+  return int(streams) if int(streams) < cpu_count() else cpu_count()
+core.num_threads = cpu_count()
 
 engine_path = os.path.join(os.getenv('APPDATA'), '.enhancr', 'models', 'engine')
 
@@ -56,14 +60,17 @@ if sceneDetection:
     else:
         clip = core.misc.SCDetect(clip=clip, threshold=0.180)
 
-clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
+if halfPrecision:
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
+else:
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-clip = gmfss_union(clip, num_streams=int(streams), trt=True, trt_cache_path=engine_path, model=0)
+clip = gmfss_union(clip, num_streams=threading(), trt=True, trt_cache_path=engine_path, model=0)
 
 clip1 = core.std.Interleave([clip, clip])
 output = vfi_frame_merger(clip1, clip)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV422P8, matrix_s="709")
 
-print("Starting video output..", file=sys.stderr)
+print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 clip.set_output()

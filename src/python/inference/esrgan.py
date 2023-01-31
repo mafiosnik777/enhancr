@@ -4,14 +4,12 @@ import sys
 import platform
 import tempfile
 import json
-
 import vapoursynth as vs
+
 from vapoursynth import core
+from multiprocessing import cpu_count
 
 ossystem = platform.system()
-
-vs_api_below4 = vs.__api_version__.api_major < 4
-core.num_threads = 8
 
 if ossystem == "Windows":
     tmp_dir = tempfile.gettempdir() + "\\enhancr\\"
@@ -28,6 +26,9 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     tileHeight = int(data['tileHeight'])
     tileWidth = int(data['tileWidth'])
 
+def threading():
+  return int(streams) if int(streams) < cpu_count() else cpu_count()
+core.num_threads = cpu_count()
 
 cwd = os.getcwd()
 vsmlrt_path = os.path.join(cwd, '..', 'env', 'Library', 'vstrt.dll')
@@ -38,11 +39,11 @@ clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
 if tiling == False:
-    clip = core.trt.Model(clip, engine_path=engine, num_streams=streams)
+    clip = core.trt.Model(clip, engine_path=engine, num_streams=threading())
 else:
-    clip = core.trt.Model(clip, engine_path=engine, num_streams=streams, tilesize=[tileHeight, tileWidth])
+    clip = core.trt.Model(clip, engine_path=engine, num_streams=threading(), tilesize=[tileHeight, tileWidth])
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 
-print("Starting video output..", file=sys.stderr)
+print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 clip.set_output()

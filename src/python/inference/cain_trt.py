@@ -6,6 +6,8 @@ import platform
 import tempfile
 import json
 
+from multiprocessing import cpu_count
+
 # workaround for relative imports with embedded python
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
@@ -14,8 +16,6 @@ from utils.vfi_inference import vfi_frame_merger
 
 ossystem = platform.system()
 core = vs.core
-vs_api_below4 = vs.__api_version__.api_major < 4
-core.num_threads = 4
 
 if ossystem == "Windows":
     tmp_dir = tempfile.gettempdir() + "\\enhancr\\"
@@ -37,6 +37,8 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     ToPadWidth = data['toPadWidth']
     ToPadHeight = data['toPadHeight']
 
+core.num_threads = cpu_count()
+
 cwd = os.getcwd()
 vsmlrt_path = os.path.join(cwd, '..', 'env', 'Library', 'vstrt.dll')
 core.std.LoadPlugin(path=vsmlrt_path)
@@ -49,8 +51,6 @@ if frameskip:
     # use ssim for similarity calc
     clip = core.vmaf.Metric(clip, offs1, 2)
 
-clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
-
 if sceneDetection:
     if sensitivity:
         clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
@@ -59,6 +59,8 @@ if sceneDetection:
 
 if padding:
     clip = core.std.AddBorders(clip, right=ToPadWidth, top=ToPadHeight)
+
+clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
 clip_pos1 = clip[1:]
 clip_pos2 = clip.std.Trim(first=0,last=clip.num_frames-2)
@@ -80,5 +82,5 @@ if padding:
 
 output = vs.core.resize.Bicubic(output, format=vs.YUV422P8, matrix_s="709")
 
-print("Starting video output..", file=sys.stderr)
+print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + streams, file=sys.stderr)
 output.set_output()

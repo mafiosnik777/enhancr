@@ -158,7 +158,7 @@ class Interpolation {
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
 
-            let fp16 = document.getElementById('fp16-check');
+            let fp16 = document.getElementById('fp16-check').checked;
 
             const progressSpan = document.getElementById("progress-span");
 

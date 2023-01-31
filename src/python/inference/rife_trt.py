@@ -9,28 +9,13 @@ import json
 import functools
 import math
 
-# https://github.com/styler00dollar/VSGAN-tensorrt-docker/blob/1c152506f5c76b76708524398483c6c97d42cd95/src/rife_trt.py#L6
-# ❤️ ty sudo u the goat
-def vfi_frame_merger(
-    clip1: vs.VideoNode,
-    clip2: vs.VideoNode,
-) -> vs.VideoNode:
-    core = vs.core
+from multiprocessing import cpu_count
 
-    metric_thresh = 0.999
+# workaround for relative imports with embedded python
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
 
-    def execute(n: int, clip1: vs.VideoNode, clip2: vs.VideoNode) -> vs.VideoNode:
-        ssim_clip = clip1.get_frame(n).props.get("float_ssim")
-        if (ssim_clip and ssim_clip > metric_thresh) or clip1.get_frame(n).props.get(
-            "_SceneChangeNext"
-        ):
-            return clip1
-        return clip2
-
-    return core.std.FrameEval(
-        core.std.BlankClip(clip=clip1, width=clip1.width, height=clip1.height),
-        functools.partial(execute, clip1=clip1, clip2=clip2),
-    ) 
+from utils.vfi_inference import vfi_frame_merger
 
 def rife_trt(
     clip: vs.VideoNode,
@@ -84,8 +69,6 @@ def rife_trt(
 
 ossystem = platform.system()
 core = vs.core
-vs_api_below4 = vs.__api_version__.api_major < 4
-core.num_threads = 4
 
 if ossystem == "Windows":
     tmp_dir = tempfile.gettempdir() + "\\enhancr\\"
@@ -103,6 +86,10 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     frameskip = data['skip']
     sensitivity = data['sensitivity']
     sensitivityValue = data['sensitivityValue']
+
+def threading():
+  return int(streams) if int(streams) < cpu_count() else cpu_count()
+core.num_threads = cpu_count()
 
 cwd = os.getcwd()
 vsmlrt_path = os.path.join(cwd, '..', 'env', 'Library', 'vstrt.dll')
@@ -124,9 +111,9 @@ if sceneDetection:
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-clip = rife_trt(clip, multi = 2, scale = 1.0, device_id = 0, num_streams = streams, engine_path = engine)
+clip = rife_trt(clip, multi = 2, scale = 1.0, device_id = 0, num_streams = threading(), engine_path = engine)
 
 output = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 
-print("Starting video output..", file=sys.stderr)
+print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 output.set_output()
