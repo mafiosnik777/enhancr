@@ -47,7 +47,6 @@ var betaModal = document.getElementById('modal-beta');
 
 previewContainer.addEventListener('animationend', () => {
   removeAnimations();
-  openModal(betaModal);
 });
 
 let saveModal = document.getElementById("modal-save");
