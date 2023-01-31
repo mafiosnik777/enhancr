@@ -200,7 +200,7 @@ class Interpolation {
             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
-                        if (!model == 'RVP - v2.0') {
+                        if (!(model == 'RVP - v2.0')) {
                             var optShapes = `--optShapes=input:1x6x${height}x${width}`
                         } else {
                             var optShapes = ``
@@ -415,6 +415,9 @@ class Interpolation {
                 if (engine == "GMFlow - GMFSS (PyTorch)") {
                     return path.join(__dirname, '..', "/python/inference/gmfss.py");
                 }
+                if (engine == "GMFlow - GMFSS (TensorRT)") {
+                    return path.join(__dirname, '..', "/python/inference/gmfss_trt.py");
+                }
             }
             var engine = pickEngine();
 
@@ -452,6 +455,7 @@ class Interpolation {
                             var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:-1 "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
                             var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
+                            console.log(cmd);
                         }
                         let term = spawn(cmd, [], {
                             shell: true,

@@ -5,30 +5,12 @@ import vapoursynth as vs
 import platform
 import tempfile
 import json
-import functools
 
-#https://github.com/styler00dollar/VSGAN-tensorrt-docker/blob/f0a30ebcae0cd9b50a07aadf152a23f74f9ba187/src/vfi_inference.py#L159
-# ❤️ ty sudo u the goat
-def vfi_frame_merger(
-    clip1: vs.VideoNode,
-    clip2: vs.VideoNode,
-) -> vs.VideoNode:
-    core = vs.core
+# workaround for relative imports with embedded python
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
 
-    metric_thresh = 0.999
-
-    def execute(n: int, clip1: vs.VideoNode, clip2: vs.VideoNode) -> vs.VideoNode:
-        ssim_clip = clip1.get_frame(n).props.get("float_ssim")
-        if (ssim_clip and ssim_clip > metric_thresh) or clip1.get_frame(n).props.get(
-            "_SceneChangeNext"
-        ):
-            return clip1
-        return clip2
-
-    return core.std.FrameEval(
-        core.std.BlankClip(clip=clip1, width=clip1.width, height=clip1.height),
-        functools.partial(execute, clip1=clip1, clip2=clip2),
-    )
+from utils.vfi_inference import vfi_frame_merger
 
 ossystem = platform.system()
 core = vs.core

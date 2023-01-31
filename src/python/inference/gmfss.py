@@ -10,8 +10,8 @@ import json
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
-from arch.GMFUpSS.GMFUpSS import GMFupSS
-from arch.GMFSS_Union.GMFSS_Union import GMFSS_Union
+from arch.gmfupss_torch.GMFUpSS import GMFupSS
+from arch.gmfss_union_torch.GMFSS_Union import GMFSS_Union
 from utils.vfi_inference import vfi_inference
 
 ossystem = platform.system()

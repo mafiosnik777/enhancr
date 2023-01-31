@@ -546,7 +546,7 @@ cainTrt.addEventListener("click", function () {
     console.log("Engine written to project file.");
 });
 
-var rife = document.getElementById("gmfss");
+var gmfss = document.getElementById("gmfss");
 
 // change engine (gmfss)
 gmfss.addEventListener("click", function () {
@@ -569,6 +569,33 @@ gmfss.addEventListener("click", function () {
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.interpolation[0].engine = "gmfss";
     data.interpolation[0].model = "GMFSS - Up";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+var gmfssTrt = document.getElementById("gmfss-trt");
+
+// change engine (gmfss-trt)
+gmfssTrt.addEventListener("click", function () {
+    interpolationEngineSpan.textContent = "GMFlow - GMFSS (TensorRT)";
+    hider.style.visibility = "hidden";
+    engineDropdown.style.visibility = "hidden";
+    rife23Option.style.display = 'none';
+    rife4Option.style.display = 'none';
+    rife46Option.style.display = 'none';
+    gmfssUpOption.style.display = 'none';
+    gmfssUnionOption.style.display = 'block';
+    rvpv1Option.style.display = 'none';
+    rvpv2Option.style.display = 'none';
+    cvpv6Option.style.display = 'none';
+
+    modelSpan.textContent = 'GMFSS - Union';
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.interpolation[0].engine = "gmfss-trt";
+    data.interpolation[0].model = "GMFSS - Union";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });

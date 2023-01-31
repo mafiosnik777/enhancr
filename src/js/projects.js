@@ -234,6 +234,16 @@ function loadInterpolation() {
     rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
   }
+  if (data.interpolation[0].engine === "gmfss-trt") {
+    interpolationEngineSpan.textContent = "GMFlow - GMFSS (TensorRT)";
+    rife23Option.style.display = 'none';
+    rife4Option.style.display = 'none';
+    rife46Option.style.display = 'none';
+    rvpv1Option.style.display = 'none';
+    rvpv2Option.style.display = 'none';
+    cvpv6Option.style.display = 'none';
+    gmfssUpOption.style.display = 'none';
+  }
   if (data.interpolation[0].engine === "") {
     interpolationEngineSpan.textContent = "Channel Attention - CAIN (TensorRT)";
     rife23Option.style.display = 'none';

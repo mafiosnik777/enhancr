@@ -25,9 +25,9 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**RIFE (TensorRT)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
->**GMFUpSS (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFupSS](https://github.com/98mxr/GMFupSS)** - [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
+>**GMFSS (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFupSS](https://github.com/98mxr/GMFupSS)** - [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
->**GMFSS_Union (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
+>**GMFSS (TensorRT)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-gmfss_union](https://github.com/HolyWu/vs-gmfss_union)**
 
 >**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-NCNN-vulkan** (unreleased)
 
@@ -94,6 +94,7 @@ Input size: 1920x1080 @ 2x
 | CAIN / cvp-v6 (TensorRT) | 45.41 fps | 63.84 fps | 81.23 fps | 112.87 fps | 183.46 fps |
 | GMFSS / Up (PyTorch) | - | - | 4.32 fps | - | 16.35 fps |
 | GMFSS / Union (PyTorch) | - | - | 3.68 fps | - | 13.93 fps |
+| GMFSS / Union (PyTorch) | - | - | 6.79 fps | - | - |
 | waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps | 9.36 fps | 9.81 fps | 15.48 fps | 39.77 fps |
 | RealESRGAN / animevideov3 (TensorRT) | 7.64 fps | 9.10 fps | 8.49 fps | 18.66 fps | 38.67 fps |
 | DPIR / Denoise (TensorRT) | 4.38 fps | 6.45 fps | 5.39 fps | 11.64 fps | 27.41 fps |

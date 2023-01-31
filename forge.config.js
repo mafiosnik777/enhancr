@@ -16,7 +16,7 @@ const includePaths = [
 //     !includePaths.includes(pathname)
 // ));
 
-if (process.platform === 'win32') process.env.GYP_MSVS_VERSION = '2022';
+if (process.platform === 'win32') process.env.GYP_MSVS_VERSION = '2019';
 
 module.exports = {
     packagerConfig: {
