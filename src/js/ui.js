@@ -893,6 +893,11 @@ async function setGPU() {
     }
     if (sessionStorage.getItem('hasNVIDIA') == "true") {
         sessionStorage.setItem('gpu', 'NVIDIA')
+        document.getElementById('cain-trt').style.display = 'block';
+        document.getElementById('rife-trt').style.display = 'block';
+        document.getElementById('realesrgan-tensorrt').style.display = 'block';
+        document.getElementById('dpir').style.display = 'block';
+        document.getElementById('anime-video').style.display = 'block';
     }
 }
 setGPU();

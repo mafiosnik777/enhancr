@@ -962,7 +962,7 @@ document.getElementById('clear-queue-btn').addEventListener('click', () => {
   empty.setAttribute('id', 'queue-blank');
   empty.textContent = 'No items scheduled for processing, add items to the queue to get started.';
   queueTab.append(empty);
-  enhancr.terminal('Cleared queue.')
+  enhancr.terminal('Queue : Cleared')
 })
 
 
