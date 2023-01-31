@@ -458,3 +458,22 @@ $macosblue: #1e5cce;
     height: auto;
   }
 }
+
+#clear-queue-btn {
+  color: indianred;
+  padding: 4px 7px;
+  background: rgb(55 55 55 / 50%);
+  position: absolute;
+  border-radius: 100px;
+  font-size: 10pt;
+  right: 0.5%;
+  bottom: 44%;
+  cursor: pointer;
+  z-index: 6;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    color: rgb(202, 74, 74);
+    background: rgba(80, 80, 80, 0.5);
+  }
+}

@@ -75,6 +75,8 @@ let queue = [];
 function renderQueueItem() {
   queueTab.innerHTML = '';
 
+  if (queue.length != 0 && queueTab.style.visibility == 'visible') document.getElementById('clear-queue-btn').style.visibility = 'visible';
+
   function setScreenshot(i) {
     setTimeout(function () {
       webFrame.clearCache()
@@ -650,6 +652,7 @@ function renderQueueItem() {
               queueBadge.innerHTML = count;
               if (queue.length == 0) {
                 queueTab.innerHTML = '';
+                document.getElementById('clear-queue-btn').style.visibility = 'hidden';
                 let blank = document.createElement('span');
                 blank.setAttribute('id', `queue-blank`);
                 blank.innerHTML = 'No items scheduled for processing, add items to the queue to get started.'
@@ -915,6 +918,7 @@ async function toggleQueueTab() {
   if (queueTab.style.visibility == 'hidden') {
     sessionStorage.setItem('queueTab', 'open');
     queueTab.style.visibility = 'visible';
+    if (queue.length != 0) document.getElementById('clear-queue-btn').style.visibility = 'visible';
     queueBtn.style.background = 'rgba(190, 190, 190, 0.378)';
     let thumbs = [].slice.call(document.getElementsByClassName('queue-thumb'));
     thumbs.forEach(function (thumb) {
@@ -930,6 +934,7 @@ async function toggleQueueTab() {
   } else {
     sessionStorage.setItem('queueTab', 'closed');
     queueTab.style.visibility = 'hidden';
+    document.getElementById('clear-queue-btn').style.visibility = 'hidden';
     queueBtn.style.background = 'rgba(190, 190, 190, 0.1)';
     let menu = [].slice.call(document.getElementsByClassName('context-menu-queue'));
     menu.forEach(function (contextMenu) {
@@ -947,5 +952,17 @@ async function toggleQueueTab() {
   }
 }
 queueBtn.addEventListener('click', toggleQueueTab);
+
+document.getElementById('clear-queue-btn').addEventListener('click', () => {
+  queue.length = 0;
+  renderQueueItem()
+  document.getElementById('clear-queue-btn').style.visibility = 'hidden';
+  sessionStorage.setItem('queueLength', queue.length);
+  let empty = document.createElement('span');
+  empty.setAttribute('id', 'queue-blank');
+  empty.textContent = 'No items scheduled for processing, add items to the queue to get started.';
+  queueTab.append(empty);
+  enhancr.terminal('Cleared queue.')
+})
 
 
