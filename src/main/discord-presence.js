@@ -36,7 +36,9 @@ const rpcClient = new EasyPresence('1046415937886228558');
 let presenceData;
 let presenceEnabled;
 
-function setPresence(status, { fps, engine, percentage } = {}) {
+function setPresence(status, { 
+    fps, engine, percentage, startDate
+} = {}) {
     let newPresenceData = basePresenceData;
 
     if (status) {
@@ -50,7 +52,7 @@ function setPresence(status, { fps, engine, percentage } = {}) {
                 small_image: 'enhancr',
                 small_text: `enhancr - ${appVersion}`,
             },
-            timestamps: { start: new Date() },
+            timestamps: { start: startDate },
         };
     }
 
@@ -63,17 +65,30 @@ rpcClient.on('connected', () => {
 });
 
 module.exports = (startupEnabled) => {
+    let inferenceRunning = false
+    let startDate;
+
+    const activePresence = (status, options) => {
+        if (!inferenceRunning) {
+            inferenceRunning = true
+            startDate = new Date()
+        }
+        
+        setPresence(status, { ...options, startDate });
+    }
+
     ipcMain.on('rpc-done', () => {
+        inferenceRunning = false
         setPresence(null);
     });
     ipcMain.on('rpc-interpolation', (event, fps, engine, percentage) => {
-        setPresence('interpolate', { fps, engine, percentage });
+        activePresence('interpolate', { fps, engine, percentage });
     });
     ipcMain.on('rpc-upscaling', (event, fps, engine, percentage) => {
-        setPresence('upscale', { fps, engine, percentage });
+        activePresence('upscale', { fps, engine, percentage });
     });
     ipcMain.on('rpc-restoration', (event, fps, engine, percentage) => {
-        setPresence('restore', { fps, engine, percentage });
+        activePresence('restore', { fps, engine, percentage });
     });
 
     if (startupEnabled) {
