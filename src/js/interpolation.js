@@ -159,7 +159,7 @@ class Interpolation {
             let onnx = getOnnx();
             // get engine path
             function getEnginePath() {
-                return path.join(appDataPath, '/.enhancr/models/engine', 'cain' + '_' + path.basename(onnx, '.onnx') + '_' + width + 'x' + height + '_' + fp + '.engine');
+                return path.join(appDataPath, '/.enhancr/models/engine', 'cain' + '_' + path.basename(onnx, '.onnx') + '_' + width + 'x' + height + '_' + fp + '_trt_8.5.2.engine');
             }
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
@@ -257,15 +257,15 @@ class Interpolation {
             function getRifeEngine() {
                 if (document.getElementById('rife-tta-check').checked) {
                     if (fp16.checked == true) {
-                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_fp16_${shapeDimensionsMax}.engine`);
+                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_fp16_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
                     } else {
-                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_${shapeDimensionsMax}.engine`);
+                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
                     }
                 } else {
                     if (fp16.checked == true) {
-                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_fp16_${shapeDimensionsMax}.engine`);
+                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_fp16_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
                     } else {
-                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_${shapeDimensionsMax}.engine`);
+                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
                     }
                 }
             }

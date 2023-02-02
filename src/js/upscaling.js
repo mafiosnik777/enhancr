@@ -188,7 +188,7 @@ class Upscaling {
                         return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     }
                 } else {
-                    return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '.engine');
+                    return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '_trt_8.5.2.engine');
                 }
             }
             let engineOut = getEnginePath();
