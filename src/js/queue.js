@@ -919,14 +919,14 @@ try {
         exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
         enhancr.terminal('Stopped queue successfully.\r\n');
         setTimeout(() => {
-          document.getElementById('eta').style.visibility = 'hidden';
-          document.getElementById('fps-meter').style.visibility = 'hidden';
           document.getElementById('progress-done').style.width = '0%';
           document.getElementById('progress-span').style.visibility = 'hidden';
           document.getElementById('loading').style.visibility = 'hidden';
           win.setProgressBar(-1, {
             mode: "none"
           });
+          document.getElementById('eta').style.visibility = 'hidden';
+          document.getElementById('fps-meter').style.visibility = 'hidden';
         }, 2000)
         ipcRenderer.send('rpc-done');
         terminal.scrollTop = terminal.scrollHeight;

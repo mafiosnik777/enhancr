@@ -282,9 +282,18 @@
       <ul style="list-style-type:none;" id="settings-list" class="animate__animated animate__fadeIn">
         <div id="toggles-side"><i class="fa-solid fa-gear"></i></div>
         <li><input type="checkbox" id="preview-check" /><span> Enable Preview</span></li>
-        <li><input type="checkbox" id="disable-blur" /><span id="advanced-view"> Enable Advanced View</span></li>
         <li id="rpc-li-item"><input type="checkbox" id="toggle-rpc" /><span> Enable Discord Rich Presence (requires
             restart)</span></li>
+            <form class="range" action="">
+              <label class="range__label" for="dummy">Range</label>
+              <input class="range__input" id="dummy" type="range" value="50" min="0" max="100" step="25">
+              <div class="range__output" id="ui-slider" aria-hidden="true" data-tip>
+                <div class="range__output-value-track">
+                  <div class="range__output-values" id="scale-tooltip" data-values></div>
+                </div>
+              </div>
+            </form>
+            <span id="scale-label">UI scale (requires restart)</span>
       </ul>
       <div id="theming" class="animate__animated animate__fadeIn">
         <div id="theming-side"><i id="theming-icon" class="fa-solid fa-paintbrush"></i></div>

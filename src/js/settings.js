@@ -50,6 +50,9 @@ function saveSettings() {
   var hwEncodeCheck = document.getElementById("hwencode-check").checked;
   var unsupportedCheck = document.getElementById("unsupported-check").checked;
 
+  var uiSlider = document.getElementById('dummy');
+  let uiScale = (getComputedStyle(uiSlider).getPropertyValue('--percent')).slice(0, -1);
+
   var theme = sessionStorage.getItem('theme');
 
   preview.classList.remove("animate__delay-4s");
@@ -89,7 +92,8 @@ function saveSettings() {
         customModel: customModelCheck,
         unsupportedEngines: unsupportedCheck,
         systemPython: pythonCheck,
-        language: "english"
+        language: "english",
+        uiScale: uiScale
       },
     ],
   };
@@ -158,6 +162,18 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     document.getElementById("sensitivity").checked = json.settings[0].sensitivityValue;
     document.getElementById("sensitivity-check").checked = json.settings[0].sensitivity;
     document.getElementById("unsupported-check").checked = json.settings[0].unsupportedEngines;
+    document.getElementById('dummy').value = json.settings[0].uiScale;
+    document.getElementById('dummy').style.setProperty('--percent', json.settings[0].uiScale + '%')
+    document.getElementById('ui-slider').style.setProperty('--percent', json.settings[0].uiScale + '%')
+    let trans = () => {
+      if (json.settings[0].uiScale == 0) return 0;
+      else if (json.settings[0].uiScale == 25) return -50;
+      else if (json.settings[0].uiScale == 50) return -100;
+      else if (json.settings[0].uiScale == 75) return -150;
+      else if (json.settings[0].uiScale == 100) return -200;
+      else return -100;
+    }
+    document.getElementById('scale-tooltip').style.setProperty('--transX', trans() + 'em')
   } catch (error) {
     console.error(error);
     console.log('Incompatible settings.json detected, saving settings to overwrite incompatible one.')
@@ -440,4 +456,65 @@ shapeRes.addEventListener('click', function () {
 })
 tileRes.addEventListener('click', function () {
   sessionStorage.setItem('settingsSaved', 'false');
+})
+
+window.addEventListener("DOMContentLoaded",() => {
+	const fr = new RangeSlidingValue("dummy");
+});
+
+class RangeSlidingValue {
+	constructor(id) {
+		this.input = document.getElementById(id);
+		this.output = document.querySelector('[data-tip]');
+		this.values = this.output?.querySelector("[data-values]");
+		this.init();
+	}
+	init() {
+		this.input?.addEventListener("input",this.update.bind(this));
+		this.populateValues();
+		this.update();
+	}
+	populateValues() {
+		const digitSpan = document.createElement("span");
+		digitSpan.className = "range__output-value";
+
+		const { min, max } = this.input;
+
+		for (let v = min; v <= max; ++v) {
+			const newSpan = digitSpan.cloneNode();
+			newSpan.innerText = v;
+			this.values?.appendChild(newSpan);
+		}
+	}
+	update(e) {
+		let value = this.input.defaultValue;
+		// when manually set
+		if (e) value = e.target?.value;
+		// when initiated
+		else this.input.value = value;
+
+		const min = this.input.min || 0;
+		const max = this.input.max || 100;
+		const possibleValues = max - min;
+		const relativeValue = (value - min) / possibleValues;
+		const percentRaw = relativeValue * 100;
+		const percent = +percentRaw.toFixed(2);
+		const tipWidth = 2;
+		const transXRaw = -tipWidth * relativeValue * possibleValues;
+		const transX = +transXRaw.toFixed(2);
+		const prop1 = "--percent";
+		const prop2 = "--transX";
+
+		this.input?.style.setProperty(prop1,`${percent}%`);
+		this.output?.style.setProperty(prop1,`${percent}%`);
+		this.values?.style.setProperty(prop2,`${transX}em`);
+	}
+}
+
+document.getElementById('dummy').addEventListener('mouseover', () => {
+  document.getElementById('ui-slider').style.visibility = 'visible';
+})
+
+document.getElementById('dummy').addEventListener('mouseout', () => {
+  document.getElementById('ui-slider').style.visibility = 'hidden';
 })

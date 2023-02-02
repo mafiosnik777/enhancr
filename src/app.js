@@ -12,9 +12,6 @@ const setupIpc = require('./main/setup-ipc');
 
 if (!app.requestSingleInstanceLock()) app.quit();
 
-app.commandLine.appendSwitch('high-dpi-support', 1.25)
-app.commandLine.appendSwitch('force-device-scale-factor', 1.25)
-
 nativeTheme.themeSource = 'dark';
 
 const appDataPaths = {
@@ -79,6 +76,18 @@ try {
 
 // eslint-disable-next-line prefer-destructuring
 settings = settings.settings[0];
+
+let scale = () => {
+    if (settings.uiScale == 0) return 1.00;
+    else if (settings.uiScale == 25) return 1.15;
+    else if (settings.uiScale == 50) return 1.25;
+    else if (settings.uiScale == 75) return 1.35;
+    else if (settings.uiScale == 100) return 1.45;
+    else return 1.25;
+}
+
+app.commandLine.appendSwitch('high-dpi-support', scale())
+app.commandLine.appendSwitch('force-device-scale-factor', scale())
 
 // Initialize
 vibe.setup(app);

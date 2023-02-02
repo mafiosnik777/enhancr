@@ -30,6 +30,7 @@ module.exports = {
             unsupportedEngines: false,
             systemPython: false,
             language: 'english',
+            uiScale: 50
         },
     ],
 };
