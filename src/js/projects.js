@@ -624,9 +624,9 @@ function loadRestoration() {
   if (data.restoration[0].engine === "dpir") {
     restorationEngineSpan.textContent = "Restoration - DPIR (TensorRT)";
   } else if (data.restoration[0].engine === "animevideo") {
-    restorationEngineSpan.textContent = "Restoration - AnimeVideo (TensorRT)";
+    restorationEngineSpan.textContent = "Restoration - RealESRGAN (1x) (TensorRT)";
   } else {
-    restorationEngineSpan.textContent = "Restoration - AnimeVideo (NCNN)";
+    restorationEngineSpan.textContent = "Restoration - RealESRGAN (1x) (NCNN)";
   }
 
   const modelSpanRes = document.getElementById('model-span-restoration');

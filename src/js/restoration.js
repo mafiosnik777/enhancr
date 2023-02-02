@@ -122,16 +122,49 @@ class Restoration {
             }
             let trtexec = getTrtExecPath();
 
+            var customModel = path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
+
+            // convert pth to onnx
+            if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth") {
+                function convertToOnnx() {
+                    return new Promise(function (resolve) {
+                        var cmd = `"${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}"`;
+                        let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
+                        process.stdout.write('');
+                        term.stdout.on('data', (data) => {
+                            process.stdout.write(`${data}`);
+                            terminal.innerHTML += data;
+                        });
+                        term.stderr.on('data', (data) => {
+                            process.stderr.write(`${data}`);
+                            progressSpan.innerHTML = path.basename(file) + ' | Converting pth to onnx..';
+                            terminal.innerHTML += data;
+                        });
+                        term.on("close", () => {
+                            resolve();
+                        });
+                    })
+                }
+                await convertToOnnx();
+            }
+
             //get onnx input path
             function getOnnxPath() {
                 if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Denoise') {
                     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx")
                 } else if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Deblock') {
                     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx")
-                } else if (engine == 'Restoration - AnimeVideo (TensorRT)') {
+                } else if (engine == 'Restoration - RealESRGAN (1x) (TensorRT)' && !(document.getElementById('custom-model-check').checked)) {
                     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
-                } else if (engine == 'Restoration - AnimeVideo (NCNN)') {
+                } else if (engine == 'Restoration - RealESRGAN (1x) (NCNN)' && !(document.getElementById('custom-model-check').checked)) {
                     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
+                } else {
+                    terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
+                    if (path.extname(customModel) == ".pth") {
+                        return path.join(cache, path.parse(customModel).name + '.onnx');
+                    } else {
+                        return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
+                    }
                 }
             }
             var onnx = getOnnxPath();
@@ -145,8 +178,12 @@ class Restoration {
 
             // get engine path
             function getEnginePath() {
-                if (engine == 'Restoration - AnimeVideo (NCNN)') {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                if (engine == 'Restoration - RealESRGAN (1x) (NCNN)') {
+                    if (!(document.getElementById('custom-model-check').checked)) {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
+                    } else {
+                        return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
+                    }
                 } else {
                     return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '.engine');
                 }
@@ -157,12 +194,12 @@ class Restoration {
             let fp16 = document.getElementById('fp16-check');
 
             let dim = () => {
-                if (engine == 'Restoration - AnimeVideo (TensorRT)') return "3";
+                if (engine == 'Restoration - RealESRGAN (1x) (TensorRT)') return "3";
                 else return "4";
             }
 
             // convert onnx to trt engine
-            if (!fse.existsSync(engineOut) && engine != 'Restoration - AnimeVideo (NCNN)') {
+            if (!fse.existsSync(engineOut) && engine != 'Restoration - RealESRGAN (1x) (NCNN)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
@@ -271,10 +308,10 @@ class Restoration {
             // determine model
             if (engine == "Restoration - DPIR (TensorRT)") {
                 model = "DPIR"
-            } else if (engine == "Restoration - AnimeVideo (TensorRT)") {
-                model = "AnimeVideo"
+            } else if (engine == "Restoration - RealESRGAN (1x) (TensorRT)") {
+                model = "RealESRGAN-1x"
             } else {
-                model = "AnimeVideo"
+                model = "RealESRGAN-1x"
             }
 
             // resolve output file path
@@ -290,10 +327,10 @@ class Restoration {
                 if (engine == "Restoration - DPIR (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/env/inference/dpir.py") : path.join(process.resourcesPath, "/env/inference/dpir.py")
                 }
-                if (engine == "Restoration - AnimeVideo (TensorRT)") {
+                if (engine == "Restoration - RealESRGAN (1x) (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "env/inference/esrgan.py") : path.join(process.resourcesPath, "/env/inference/esrgan.py")
                 }
-                if (engine == "Restoration - AnimeVideo (NCNN)") {
+                if (engine == "Restoration - RealESRGAN (1x) (NCNN)") {
                     return !isPackaged ? path.join(__dirname, '..', "env/inference/esrgan_ncnn.py") : path.join(process.resourcesPath, "/env/inference/esrgan_ncnn.py")
                 }
             }

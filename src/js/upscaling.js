@@ -168,7 +168,6 @@ class Upscaling {
                     } else {
                         return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     }
-                    
                 }
             }
             let onnx = getOnnxPath();

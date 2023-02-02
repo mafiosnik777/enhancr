@@ -2121,7 +2121,7 @@ dpirOption.addEventListener("click", function () {
 
 // change engine (animevideo)
 animevideoOption.addEventListener("click", function () {
-    restoreEngineText.textContent = "Restoration - AnimeVideo (TensorRT)";
+    restoreEngineText.textContent = "Restoration - RealESRGAN (1x) (TensorRT)";
     hiderRestore.style.visibility = "hidden";
     engineDropdownRestore.style.visibility = "hidden";
     modelSpanRes.textContent = "Denoise/Sharpen";
@@ -2139,7 +2139,7 @@ animevideoOption.addEventListener("click", function () {
 
 // change engine (animevideo-ncnn)
 animevideoNcnnOption.addEventListener("click", function () {
-    restoreEngineText.textContent = "Restoration - AnimeVideo (NCNN)";
+    restoreEngineText.textContent = "Restoration - RealESRGAN (1x) (NCNN)";
     hiderRestore.style.visibility = "hidden";
     engineDropdownRestore.style.visibility = "hidden";
     modelSpanRes.textContent = "Denoise/Sharpen";
