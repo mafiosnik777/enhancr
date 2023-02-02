@@ -46,7 +46,7 @@ function saveSettings() {
   var trimCheck = document.getElementById("trim-check").checked;
   var hwEncodeCheck = document.getElementById("hwencode-check").checked;
   var sensitivityCheck = document.getElementById("sensitivity-check").checked;
-  var sensitivity = document.getElementById("sensitivity").checked;
+  var sensitivity = document.getElementById("sensitivity").value;
   var hwEncodeCheck = document.getElementById("hwencode-check").checked;
   var unsupportedCheck = document.getElementById("unsupported-check").checked;
 

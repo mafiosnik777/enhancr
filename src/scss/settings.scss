@@ -271,7 +271,7 @@ input[type="checkbox"] {
 
 #oled {
   position: absolute;
-  top: 54.5%;
+  top: 54%;
   left: 12%;
   font-size: 8.5pt;
   color: #d0d0d0;
@@ -500,7 +500,7 @@ input[type="checkbox"] {
 }
 
 #interpolation-settings-list {
-  margin-top: 82.5px;
+  margin-top: 80.5px;
   padding: 12px 125px 6px 10px;
   display: inline-block;
   width: 315px;
@@ -910,7 +910,7 @@ input[type="checkbox"] {
 
 #sensitivity-list {
   margin-top: 3.5px;
-  padding: 12px 125px 6px 10px;
+  padding: 12px 125px 0px 10px;
   display: inline-block;
   width: 315px;
   margin-left: 10px;
@@ -1436,11 +1436,11 @@ input[type="checkbox"] {
 #sensitivity-side {
   transform: rotate(-90deg);
   font-size: 8pt;
-  top: 27%;
-  left: -4.25%;
-  background: rgba(0, 0, 0, 0.2);
-  width: 15%;
-  height: 45%;
+  top: 23%;
+  left: -3.25%;
+  background: rgba(0,0,0,.2);
+  width: 13.5%;
+  height: 53%;
   border-top-left-radius: 10px;
   position: absolute;
   border-top-right-radius: 10px;
