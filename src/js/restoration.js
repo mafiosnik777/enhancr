@@ -156,14 +156,19 @@ class Restoration {
 
             let fp16 = document.getElementById('fp16-check');
 
+            let dim = () => {
+                if (engine == 'Restoration - AnimeVideo (TensorRT)') return "3";
+                else return "4";
+            }
+
             // convert onnx to trt engine
             if (!fse.existsSync(engineOut) && engine != 'Restoration - AnimeVideo (NCNN)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
-                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x4x8x8 --optShapes=input:1x4x${shapeDimensionsOpt} --maxShapes=input:1x4x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
                         } else {
-                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x4x8x8 --optShapes=input:1x4x${shapeDimensionsOpt} --maxShapes=input:1x4x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
