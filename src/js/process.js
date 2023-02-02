@@ -4,6 +4,7 @@ const fs = require("fs-extra");
 
 const remote = require('@electron/remote');
 const { BrowserWindow } = remote;
+let win = BrowserWindow.getFocusedWindow();
 
 const thumbInterpolation = document.getElementById("thumb-interpolation");
 const thumbUpscaling = document.getElementById("thumb-upscaling");
@@ -17,8 +18,6 @@ const framecountCurrent = document.getElementById("framecount-current");
 const framecountTotal = document.getElementById("framecount-total");
 const timecodeCurrent = document.getElementById("timecode-current");
 const timecodeDuration = document.getElementById("timecode-duration");
-
-let win = BrowserWindow.getFocusedWindow();
 
 const preview = document.getElementById("preview");
 
