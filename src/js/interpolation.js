@@ -11,11 +11,15 @@ const enhancrPrefix = "[enhancr]";
 const modal = document.querySelector("#modal");
 const blankModal = document.querySelector("#blank-modal");
 
+const remote = require('@electron/remote');
+
 function openModal(modal) {
     if (modal == undefined) return
     modal.classList.add('active')
     overlay.classList.add('active')
 }
+
+const isPackaged = remote.app.isPackaged;
 
 const successTitle = document.getElementById("success-title");
 const thumbModal = document.getElementById("thumb-modal");
@@ -68,7 +72,7 @@ class Interpolation {
                 fse.mkdirSync(previewPath);
             };
 
-            const ffmpeg = path.join(__dirname, '..', "python/ffmpeg/ffmpeg.exe");
+            const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
 
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for interpolation process..';
 
@@ -92,7 +96,7 @@ class Interpolation {
 
             //get trtexec path
             function getTrtExecPath() {
-                return path.join(__dirname, '..', "/python/env/Library/bin/trtexec.exe");
+                return !isPackaged ? path.join(__dirname, '..', "/env/python/Library/bin/trtexec.exe") : path.join(process.resourcesPath, "/env/python/Library/bin/trtexec.exe")
             }
             let trtexec = getTrtExecPath();
 
@@ -109,9 +113,10 @@ class Interpolation {
             let fp = floatingPoint ? "fp16" : "fp32";
 
             let systemPython = document.getElementById('python-check').checked;
+            
             //get python path
             function getPythonPath() {
-                return path.join(__dirname, '..', "/python/env/python.exe");
+                return !isPackaged ? path.join(__dirname, '..', "/env/python/python.exe") : path.join(process.resourcesPath, "/env/python/python.exe");
             }
             let python = getPythonPath();
 
@@ -136,15 +141,16 @@ class Interpolation {
 
             //get conversion script
             function getConversionScript() {
-                return path.join(__dirname, '..', "/python/utils/convert_model_rvpv2.py");
+                return !isPackaged ? path.join(__dirname, '..', "/env/utils/convert_model_rvpv2.py") : path.join(process.resourcesPath, "/env/utils/convert_model_rvpv2.py")
             }
             let convertModel = getConversionScript();
 
             function getOnnx() {
                 if (model == 'RVP - v1.0') {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx")
                 } else if (model == 'CVP - v6.0') {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx");
+
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx")
                 } else {
                     return path.join(cache, 'rvpv2.onnx');
                 }
@@ -163,14 +169,15 @@ class Interpolation {
             const progressSpan = document.getElementById("progress-span");
 
             // inject env hook
-            let inject_env = `"${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}"`
+            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"` 
 
              // rvpv2 model conversion (pth -> onnx)
              if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)' && model == 'RVP - v2.0') {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Converting model to onnx..\r\n`;
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
-                        var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth")}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height}"`;
+                        let rvpv2Model = !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth");
+                        var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${rvpv2Model}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height}"`;
                         console.log(convertCmd);
                         let convertTerm = spawn(convertCmd, [], {
                             shell: true,
@@ -236,9 +243,9 @@ class Interpolation {
 
             function getRifeOnnx() {
                 if (document.getElementById('rife-tta-check').checked) {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx")
                 } else {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx")
                 }
             }
             let rifeOnnx = getRifeOnnx();
@@ -401,22 +408,22 @@ class Interpolation {
             // determine ai engine
             function pickEngine() {
                 if (engine == "Channel Attention - CAIN (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/inference/cain_trt.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/cain_trt.py") : path.join(process.resourcesPath, "/env/inference/cain_trt.py");
                 }
                 if (engine == "Channel Attention - CAIN (NCNN)") {
-                    return path.join(__dirname, '..', "/python/inference/cain.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/cain.py") : path.join(process.resourcesPath, "/env/inference/cain.py");
                 }
                 if (engine == "Optical Flow - RIFE (NCNN)") {
-                    return path.join(__dirname, '..', "/python/inference/rife.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/rife.py") : path.join(process.resourcesPath, "/env/inference/rife.py");
                 }
                 if (engine == "Optical Flow - RIFE (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/inference/rife_trt.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/rife_trt.py") : path.join(process.resourcesPath, "/env/inference/rife_trt.py");
                 }
                 if (engine == "GMFlow - GMFSS (PyTorch)") {
-                    return path.join(__dirname, '..', "/python/inference/gmfss.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/gmfss.py") : path.join(process.resourcesPath, "/env/inference/gmfss.py");
                 }
                 if (engine == "GMFlow - GMFSS (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/inference/gmfss_trt.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/gmfss_trt.py") : path.join(process.resourcesPath, "/env/inference/gmfss_trt.py");
                 }
             }
             var engine = pickEngine();
@@ -427,7 +434,7 @@ class Interpolation {
                     if (document.getElementById('python-check').checked) {
                         return "vspipe"
                     } else {
-                        return path.join(__dirname, '..', "\\python\\env\\VSPipe.exe")
+                        return !isPackaged ? path.join(__dirname, '..', "\\env\\python\\VSPipe.exe") : path.join(process.resourcesPath, "\\env\\python\\VSPipe.exe")
                     }
                 }
                 if (process.platform == "linux") {

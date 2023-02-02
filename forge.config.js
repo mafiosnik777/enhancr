@@ -3,13 +3,14 @@ const path = require('path');
 const sass = require('sass');
 
 const assetBuildDir = path.resolve(__dirname, './build');
-const includePaths = [
-    'src',
-    'build',
-    'LICENSE',
-    'package.json',
-    'node_modules',
-];
+
+// const includePaths = [
+//     'src',
+//     'build',
+//     'LICENSE',
+//     'package.json',
+//     'node_modules',
+// ];
 
 // TODO: resolve issues with packaging when ignoring paths 
 // const ignoredPaths = fs.readdirSync(__dirname).filter((pathname) => (
@@ -21,9 +22,12 @@ if (process.platform === 'win32') process.env.GYP_MSVS_VERSION = '2019';
 module.exports = {
     packagerConfig: {
         icon: './src/assets/enhancr-icon',
-        asar: false,
+        asar: {
+            unpack: "**/node_modules/{@mafiosnik,@ffprobe-installer,@ffmpeg-installer,axios}/**/*"
+          },
         ignore: [
             'src/scss',
+            'env',
             /\.map$/i,
             // ...ignoredPaths,
         ],
@@ -49,6 +53,11 @@ module.exports = {
                 JSON.stringify(compiledScss.sourceMap),
             );
         },
+        postMake:  () => {
+            const pythonDir = './src/env/'
+            const targetDir = './out/enhancr-win32-x64/resources/env'
+            fs.copySync(pythonDir, targetDir);
+        }
     },
     makers: [
         {

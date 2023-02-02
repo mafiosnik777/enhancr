@@ -1,4 +1,4 @@
-const { ipcMain, dialog } = require('electron');
+const { ipcMain, dialog, app } = require('electron');
 const fs = require('fs-extra');
 
 const projectTemplate = require('./project-template.json');
@@ -60,6 +60,10 @@ module.exports = (mainWindow) => {
     // Window state
     ipcMain.on('minimize-window', () => {
         mainWindow.minimize();
+    });
+
+    ipcMain.on('isAppPackaged', (event) => {
+        event.reply('packaged', app.isPackaged);
     });
 
     ipcMain.on('close-window', () => {

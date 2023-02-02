@@ -9,9 +9,20 @@ const execSync = require('child_process').execSync;
 const exec = require('child_process').exec;
 const { spawn } = require('child_process');
 
-const ffmpeg = require("fluent-ffmpeg");
-const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
-const ffprobePath = require("@ffprobe-installer/ffprobe").path;
+const remote = require('@electron/remote');
+
+const ffmpeg = require('fluent-ffmpeg');
+
+let ffmpegPath;
+let ffprobePath;
+
+if (remote.app.isPackaged == false) {
+    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+    ffprobePath = require('@ffprobe-installer/ffprobe').path;
+} else {
+    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
+    ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+}
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 
@@ -28,6 +39,8 @@ function openModal(modal) {
     modal.classList.add('active')
     overlay.classList.add('active')
 }
+
+const isPackaged = remote.app.isPackaged;
 
 const successModal = document.getElementById("modal-success");
 const successTitle = document.getElementById("success-title");
@@ -83,7 +96,7 @@ class Restoration {
 
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for restoration process..';
 
-            const ffmpeg = path.join(__dirname, '..', "python/ffmpeg/ffmpeg.exe");
+            const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
 
             // scan media for subtitles
             const subsPath = path.join(cache, "subs.ass");
@@ -105,20 +118,20 @@ class Restoration {
 
             //get trtexec path
             function getTrtExecPath() {
-                return path.join(__dirname, '..', "/python/env/Library/bin/trtexec.exe");
+                return !isPackaged ? path.join(__dirname, '..', "/env/python/Library/bin/trtexec.exe") : path.join(process.resourcesPath, "/env/python/Library/bin/trtexec.exe")
             }
             let trtexec = getTrtExecPath();
 
             //get onnx input path
             function getOnnxPath() {
                 if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Denoise') {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx")
                 } else if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Deblock') {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx")
                 } else if (engine == 'Restoration - AnimeVideo (TensorRT)') {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
                 } else if (engine == 'Restoration - AnimeVideo (NCNN)') {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
                 }
             }
             var onnx = getOnnxPath();
@@ -133,7 +146,7 @@ class Restoration {
             // get engine path
             function getEnginePath() {
                 if (engine == 'Restoration - AnimeVideo (NCNN)') {
-                    return path.join(__dirname, '..', "/python/env/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                 } else {
                     return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '.engine');
                 }
@@ -270,13 +283,13 @@ class Restoration {
             // determine ai engine
             function pickEngine() {
                 if (engine == "Restoration - DPIR (TensorRT)") {
-                    return path.join(__dirname, '..', "/python/inference/dpir.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/dpir.py") : path.join(process.resourcesPath, "/env/inference/dpir.py")
                 }
                 if (engine == "Restoration - AnimeVideo (TensorRT)") {
-                    return path.join(__dirname, '..', "python/inference/esrgan.py");
+                    return !isPackaged ? path.join(__dirname, '..', "env/inference/esrgan.py") : path.join(process.resourcesPath, "/env/inference/esrgan.py")
                 }
                 if (engine == "Restoration - AnimeVideo (NCNN)") {
-                    return path.join(__dirname, '..', "python/inference/esrgan_ncnn.py");
+                    return !isPackaged ? path.join(__dirname, '..', "env/inference/esrgan_ncnn.py") : path.join(process.resourcesPath, "/env/inference/esrgan_ncnn.py")
                 }
             }
             var engine = pickEngine();
@@ -287,7 +300,7 @@ class Restoration {
                     if (document.getElementById('python-check').checked) {
                         return "vspipe"
                     } else {
-                        return path.join(__dirname, '..', "\\python\\env\\VSPipe.exe")
+                        return !isPackaged ? path.join(__dirname, '..', "\\env\\python\\VSPipe.exe") : path.join(process.resourcesPath, "\\env\\python\\VSPipe.exe");
                     }
                 }
                 if (process.platform == "linux") {
@@ -313,7 +326,7 @@ class Restoration {
             let height = getHeight();
 
             // inject env hook
-            let inject_env = `"${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\python\\env\\condabin\\conda_auto_activate.bat")}"`
+            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"`;
 
             let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {

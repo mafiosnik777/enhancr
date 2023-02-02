@@ -92,7 +92,7 @@ def threading():
 core.num_threads = cpu_count()
 
 cwd = os.getcwd()
-vsmlrt_path = os.path.join(cwd, '..', 'env', 'Library', 'vstrt.dll')
+vsmlrt_path = os.path.join(cwd, '..', 'python', 'Library', 'vstrt.dll')
 core.std.LoadPlugin(path=vsmlrt_path)
     
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)

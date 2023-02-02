@@ -1,7 +1,15 @@
 const { PromisePool } = require('@supercharge/promise-pool')
 const path = require("path");
 const remote = require('@electron/remote');
-const axios = require('axios');
+
+let axios;
+
+if (remote.app.isPackaged == false) {
+    axios = require("axios");
+} else {
+    axios = require(path.join(process.resourcesPath, '/app.asar.unpacked/node_modules/axios/dist/browser/axios.cjs'))
+}
+
 const fs = require('fs-extra');
 const os = require('os');
 
@@ -32,8 +40,17 @@ const find = require('find-process');
 const shell = require("electron").shell;
 const ffmpeg = require('fluent-ffmpeg');
 
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-const ffprobePath = require('@ffprobe-installer/ffprobe').path;
+let ffmpegPath;
+let ffprobePath;
+
+if (remote.app.isPackaged == false) {
+    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+    ffprobePath = require('@ffprobe-installer/ffprobe').path;
+} else {
+    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
+    ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+}
+
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 

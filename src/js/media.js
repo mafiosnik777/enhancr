@@ -4,10 +4,21 @@ const MediaInfoFactory = require("mediainfo.js");
 const ratio = require('aspect-ratio')
 const fse = require('fs-extra');
 const { ipcRenderer, webFrame } = require("electron");
+const remote = require('@electron/remote');
 
 const ffmpeg = require('fluent-ffmpeg');
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-const ffprobePath = require('@ffprobe-installer/ffprobe').path;
+
+let ffmpegPath;
+let ffprobePath;
+
+if (remote.app.isPackaged == false) {
+    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+    ffprobePath = require('@ffprobe-installer/ffprobe').path;
+} else {
+    ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
+    ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+}
+
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 

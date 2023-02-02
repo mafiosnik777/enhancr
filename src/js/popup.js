@@ -1,8 +1,16 @@
 const shell = require("electron").shell;
-const axios = require('axios');
+const remote = require('@electron/remote');
+const path = require('path');
+
+let axios;
+
+if (remote.app.isPackaged == false) {
+    axios = require("axios");
+} else {
+    axios = require(path.join(process.resourcesPath, '/app.asar.unpacked/node_modules/axios/dist/browser/axios.cjs'))
+}
 
 const fs = require('fs-extra');
-const path = require('path');
 
 const os = require('os');
 
@@ -14,7 +22,6 @@ const { ipcRenderer } = require("electron");
 
 var terminal = document.getElementById("terminal-text");
 
-const remote = require('@electron/remote');
 const { BrowserWindow } = remote;
   
 let win = BrowserWindow.getFocusedWindow();

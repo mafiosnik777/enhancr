@@ -4,7 +4,15 @@ const path = require("path");
 const shell = require("electron").shell;
 const remote = require('@electron/remote');
 const { BrowserWindow } = remote;
-const nvencDevice = require("@mafiosnik/nvenc-codecs");
+const { ipcRenderer } = require("electron");
+
+let nvencDevice;
+
+if (remote.app.isPackaged == false) {
+    nvencDevice = require("@mafiosnik/nvenc-codecs");
+} else {
+    nvencDevice = require(path.join(process.resourcesPath, '/app.asar.unpacked/node_modules/@mafiosnik/nvenc-codecs'))
+}
 
 var saveBtn = document.getElementById("settings-button");
 var preview = document.getElementById("preview");
@@ -100,7 +108,6 @@ function saveSettings() {
 saveBtn.addEventListener("click", saveSettings);
 
 const os = require('os');
-const { ipcRenderer, ipcMain } = require("electron");
 
 function getTmpPath() {
   if (process.platform == 'win32') {
