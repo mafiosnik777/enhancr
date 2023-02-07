@@ -122,6 +122,18 @@ class Restoration {
             }
             let trtexec = getTrtExecPath();
 
+            //get python path
+            function getPythonPath() {
+                return !isPackaged ? path.join(__dirname, '..', "/env/python/python.exe") : path.join(process.resourcesPath, "/env/python/python.exe");
+            }
+            let python = getPythonPath();
+
+            //get conversion script
+            function getConversionScript() {
+                return !isPackaged ? path.join(__dirname, '..', "/env/utils/convert_model_esrgan.py") : path.join(process.resourcesPath, "/env/utils/convert_model_esrgan.py")
+            }
+            let convertModel = getConversionScript();
+
             var customModel = path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
 
             // convert pth to onnx
