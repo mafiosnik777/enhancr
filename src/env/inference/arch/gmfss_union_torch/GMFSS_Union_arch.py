@@ -2456,16 +2456,16 @@ class Model:
 
     def load_model(self, path):
         if self.model_type == "vanilla":
-            metricnet_path = "{}/GMFSS_union_metric_vanilla.pkl".format(path)
+            metricnet_path = "{}\\GMFSS_union_metric_vanilla.pkl".format(path)
             self.metricnet.load_state_dict(torch.load(metricnet_path))
 
-            fusionnet_path = "{}/GMFSS_union_fusionnet_vanilla.pkl".format(path)
+            fusionnet_path = "{}\\GMFSS_union_fusionnet_vanilla.pkl".format(path)
             self.fusionnet.load_state_dict(torch.load(fusionnet_path))
 
-        flownet_path = "{}/GMFupSS_flownet.pkl".format(path)
+        flownet_path = "{}\\GMFupSS_flownet.pkl".format(path)
         self.flownet.load_state_dict(torch.load(flownet_path))
 
-        ifnet_path = "{}/rife46.pth".format(path)
+        ifnet_path = "{}\\rife46.pth".format(path)
         self.ifnet.load_state_dict(torch.load(ifnet_path))
         if self.partial_fp16:
             self.ifnet.half()

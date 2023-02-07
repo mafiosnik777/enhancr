@@ -177,7 +177,7 @@ class Interpolation {
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
                         let rvpv2Model = !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth");
-                        var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${rvpv2Model}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height}"`;
+                        var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${rvpv2Model}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height}`;
                         console.log(convertCmd);
                         let convertTerm = spawn(convertCmd, [], {
                             shell: true,

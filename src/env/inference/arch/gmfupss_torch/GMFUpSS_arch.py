@@ -2343,13 +2343,13 @@ class Model:
                 return param
 
         if rank <= 0:
-            flownet_path = "{}/GMFupSS_flownet.pkl".format(path)
+            flownet_path = "{}\\GMFupSS_flownet.pkl".format(path)
             self.flownet.load_state_dict(torch.load(flownet_path))
 
-            metricnet_path = "{}/GMFupSS_metric.pkl".format(path)
+            metricnet_path = "{}\\GMFupSS_metric.pkl".format(path)
             self.metricnet.load_state_dict(convert(torch.load(metricnet_path)))
 
-            fusionnet_path = "{}/GMFupSS_fusionnet.pkl".format(path)
+            fusionnet_path = "{}\\GMFupSS_fusionnet.pkl".format(path)
             self.fusionnet.load_state_dict(convert(torch.load(fusionnet_path)))
 
     def reuse(self, img0, img1, scale=1.0):
