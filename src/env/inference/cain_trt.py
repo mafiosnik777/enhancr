@@ -82,5 +82,5 @@ if padding:
 
 output = vs.core.resize.Bicubic(output, format=vs.YUV422P8, matrix_s="709")
 
-print("Starting video output | Threads: " + cpu_count() + " | " + "Streams: " + streams, file=sys.stderr)
+print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + streams, file=sys.stderr)
 output.set_output()
