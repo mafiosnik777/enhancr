@@ -37,7 +37,7 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     ToPadWidth = data['toPadWidth']
     ToPadHeight = data['toPadHeight']
 
-core.num_threads = cpu_count()
+core.num_threads = 4
 
 cwd = os.getcwd()
 vsmlrt_path = os.path.join(cwd, '..', 'python', 'Library', 'vstrt.dll')
@@ -82,5 +82,5 @@ if padding:
 
 output = vs.core.resize.Bicubic(output, format=vs.YUV422P8, matrix_s="709")
 
-print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + streams, file=sys.stderr)
+print("Starting video output | Threads: " + "4" + " | " + "Streams: " + streams, file=sys.stderr)
 output.set_output()
