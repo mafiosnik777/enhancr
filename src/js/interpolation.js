@@ -149,7 +149,6 @@ class Interpolation {
                 if (model == 'RVP - v1.0') {
                     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx")
                 } else if (model == 'CVP - v6.0') {
-
                     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx")
                 } else {
                     return path.join(cache, 'rvpv2.onnx');
@@ -212,10 +211,10 @@ class Interpolation {
                         } else {
                             var optShapes = ``
                         }
-                        if (fp16.checked == true) {
-                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                        if (fp16) {
+                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
                         } else {
-                            var engineCmd = `"${trtexec}" --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var engineCmd = `"${trtexec}" --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly`;
                         }
                         let engineTerm = spawn(engineCmd, [], {
                             shell: true,
@@ -256,13 +255,13 @@ class Interpolation {
 
             function getRifeEngine() {
                 if (document.getElementById('rife-tta-check').checked) {
-                    if (fp16.checked == true) {
+                    if (fp16) {
                         return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_fp16_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
                     } else {
                         return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
                     }
                 } else {
-                    if (fp16.checked == true) {
+                    if (fp16) {
                         return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_fp16_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
                     } else {
                         return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
@@ -275,7 +274,7 @@ class Interpolation {
             if (!fse.existsSync(rifeEngine) && engine == 'Optical Flow - RIFE (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
-                        if (fp16.checked == true) {
+                        if (fp16) {
                             var cmd = `"${trtexec}" --fp16 --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
                         } else {
                             var cmd = `"${trtexec}" --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
