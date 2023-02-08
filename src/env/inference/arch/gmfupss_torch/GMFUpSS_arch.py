@@ -2415,7 +2415,7 @@ class Model:
 
 
 cwd = os.getcwd()
-model_dir = os.path.join(cwd, 'arch', 'GMFUpSS', 'models')
+model_dir = os.path.join(cwd, 'arch', 'gmfupss_torch', 'models')
 
 class Model_inference(nn.Module):
     def __init__(self, partial_fp16=True):
