@@ -8,8 +8,8 @@ const { spawn } = require('child_process');
 const terminal = document.getElementById("terminal-text");
 const enhancrPrefix = "[enhancr]";
 
-const modal = document.querySelector("#modal");
-const blankModal = document.querySelector("#blank-modal");
+const subsModal = document.getElementById("modal");
+const blankModal = document.getElementById("blank-modal");
 
 const remote = require('@electron/remote');
 
@@ -80,7 +80,7 @@ class Interpolation {
             const subsPath = path.join(cache, "subs.ass");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for subtitles..`;
-                execSync(`${ffmpeg} -y -loglevel error -i ${file} -c:s copy ${subsPath}`);
+                execSync(`${ffmpeg} -y -loglevel error -i "${file}" -c:s copy ${subsPath}`);
             } catch (err) {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` No subtitles were found, skipping subtitle extraction..`;
             };
@@ -447,7 +447,7 @@ class Interpolation {
 
             let tmpOutPath = path.join(cache, Date.now() + extension);
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
-                openModal(modal);
+                openModal(subsModal);
                 terminal.innerHTML += "\r\n[Error] Input video contains subtitles, but output container is not .mkv, cancelling.";
                 sessionStorage.setItem('status', 'error');
                 throw new Error('Input video contains subtitles, but output container is not .mkv');
