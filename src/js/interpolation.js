@@ -503,7 +503,7 @@ class Interpolation {
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
-                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1 -map 0 -map -0:v -dn -codec copy ${mkvFix} "${out}"`;
+                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn -codec copy ${mkvFix} "${out}"`;
                                 let muxTerm = spawn(muxCmd, [], {
                                     shell: true,
                                     stdio: ['inherit', 'pipe', 'pipe'],
