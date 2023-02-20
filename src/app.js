@@ -78,11 +78,11 @@ try {
 settings = settings.settings[0];
 
 let scale = () => {
-    if (settings.uiScale == 0) return 1.00;
-    else if (settings.uiScale == 25) return 1.15;
-    else if (settings.uiScale == 50) return 1.25;
-    else if (settings.uiScale == 75) return 1.35;
-    else if (settings.uiScale == 100) return 1.45;
+    if (settings.uiScale == 0) return 1.15;
+    else if (settings.uiScale == 25) return 1.25;
+    else if (settings.uiScale == 50) return 1.35;
+    else if (settings.uiScale == 75) return 1.45;
+    else if (settings.uiScale == 100) return 1.55;
     else return 1.25;
 }
 
