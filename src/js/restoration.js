@@ -97,6 +97,17 @@ class Restoration {
 
             const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
 
+            // convert gif to video
+            const gifVideoPath = path.join(cache, "gif.mkv");
+            if (path.extname(file) == ".gif") {
+                try {
+                    execSync(`${ffmpeg} -y -loglevel error -i "${file}" "${gifVideoPath}"`);
+                    file = gifVideoPath;
+                } catch (err) {
+                    terminal.innerHTML += '\r\n' + enhancrPrefix + ` Error: GIF preparation has failed.`;
+                };
+            }
+
             // scan media for subtitles
             const subsPath = path.join(cache, "subs.ass");
             try {

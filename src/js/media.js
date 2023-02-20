@@ -126,37 +126,70 @@ function fetchMetadata() {
     let inputPath = sessionStorage.getItem('inputPath');
     readMetadata(inputPath).then((result) => {
         const data = JSON.parse(result);
+        const gifCheck = Boolean(data.media.track.find((item) => item["@type"] === "Image"))
 
-        const video = data.media.track.find((item) => item["@type"] === "Video");
-        const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
+        if (!gifCheck) {
+            const video = data.media.track.find((item) => item["@type"] === "Video");
+            const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
 
-        const container = data.media.track[0].Format;
-        const filesize = data.media.track[0].FileSize;
-        const bitRate = data.media.track[0].OverallBitRate;
+            const container = data.media.track[0].Format;
+            const filesize = data.media.track[0].FileSize;
+            const bitRate = data.media.track[0].OverallBitRate;
 
-        const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
 
-        noMedia.style.visibility = "hidden";
-        mediaContainer.style.visibility = "visible";
+            noMedia.style.visibility = "hidden";
+            mediaContainer.style.visibility = "visible";
 
-        mediaHeader.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+            mediaHeader.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
 
-        console.log(data);
+            console.log(data);
 
-        infoFormat.textContent = container + ' - ' + Format;
-        infoSize.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
-        infoDimensions.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
-        infoFrameRate.textContent = FrameRate + " ➜ " + parseFloat(FrameRate) * 2;
-        infoDuration.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
-        infoFramecount.textContent = FrameCount;
-        infoBitrate.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-        webFrame.clearCache()
-        ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbInterpolation.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
-        var thumbInterpolation = document.getElementById('interpolation-thumb-img');
-        function setThumbInterpolation() {
-            thumbInterpolation.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Math.random() * 1000);
+            infoFormat.textContent = container + ' - ' + Format;
+            infoSize.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+            infoDimensions.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
+            infoFrameRate.textContent = FrameRate + " ➜ " + parseFloat(FrameRate) * 2;
+            infoDuration.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+            infoFramecount.textContent = FrameCount;
+            infoBitrate.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
+            webFrame.clearCache()
+            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbInterpolation.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+            var thumbInterpolation = document.getElementById('interpolation-thumb-img');
+            function setThumbInterpolation() {
+                thumbInterpolation.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Math.random() * 1000);
+            }
+            setTimeout(setThumbInterpolation, 2000);
+        } else {
+            const gif = data.media.track.find((item) => item["@type"] === "Image")
+            const { Format, Height, Width } = gif;
+
+            const container = data.media.track[0].Format;
+            const filesize = data.media.track[0].FileSize;
+
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+
+            noMedia.style.visibility = "hidden";
+            mediaContainer.style.visibility = "visible";
+
+            mediaHeader.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+
+            console.log(data);
+
+            infoFormat.textContent = container + ' - ' + Format;
+            infoSize.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+            infoDimensions.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
+            infoFrameRate.textContent = '-';
+            infoDuration.textContent = '-';
+            infoFramecount.textContent = '-';
+            infoBitrate.textContent = '-';
+            webFrame.clearCache()
+            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbInterpolation.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+            var thumbInterpolation = document.getElementById('interpolation-thumb-img');
+            function setThumbInterpolation() {
+                thumbInterpolation.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Math.random() * 1000);
+            }
+            setTimeout(setThumbInterpolation, 2000);
         }
-        setTimeout(setThumbInterpolation, 2000);
     })
 };
 var getFactor = parseInt(document.getElementById("factor-span").textContent.split("x")[0]);
@@ -168,39 +201,74 @@ function fetchMetadataUpscale() {
     let upscaleFactor = parseInt(sessionStorage.getItem("upscaleFactor"));
     readMetadata(inputPath).then((result) => {
         const data = JSON.parse(result);
+        const gifCheck = Boolean(data.media.track.find((item) => item["@type"] === "Image"))
 
-        const video = data.media.track.find((item) => item["@type"] === "Video");
-        const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
+        if (!gifCheck) {
+            const video = data.media.track.find((item) => item["@type"] === "Video");
+            const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
 
-        const container = data.media.track[0].Format;
-        const filesize = data.media.track[0].FileSize;
-        const bitRate = data.media.track[0].OverallBitRate;
+            const container = data.media.track[0].Format;
+            const filesize = data.media.track[0].FileSize;
+            const bitRate = data.media.track[0].OverallBitRate;
 
-        const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
 
-        noMedia.style.visibility = "hidden";
-        if (sessionStorage.getItem('currentTab') == 'upscaling') {
-            mediaContainerUp.style.visibility = "visible";
+            noMedia.style.visibility = "hidden";
+            if (sessionStorage.getItem('currentTab') == 'upscaling') {
+                mediaContainerUp.style.visibility = "visible";
+            }
+
+            mediaHeaderUp.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+
+            console.log(data);
+
+            infoFormatUp.textContent = container + ' - ' + Format;
+            infoSizeUp.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+            infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
+            infoFrameRateUp.textContent = FrameRate;
+            infoDurationUp.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+            infoFramecountUp.textContent = FrameCount;
+            infoBitrateUp.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
+            webFrame.clearCache()
+            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbUpscaling.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+            var thumbUpscaling = document.getElementById('upscaling-thumb-img');
+            function setThumbUpscaling() {
+                thumbUpscaling.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Math.random() * 1000);
+            }
+            setTimeout(setThumbUpscaling, 1000)
+        } else {
+            const gif = data.media.track.find((item) => item["@type"] === "Image")
+            const { Format, Height, Width } = gif;
+
+            const container = data.media.track[0].Format;
+            const filesize = data.media.track[0].FileSize;
+
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+
+            noMedia.style.visibility = "hidden";
+            if (sessionStorage.getItem('currentTab') == 'upscaling') {
+                mediaContainerUp.style.visibility = "visible";
+            }
+
+            mediaHeaderUp.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+
+            console.log(data);
+
+            infoFormatUp.textContent = container + ' - ' + Format;
+            infoSizeUp.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+            infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
+            infoFrameRateUp.textContent = '-';
+            infoDurationUp.textContent = '-';
+            infoFramecountUp.textContent = '-';
+            infoBitrateUp.textContent = '-';
+            webFrame.clearCache()
+            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbUpscaling.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+            var thumbUpscaling = document.getElementById('upscaling-thumb-img');
+            function setThumbUpscaling() {
+                thumbUpscaling.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Math.random() * 1000);
+            }
+            setTimeout(setThumbUpscaling, 1000)
         }
-
-        mediaHeaderUp.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
-
-        console.log(data);
-
-        infoFormatUp.textContent = container + ' - ' + Format;
-        infoSizeUp.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
-        infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
-        infoFrameRateUp.textContent = FrameRate;
-        infoDurationUp.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
-        infoFramecountUp.textContent = FrameCount;
-        infoBitrateUp.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-        webFrame.clearCache()
-        ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbUpscaling.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
-        var thumbUpscaling = document.getElementById('upscaling-thumb-img');
-        function setThumbUpscaling() {
-            thumbUpscaling.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Math.random() * 1000);
-        }
-        setTimeout(setThumbUpscaling, 1000)
     })
 };
 
@@ -210,12 +278,21 @@ function calcRes() {
     let upscaleFactor = parseInt(sessionStorage.getItem("upscaleFactor"));
     readMetadata(inputPath).then((result) => {
         const data = JSON.parse(result);
+        const gifCheck = Boolean(data.media.track.find((item) => item["@type"] === "Image"))
 
-        const video = data.media.track.find((item) => item["@type"] === "Video");
-        const { Width, Height } = video;
-        const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+        if (!gifCheck) {
+            const video = data.media.track.find((item) => item["@type"] === "Video");
+            const { Width, Height } = video;
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
 
-        infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
+            infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
+        } else {
+            const gif = data.media.track.find((item) => item["@type"] === "Image")
+            const { Height, Width } = gif;
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+
+            infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
+        }
     })
 };
 
@@ -224,39 +301,74 @@ function fetchMetadataRestore() {
     let inputPath = sessionStorage.getItem('inputPathRestore');
     readMetadata(inputPath).then((result) => {
         const data = JSON.parse(result);
+        const gifCheck = Boolean(data.media.track.find((item) => item["@type"] === "Image"))
 
-        const video = data.media.track.find((item) => item["@type"] === "Video");
-        const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
+        if (!gifCheck) {
+            const video = data.media.track.find((item) => item["@type"] === "Video");
+            const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
 
-        const container = data.media.track[0].Format;
-        const filesize = data.media.track[0].FileSize;
-        const bitRate = data.media.track[0].OverallBitRate;
+            const container = data.media.track[0].Format;
+            const filesize = data.media.track[0].FileSize;
+            const bitRate = data.media.track[0].OverallBitRate;
 
-        const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
 
-        noMedia.style.visibility = "hidden";
-        if (sessionStorage.getItem('currentTab') == 'restoration') {
-            mediaContainerRes.style.visibility = "visible";
+            noMedia.style.visibility = "hidden";
+            if (sessionStorage.getItem('currentTab') == 'restoration') {
+                mediaContainerRes.style.visibility = "visible";
+            }
+
+            mediaHeaderRes.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+
+            console.log(data);
+
+            infoFormatRes.textContent = container + ' - ' + Format;
+            infoSizeRes.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+            infoDimensionsRes.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
+            infoFrameRateRes.textContent = FrameRate;
+            infoDurationRes.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+            infoFramecountRes.textContent = FrameCount;
+            infoBitrateRes.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
+            webFrame.clearCache()
+            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbRestoration.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+            var thumbRestoration = document.getElementById('restoration-thumb-img');
+            function setThumbRestoration() {
+                thumbRestoration.src = path.join(appDataPath, '/.enhancr/thumbs/thumbRestoration.png?' + Math.random() * 1000);
+            }
+            setTimeout(setThumbRestoration, 1000)
+        } else {
+            const gif = data.media.track.find((item) => item["@type"] === "Image")
+            const { Format, Height, Width } = gif;
+
+            const container = data.media.track[0].Format;
+            const filesize = data.media.track[0].FileSize;
+
+            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+
+            noMedia.style.visibility = "hidden";
+            if (sessionStorage.getItem('currentTab') == 'restoration') {
+                mediaContainerRes.style.visibility = "visible";
+            }
+
+            mediaHeaderRes.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+
+            console.log(data);
+
+            infoFormatRes.textContent = container + ' - ' + Format;
+            infoSizeRes.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+            infoDimensionsRes.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
+            infoFrameRateRes.textContent = '-';
+            infoDurationRes.textContent = '-';
+            infoFramecountRes.textContent = '-';
+            infoBitrateRes.textContent = '-';
+            webFrame.clearCache()
+            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbRestoration.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+            var thumbRestoration = document.getElementById('restoration-thumb-img');
+            function setThumbRestoration() {
+                thumbRestoration.src = path.join(appDataPath, '/.enhancr/thumbs/thumbRestoration.png?' + Math.random() * 1000);
+            }
+            setTimeout(setThumbRestoration, 1000)
         }
-
-        mediaHeaderRes.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
-
-        console.log(data);
-
-        infoFormatRes.textContent = container + ' - ' + Format;
-        infoSizeRes.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
-        infoDimensionsRes.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
-        infoFrameRateRes.textContent = FrameRate;
-        infoDurationRes.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
-        infoFramecountRes.textContent = FrameCount;
-        infoBitrateRes.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-        webFrame.clearCache()
-        ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbRestoration.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
-        var thumbRestoration = document.getElementById('restoration-thumb-img');
-        function setThumbRestoration() {
-            thumbRestoration.src = path.join(appDataPath, '/.enhancr/thumbs/thumbRestoration.png?' + Math.random() * 1000);
-        }
-        setTimeout(setThumbRestoration, 1000)
     })
 };
 
@@ -298,121 +410,223 @@ var previewUpdater = setInterval(function () {
 class Media {
     // fetch metadata (interpolation)
     static fetchMetadata() {
-        let inputPath = sessionStorage.getItem('currentFile');
+        let inputPath = sessionStorage.getItem('inputPath');
         readMetadata(inputPath).then((result) => {
             const data = JSON.parse(result);
+            const gifCheck = Boolean(data.media.track.find((item) => item["@type"] === "Image"))
 
-            const video = data.media.track.find((item) => item["@type"] === "Video");
-            const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
+            if (!gifCheck) {
+                const video = data.media.track.find((item) => item["@type"] === "Video");
+                const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
 
-            const container = data.media.track[0].Format;
-            const filesize = data.media.track[0].FileSize;
-            const bitRate = data.media.track[0].OverallBitRate;
+                const container = data.media.track[0].Format;
+                const filesize = data.media.track[0].FileSize;
+                const bitRate = data.media.track[0].OverallBitRate;
 
-            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+                const aspectRatio = ratio(parseInt(Height), parseInt(Width));
 
-            mediaContainer.style.visibility = "visible";
-            mediaContainerUp.style.visibility = "hidden";
-            mediaContainerRes.style.visibility = "hidden";
+                noMedia.style.visibility = "hidden";
+                mediaContainer.style.visibility = "visible";
 
-            mediaHeader.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+                mediaHeader.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
 
-            console.log(data);
+                console.log(data);
 
-            infoFormat.textContent = container + ' - ' + Format;
-            infoSize.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
-            infoDimensions.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
-            infoFrameRate.textContent = FrameRate + " ➜ " + parseFloat(FrameRate) * 2;
-            infoDuration.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
-            infoFramecount.textContent = FrameCount;
-            infoBitrate.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-            webFrame.clearCache()
-            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbInterpolation.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
-            var thumbInterpolation = document.getElementById('interpolation-thumb-img');
-            function setThumbInterpolation() {
-                thumbInterpolation.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Math.random() * 1000);
+                infoFormat.textContent = container + ' - ' + Format;
+                infoSize.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+                infoDimensions.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
+                infoFrameRate.textContent = FrameRate + " ➜ " + parseFloat(FrameRate) * 2;
+                infoDuration.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+                infoFramecount.textContent = FrameCount;
+                infoBitrate.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
+                webFrame.clearCache()
+                ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbInterpolation.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+                var thumbInterpolation = document.getElementById('interpolation-thumb-img');
+                function setThumbInterpolation() {
+                    thumbInterpolation.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Math.random() * 1000);
+                }
+                setTimeout(setThumbInterpolation, 2000);
+            } else {
+                const gif = data.media.track.find((item) => item["@type"] === "Image")
+                const { Format, Height, Width } = gif;
+
+                const container = data.media.track[0].Format;
+                const filesize = data.media.track[0].FileSize;
+
+                const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+
+                noMedia.style.visibility = "hidden";
+                mediaContainer.style.visibility = "visible";
+
+                mediaHeader.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+
+                console.log(data);
+
+                infoFormat.textContent = container + ' - ' + Format;
+                infoSize.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+                infoDimensions.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
+                infoFrameRate.textContent = '-';
+                infoDuration.textContent = '-';
+                infoFramecount.textContent = '-';
+                infoBitrate.textContent = '-';
+                webFrame.clearCache()
+                ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbInterpolation.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+                var thumbInterpolation = document.getElementById('interpolation-thumb-img');
+                function setThumbInterpolation() {
+                    thumbInterpolation.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Math.random() * 1000);
+                }
+                setTimeout(setThumbInterpolation, 2000);
             }
-            setTimeout(setThumbInterpolation, 1000);
         })
     }
     // fetch metadata (upscaling)
     static fetchMetadataUpscale() {
-        let inputPath = sessionStorage.getItem('currentFile');
-        let upscaleFactor = parseInt(sessionStorage.getItem("currentFactor"));
+        let inputPath = sessionStorage.getItem('upscaleInputPath');
+        let upscaleFactor = parseInt(sessionStorage.getItem("upscaleFactor"));
         readMetadata(inputPath).then((result) => {
             const data = JSON.parse(result);
+            const gifCheck = Boolean(data.media.track.find((item) => item["@type"] === "Image"))
 
-            const video = data.media.track.find((item) => item["@type"] === "Video");
-            const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
+            if (!gifCheck) {
+                const video = data.media.track.find((item) => item["@type"] === "Video");
+                const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
 
-            const container = data.media.track[0].Format;
-            const filesize = data.media.track[0].FileSize;
-            const bitRate = data.media.track[0].OverallBitRate;
+                const container = data.media.track[0].Format;
+                const filesize = data.media.track[0].FileSize;
+                const bitRate = data.media.track[0].OverallBitRate;
 
-            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+                const aspectRatio = ratio(parseInt(Height), parseInt(Width));
 
-            noMedia.style.visibility = "hidden";
+                noMedia.style.visibility = "hidden";
+                if (sessionStorage.getItem('currentTab') == 'upscaling') {
+                    mediaContainerUp.style.visibility = "visible";
+                }
 
-            mediaContainer.style.visibility = "hidden";
-            mediaContainerUp.style.visibility = "visible";
-            mediaContainerRes.style.visibility = "hidden";
+                mediaHeaderUp.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
 
-            mediaHeaderUp.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+                console.log(data);
 
-            console.log(data);
+                infoFormatUp.textContent = container + ' - ' + Format;
+                infoSizeUp.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+                infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
+                infoFrameRateUp.textContent = FrameRate;
+                infoDurationUp.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+                infoFramecountUp.textContent = FrameCount;
+                infoBitrateUp.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
+                webFrame.clearCache()
+                ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbUpscaling.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+                var thumbUpscaling = document.getElementById('upscaling-thumb-img');
+                function setThumbUpscaling() {
+                    thumbUpscaling.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Math.random() * 1000);
+                }
+                setTimeout(setThumbUpscaling, 1000)
+            } else {
+                const gif = data.media.track.find((item) => item["@type"] === "Image")
+                const { Format, Height, Width } = gif;
 
-            infoFormatUp.textContent = container + ' - ' + Format;
-            infoSizeUp.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
-            infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
-            infoFrameRateUp.textContent = FrameRate;
-            infoDurationUp.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
-            infoFramecountUp.textContent = FrameCount;
-            infoBitrateUp.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-            webFrame.clearCache()
-            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbUpscaling.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
-            var thumbUpscaling = document.getElementById('upscaling-thumb-img');
-            function setThumbUpscaling() {
-                thumbUpscaling.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Math.random() * 1000);
+                const container = data.media.track[0].Format;
+                const filesize = data.media.track[0].FileSize;
+
+                const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+
+                noMedia.style.visibility = "hidden";
+                if (sessionStorage.getItem('currentTab') == 'upscaling') {
+                    mediaContainerUp.style.visibility = "visible";
+                }
+
+                mediaHeaderUp.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+
+                console.log(data);
+
+                infoFormatUp.textContent = container + ' - ' + Format;
+                infoSizeUp.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+                infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
+                infoFrameRateUp.textContent = '-';
+                infoDurationUp.textContent = '-';
+                infoFramecountUp.textContent = '-';
+                infoBitrateUp.textContent = '-';
+                webFrame.clearCache()
+                ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbUpscaling.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+                var thumbUpscaling = document.getElementById('upscaling-thumb-img');
+                function setThumbUpscaling() {
+                    thumbUpscaling.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Math.random() * 1000);
+                }
+                setTimeout(setThumbUpscaling, 1000)
             }
-            setTimeout(setThumbUpscaling, 1000)
         })
     }
     static fetchMetadataRestore() {
-        let inputPath = sessionStorage.getItem('currentFile');
+        let inputPath = sessionStorage.getItem('inputPathRestore');
         readMetadata(inputPath).then((result) => {
             const data = JSON.parse(result);
+            const gifCheck = Boolean(data.media.track.find((item) => item["@type"] === "Image"))
 
-            const video = data.media.track.find((item) => item["@type"] === "Video");
-            const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
+            if (!gifCheck) {
+                const video = data.media.track.find((item) => item["@type"] === "Video");
+                const { Format, FrameRate, FrameCount, Width, Height, Duration } = video;
 
-            const container = data.media.track[0].Format;
-            const filesize = data.media.track[0].FileSize;
-            const bitRate = data.media.track[0].OverallBitRate;
+                const container = data.media.track[0].Format;
+                const filesize = data.media.track[0].FileSize;
+                const bitRate = data.media.track[0].OverallBitRate;
 
-            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+                const aspectRatio = ratio(parseInt(Height), parseInt(Width));
 
-            mediaContainer.style.visibility = "hidden";
-            mediaContainerUp.style.visibility = "hidden";
-            mediaContainerRes.style.visibility = "visible";
+                noMedia.style.visibility = "hidden";
+                if (sessionStorage.getItem('currentTab') == 'restoration') {
+                    mediaContainerRes.style.visibility = "visible";
+                }
 
-            mediaHeaderRes.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+                mediaHeaderRes.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
 
-            console.log(data);
+                console.log(data);
 
-            infoFormatRes.textContent = container + ' - ' + Format;
-            infoSizeRes.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
-            infoDimensionsRes.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
-            infoFrameRateRes.textContent = FrameRate;
-            infoDurationRes.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
-            infoFramecountRes.textContent = FrameCount;
-            infoBitrateRes.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
-            webFrame.clearCache()
-            ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbRestoration.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
-            var thumbRestoration = document.getElementById('restoration-thumb-img');
-            function setThumbRestoration() {
-                thumbRestoration.src = path.join(appDataPath, '/.enhancr/thumbs/thumbRestoration.png?' + Math.random() * 1000);
+                infoFormatRes.textContent = container + ' - ' + Format;
+                infoSizeRes.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+                infoDimensionsRes.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
+                infoFrameRateRes.textContent = FrameRate;
+                infoDurationRes.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+                infoFramecountRes.textContent = FrameCount;
+                infoBitrateRes.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
+                webFrame.clearCache()
+                ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbRestoration.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+                var thumbRestoration = document.getElementById('restoration-thumb-img');
+                function setThumbRestoration() {
+                    thumbRestoration.src = path.join(appDataPath, '/.enhancr/thumbs/thumbRestoration.png?' + Math.random() * 1000);
+                }
+                setTimeout(setThumbRestoration, 1000)
+            } else {
+                const gif = data.media.track.find((item) => item["@type"] === "Image")
+                const { Format, Height, Width } = gif;
+
+                const container = data.media.track[0].Format;
+                const filesize = data.media.track[0].FileSize;
+
+                const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+
+                noMedia.style.visibility = "hidden";
+                if (sessionStorage.getItem('currentTab') == 'restoration') {
+                    mediaContainerRes.style.visibility = "visible";
+                }
+
+                mediaHeaderRes.innerHTML = '<i class="fa-solid fa-folder-closed"></i> ../' + path.basename(inputPath);
+
+                console.log(data);
+
+                infoFormatRes.textContent = container + ' - ' + Format;
+                infoSizeRes.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
+                infoDimensionsRes.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
+                infoFrameRateRes.textContent = '-';
+                infoDurationRes.textContent = '-';
+                infoFramecountRes.textContent = '-';
+                infoBitrateRes.textContent = '-';
+                webFrame.clearCache()
+                ffmpeg(inputPath).screenshots({ count: 1, filename: 'thumbRestoration.png', folder: path.join(appDataPath, '/.enhancr/thumbs'), size: '1280x720' });
+                var thumbRestoration = document.getElementById('restoration-thumb-img');
+                function setThumbRestoration() {
+                    thumbRestoration.src = path.join(appDataPath, '/.enhancr/thumbs/thumbRestoration.png?' + Math.random() * 1000);
+                }
+                setTimeout(setThumbRestoration, 1000)
             }
-            setTimeout(setThumbRestoration, 1000)
         })
     }
 
@@ -420,13 +634,21 @@ class Media {
         try {
             const result = await readMetadata(file);
             const data = JSON.parse(result);
-    
-            const video = data.media.track.find((item) => item["@type"] === "Video");
-            const {Width, Height} = video;
-    
-            const aspectRatio = ratio(parseInt(Height), parseInt(Width));
-            return Width + " x " + Height + " (" + aspectRatio + ")";
-        } catch(error) {
+            const gifCheck = Boolean(data.media.track.find((item) => item["@type"] === "Image"))
+
+            if (!gifCheck) {
+                const video = data.media.track.find((item) => item["@type"] === "Video");
+                const { Width, Height } = video;
+
+                const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+                return Width + " x " + Height + " (" + aspectRatio + ")";
+            } else {
+                const gif = data.media.track.find((item) => item["@type"] === "Image")
+                const { Height, Width } = gif;
+                const aspectRatio = ratio(parseInt(Height), parseInt(Width));
+                return Width + " x " + Height + " (" + aspectRatio + ")";
+            }
+        } catch (error) {
             console.log(error);
         }
     }

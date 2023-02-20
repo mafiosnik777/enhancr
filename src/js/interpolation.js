@@ -76,11 +76,22 @@ class Interpolation {
 
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for interpolation process..';
 
+            // convert gif to video
+            const gifVideoPath = path.join(cache, "gif.mkv");
+            if (path.extname(file) == ".gif") {
+                try {
+                    execSync(`${ffmpeg} -y -loglevel error -i "${file}" "${gifVideoPath}"`);
+                    file = gifVideoPath;
+                } catch (err) {
+                    terminal.innerHTML += '\r\n' + enhancrPrefix + ` Error: GIF preparation has failed.`;
+                };
+            }
+            
             // scan media for subtitles
             const subsPath = path.join(cache, "subs.ass");
             try {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for subtitles..`;
-                execSync(`${ffmpeg} -y -loglevel error -i "${file}" -c:s copy ${subsPath}`);
+                execSync(`${ffmpeg} -y -loglevel error -i "${file}" -c:s copy "${subsPath}"`);
             } catch (err) {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` No subtitles were found, skipping subtitle extraction..`;
             };
