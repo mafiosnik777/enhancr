@@ -18,6 +18,20 @@ const recentItemTemplate = document.getElementById('recent-item-template');
     appLogo[0].style.animation = '';
 }); */
 
+var winControls = document.getElementById("win-controls");
+
+//Window controls
+const isWin11 = os.release().split('.')[2] >= 22000;
+if (process.platform == "win32" && !isWin11 || process.platform == "linux") {
+    winControls.style.visibility = "visible";
+    document.getElementById('patreon-profile').style.top = '8%';
+    document.getElementById('profile-container').style.top = '9.3%';
+    document.getElementById('close').style.top = '1%';
+    document.getElementById('minimize').style.top = '2%';
+} else {
+    winControls.style.visibility = "hidden";
+}
+
 if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
     console.log('light mode detected');
     lightModeLayer.style.visibility = 'visible';
