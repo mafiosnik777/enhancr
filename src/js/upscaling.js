@@ -95,7 +95,7 @@ class Upscaling {
             const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
 
             // convert gif to video
-            const gifVideoPath = path.join(cache, "gif.mkv");
+            const gifVideoPath = path.join(cache, path.basename(file)+ ".mkv");
             if (path.extname(file) == ".gif") {
                 try {
                     execSync(`${ffmpeg} -y -loglevel error -i "${file}" "${gifVideoPath}"`);
@@ -313,10 +313,12 @@ class Upscaling {
 
             // resolve output file path
             if (fileOut == null) {
-                let outPath = path.join(output, path.parse(file).name + `_${model}-${scale}x${extension}`);
+                if (extension == "Frame Sequence") var outPath = path.join(output, path.parse(file).name + `_${model}-2x-${extension}`);
+                else var outPath = path.join(output, path.parse(file).name + `_${model}-2x${extension}`);
                 sessionStorage.setItem("pipeOutPath", outPath);
             } else {
-                sessionStorage.setItem("pipeOutPath", `${path.join(output, fileOut + extension)}`);
+                if (extension == "Frame Sequence") sessionStorage.setItem("pipeOutPath", `${path.join(output, fileOut + "-" + extension)}`);
+                else sessionStorage.setItem("pipeOutPath", `${path.join(output, fileOut + extension)}`);
             }
 
             // determine ai engine
@@ -365,7 +367,7 @@ class Upscaling {
             // inject env hook
             let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"`;
 
-            let tmpOutPath = path.join(cache, Date.now() + extension);
+            let tmpOutPath = path.join(cache, Date.now() + ".mkv");
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
                 openModal(subsModal);
                 terminal.innerHTML += "\r\n[enhancr] Input video contains subtitles, but output container is not .mkv, cancelling.";
@@ -410,13 +412,22 @@ class Upscaling {
                                 resolve();
                             } else {
                                 terminal.innerHTML += `[enhancr] Finishing up upscaling..\r\n`;
-                                terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
 
                                 // fix audio loss when muxing mkv
                                 let mkv = extension == ".mkv";
                                 let mkvFix = mkv ? "-max_interleave_delta 0" : "";
 
-                                let muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn -codec copy ${mkvFix} "${sessionStorage.getItem('pipeOutPath')}"`;
+                                let out = sessionStorage.getItem('pipeOutPath');
+
+                                if (extension == "Frame Sequence") {
+                                    fse.mkdirSync(path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now()));
+                                    terminal.innerHTML += `[enhancr] Exporting as frame sequence..\r\n`;
+                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
+                                } else {
+                                    terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
+                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn -codec copy ${mkvFix} "${out}"`;
+                                }
+
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
 
                                 // merge stdout & stderr & write data to terminal

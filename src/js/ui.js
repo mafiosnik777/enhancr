@@ -35,6 +35,7 @@ var mp4Option = document.getElementById("mp4");
 var mkvOption = document.getElementById("mkv");
 var webmOption = document.getElementById("webm");
 var movOption = document.getElementById("mov");
+var framesOption = document.getElementById("frame-sequence");
 
 var engineInput = document.getElementById("engine");
 var engineDropdown = document.getElementById("engine-dropdown");
@@ -475,6 +476,19 @@ webmOption.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.interpolation[0].outputContainer = ".webm";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Output container written to project file.");
+});
+
+framesOption.addEventListener("click", function () {
+    outputContainerSpan.textContent = "Frame Sequence";
+    hider.style.visibility = "hidden";
+    containerDropdown.style.visibility = "hidden";
+    mediaInfoContainer.textContent = "Frame Sequence";
+    // autosave container in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.interpolation[0].outputContainer = "Frame Sequence";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Output container written to project file.");
 });
@@ -1456,7 +1470,8 @@ var outputContainerInputUpscale = document.getElementById("output-container-upsc
     mp4OptionUp = document.getElementById("mp4-up"),
     mkvOptionUp = document.getElementById("mkv-up"),
     movOptionUp = document.getElementById("mov-up"),
-    webmOptionUp = document.getElementById("webm-up");
+    webmOptionUp = document.getElementById("webm-up"),
+    framesOptionUp = document.getElementById("frame-sequence-up");
 var outputContainerSpanUp = document.getElementById("container-span-up");
 
 function toggleHiderUpscale() {
@@ -1533,6 +1548,19 @@ webmOptionUp.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.upscaling[0].outputContainer = ".webm";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Output container written to project file.");
+});
+
+framesOptionUp.addEventListener("click", function () {
+    outputContainerSpanUp.textContent = "Frame Sequence";
+    hiderUpscale.style.visibility = "hidden";
+    containerDropdownUpscale.style.visibility = "hidden";
+    mediaInfoContainerUp.textContent = "Frame Sequence";
+    // autosave container in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.upscaling[0].outputContainer = "Frame Sequence";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Output container written to project file.");
 });
@@ -2001,7 +2029,8 @@ var outputContainerInputRestoration = document.getElementById("output-container-
     mp4OptionRes = document.getElementById("mp4-res"),
     mkvOptionRes = document.getElementById("mkv-res"),
     movOptionRes = document.getElementById("mov-res"),
-    webmOptionRes = document.getElementById("webm-res");
+    webmOptionRes = document.getElementById("webm-res"),
+    framesOptionRes = document.getElementById("frame-sequence-res");
 var outputContainerSpanRes = document.getElementById("container-span-res");
 
 const modelDropdownRes = document.getElementById('model-dropdown-restoration')
@@ -2078,6 +2107,20 @@ webmOptionRes.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.restoration[0].outputContainer = ".webm";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Output container written to project file.");
+});
+
+framesOptionRes.addEventListener("click", function () {
+    outputContainerSpanUp.textContent = "Frame Sequence";
+    hiderRestore.style.visibility = "hidden";
+    containerDropdownRestoration.style.visibility = "hidden";
+    mediaInfoContainerRes.textContent = "Frame Sequence";
+
+    // autosave container in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.restoration[0].outputContainer = "Frame Sequence";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Output container written to project file.");
 });
