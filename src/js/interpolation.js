@@ -77,7 +77,7 @@ class Interpolation {
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for interpolation process..';
 
             // convert gif to video
-            const gifVideoPath = path.join(cache, path.basename(file)+ ".mkv");
+            const gifVideoPath = path.join(cache, path.parse(file).name + ".mkv");
             if (path.extname(file) == ".gif") {
                 try {
                     execSync(`${ffmpeg} -y -loglevel error -i "${file}" "${gifVideoPath}"`);

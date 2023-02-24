@@ -264,7 +264,7 @@ function renderQueueItem() {
           let chainModal = document.getElementById('modal-chain');
           let mode = queue[index].mode;
           if (item.innerHTML == '<i class="fa-solid fa-film"></i> Play video') {
-            let model;
+            var model;
             let outputPath;
             if (!(sessionStorage.getItem(`out${index}`) == null)) {
               outputPath = path.join(queue[index].output, sessionStorage.getItem(`out${index}`) + queue[index].extension);

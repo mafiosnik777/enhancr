@@ -95,7 +95,7 @@ class Upscaling {
             const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
 
             // convert gif to video
-            const gifVideoPath = path.join(cache, path.basename(file)+ ".mkv");
+            const gifVideoPath = path.join(cache, path.parse(file).name + ".mkv");
             if (path.extname(file) == ".gif") {
                 try {
                     execSync(`${ffmpeg} -y -loglevel error -i "${file}" "${gifVideoPath}"`);
@@ -323,7 +323,7 @@ class Upscaling {
 
             // resolve output file path
             if (fileOut == null) {
-                if (extension == "Frame Sequence") var outPath = path.join(output, path.parse(file).name + `_${model}-2x-${extension}`);
+                if (extension == "Frame Sequence") var outPath = path.join(output, path.parse(file).name + `_${model}-${scale}x-${extension}`);
                 else var outPath = path.join(output, path.parse(file).name + `_${model}-2x${extension}`);
                 sessionStorage.setItem("pipeOutPath", outPath);
             } else {
