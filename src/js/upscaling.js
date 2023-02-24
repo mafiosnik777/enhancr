@@ -170,8 +170,14 @@ class Upscaling {
 
             //get onnx input path
             function getOnnxPath() {
-                if (!(document.getElementById('custom-model-check').checked)) {
+                if (!(document.getElementById('custom-model-check').checked) && engine == 'Upscaling - RealESRGAN (TensorRT)') {
                     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                } else if (engine == 'Upscaling - RealCUGAN (TensorRT)') {
+                    if (scale = "2") {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx");
+                    } else if (scale = "3") {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-3x.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-3x.onnx");
+                    }
                 } else {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
@@ -206,7 +212,7 @@ class Upscaling {
             sessionStorage.setItem('engineOut', engineOut);
 
             // convert onnx to trt engine
-            if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)') {
+            if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)' || !fse.existsSync(engineOut) && engine == 'Upscaling - RealCUGAN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
@@ -309,6 +315,10 @@ class Upscaling {
                 model = "RealESRGAN"
             } else if (engine == "Upscaling - waifu2x (NCNN)") {
                 model = "waifu2x"
+            } else if (engine == "Upscaling - RealESRGAN (NCNN)") {
+                model = "RealESRGAN"
+            } else if (engine == "Upscaling - RealCUGAN (TensorRT)") {
+                model = "RealCUGAN"
             }
 
             // resolve output file path
@@ -331,6 +341,9 @@ class Upscaling {
                 }
                 if (engine == "Upscaling - waifu2x (NCNN)") {
                     return !isPackaged ? path.join(__dirname, '..', "/env/inference/waifu2x.py") : path.join(process.resourcesPath, "/env/inference/waifu2x.py");
+                }
+                if (engine == "Upscaling - RealCUGAN (TensorRT)") {
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/cugan_trt.py") : path.join(process.resourcesPath, "/env/inference/cugan_trt.py");
                 }
             }
             var engine = pickEngine();

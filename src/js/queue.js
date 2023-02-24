@@ -286,8 +286,10 @@ function renderQueueItem() {
             } else if (queue[index].mode == 'upscaling') {
               if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
+              } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
                 model = "waifu2x"
+              } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
+                model = "RealCUGAN"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
               shell.openPath(outputPath);
@@ -396,8 +398,10 @@ function renderQueueItem() {
                   } else {
                     if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                       model = "RealESRGAN"
-                    } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
+                    } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
                       model = "waifu2x"
+                    } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
+                      model = "RealCUGAN"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
                   }
@@ -431,8 +435,10 @@ function renderQueueItem() {
                   if (queue[index].mode == 'upscaling') {
                     if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                       model = "RealESRGAN"
-                    } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
+                    } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
                       model = "waifu2x"
+                    } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
+                      model = "RealCUGAN"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
                   } else {
@@ -500,8 +506,10 @@ function renderQueueItem() {
             } else if (queue[index].mode == 'upscaling') {
               if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
+              } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
                 model = "waifu2x"
+              } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
+                model = "RealCUGAN"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
               remote.shell.showItemInFolder(outputPath);
@@ -568,8 +576,10 @@ function renderQueueItem() {
             } else if (queue[index].mode == 'upscaling') {
               if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - waifu2x (TensorRT)") {
+              } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
                 model = "waifu2x"
+              } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
+                model = "RealCUGAN"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
             } else if (queue[index].mode == 'restoration') {

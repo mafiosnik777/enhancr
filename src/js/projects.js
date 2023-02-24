@@ -447,6 +447,10 @@ function loadUpscaling() {
   if (data.upscaling[0].engine === "realesrgan") {
     upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (TensorRT)"
   }
+  if (data.upscaling[0].engine === "realcugan") {
+    upscaleEngineSpan.textContent = "Upscaling - RealCUGAN (TensorRT)"
+    document.getElementById('factor4').style.display = 'none';
+  }
 }
 loadUpscaling();
 

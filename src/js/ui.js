@@ -888,6 +888,7 @@ async function setGPU() {
         document.getElementById('cain-trt').style.display = 'none';
         document.getElementById('rife-trt').style.display = 'none';
         document.getElementById('realesrgan-tensorrt').style.display = 'none';
+        document.getElementById('realcugan-tensorrt').style.display = 'none';
         document.getElementById('dpir').style.display = 'none';
         document.getElementById('anime-video').style.display = 'none';
         document.getElementById('rife').click();
@@ -899,6 +900,7 @@ async function setGPU() {
         document.getElementById('cain-trt').style.display = 'none';
         document.getElementById('rife-trt').style.display = 'none';
         document.getElementById('realesrgan-tensorrt').style.display = 'none';
+        document.getElementById('realcugan-tensorrt').style.display = 'none';
         document.getElementById('dpir').style.display = 'none';
         document.getElementById('anime-video').style.display = 'none';
         document.getElementById('rife').click();
@@ -910,6 +912,7 @@ async function setGPU() {
         document.getElementById('cain-trt').style.display = 'block';
         document.getElementById('rife-trt').style.display = 'block';
         document.getElementById('realesrgan-tensorrt').style.display = 'block';
+        document.getElementById('realcugan-tensorrt').style.display = 'block';
         document.getElementById('dpir').style.display = 'block';
         document.getElementById('anime-video').style.display = 'block';
     }
@@ -1200,6 +1203,7 @@ var engineInputUpscale = document.getElementById("engine-upscale");
 var engineDropdownUpscale = document.getElementById("engine-dropdown-upscale");
 var waifu2xOption = document.getElementById("waifu2x-tensorrt");
 var realesrganOption = document.getElementById("realesrgan-tensorrt");
+var realcuganOption = document.getElementById("realcugan-tensorrt");
 var realesrganNcnnOption = document.getElementById("realesrgan-ncnn");
 
 var upscaleOutputPath = document.getElementById("upscale-output-path");
@@ -1625,6 +1629,23 @@ realesrganOption.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.upscaling[0].engine = "realesrgan";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (realcugan-trt)
+realcuganOption.addEventListener("click", function () {
+    upscaleEngineText.textContent = "Upscaling - RealCUGAN (TensorRT)";
+    hiderUpscale.style.visibility = "hidden";
+    engineDropdownUpscale.style.visibility = "hidden";
+    factor2.style.display = "block";
+    factor3.style.display = "block";
+    factor4.style.display = "none";
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.upscaling[0].engine = "realcugan";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });
