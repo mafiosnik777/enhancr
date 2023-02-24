@@ -445,6 +445,10 @@ class Restoration {
                                 let mkv = extension == ".mkv";
                                 let mkvFix = mkv ? "-max_interleave_delta 0" : "";
 
+                                // fix muxing audio into webm
+                                let webm = extension == ".webm";
+                                let webmFix = webm ? "-c:a libopus -b:a 192k" : "-codec copy";
+
                                 let out = sessionStorage.getItem('pipeOutPath');
 
                                 if (extension == "Frame Sequence") {
@@ -453,8 +457,10 @@ class Restoration {
                                     var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn -codec copy ${mkvFix} "${out}"`;
+                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
+                                    console.log(muxCmd);
                                 }
+
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
 
                                 // merge stdout & stderr & write data to terminal

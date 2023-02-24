@@ -103,7 +103,7 @@ class Upscaling {
                 } catch (err) {
                     terminal.innerHTML += '\r\n' + enhancrPrefix + ` Error: GIF preparation has failed.`;
                 };
-            }            
+            }
 
             // scan media for subtitles
             const subsPath = path.join(cache, "subs.ass");
@@ -406,7 +406,7 @@ class Upscaling {
                         term.stderr.on('data', (data) => {
                             process.stderr.write(`[Pipe] ${data}`);
                             // remove leading and trailing whitespace, including newline characters
-                            let dataString = data.toString().trim(); 
+                            let dataString = data.toString().trim();
                             if (dataString.startsWith('Frame:')) {
                                 // Replace the last line of the textarea with the updated line
                                 terminal.innerHTML = terminal.innerHTML.replace(/([\s\S]*\n)[\s\S]*$/, '$1' + '[Pipe] ' + dataString);
@@ -430,6 +430,10 @@ class Upscaling {
                                 let mkv = extension == ".mkv";
                                 let mkvFix = mkv ? "-max_interleave_delta 0" : "";
 
+                                // fix muxing audio into webm
+                                let webm = extension == ".webm";
+                                let webmFix = webm ? "-c:a libopus -b:a 192k" : "-codec copy";
+
                                 let out = sessionStorage.getItem('pipeOutPath');
 
                                 if (extension == "Frame Sequence") {
@@ -438,7 +442,8 @@ class Upscaling {
                                     var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn -codec copy ${mkvFix} "${out}"`;
+                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
+                                    console.log(muxCmd);
                                 }
 
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
