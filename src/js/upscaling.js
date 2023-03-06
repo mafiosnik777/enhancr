@@ -319,6 +319,8 @@ class Upscaling {
                 model = "RealESRGAN"
             } else if (engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
+            } else if (engine == "Upscaling - SwinIR (PyTorch)") {
+                model = "SwinIR"
             }
 
             // resolve output file path
@@ -344,6 +346,9 @@ class Upscaling {
                 }
                 if (engine == "Upscaling - RealCUGAN (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/env/inference/cugan_trt.py") : path.join(process.resourcesPath, "/env/inference/cugan_trt.py");
+                }
+                if (engine == "Upscaling - SwinIR (PyTorch)") {
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/swinir.py") : path.join(process.resourcesPath, "/env/inference/swinir.py");
                 }
             }
             var engine = pickEngine();

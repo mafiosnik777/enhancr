@@ -1204,6 +1204,7 @@ var engineDropdownUpscale = document.getElementById("engine-dropdown-upscale");
 var waifu2xOption = document.getElementById("waifu2x-tensorrt");
 var realesrganOption = document.getElementById("realesrgan-tensorrt");
 var realcuganOption = document.getElementById("realcugan-tensorrt");
+var swinIROption = document.getElementById("swinir");
 var realesrganNcnnOption = document.getElementById("realesrgan-ncnn");
 
 var upscaleOutputPath = document.getElementById("upscale-output-path");
@@ -1646,6 +1647,23 @@ realcuganOption.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.upscaling[0].engine = "realcugan";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (swinir)
+swinIROption.addEventListener("click", function () {
+    upscaleEngineText.textContent = "Upscaling - SwinIR (PyTorch)";
+    hiderUpscale.style.visibility = "hidden";
+    engineDropdownUpscale.style.visibility = "hidden";
+    factor2.style.display = "block";
+    factor3.style.display = "none";
+    factor4.style.display = "none";
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.upscaling[0].engine = "swinir";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });

@@ -451,6 +451,11 @@ function loadUpscaling() {
     upscaleEngineSpan.textContent = "Upscaling - RealCUGAN (TensorRT)"
     document.getElementById('factor4').style.display = 'none';
   }
+  if (data.upscaling[0].engine === "swinir") {
+    upscaleEngineSpan.textContent = "Upscaling - SwinIR (PyTorch)"
+    document.getElementById('factor4').style.display = 'none';
+    document.getElementById('factor3').style.display = 'none';
+  }
 }
 loadUpscaling();
 
