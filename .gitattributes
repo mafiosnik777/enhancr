@@ -1,2 +1,4 @@
 core.eol=lf
 core.autocrlf=input
+
+src/env/* linguist-detectable
