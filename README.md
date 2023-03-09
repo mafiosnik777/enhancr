@@ -43,7 +43,9 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**RealESRGAN (TensorRT)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
-*Thanks to [HubertSontowski](https://github.com/HubertSotnowski) for helping out with implementing AnimeSR*
+>**RealCUGAN (TensorRT)** - [bilibili](https://github.com/bilibili)/**[ailab/Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
+
+>**SwinIR (PyTorch)** - [JingyunLiang](https://github.com/JingyunLiang)/**[SwinIR](https://github.com/JingyunLiang/SwinIR)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-swinir](https://github.com/HolyWu/vs-swinir)**
 
 ## Restoration
 
@@ -97,6 +99,8 @@ Input size: 1920x1080 @ 2x
 | GMFSS / Union (TensorRT) | - | - | 6.79 fps | - | - |
 | waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps | 9.36 fps | 9.81 fps | 15.48 fps | 39.77 fps |
 | RealESRGAN / animevideov3 (TensorRT) | 7.64 fps | 9.10 fps | 8.49 fps | 18.66 fps | 38.67 fps |
+| RealCUGAN (TensorRT) | - | - | 5.96 fps | - | - |
+| SwinIR (PyTorch) | - | - | 0.43 fps | - | - |
 | DPIR / Denoise (TensorRT) | 4.38 fps | 6.45 fps | 5.39 fps | 11.64 fps | 27.41 fps |
 
 <sup>1</sup> <sub>Ryzen 5 3600X - Gainward RTX 2060 Super @ Stock</sub>
