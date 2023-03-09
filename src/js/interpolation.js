@@ -406,6 +406,8 @@ class Interpolation {
                 model = "CAIN"
             } else if (engine == "GMFlow - GMFSS (PyTorch)") {
                 model = "GMFSS"
+            } else if (engine == "GMFlow - GMFSS (TensorRT)") {
+                model = "GMFSS"
             }
             // resolve output file path
             if (fileOut == null) {

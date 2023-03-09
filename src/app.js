@@ -160,7 +160,7 @@ app.whenReady().then(async () => {
 
     remoteMain.enable(mainWindow.webContents);
     setupIpc(mainWindow);
-    mainWindow.removeMenu();
+    if (!devMode) mainWindow.removeMenu();
 
     // Inject css for solid bg (for now)
     if (settings.disableBlur) {

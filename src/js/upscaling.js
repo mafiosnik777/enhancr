@@ -178,7 +178,7 @@ class Upscaling {
                     } else if (scale = "3") {
                         return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-3x.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-3x.onnx");
                     }
-                } else {
+                } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - waifu2x (NCNN)') {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
                         return path.join(cache, path.parse(customModel).name + '.onnx');

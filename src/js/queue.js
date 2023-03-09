@@ -278,7 +278,9 @@ function renderQueueItem() {
                 model = "RIFE"
               } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
                 model = "CAIN"
-              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch") {
+              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
+                model = "GMFSS"
+              } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
                 model = "GMFSS"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
@@ -343,7 +345,9 @@ function renderQueueItem() {
                       model = "RIFE"
                     } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
                       model = "CAIN"
-                    } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch") {
+                    } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
+                      model = "GMFSS"
+                    } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
                       model = "GMFSS"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
@@ -393,7 +397,9 @@ function renderQueueItem() {
                       model = "RIFE"
                     } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
                       model = "CAIN"
-                    } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch") {
+                    } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
+                      model = "GMFSS"
+                    } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
                       model = "GMFSS"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
@@ -504,7 +510,9 @@ function renderQueueItem() {
                 model = "RIFE"
               } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
                 model = "CAIN"
-              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch") {
+              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
+                model = "GMFSS"
+              } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
                 model = "GMFSS"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
@@ -518,8 +526,9 @@ function renderQueueItem() {
                 model = "RealCUGAN"
               } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
                 model = "SwinIR"
-                }
+              }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
+              console.log(outputPath);
               remote.shell.showItemInFolder(outputPath);
             } else if (queue[index].mode == 'restoration') {
               if (queue[index].engine == "Restoration - DPIR (TensorRT)") {
@@ -577,7 +586,9 @@ function renderQueueItem() {
                 model = "RIFE"
               } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
                 model = "CAIN"
-              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch") {
+              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
+                model = "GMFSS"
+              } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
                 model = "GMFSS"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
