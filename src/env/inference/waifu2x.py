@@ -21,6 +21,10 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     data = json.load(f)
     video_path = data['file']
     engine = data['engine']
+    tiling = data['tiling']
+    tileHeight = int(data['tileHeight'])
+    tileWidth = int(data['tileWidth'])
+    fp16 = data['fp16']
     streams = data['streams']
 
 def threading():
@@ -31,7 +35,12 @@ clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-clip = core.w2xnvk.Waifu2x(clip, noise=2, scale=2, model=0, precision=16, gpu_thread=threading())
+network = "../python/vapoursynth64/plugins/models/waifu2x/noise2_model.onnx"
+
+if tiling == False:
+    clip = core.ncnn.Model(clip, network_path=network, num_streams=threading(), fp16=fp16)
+else:
+    clip = core.ncnn.Model(clip, network_path=network, num_streams=threading(), fp16=fp16, tilesize=[tileHeight, tileWidth])
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 

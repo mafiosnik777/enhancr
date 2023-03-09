@@ -78,7 +78,8 @@ module.exports = (startupEnabled) => {
     }
 
     ipcMain.on('rpc-done', () => {
-        inferenceRunning = false
+        inferenceRunning = 
+        console.log('Process completed: Resetting Discord Presence')
         setPresence(null);
     });
     ipcMain.on('rpc-interpolation', (event, fps, engine, percentage) => {

@@ -37,7 +37,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 ## Upscaling
 
->**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [nlzy](https://github.com/nlzy)/**[vapoursynth-waifu2x-NCNN-vulkan](https://github.com/nlzy/vapoursynth-waifu2x-NCNN-vulkan)**
+>**waifu2x (NCNN)** - [nagadomi](https://github.com/nagadomi)/**[waifu2x](https://github.com/nagadomi/waifu2x)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
 >**RealESRGAN (NCNN)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
@@ -97,7 +97,7 @@ Input size: 1920x1080 @ 2x
 | GMFSS / Up (PyTorch) | - | - | 4.32 fps | - | 16.35 fps |
 | GMFSS / Union (PyTorch) | - | - | 3.68 fps | - | 13.93 fps |
 | GMFSS / Union (TensorRT) | - | - | 6.79 fps | - | - |
-| waifu2x / anime_style_art_rgb (NCNN) | 6.71 fps | 9.36 fps | 9.81 fps | 15.48 fps | 39.77 fps |
+| waifu2x / anime_style_art_rgb (NCNN) | - | - | 12.44 fps | - | - |
 | RealESRGAN / animevideov3 (TensorRT) | 7.64 fps | 9.10 fps | 8.49 fps | 18.66 fps | 38.67 fps |
 | RealCUGAN (TensorRT) | - | - | 5.96 fps | - | - |
 | SwinIR (PyTorch) | - | - | 0.43 fps | - | - |
