@@ -113,6 +113,13 @@ clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
 clip = rife_trt(clip, multi = 2, scale = 1.0, device_id = 0, num_streams = threading(), engine_path = engine)
 
+# padding if clip dimensions aren't divisble by 2
+if (clip.height % 2 != 0):
+    clip = core.std.AddBorders(clip, bottom=1)
+    
+if (clip.width % 2 != 0):
+    clip = core.std.AddBorders(clip, right=1)
+
 output = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 
 print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)

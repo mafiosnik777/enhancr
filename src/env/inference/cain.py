@@ -49,6 +49,14 @@ clip = vs.core.resize.Bicubic(clip, format=vs.YUV444PS, matrix_in_s="709")
 
 clip = core.cain.CAIN(clip, model=cainModel, gpu_id=0, gpu_thread=threading(), sc=sceneDetection, skip=frameskip)
 
+# padding if clip dimensions aren't divisble by 2
+if (clip.height % 2 != 0):
+    clip = core.std.AddBorders(clip, bottom=1)
+    
+if (clip.width % 2 != 0):
+    clip = core.std.AddBorders(clip, right=1)
+
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
+
 print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 clip.set_output()

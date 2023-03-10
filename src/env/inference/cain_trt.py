@@ -77,8 +77,16 @@ clip1 = core.std.Interleave([clip, clip])
 
 output = vfi_frame_merger(clip1, output)
 
+# cain network specific padding
 if padding:
     output = core.std.Crop(clip, right=ToPadWidth, top=ToPadHeight)
+
+# padding if clip dimensions aren't divisble by 2
+if (clip.height % 2 != 0):
+    clip = core.std.AddBorders(clip, bottom=1)
+    
+if (clip.width % 2 != 0):
+    clip = core.std.AddBorders(clip, right=1)
 
 output = vs.core.resize.Bicubic(output, format=vs.YUV422P8, matrix_s="709")
 

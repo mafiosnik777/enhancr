@@ -43,6 +43,13 @@ if tiling == False:
 else:
     clip = core.trt.Model(clip, engine_path=engine, num_streams=threading(), tilesize=[tileHeight, tileWidth])
 
+# padding if clip dimensions aren't divisble by 2
+if (clip.height % 2 != 0):
+    clip = core.std.AddBorders(clip, bottom=1)
+
+if (clip.width % 2 != 0):
+    clip = core.std.AddBorders(clip, right=1)
+
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 
 print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)

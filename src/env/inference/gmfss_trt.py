@@ -70,6 +70,13 @@ clip = gmfss_union(clip, num_streams=threading(), trt=True, trt_cache_path=engin
 clip1 = core.std.Interleave([clip, clip])
 output = vfi_frame_merger(clip1, clip)
 
+# padding if clip dimensions aren't divisble by 2
+if (clip.height % 2 != 0):
+    clip = core.std.AddBorders(clip, bottom=1)
+    
+if (clip.width % 2 != 0):
+    clip = core.std.AddBorders(clip, right=1)
+
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV422P8, matrix_s="709")
 
 print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)
