@@ -35,7 +35,7 @@
     "gpu-info": "^0.0.1",
     "hls.js": "^1.1.5",
     "i": "^0.3.7",
-    "mediainfo.js": "^0.1.8",
+    "mediainfo.js": "0.1.8",
     "mime": "^3.0.0",
     "npm": "^9.4.0",
     "proxy-from-env": "^1.1.0",

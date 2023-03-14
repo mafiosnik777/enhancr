@@ -2763,12 +2763,12 @@ matcher@^3.0.0:
   dependencies:
     escape-string-regexp "^4.0.0"
 
-mediainfo.js@^0.1.8:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/mediainfo.js/-/mediainfo.js-0.1.9.tgz#10e3204db4d51244b08593c554884ff0f0b8739e"
-  integrity sha512-RxTWC5cvfl+TMDM4cG+G7VFIdYfg1X/FLNLujqRERtKMr48Hbmno94fS0A8VP3zANDRXJn88DPWAUFDbcgzIrQ==
+mediainfo.js@0.1.8:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/mediainfo.js/-/mediainfo.js-0.1.8.tgz#b24e25815c21dc2bac9903b8b6452a28aa13e154"
+  integrity sha512-j68v2X+SC93X8F1nWKYqCDvGs2VtwPgvvXQsyJIAYP0zMM6WVa8lDfixyi2tthaB51uhC9/RTb9t5P1KJZeKpQ==
   dependencies:
-    yargs "^17.6.2"
+    yargs "^17.5.1"
 
 mem@^4.3.0:
   version "4.3.0"
@@ -4491,7 +4491,7 @@ yargs@^16.0.2:
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
 
-yargs@^17.0.1, yargs@^17.6.2:
+yargs@^17.0.1, yargs@^17.5.1:
   version "17.7.1"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.7.1.tgz#34a77645201d1a8fc5213ace787c220eabbd0967"
   integrity sha512-cwiTb08Xuv5fqF4AovYacTFNxk62th7LKJ6BL9IGUpTJrWoU7/7WdQGTP2SjKf1dUNBGzDd28p/Yfs/GI6JrLw==
