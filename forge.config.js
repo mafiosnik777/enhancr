@@ -17,7 +17,7 @@ const assetBuildDir = path.resolve(__dirname, './build');
 //     !includePaths.includes(pathname)
 // ));
 
-if (process.platform === 'win32') process.env.GYP_MSVS_VERSION = '2019';
+// if (process.platform === 'win32') process.env.GYP_MSVS_VERSION = '2019';
 
 module.exports = {
     packagerConfig: {
