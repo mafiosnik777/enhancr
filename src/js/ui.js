@@ -20,6 +20,21 @@ var outputPathText = document.getElementById("output-path-text");
 
 var upscaleEngineText = document.getElementById("upscale-engine-text");
 
+document.addEventListener('keydown', function(e) {
+    var handled = false;
+    if (e.key !== undefined) {
+        if((e.key == "Enter" && (e.metaKey || e.ctrlKey || e.altKey))) handled = true;
+    } else if (e.keyCode !== undefined) {
+        if((e.keyCode == 13 && (e.metaKey || e.ctrlKey || e.altKey))) handled = true;
+    }
+    if (handled) {
+        let exportBtn = document.getElementById('export-btn');
+        exportBtn.click()
+        e.preventDefault();
+    }
+})
+
+
 var x264Btn = document.getElementById("x264"),
     x265Btn = document.getElementById("x265"),
     AV1Btn = document.getElementById("AV1"),
