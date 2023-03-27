@@ -196,7 +196,7 @@ class Restoration {
 
             let shapeOverride = document.getElementById('shape-check').checked;
             let shapeDimensionsMax = shapeOverride ? document.getElementById('shape-res').value : '1080x1920';
-            let shapeDimensionsOpt = Math.ceil(parseInt(shapeDimensionsMax.split('x')[0]) / 1.5) + 'x' + Math.ceil(parseInt(shapeDimensionsMax.split('x')[1]) / 1.5);
+            let shapeDimensionsOpt = Math.ceil(parseInt(shapeDimensionsMax.split('x')[0]) / 2) + 'x' + Math.ceil(parseInt(shapeDimensionsMax.split('x')[1]) / 2);
 
             // get engine path
             function getEnginePath() {
