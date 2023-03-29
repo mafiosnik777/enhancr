@@ -142,7 +142,7 @@ def gmfss_union(
 
     if trt:
         device_name = torch.cuda.get_device_name(device)
-        trt_version = tensorrt.__version__
+        trt_version = '8.6.0'
         dimensions = f'{pw}x{ph}'
         precision = 'fp16' if fp16 else 'fp32'
         trt_engine_path = os.path.join(

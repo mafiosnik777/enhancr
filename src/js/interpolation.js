@@ -28,6 +28,8 @@ const preview = document.getElementById('preview-check');
 
 sessionStorage.setItem('stopped', 'false');
 
+const trtVersion = '8.6.0';
+
 class Interpolation {
     static async process(file, model, output, params, extension, engine, dimensions, fileOut, index) {
         let cacheInputText = document.getElementById('cache-input-text');
@@ -99,10 +101,10 @@ class Interpolation {
             // scan media for audio
             const audioPath = path.join(cache, "audio.mka");
             try {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for audio..`;
+                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for audio..\r\n`;
                 execSync(`${ffmpeg} -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
             } catch (err) {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` No audio stream was found, skipping copying audio..`;
+                terminal.innerHTML += '\r\n' + enhancrPrefix + ` No audio stream was found, skipping copying audio..\r\n`;
             };
 
             //get trtexec path
@@ -169,7 +171,7 @@ class Interpolation {
             let onnx = getOnnx();
             // get engine path
             function getEnginePath() {
-                return path.join(appDataPath, '/.enhancr/models/engine', 'cain' + '_' + path.basename(onnx, '.onnx') + '_' + width + 'x' + height + '_' + fp + '_trt_8.5.2.engine');
+                return path.join(appDataPath, '/.enhancr/models/engine', `cain_${path.basename(onnx, '.onnx')}_${width}x${height}_${fp}_trt_${trtVersion}.engine`);
             }
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
@@ -267,15 +269,15 @@ class Interpolation {
             function getRifeEngine() {
                 if (document.getElementById('rife-tta-check').checked) {
                     if (fp16) {
-                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_fp16_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
+                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_fp16_${shapeDimensionsMax}` + `_trt_${trtVersion}.engine`);
                     } else {
-                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
+                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleTrue_${shapeDimensionsMax}` + `_trt_${trtVersion}.engine`);
                     }
                 } else {
                     if (fp16) {
-                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_fp16_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
+                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_fp16_${shapeDimensionsMax}` + `_trt_${trtVersion}.engine`);
                     } else {
-                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_${shapeDimensionsMax}` + '_trt_8.5.2.engine');
+                        return path.join(appDataPath, '/.enhancr/models/engine', `rife46_ensembleFalse_${shapeDimensionsMax}` + `_trt_${trtVersion}.engine`);
                     }
                 }
             }

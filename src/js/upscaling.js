@@ -46,6 +46,8 @@ const preview = document.getElementById('preview-check');
 
 sessionStorage.setItem('stopped', 'false');
 
+const trtVersion = '8.6.0';
+
 class Upscaling {
     static async process(scale, dimensions, file, output, params, extension, engine, fileOut, index) {
         let cacheInputText = document.getElementById('cache-input-text');
@@ -205,7 +207,7 @@ class Upscaling {
                         return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     }
                 } else {
-                    return path.join(appDataPath, '/.enhancr/models/engine', path.parse(onnx).name + '-' + fp + '_' + shapeDimensionsMax + '_trt_8.5.2.engine');
+                    return path.join(appDataPath, '/.enhancr/models/engine', `${path.parse(onnx).name}-${fp}_${shapeDimensionsMax}_trt_${trtVersion}.engine`);
                 }
             }
             let engineOut = getEnginePath();

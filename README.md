@@ -10,7 +10,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 # Features
 - Encodes video on the fly and reads frames from source video, without the need of extracting frames or loading into memory
 - Queue for batch processing
-- Live Preview of output media
+- Live Preview integrated in the UI, without impact on performance
 - Allows chaining of interpolation, upscaling & restoration
 - Offers the possibility to trim videos before processing
 - Can load custom ESRGAN models in onnx & pth format and converts them automatically
@@ -53,17 +53,21 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 # System Requirements
 
+
+
 #### Minimum:
  - Dual Core CPU with Hyperthreading enabled
- - Vulkan-capable graphics processor
+ - Vulkan-capable graphics processor for inference with NCNN
  - Windows 10
 
 #### Recommended:
 
 -   Quad Core Intel Kaby Lake/AMD Ryzen or newer with Hyperthreading enabled
 -   16 GB RAM
--   NVIDIA 1000 Series (Pascal) for TensorRT/NCNN or AMD Polaris for NCNN
+-   NVIDIA 2000 Series (Ampere) for TensorRT/NCNN or AMD Polaris for NCNN
 -   Windows 11
+
+<sub>Sidenote: Starting with TensorRT 8.6, support for 2nd generation Kepler and Maxwell (900 Series and below) has been dropped. You will need at least a Pascal GPU (1000 series and up) and CUDA 12.0 + driver version >= 525.xx to run inference using TensorRT.</sub>
 
 # Installation
 
@@ -73,16 +77,16 @@ Please note that builds and an embeddable python environment **are not** provide
 
 ![installer](https://mafiosnik.needsmental.help/mEerVMP8LA.png?key=bzdnzy2RYJGOvO)
 
->*There probably will be free versions down the line, after a backlog of versions has released.*
+>*Release 0.9.8 will feature a free version, with some features cut down.*
 
 # macOS and Linux Support
 
 The GUI was created with cross-platform compatibility in mind and is compatible with both operating systems.
-**Our primary focus at the moment is ensuring a stable and fully functioning solution for Windows users, but support for Linux and macOS will be made available in the near future.**
+**Our primary focus at the moment is ensuring a stable and fully functioning solution for Windows users, but support for Linux and macOS will be made available with the 1.0 update.**
 
 ![enhancr-macos](https://mafiosnik.needsmental.help/st6TAP6g9t.png?key=kfq89rqeM2kEdi)
 
-Support for Apple Silicon is planned as well, but I currently only have an Intel Macbook Pro available for testing.
+Support for Apple Silicon is planned as well, ~~but I currently only have an Intel Macbook Pro available for testing~~ i'll get a Apple Silicon instance on Amazon AWS to implement this, in time for the 1.0 release.
 
 # Benchmarks
 
