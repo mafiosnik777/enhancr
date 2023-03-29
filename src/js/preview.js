@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const os = require('os');
 const path = require('path');
 
+const terminal = document.getElementById("terminal-text");
 var preview = document.getElementById('preview');
 
 class Preview {

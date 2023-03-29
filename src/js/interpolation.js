@@ -468,12 +468,16 @@ class Interpolation {
                 throw new Error('Input video contains subtitles, but output container is not .mkv');
             } else {
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Starting interpolation process..` + '\r\n';
-
+                let previewEncoder = () => {
+                    if (sessionStorage.getItem('gpu') == 'Intel') return '-c:v h264_qsv -preset fast -look_ahead 30 -q 25 -pix_fmt nv12'
+                    if (sessionStorage.getItem('gpu') == 'AMD') return '-c:v h264_amf -quality balanced -rc cqp -qp 20 -pix_fmt nv12'
+                    if (sessionStorage.getItem('gpu') == 'NVIDIA') return '-c:v h264_nvenc -preset llhq -b_adapt 1 -rc-lookahead 30 -qp 18 -qp_cb_offset -2 -qp_cr_offset -2 -pix_fmt nv12'
+                }
                 function interpolate() {
                     return new Promise(function (resolve) {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
-                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" -preset veryfast -vf scale=960:540 "${path.join(previewPath, '/master.m3u8')}"`;
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" ${previewEncoder()} "${path.join(previewPath, '/master.m3u8')}"`;
                         } else {
                             var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
                             console.log(cmd);
