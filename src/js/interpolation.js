@@ -2,6 +2,8 @@ const fse = require('fs-extra');
 const path = require("path");
 const { ipcRenderer } = require("electron");
 
+const { app } = require('@electron/remote');
+
 const execSync = require('child_process').execSync;
 const { spawn } = require('child_process');
 
@@ -527,14 +529,17 @@ class Interpolation {
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
+                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvmerge.exe");
+                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvpropedit.exe");
+
                                 if (extension == "Frame Sequence") {
                                     fse.mkdirSync(path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now()));
                                     terminal.innerHTML += `[enhancr] Exporting as frame sequence..\r\n`;
                                     var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
-                                    console.log(muxCmd);
+                                    // var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
+                                    var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
                                 }
 
                                 let muxTerm = spawn(muxCmd, [], {
@@ -547,6 +552,7 @@ class Interpolation {
                                 process.stdout.write('');
                                 muxTerm.stdout.on('data', (data) => {
                                     process.stdout.write(`[Muxer] ${data}`);
+                                    terminal.innerHTML += '[Muxer] ' + data;
                                 });
                                 muxTerm.stderr.on('data', (data) => {
                                     process.stderr.write(`[Muxer] ${data}`);

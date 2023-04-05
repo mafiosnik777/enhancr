@@ -457,14 +457,17 @@ class Restoration {
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
+                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvmerge.exe");
+                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvpropedit.exe");
+
                                 if (extension == "Frame Sequence") {
                                     fse.mkdirSync(path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now()));
                                     terminal.innerHTML += `[enhancr] Exporting as frame sequence..\r\n`;
                                     var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
-                                    console.log(muxCmd);
+                                    // var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
+                                    var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
                                 }
 
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
@@ -473,6 +476,7 @@ class Restoration {
                                 process.stdout.write('');
                                 muxTerm.stdout.on('data', (data) => {
                                     process.stdout.write(`[Pipe] ${data}`);
+                                    terminal.innerHTML += '[Muxer] ' + data;
                                 });
                                 muxTerm.stderr.on('data', (data) => {
                                     process.stderr.write(`[Pipe] ${data}`);
