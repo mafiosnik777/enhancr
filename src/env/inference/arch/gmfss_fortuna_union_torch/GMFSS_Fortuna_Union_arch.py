@@ -2317,13 +2317,14 @@ class softsplat_func(torch.autograd.Function):
 
 
 class Model:
-    def __init__(self):
+    def __init__(self, partial_fp16):
         self.flownet = GMFlow()
         self.ifnet = IFNet(arch_ver="4.6")
         self.metricnet = MetricNet()
         self.feat_ext = FeatureNet()
         self.fusionnet = GridNet()
         self.version = 3.9
+        self.partial_fp16 = partial_fp16
 
     def eval(self):
         self.flownet.eval()
@@ -2397,8 +2398,11 @@ class Model:
                 )
                 / scale
             )
-
-        metric0, metric1 = self.metricnet(img0, img1, flow01, flow10)
+        if self.partial_fp16:
+            with torch.autocast(device_type='cuda', dtype=torch.float16):
+                metric0, metric1 = self.metricnet(img0, img1, flow01, flow10)
+        else:
+            metric0, metric1 = self.metricnet(img0, img1, flow01, flow10)
 
         return (
             flow01,
@@ -2443,8 +2447,12 @@ class Model:
             img1, scale_factor=0.5, mode="bilinear", align_corners=False
         )
         I2t = softsplat(img1, F2t, Z2t, strMode="soft")
-
-        rife = self.ifnet(img0, img1, timestep, scale_list=[8, 4, 2, 1])
+        
+        if self.partial_fp16:
+            with torch.autocast(device_type='cuda', dtype=torch.float16):
+                rife = self.ifnet(img0, img1, timestep, scale_list=[8, 4, 2, 1])
+        else:
+            rife = self.ifnet(img0, img1, timestep, scale_list=[8, 4, 2, 1])
 
         feat1t1 = softsplat(feat11, F1t, Z1t, strMode="soft")
         feat2t1 = softsplat(feat21, F2t, Z2t, strMode="soft")
@@ -2478,23 +2486,32 @@ class Model:
             Z2t, scale_factor=0.25, mode="bilinear", align_corners=False
         )
         feat2t3 = softsplat(feat23, F2tdd, Z2dd, strMode="soft")
+        if self.partial_fp16:
+            with torch.autocast(device_type='cuda', dtype=torch.float16):
+                out = self.fusionnet(
+                    torch.cat([I1t, rife, I2t], dim=1),
+                    torch.cat([feat1t1, feat2t1], dim=1),
+                    torch.cat([feat1t2, feat2t2], dim=1),
+                    torch.cat([feat1t3, feat2t3], dim=1),
+                )
+            return torch.clamp(out, 0, 1)
+        else:
+            out = self.fusionnet(
+                    torch.cat([I1t, rife, I2t], dim=1),
+                    torch.cat([feat1t1, feat2t1], dim=1),
+                    torch.cat([feat1t2, feat2t2], dim=1),
+                    torch.cat([feat1t3, feat2t3], dim=1),
+                )
+            return torch.clamp(out, 0, 1)
 
-        out = self.fusionnet(
-            torch.cat([I1t, rife, I2t], dim=1),
-            torch.cat([feat1t1, feat2t1], dim=1),
-            torch.cat([feat1t2, feat2t2], dim=1),
-            torch.cat([feat1t3, feat2t3], dim=1),
-        )
-
-        return torch.clamp(out, 0, 1)
 
 cwd = os.getcwd()
 model_dir = os.path.join(cwd, 'arch', 'gmfss_fortuna_union_torch', 'models')
 
 class Model_inference(nn.Module):
-    def __init__(self):
+    def __init__(self, partial_fp16=True):
         super(Model_inference, self).__init__()
-        self.model = Model()
+        self.model = Model(partial_fp16)
         self.model.eval()
         self.model.device()
         self.model.load_model(model_dir)

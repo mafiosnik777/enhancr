@@ -68,9 +68,9 @@ if model == "GMFSS - Up":
 elif model == "GMFSS - Union":
     model_inference = GMFSS_Union(partial_fp16=precision)
 elif model == "GMFSS - Fortuna":
-    model_inference = GMFSS_Fortuna()
+    model_inference = GMFSS_Fortuna(partial_fp16=precision)
 elif model == "GMFSS - Fortuna - Union":
-    model_inference = GMFSS_Fortuna_union()
+    model_inference = GMFSS_Fortuna_union(partial_fp16=precision)
 
 clip = vfi_inference(
        model_inference=model_inference, clip=clip, multi=2, metric_thresh=0.999
