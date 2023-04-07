@@ -14,6 +14,8 @@ sys.path.insert(0, current_dir)
 
 from arch.gmfupss_torch.GMFUpSS import GMFupSS
 from arch.gmfss_union_torch.GMFSS_Union import GMFSS_Union
+from arch.gmfss_fortuna_torch.GMFSS_Fortuna import GMFSS_Fortuna
+from arch.gmfss_fortuna_union_torch.GMFSS_Fortuna_Union import GMFSS_Fortuna_union
 from utils.vfi_inference import vfi_inference
 
 ossystem = platform.system()
@@ -65,6 +67,10 @@ if model == "GMFSS - Up":
     model_inference = GMFupSS(partial_fp16=precision)
 elif model == "GMFSS - Union":
     model_inference = GMFSS_Union(partial_fp16=precision)
+elif model == "GMFSS - Fortuna":
+    model_inference = GMFSS_Fortuna()
+elif model == "GMFSS - Fortuna - Union":
+    model_inference = GMFSS_Fortuna_union()
 
 clip = vfi_inference(
        model_inference=model_inference, clip=clip, multi=2, metric_thresh=0.999

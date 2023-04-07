@@ -523,6 +523,8 @@ var rvpv2Option = document.getElementById("rvp-v2");
 var cvpv6Option = document.getElementById("cvp-v6");
 var gmfssUpOption = document.getElementById("gmf-up");
 var gmfssUnionOption = document.getElementById("gmf-union");
+var gmfssFortunaOption = document.getElementById("gmf-fortuna");
+var gmfssFortunaUnionOption = document.getElementById("gmf-fortuna-union");
 
 // change engine (cain)
 cain.addEventListener("click", function () {
@@ -534,6 +536,8 @@ cain.addEventListener("click", function () {
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
+    gmfssFortunaOption.style.display = 'none';
+    gmfssFortunaUnionOption.style.display = 'none';
     cvpv6Option.style.display = 'block';
     rvpv1Option.style.display = 'block';
     rvpv2Option.style.display = 'none';
@@ -560,6 +564,8 @@ cainTrt.addEventListener("click", function () {
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
+    gmfssFortunaOption.style.display = 'none';
+    gmfssFortunaUnionOption.style.display = 'none';
     rvpv1Option.style.display = 'block';
     rvpv2Option.style.display = 'block';
     cvpv6Option.style.display = 'block';
@@ -587,17 +593,19 @@ gmfss.addEventListener("click", function () {
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'block';
     gmfssUnionOption.style.display = 'block';
+    gmfssFortunaOption.style.display = 'block';
+    gmfssFortunaUnionOption.style.display = 'block';
     rvpv1Option.style.display = 'none';
     rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
 
-    modelSpan.textContent = 'GMFSS - Up';
+    modelSpan.textContent = 'GMFSS - Fortuna';
 
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.interpolation[0].engine = "gmfss";
-    data.interpolation[0].model = "GMFSS - Up";
+    data.interpolation[0].model = "GMFSS - Fortuna";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });
@@ -614,6 +622,8 @@ gmfssTrt.addEventListener("click", function () {
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'block';
+    gmfssFortunaOption.style.display = 'none';
+    gmfssFortunaUnionOption.style.display = 'none';
     rvpv1Option.style.display = 'none';
     rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
@@ -642,6 +652,8 @@ rife.addEventListener("click", function () {
     rife46Option.style.display = 'block';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
+    gmfssFortunaOption.style.display = 'none';
+    gmfssFortunaUnionOption.style.display = 'none';
     rvpv1Option.style.display = 'none';
     rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
@@ -667,6 +679,8 @@ rifeTrt.addEventListener("click", function () {
     rife46Option.style.display = 'block';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
+    gmfssFortunaOption.style.display = 'none';
+    gmfssFortunaUnionOption.style.display = 'none';
     rvpv1Option.style.display = 'none';
     rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
@@ -745,6 +759,30 @@ gmfssUnionOption.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.interpolation[0].model = "GMFSS - Union";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Model written to project file.");
+});
+
+gmfssFortunaOption.addEventListener("click", function () {
+    modelSpan.textContent = "GMFSS - Fortuna";
+    hider.style.visibility = "hidden";
+    modelDropdown.style.visibility = "hidden";
+    // autosave model in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.interpolation[0].model = "GMFSS - Fortuna";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Model written to project file.");
+});
+
+gmfssFortunaUnionOption.addEventListener("click", function () {
+    modelSpan.textContent = "GMFSS - Fortuna - Union";
+    hider.style.visibility = "hidden";
+    modelDropdown.style.visibility = "hidden";
+    // autosave model in project file
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.interpolation[0].model = "GMFSS - Fortuna - Union";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Model written to project file.");
 });
