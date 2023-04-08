@@ -13,6 +13,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
 from utils.vfi_inference import vfi_frame_merger
+from utils.trt_precision import check_model_precision_trt
 
 ossystem = platform.system()
 core = vs.core
@@ -60,7 +61,11 @@ if sceneDetection:
 if padding:
     clip = core.std.AddBorders(clip, right=ToPadWidth, top=ToPadHeight)
 
-clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
+if check_model_precision_trt(engine) == "float32":
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
+else:
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
+    print("Using fp16 i/o for inference", file=sys.stderr)
 
 clip_pos1 = clip[1:]
 clip_pos2 = clip.std.Trim(first=0,last=clip.num_frames-2)

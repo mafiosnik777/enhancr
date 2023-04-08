@@ -9,6 +9,12 @@ import vapoursynth as vs
 from vapoursynth import core
 from multiprocessing import cpu_count
 
+# workaround for relative imports with embedded python
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
+
+from utils.trt_precision import check_model_precision_trt
+
 ossystem = platform.system()
 
 if ossystem == "Windows":
@@ -36,7 +42,11 @@ core.std.LoadPlugin(path=vsmlrt_path)
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
-clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
+if check_model_precision_trt(engine) == "float32":
+    clip = vs.core.resize.Spline64(clip, format=vs.RGBS, matrix_in_s="709", transfer_in_s="linear")
+else:
+    clip = vs.core.resize.Spline64(clip, format=vs.RGBH, matrix_in_s="709", transfer_in_s="linear")
+    print("Using fp16 i/o for inference", file=sys.stderr)
 
 if tiling == False:
     clip = core.trt.Model(clip, engine_path=engine, num_streams=threading())

@@ -13,6 +13,7 @@ from arch.RRDBNet import RRDBNet as ESRGAN
 parse = argparse.ArgumentParser(description="")
 parse.add_argument("--input", metavar="--input", type=str, help="input model")
 parse.add_argument("--output", metavar="--output", type=str, help="output model")
+parse.add_argument("--fp16", metavar="--fp16", type=bool, help="fp16 precision")
 args = parse.parse_args()
 
 
@@ -39,13 +40,22 @@ def load_state_dict(state_dict):
     return model
 
 state_dict = torch.load(args.input, map_location=torch.device('cpu'))
-
 model = load_state_dict(state_dict)
+
+if args.fp16:
+    device = torch.device("cuda")
+    model.half()
+    model = model.to(device)
 
 input_names = ["input"]
 output_names = ["output"]
 
-f1 = torch.rand((1, 3, 64, 64))
+
+if args.fp16:
+    f1 = torch.rand((1, 3, 64, 64)).half().to(device)
+else:
+    f1 = torch.rand((1, 3, 64, 64))
+    
 x = f1
 
 torch.onnx.export(

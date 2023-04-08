@@ -62,6 +62,7 @@ if sceneDetection:
 
 if halfPrecision:
     clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
+    print("Using fp16 i/o for inference", file=sys.stderr)
 else:
     clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 

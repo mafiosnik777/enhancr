@@ -146,11 +146,16 @@ class Upscaling {
             }
             let convertModel = getConversionScript();
 
+            let fp16Onnx = () => {
+                if (fp16) return "True"
+                else return "False"
+            }
+
             // convert pth to onnx
             if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth") {
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
-                        var cmd = `"${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}"`;
+                        var cmd = `"${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')} --fp16=${fp16Onnx()}"`;
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
                         term.stdout.on('data', (data) => {
@@ -173,12 +178,16 @@ class Upscaling {
             //get onnx input path
             function getOnnxPath() {
                 if (!(document.getElementById('custom-model-check').checked) && engine == 'Upscaling - RealESRGAN (TensorRT)') {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    if (fp16) {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3_fp16.onnx");
+                    } else {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                    }
                 } else if (engine == 'Upscaling - RealCUGAN (TensorRT)') {
-                    if (scale = "2") {
+                    if (fp16) {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x_fp16.onnx");
+                    } else {
                         return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx");
-                    } else if (scale = "3") {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-3x.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-3x.onnx");
                     }
                 } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - waifu2x (NCNN)') {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
@@ -213,14 +222,24 @@ class Upscaling {
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
 
+            const getOnnxPrecisionScript = () => {
+                return !isPackaged ? path.join(__dirname, '..', "/env/inference/utils/onnx_precision.py") : path.join(process.resourcesPath, "/env/inference/utils/onnx_precision.py")
+            }
+
+            let ioPrecision = () => {
+                let onnxPrecision = execSync(`${python} ${getOnnxPrecisionScript()} --input=${onnx}`).toString();
+                if (onnxPrecision.trim() === 'FLOAT16') return '--inputIOFormats=fp16:chw --outputIOFormats=fp16:chw';
+                else return '';
+            };
+                        
             // convert onnx to trt engine
             if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)' || !fse.existsSync(engineOut) && engine == 'Upscaling - RealCUGAN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
-                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${ioPrecision()} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
                         } else {
-                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
@@ -457,7 +476,7 @@ class Upscaling {
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
                                     // var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
-                                    var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
+                                    var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
                                 }
 
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });

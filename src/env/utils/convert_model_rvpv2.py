@@ -16,6 +16,7 @@ parser.add_argument("--output", metavar="--output", type=str, help="output model
 parser.add_argument("--tmp", metavar="--tmp", type=str, help="temp folder")
 parser.add_argument("--width", metavar="--width", type=int, help="width")
 parser.add_argument("--height", metavar="--height", type=int, help="height")
+parser.add_argument("--fp16", metavar="--fp16", type=bool, help="fp16 precision")
 args = parser.parse_args()
 
 def sub_mean(x):
@@ -365,9 +366,20 @@ class CAIN(nn.Module):
 
 model = CAIN(3)
 model.load_state_dict(torch.load(args.input, map_location=torch.device('cuda')), strict=False)
+
+if args.fp16:
+    device = torch.device("cuda")
+    model.half()
+    model = model.to(device)
+
 input_names = ["input"]
 output_names = ["output"]
-f1 = torch.rand((1, 6, args.height, args.width))
+
+if args.fp16:
+    f1 = torch.rand((1, 6, args.height, args.width)).half().to(device)
+else:
+    f1 = torch.rand((1, 6, args.height, args.width))
+    
 x = f1
 
 import os

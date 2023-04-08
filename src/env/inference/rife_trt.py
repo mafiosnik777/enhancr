@@ -16,6 +16,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
 from utils.vfi_inference import vfi_frame_merger
+from utils.trt_precision import check_model_precision_trt
 
 def rife_trt(
     clip: vs.VideoNode,
@@ -109,7 +110,11 @@ if sceneDetection:
     else:
         clip = core.misc.SCDetect(clip=clip, threshold=0.180)
 
-clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
+if check_model_precision_trt(engine) == "float32":
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
+else:
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
+    print("Using fp16 i/o for inference", file=sys.stderr)
 
 clip = rife_trt(clip, multi = 2, scale = 1.0, device_id = 0, num_streams = threading(), engine_path = engine)
 

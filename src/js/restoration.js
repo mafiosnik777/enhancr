@@ -222,14 +222,24 @@ class Restoration {
                 else return "4";
             }
 
+            const getOnnxPrecisionScript = () => {
+                return !isPackaged ? path.join(__dirname, '..', "/env/inference/utils/onnx_precision.py") : path.join(process.resourcesPath, "/env/inference/utils/onnx_precision.py")
+            }
+
+            let ioPrecision = () => {
+                let onnxPrecision = execSync(`${python} ${getOnnxPrecisionScript()} --input=${onnx}`).toString();
+                if (onnxPrecision.trim() === 'FLOAT16') return '--inputIOFormats=fp16:chw --outputIOFormats=fp16:chw';
+                else return '';
+            };
+
             // convert onnx to trt engine
             if (!fse.existsSync(engineOut) && engine != 'Restoration - RealESRGAN (1x) (NCNN)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
-                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" --minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${ioPrecision()} --minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
                         } else {
-                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
@@ -467,7 +477,7 @@ class Restoration {
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
                                     // var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
-                                    var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
+                                    var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
                                 }
 
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });

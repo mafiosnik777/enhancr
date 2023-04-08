@@ -128,6 +128,8 @@ class Interpolation {
             let fp = floatingPoint ? "fp16" : "fp32";
 
             let systemPython = document.getElementById('python-check').checked;
+
+            let fp16 = document.getElementById('fp16-check').checked;
             
             //get python path
             function getPythonPath() {
@@ -162,9 +164,17 @@ class Interpolation {
 
             function getOnnx() {
                 if (model == 'RVP - v1.0') {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx")
+                    if (fp16) {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx")
+                    } else {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx")
+                    }
                 } else if (model == 'CVP - v6.0') {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx")
+                    if (fp16) {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx")
+                    } else {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx")
+                    }
                 } else {
                     return path.join(cache, 'rvpv2.onnx');
                 }
@@ -178,9 +188,12 @@ class Interpolation {
             let engineOut = getEnginePath();
             sessionStorage.setItem('engineOut', engineOut);
 
-            let fp16 = document.getElementById('fp16-check').checked;
-
             const progressSpan = document.getElementById("progress-span");
+
+            let fp16Onnx = () => {
+                if (fp16) return "True"
+                else return "False"
+            }
 
             // inject env hook
             let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"` 
@@ -191,7 +204,7 @@ class Interpolation {
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
                         let rvpv2Model = !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth");
-                        var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${rvpv2Model}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height}`;
+                        var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${rvpv2Model}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height} --fp16=${fp16Onnx()}`;
                         console.log(convertCmd);
                         let convertTerm = spawn(convertCmd, [], {
                             shell: true,
@@ -227,9 +240,9 @@ class Interpolation {
                             var optShapes = ``
                         }
                         if (fp16) {
-                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${optShapes} --inputIOFormats=fp16:chw --outputIOFormats=fp16:chw --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
                         } else {
-                            var engineCmd = `"${trtexec}" --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var engineCmd = `"${trtexec}" --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
                         }
                         let engineTerm = spawn(engineCmd, [], {
                             shell: true,
@@ -257,9 +270,17 @@ class Interpolation {
 
             function getRifeOnnx() {
                 if (document.getElementById('rife-tta-check').checked) {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx")
+                    if (fp16) {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx")
+                    } else {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx")
+                    }
                 } else {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx")
+                    if (fp16) {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx")
+                    } else {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx")
+                    }
                 }
             }
             let rifeOnnx = getRifeOnnx();
@@ -290,9 +311,9 @@ class Interpolation {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16) {
-                            var cmd = `"${trtexec}" --fp16 --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var cmd = `"${trtexec}" --fp16 --onnx="${rifeOnnx}" --inputIOFormats=fp16:chw --outputIOFormats=fp16:chw --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
                         } else {
-                            var cmd = `"${trtexec}" --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --buildOnly --preview=+fasterDynamicShapes0805`;
+                            var cmd = `"${trtexec}" --onnx="${rifeOnnx}" --minShapes=input:1x8x8x8 --optShapes=input:1x8x${shapeDimensionsOpt} --maxShapes=input:1x8x${shapeDimensionsMax} --saveEngine="${rifeEngine}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
                         }
                         let term = spawn(cmd, [], {
                             shell: true,
@@ -539,7 +560,7 @@ class Interpolation {
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
                                     // var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
-                                    var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
+                                    var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
                                 }
 
                                 let muxTerm = spawn(muxCmd, [], {
