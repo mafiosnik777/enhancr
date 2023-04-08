@@ -622,8 +622,8 @@ gmfssTrt.addEventListener("click", function () {
     rife46Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
     gmfssUnionOption.style.display = 'block';
-    gmfssFortunaOption.style.display = 'none';
-    gmfssFortunaUnionOption.style.display = 'none';
+    gmfssFortunaOption.style.display = 'block';
+    gmfssFortunaUnionOption.style.display = 'block';
     rvpv1Option.style.display = 'none';
     rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';

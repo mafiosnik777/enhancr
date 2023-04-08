@@ -253,8 +253,6 @@ function loadInterpolation() {
     rvpv2Option.style.display = 'none';
     cvpv6Option.style.display = 'none';
     gmfssUpOption.style.display = 'none';
-    gmfssFortunaOption.style.display = 'none';
-    gmfssFortunaUnionOption.style.display = 'none';
   }
   if (data.interpolation[0].engine === "") {
     interpolationEngineSpan.textContent = "Channel Attention - CAIN (TensorRT)";

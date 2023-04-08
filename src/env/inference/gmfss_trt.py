@@ -13,6 +13,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
 from arch.vsgmfss_union import gmfss_union
+from arch.vsgmfss_fortuna import gmfss_fortuna
 from utils.vfi_inference import vfi_frame_merger
 
 ossystem = platform.system()
@@ -66,7 +67,12 @@ if halfPrecision:
 else:
     clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-clip = gmfss_union(clip, num_streams=threading(), trt=True, trt_cache_path=engine_path, model=0)
+if model == "GMFSS - Union":
+    clip = gmfss_union(clip, num_streams=threading(), trt=True, trt_cache_path=engine_path, model=0)
+elif model == "GMFSS - Fortuna":
+    clip = gmfss_fortuna(clip, num_streams=threading(), trt=True, trt_cache_path=engine_path, model=0)
+elif model == "GMFSS - Fortuna - Union":
+    clip = gmfss_fortuna(clip, num_streams=threading(), trt=True, trt_cache_path=engine_path, model=1)
 
 clip1 = core.std.Interleave([clip, clip])
 output = vfi_frame_merger(clip1, clip)
