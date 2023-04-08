@@ -12,5 +12,3 @@ def check_model_precision_trt(model_path):
         input_metadata = runner.get_input_metadata()
         input_precision = input_metadata["input"].dtype
         return input_precision
-    
-print(check_model_precision_trt("C:\\Users\\Mafio\\AppData\\Roaming\\.enhancr\\models\\engine\\rife46_ensembleFalse_fp16_1080x1920_trt_8.6.0.engine"))
