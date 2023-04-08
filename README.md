@@ -29,7 +29,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**GMFSS - Union (TensorRT)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-gmfss_union](https://github.com/HolyWu/vs-gmfss_union)**
 
->**GMFSS - Fortuna (TensorRT)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Fortuna](https://github.com/98mxr/GMFSS_Fortuna)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
+>**GMFSS - Fortuna (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Fortuna](https://github.com/98mxr/GMFSS_Fortuna)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
 >**GMFSS - Fortuna (TensorRT)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Fortuna](https://github.com/98mxr/GMFSS_Fortuna)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-gmfss_fortuna](https://github.com/HolyWu/vs-gmfss_fortuna)**
 
