@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import vapoursynth as vs
 import platform
 import tempfile
 import json
+import vapoursynth as vs
 
+from vapoursynth import core
 from multiprocessing import cpu_count
 
+# workaround for relative imports with embedded python
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
+
+from utils.trt_precision import check_model_precision_trt
+
 ossystem = platform.system()
-core = vs.core
 
 if ossystem == "Windows":
     tmp_dir = tempfile.gettempdir() + "\\enhancr\\"
@@ -21,26 +27,31 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     data = json.load(f)
     video_path = data['file']
     engine = data['engine']
+    streams = data['streams']
     tiling = data['tiling']
     tileHeight = int(data['tileHeight'])
     tileWidth = int(data['tileWidth'])
-    fp16 = data['fp16']
-    streams = data['streams']
 
 def threading():
   return int(streams) if int(streams) < cpu_count() else cpu_count()
 core.num_threads = cpu_count()
-    
+
+cwd = os.getcwd()
+vsmlrt_path = os.path.join(cwd, '..', 'python', 'Library', 'vstrt.dll')
+core.std.LoadPlugin(path=vsmlrt_path)
+
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
-clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
-
-network = "../python/vapoursynth64/plugins/models/waifu2x/noise2_model.onnx"
+if check_model_precision_trt(engine) == "float32":
+    clip = vs.core.resize.Spline64(clip, format=vs.RGBS, matrix_in_s="709", transfer_in_s="linear")
+else:
+    clip = vs.core.resize.Spline64(clip, format=vs.RGBH, matrix_in_s="709", transfer_in_s="linear")
+    print("Using fp16 i/o for inference", file=sys.stderr)
 
 if tiling == False:
-    clip = core.ncnn.Model(clip, network_path=network, num_streams=threading(), fp16=fp16)
+    clip = core.trt.Model(clip, engine_path=engine, num_streams=threading())
 else:
-    clip = core.ncnn.Model(clip, network_path=network, num_streams=threading(), fp16=fp16, tilesize=[tileHeight, tileWidth])
+    clip = core.trt.Model(clip, engine_path=engine, num_streams=threading(), tilesize=[tileHeight, tileWidth])
 
 # padding if clip dimensions aren't divisble by 2
 if (clip.height % 2 != 0):

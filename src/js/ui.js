@@ -1254,7 +1254,7 @@ var x265BtnUp = document.getElementById("x265-up"),
 
 var engineInputUpscale = document.getElementById("engine-upscale");
 var engineDropdownUpscale = document.getElementById("engine-dropdown-upscale");
-var waifu2xOption = document.getElementById("waifu2x-tensorrt");
+var shuffleCuganOption = document.getElementById("shufflecugan");
 var realesrganOption = document.getElementById("realesrgan-tensorrt");
 var realcuganOption = document.getElementById("realcugan-tensorrt");
 var swinIROption = document.getElementById("swinir");
@@ -1634,9 +1634,9 @@ engineInputUpscale.addEventListener("click", function () {
     engineDropdownUpscale.style.visibility = "visible";
 });
 
-// change engine (waifu2x)
-waifu2xOption.addEventListener("click", function () {
-    upscaleEngineText.textContent = "Upscaling - waifu2x (NCNN)";
+// change engine (shufflecugan)
+shuffleCuganOption.addEventListener("click", function () {
+    upscaleEngineText.textContent = "Upscaling - ShuffleCUGAN (TensorRT)";
     hiderUpscale.style.visibility = "hidden";
     engineDropdownUpscale.style.visibility = "hidden";
     factorSpan.textContent = "2x";
@@ -1648,7 +1648,7 @@ waifu2xOption.addEventListener("click", function () {
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
-    data.upscaling[0].engine = "waifu2x";
+    data.upscaling[0].engine = "shufflecugan";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });

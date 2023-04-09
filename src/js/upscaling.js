@@ -189,7 +189,13 @@ class Upscaling {
                     } else {
                         return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx");
                     }
-                } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - waifu2x (NCNN)') {
+                } else if (engine == 'Upscaling - ShuffleCUGAN (TensorRT)') {
+                    if (fp16) {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan_fp16.onnx");
+                    } else {
+                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx");
+                    }
+                } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (TensorRT)') {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
                         return path.join(cache, path.parse(customModel).name + '.onnx');
@@ -231,9 +237,9 @@ class Upscaling {
                 if (onnxPrecision.trim() === 'FLOAT16') return '--inputIOFormats=fp16:chw --outputIOFormats=fp16:chw';
                 else return '';
             };
-                        
+
             // convert onnx to trt engine
-            if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)' || !fse.existsSync(engineOut) && engine == 'Upscaling - RealCUGAN (TensorRT)') {
+            if (!fse.existsSync(engineOut) && engine == 'Upscaling - RealESRGAN (TensorRT)' || !fse.existsSync(engineOut) && engine == 'Upscaling - RealCUGAN (TensorRT)' || !fse.existsSync(engineOut) && engine == 'Upscaling - ShuffleCUGAN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function (resolve) {
                         if (fp16.checked == true) {
@@ -334,8 +340,8 @@ class Upscaling {
             // determine model
             if (engine == "Upscaling - RealESRGAN (TensorRT)") {
                 model = "RealESRGAN"
-            } else if (engine == "Upscaling - waifu2x (NCNN)") {
-                model = "waifu2x"
+            } else if (engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
+                model = "ShuffleCUGAN"
             } else if (engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
             } else if (engine == "Upscaling - RealCUGAN (TensorRT)") {
@@ -362,8 +368,8 @@ class Upscaling {
                 if (engine == "Upscaling - RealESRGAN (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/env/inference/esrgan.py") : path.join(process.resourcesPath, "/env/inference/esrgan.py");
                 }
-                if (engine == "Upscaling - waifu2x (NCNN)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/waifu2x.py") : path.join(process.resourcesPath, "/env/inference/waifu2x.py");
+                if (engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/shufflecugan.py") : path.join(process.resourcesPath, "/env/inference/shufflecugan.py");
                 }
                 if (engine == "Upscaling - RealCUGAN (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/env/inference/cugan_trt.py") : path.join(process.resourcesPath, "/env/inference/cugan_trt.py");

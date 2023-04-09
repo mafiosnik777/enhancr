@@ -288,8 +288,8 @@ function renderQueueItem() {
             } else if (queue[index].mode == 'upscaling') {
               if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
-                model = "waifu2x"
+              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
+                model = "ShuffleCUGAN"
               } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
               } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
@@ -406,8 +406,8 @@ function renderQueueItem() {
                   } else {
                     if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                       model = "RealESRGAN"
-                    } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
-                      model = "waifu2x"
+                    } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
+                      model = "ShuffleCUGAN"
                     } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                       model = "RealCUGAN"
                     } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
@@ -445,8 +445,8 @@ function renderQueueItem() {
                   if (queue[index].mode == 'upscaling') {
                     if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                       model = "RealESRGAN"
-                    } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
-                      model = "waifu2x"
+                    } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
+                      model = "ShuffleCUGAN"
                     } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                       model = "RealCUGAN"
                     } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
@@ -520,8 +520,8 @@ function renderQueueItem() {
             } else if (queue[index].mode == 'upscaling') {
               if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
-                model = "waifu2x"
+              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
+                model = "ShuffleCUGAN"
               } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
               } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
@@ -595,8 +595,8 @@ function renderQueueItem() {
             } else if (queue[index].mode == 'upscaling') {
               if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - waifu2x (NCNN)") {
-                model = "waifu2x"
+              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
+                model = "ShuffleCUGAN"
               } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
               } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {

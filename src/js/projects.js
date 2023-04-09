@@ -450,8 +450,8 @@ function loadUpscaling() {
 
   var upscaleEngineSpan = document.getElementById("upscale-engine-text");
   // fill engine input
-  if (data.upscaling[0].engine === "waifu2x") {
-    upscaleEngineSpan.textContent = "Upscaling - waifu2x (NCNN)"
+  if (data.upscaling[0].engine === "shufflecugan") {
+    upscaleEngineSpan.textContent = "Upscaling - ShuffleCUGAN (TensorRT)"
   }
   if (data.upscaling[0].engine === "realesrgan-ncnn") {
     upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (NCNN)"
