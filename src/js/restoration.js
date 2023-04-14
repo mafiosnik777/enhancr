@@ -3,7 +3,7 @@ const os = require('os');
 const path = require("path");
 const { ipcRenderer } = require("electron");
 
-const find = require('find-process');
+const { app } = require('@electron/remote');
 
 const execSync = require('child_process').execSync;
 const exec = require('child_process').exec;

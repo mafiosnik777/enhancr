@@ -3,6 +3,8 @@ const os = require('os');
 const path = require("path");
 const { ipcRenderer } = require("electron");
 
+const { app } = require('@electron/remote');
+
 const execSync = require('child_process').execSync;
 const { spawn } = require('child_process');
 
@@ -484,6 +486,8 @@ class Upscaling {
                                     // var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
                                     var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
                                 }
+
+                                console.log(muxCmd);
 
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
 
