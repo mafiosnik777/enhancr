@@ -95,5 +95,5 @@ if (clip.width % 2 != 0):
 
 output = vs.core.resize.Bicubic(output, format=vs.YUV422P8, matrix_s="709")
 
-print("Starting video output | Threads: " + str(int(cpu_count() / 2)) + " | " + "Streams: " + str(threading()), file=sys.stderr)
+print("Starting video output | Threads: " + str(int(cpu_count() / 2)) + " | " + "Streams: " + streams, file=sys.stderr)
 output.set_output()
