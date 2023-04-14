@@ -154,8 +154,12 @@ $macosblue: #1e5cce;
   }
 
   #progress-span {
-    font-size: 9pt;
-    font-weight: 500;
+    font-size: 8pt;
+    font-weight: 600;
+    max-width: 400px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   
   .notifications {
