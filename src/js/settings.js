@@ -50,6 +50,8 @@ function saveSettings() {
   var hwEncodeCheck = document.getElementById("hwencode-check").checked;
   var unsupportedCheck = document.getElementById("unsupported-check").checked;
 
+  var customModelText = document.getElementById("custom-model-text").innerHTML;
+
   var uiSlider = document.getElementById('dummy');
   let uiScale = (getComputedStyle(uiSlider).getPropertyValue('--percent')).slice(0, -1);
 
@@ -90,6 +92,7 @@ function saveSettings() {
         sensitivityValue: sensitivity,
         sensitivity: sensitivityCheck,
         customModel: customModelCheck,
+        customModelFile: customModelText,
         unsupportedEngines: unsupportedCheck,
         systemPython: pythonCheck,
         language: "english",
@@ -162,6 +165,7 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
     document.getElementById("sensitivity").checked = json.settings[0].sensitivityValue;
     document.getElementById("sensitivity-check").checked = json.settings[0].sensitivity;
     document.getElementById("unsupported-check").checked = json.settings[0].unsupportedEngines;
+    document.getElementById('custom-model-text').innerHTML = json.settings[0].customModelFile;
     document.getElementById('dummy').value = json.settings[0].uiScale;
     document.getElementById('dummy').style.setProperty('--percent', json.settings[0].uiScale + '%')
     document.getElementById('ui-slider').style.setProperty('--percent', json.settings[0].uiScale + '%')
@@ -455,6 +459,9 @@ shapeRes.addEventListener('click', function () {
   sessionStorage.setItem('settingsSaved', 'false');
 })
 tileRes.addEventListener('click', function () {
+  sessionStorage.setItem('settingsSaved', 'false');
+})
+document.getElementById('custom-model').addEventListener('click', function () {
   sessionStorage.setItem('settingsSaved', 'false');
 })
 

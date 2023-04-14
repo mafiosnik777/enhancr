@@ -27,6 +27,7 @@ module.exports = {
             sensitivityValue: 0.180,
             sensitivity: false,
             customModel: false,
+            customModelFile: '',
             unsupportedEngines: false,
             systemPython: false,
             language: 'english',
