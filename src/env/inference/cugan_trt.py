@@ -34,7 +34,7 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
 
 def threading():
   return int(streams) if int(streams) < cpu_count() else cpu_count()
-core.num_threads = cpu_count()
+core.num_threads = cpu_count() / 2
 
 cwd = os.getcwd()
 vsmlrt_path = os.path.join(cwd, '..', 'python', 'Library', 'vstrt.dll')
@@ -62,5 +62,5 @@ if (clip.width % 2 != 0):
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV420P8, matrix_s="709")
 
-print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(threading()), file=sys.stderr)
+print("Starting video output | Threads: " + str(int(cpu_count() / 2)) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 clip.set_output()

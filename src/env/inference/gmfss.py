@@ -47,7 +47,7 @@ clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
 def threading():
   return int(streams) if int(streams) < cpu_count() else cpu_count()
-core.num_threads = cpu_count()
+core.num_threads = cpu_count() / 2
 
 if frameskip:
     offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
@@ -85,5 +85,5 @@ if (clip.width % 2 != 0):
 
 clip = vs.core.resize.Bicubic(clip, format=vs.YUV422P8, matrix_s="709")
 
-print("Starting video output | Threads: " + str(cpu_count()) + " | " + "Streams: " + str(1), file=sys.stderr)
+print("Starting video output | Threads: " + str(int(cpu_count() / 2)) + " | " + "Streams: " + str(1), file=sys.stderr)
 clip.set_output()
