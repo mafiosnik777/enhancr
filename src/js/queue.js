@@ -97,8 +97,9 @@ function renderQueueItem() {
   function setScreenshot(i) {
     setTimeout(function () {
       webFrame.clearCache()
+      const cacheBuster = new Date().getTime();
       let thumb = document.getElementById(`queue-thumb${i}`);
-      thumb.setAttribute('src', path.join(appDataPath, `/.enhancr/thumbs/queue${i}.png`));
+      thumb.setAttribute('src', path.join(appDataPath, `/.enhancr/thumbs/queue${i}.png?${cacheBuster}`));
     }, 1000)
   }
 
