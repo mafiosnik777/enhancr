@@ -1012,10 +1012,13 @@ async function toggleQueueTab() {
       thumb.style.visibility = 'hidden';
     });
     document.getElementById('preview-text').style.visibility = 'visible';
-    document.getElementById('thumb-interpolation').style.visibility = 'visible';
     document.getElementById('timecode').style.visibility = 'visible';
     document.getElementById('framecount').style.visibility = 'visible';
     document.getElementById('preview').style.visibility = 'visible';
+
+    if (sessionStorage.getItem('currentTab') == 'interpolation') document.getElementById('thumb-interpolation').style.visibility = 'visible';
+    if (sessionStorage.getItem('currentTab') == 'upscaling') document.getElementById('thumb-upscaling').style.visibility = 'visible';
+    if (sessionStorage.getItem('currentTab') == 'restoration') document.getElementById('thumb-restoration').style.visibility = 'visible';
   }
 }
 queueBtn.addEventListener('click', toggleQueueTab);
