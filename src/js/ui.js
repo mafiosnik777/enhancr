@@ -361,9 +361,24 @@ document.addEventListener('dragleave', (event) => {
     dropSpan.style.visibility = 'hidden';
 });
 
+//prevent dragging of text that locks up the UI
+function preventDragging(elementId) {
+    document.getElementById(elementId).addEventListener('dragstart', function(event) {
+      event.preventDefault();
+    });
+}
+
+preventDragging('ffmpeg-params');
+preventDragging('ffmpeg-params-upscale');
+preventDragging('ffmpeg-params-restoration');
+preventDragging('denoise-strength');
+preventDragging('shape-res');
+preventDragging('tile-res');
+preventDragging('num-streams');
+preventDragging('sensitivity');
+
 const interpolationSettingsBtn = document.getElementById('settings-btn-interpolation');
 const modelsBtnUpscale = document.getElementById('models-btn-upscale');
-
 
 // interpolation settings button
 function changeToInterpolationSettings() {
