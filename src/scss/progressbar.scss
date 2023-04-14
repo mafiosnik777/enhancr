@@ -117,12 +117,11 @@ $macosblue: #1e5cce;
     font-size: 8pt;
     background-color: rgba(6, 6, 6, 0.43);
     border-radius: 10px;
-    visibility: hidden;
     color: #d0d0d0;
     font-weight: 500;
     margin-left: 8.5%;
     width: fit-content;
-    display: inline-block;
+    display: none;
     padding: 4px 9px;
   }
 
@@ -132,18 +131,17 @@ $macosblue: #1e5cce;
     font-size: 8pt;
     background-color: rgba(6, 6, 6, 0.43);
     border-radius: 10px;
-    visibility: hidden;
     color: #d0d0d0;
     font-weight: 500;
     width: fit-content;
-    display: inline-block;
+    display: none;
     padding: 4px 9px;
   }
 
   #loading {
     width: 20px;
     margin-right: 2.5px;
-    visibility: hidden;
+    display: none;
     color: silver;
     font-size: 10pt;
   }

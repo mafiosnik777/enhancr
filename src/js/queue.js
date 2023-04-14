@@ -615,9 +615,9 @@ function renderQueueItem() {
             }
 
             var fpsMeter = document.getElementById('fps-meter');
-            fpsMeter.style.visibility = "hidden";
+            fpsMeter.style.display = "none";
             var eta = document.getElementById('eta');
-            eta.style.visibility = "hidden";
+            eta.style.style.display = "none";
 
             const progressDone = document.getElementById("progress-done");
 
@@ -907,6 +907,14 @@ try {
           contextItem1.innerHTML = "<i class='fa-solid fa-folder-closed'></i> Open in folder";
           let contextItem2 = document.getElementById(`context-item2-queue${queue.indexOf(item)}`);
           contextItem2.innerHTML = "<i class='fa-solid fa-share-nodes'></i> Share";
+
+          sessionStorage.removeItem('percent');
+          sessionStorage.removeItem('currentFrame');
+          sessionStorage.removeItem('totalFrames');
+          document.getElementById('progress-done').style.width = "0%";
+          document.getElementById('eta').style.display = "none";
+          document.getElementById('fps-meter').style.display = "none";
+          document.getElementById('loading').style.display = "none";
         })
         .process(async (item, index, pool) => {
           if (item.status == '0') {
@@ -951,13 +959,13 @@ try {
         enhancr.terminal('Stopped queue successfully.\r\n');
         setTimeout(() => {
           document.getElementById('progress-done').style.width = '0%';
-          document.getElementById('progress-span').style.visibility = 'hidden';
-          document.getElementById('loading').style.visibility = 'hidden';
+          document.getElementById('progress-span').innerHTML = `${path.basename(sessionStorage.getItem('pipeOutPath'))} | Canceled`
+          document.getElementById('loading').style.display = 'none';
           win.setProgressBar(-1, {
             mode: "none"
           });
-          document.getElementById('eta').style.visibility = 'hidden';
-          document.getElementById('fps-meter').style.visibility = 'hidden';
+          document.getElementById('eta').style.display = 'none';
+          document.getElementById('fps-meter').style.display = 'none';
         }, 2000)
         ipcRenderer.send('rpc-done');
         terminal.scrollTop = terminal.scrollHeight;

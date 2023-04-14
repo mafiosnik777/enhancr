@@ -49,7 +49,7 @@ class Interpolation {
 
             // render progressbar
             const loading = document.getElementById("loading");
-            loading.style.visibility = "visible";
+            loading.style.display = "block";
 
             // check if output path field is filled
             if (document.getElementById('output-path-text').innerHTML == '') {
@@ -583,7 +583,6 @@ class Interpolation {
                                 muxTerm.on("close", () => {
                                     // finish up interpolation process
                                     terminal.innerHTML += `[enhancr] Completed interpolation`;
-                                    const interpolateBtnSpan = document.getElementById("interpolate-button-text");
                                     var notification = new Notification("Interpolation completed", {
                                         icon: "./assets/enhancr.png",
                                         body: path.basename(file)

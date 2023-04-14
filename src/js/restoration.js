@@ -68,7 +68,7 @@ class Restoration {
 
             // render progresbar
             const loading = document.getElementById("loading");
-            loading.style.visibility = "visible";
+            loading.style.display = "block";
 
             // check if output path field is filled
             if (document.getElementById('restore-output-path-text').innerHTML == '') {

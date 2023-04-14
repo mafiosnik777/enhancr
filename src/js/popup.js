@@ -64,9 +64,9 @@ async function shareVideo() {
 
     var pipeOutPath = sessionStorage.getItem('pipeOutPath');
     var fpsMeter = document.getElementById('fps-meter');
-    fpsMeter.style.visibility = "hidden";
+    fpsMeter.style.display = "none";
     var eta = document.getElementById('eta');
-    eta.style.visibility = "hidden";
+    eta.style.display = "none";
 
     const progressDone = document.getElementById("progress-done");
 

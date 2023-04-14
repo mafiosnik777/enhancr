@@ -67,7 +67,7 @@ class Upscaling {
 
             // render progresbar
             const loading = document.getElementById("loading");
-            loading.style.visibility = "visible";
+            loading.style.display = "block";
 
             // check if output path field is filled
             if (document.getElementById('upscale-output-path-text').innerHTML == '') {
@@ -486,8 +486,6 @@ class Upscaling {
                                     // var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
                                     var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
                                 }
-
-                                console.log(muxCmd);
 
                                 let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
 

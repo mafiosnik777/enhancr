@@ -113,12 +113,12 @@ class Process {
                     const etaText = document.getElementById("eta-text");
                     if (progress.includes("fps")) {
                         var fps = progress.split("(")[1].split(")")[0];
-                        fpsMeter.style.visibility = "visible";
+                        fpsMeter.style.display = "inline-block";
                         fpsMeterText.textContent = " " + fps;
                         var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
                         var fpsNumber = parseFloat(fps.replace(" fps"));
                         var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
-                        etaElement.style.visibility = "visible";
+                        etaElement.style.display = "inline-block";
                         etaText.textContent = " " + eta + " minutes";
                         var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
                         ipcRenderer.send('rpc-restoration', fpsNumber, engineCleaned, percentage);
@@ -221,11 +221,11 @@ class Process {
                     const etaText = document.getElementById("eta-text");
                     if (progress.includes("fps")) {
                         var fps = progress.split("(")[1].split(")")[0];
-                        fpsMeter.style.visibility = "visible";
+                        fpsMeter.style.display = "inline-block";
                         fpsMeterText.textContent = " " + fps;
                         var fpsNumber = parseFloat(fps.replace(" fps"));
                         var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
-                        etaElement.style.visibility = "visible";
+                        etaElement.style.display = "inline-block";
                         etaText.textContent = " " + eta + " minutes";
                         var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
                         ipcRenderer.send('rpc-upscaling', fpsNumber, engineCleaned, percentage);
@@ -331,7 +331,7 @@ class Process {
                         const etaText = document.getElementById("eta-text");
                         if (progress.includes("fps")) {
                             var fps = progress.split("(")[1].split(")")[0];
-                            fpsMeter.style.visibility = "visible";
+                            fpsMeter.style.display = "inline-block";
                             fpsMeterText.textContent = " " + fps;
                             // adjust preview speed based on fps
                             let playbackSpeed = (parseFloat(fps) / parseFloat(videoFrameRateOut)).toFixed(2);
@@ -340,7 +340,7 @@ class Process {
                             }
                             var fpsNumber = parseFloat(fps.replace(" fps"));
                             var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
-                            etaElement.style.visibility = "visible";
+                            etaElement.style.display = "inline-block";
                             etaText.textContent = " " + eta + " minutes";
                             var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
                             ipcRenderer.send('rpc-interpolation', fpsNumber, engineCleaned, percentage);
