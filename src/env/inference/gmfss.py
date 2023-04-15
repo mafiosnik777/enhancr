@@ -12,11 +12,9 @@ from multiprocessing import cpu_count
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
-from arch.gmfupss_torch.GMFUpSS import GMFupSS
-from arch.gmfss_union_torch.GMFSS_Union import GMFSS_Union
-from arch.gmfss_fortuna_torch.GMFSS_Fortuna import GMFSS_Fortuna
-from arch.gmfss_fortuna_union_torch.GMFSS_Fortuna_Union import GMFSS_Fortuna_union
-from utils.vfi_inference import vfi_inference
+from arch.vsgmfss_union import gmfss_union
+from arch.vsgmfss_fortuna import gmfss_fortuna
+from utils.vfi_inference import vfi_frame_merger
 
 ossystem = platform.system()
 core = vs.core
@@ -41,7 +39,7 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     sensitivityValue = data['sensitivityValue']
     ToPadWidth = data['toPadWidth']
     ToPadHeight = data['toPadHeight']
-    precision = data['halfPrecision']
+    halfPrecision = data['halfPrecision']
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
@@ -61,20 +59,21 @@ if sceneDetection:
     else:
         clip = core.misc.SCDetect(clip=clip, threshold=0.180)
 
-clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
+if halfPrecision:
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
+    print("Using fp16 i/o for inference", file=sys.stderr)
+else:
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
-if model == "GMFSS - Up":
-    model_inference = GMFupSS(partial_fp16=precision)
-elif model == "GMFSS - Union":
-    model_inference = GMFSS_Union(partial_fp16=precision)
+if model == "GMFSS - Union":
+    clip = gmfss_union(clip, num_streams=threading(), trt=False, model=0)
 elif model == "GMFSS - Fortuna":
-    model_inference = GMFSS_Fortuna(partial_fp16=precision)
+    clip = gmfss_fortuna(clip, num_streams=threading(), trt=False, model=0)
 elif model == "GMFSS - Fortuna - Union":
-    model_inference = GMFSS_Fortuna_union(partial_fp16=precision)
+    clip = gmfss_fortuna(clip, num_streams=threading(), trt=False, model=1)
 
-clip = vfi_inference(
-       model_inference=model_inference, clip=clip, multi=2, metric_thresh=0.999
-)
+clip1 = core.std.Interleave([clip, clip])
+clip = vfi_frame_merger(clip1, clip)
 
 # padding if clip dimensions aren't divisble by 2
 if (clip.height % 2 != 0):

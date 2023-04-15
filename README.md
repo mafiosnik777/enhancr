@@ -25,13 +25,9 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**RIFE (TensorRT)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)** & [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
 
->**GMFSS (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFupSS](https://github.com/98mxr/GMFupSS)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
+>**GMFSS - Union (PyTorch/TensorRT)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-gmfss_union](https://github.com/HolyWu/vs-gmfss_union)**
 
->**GMFSS - Union (TensorRT)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Union](https://github.com/98mxr/GMFSS_union)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-gmfss_union](https://github.com/HolyWu/vs-gmfss_union)**
-
->**GMFSS - Fortuna (PyTorch)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Fortuna](https://github.com/98mxr/GMFSS_Fortuna)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)**
-
->**GMFSS - Fortuna (TensorRT)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Fortuna](https://github.com/98mxr/GMFSS_Fortuna)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-gmfss_fortuna](https://github.com/HolyWu/vs-gmfss_fortuna)**
+>**GMFSS - Fortuna (PyTorch/TensorRT)** - [98mxr](https://github.com/98mxr)/**[GMFSS_Fortuna](https://github.com/98mxr/GMFSS_Fortuna)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-gmfss_fortuna](https://github.com/HolyWu/vs-gmfss_fortuna)**
 
 >**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-NCNN-vulkan** (unreleased)
 

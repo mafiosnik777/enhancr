@@ -75,7 +75,7 @@ elif model == "GMFSS - Fortuna - Union":
     clip = gmfss_fortuna(clip, num_streams=threading(), trt=True, trt_cache_path=engine_path, model=1)
 
 clip1 = core.std.Interleave([clip, clip])
-output = vfi_frame_merger(clip1, clip)
+clip = vfi_frame_merger(clip1, clip)
 
 # padding if clip dimensions aren't divisble by 2
 if (clip.height % 2 != 0):
