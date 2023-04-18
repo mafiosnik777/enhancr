@@ -62,6 +62,7 @@ var progressSpan = document.getElementById('progress-span');
 var terminal = document.getElementById("terminal-text");
 
 const exportBtn = document.getElementById('export-btn');
+const realtimeBtn = document.getElementById('realtime-btn');
 
 const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
 
@@ -975,6 +976,33 @@ try {
     }
   };
   exportBtn.addEventListener('click', processQueue);
+  
+  let realtimeIsRunning = false;
+
+  let processRealtimeQueue = async () => {
+    if (realtimeIsRunning) {
+      return;
+    }
+    realtimeIsRunning = true;
+
+    realtimeBtn.disabled = true;
+    let realtimeBtnIcon = document.getElementById("realtime-btn-icon");
+    realtimeBtnIcon.className = 'fa-solid fa-lock';
+    realtimeBtnIcon.style.color = 'grey';
+    let initialPreviewState = document.getElementById('preview-check').checked;
+    document.getElementById('preview-check').checked = false;
+    sessionStorage.setItem('realtime', 'true');
+    document.getElementById('preview-text').innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Realtime Playback active</span>'
+    await processQueue();
+    sessionStorage.setItem('realtime', 'false');
+    document.getElementById('preview-text').innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Preview not initialized</span>'
+    document.getElementById('preview-check').checked = initialPreviewState;
+    realtimeBtnIcon.className = 'fa-regular fa-circle-play';
+    realtimeBtnIcon.style.color = 'white';
+    realtimeIsRunning = false;
+  }
+
+  realtimeBtn.addEventListener('click', processRealtimeQueue);
 } catch (error) {
   console.error(error)
 }

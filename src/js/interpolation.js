@@ -485,6 +485,12 @@ class Interpolation {
             }
             let vspipe = pickVspipe();
 
+            let mpv = () => {
+                return !isPackaged ? path.join(__dirname, '..', "\\env\\mpv\\enhancr-mpv.exe") : path.join(process.resourcesPath, "\\env\\mpv\\enhancr-mpv.exe")
+            }
+
+            let mpvTitle = `enhancr - ${path.basename(sessionStorage.getItem("pipeOutPath"))} [${localStorage.getItem('gpu').split("GPU: ")[1]}]`
+
             let tmpOutPath = path.join(cache, Date.now() + ".mkv");
             if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
                 openModal(subsModal);
@@ -503,9 +509,11 @@ class Interpolation {
                         // if preview is enabled split out 2 streams from output
                         if (preview.checked == true) {
                             var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" ${previewEncoder()} "${path.join(previewPath, '/master.m3u8')}"`;
+                        // if user selects realtime processing pipe to mpv
+                        } else if (sessionStorage.getItem('realtime') == 'true') {
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${mpv()}" --title="${mpvTitle}" --force-media-title=" " --audio-file="${file}" --sub-file="${file}" --external-file="${file}" --msg-level=all=no -`;
                         } else {
                             var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} "${tmpOutPath}"`;
-                            console.log(cmd);
                         }
                         let term = spawn(cmd, [], {
                             shell: true,
@@ -537,7 +545,7 @@ class Interpolation {
                                 terminal.innerHTML += `[enhancr] An error has occured.`;
                                 sessionStorage.setItem('status', 'done');
                                 resolve();
-                            } else {
+                            } else if ((sessionStorage.getItem('realtime') == 'false')) {
                                 terminal.innerHTML += `[enhancr] Finishing up interpolation..\r\n`;
                                 
                                 // fix audio loss when muxing mkv
@@ -593,6 +601,11 @@ class Interpolation {
                                     thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbInterpolation.png?' + Date.now());
                                     resolve();
                                 });
+                            } else {
+                                terminal.innerHTML += `[enhancr] Completed interpolation`;
+                                sessionStorage.setItem('status', 'done');
+                                ipcRenderer.send('rpc-done');
+                                resolve();
                             }
                         })
                     })

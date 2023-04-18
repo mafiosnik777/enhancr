@@ -17,6 +17,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 - Has Scene Detection built-in, to skip interpolation on scene change frames & mitigate artifacts
 - Color Themes for user customization
 - Discord Rich Presence, to show all your friends progress, current speed & what you're currently enhancing
+- Realtime Player (assuming you have a powerful enough GPU) with perfect support for audio, subtitles, fonts, attachments etc.
 - ... and much more
 
 ## Interpolation
@@ -33,7 +34,6 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 >**CAIN (TensorRT)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [HubertSotnowski](https://github.com/HubertSotnowski)/**[cain-TensorRT](https://github.com/HubertSotnowski/cain-TensorRT)**
 
-*Thanks to [HubertSontowski](https://github.com/HubertSotnowski) and [styler00dollar](https://github.com/styler00dollar) for helping out with implementing CAIN.*
 
 ## Upscaling
 
@@ -137,6 +137,12 @@ I would be grateful if you could show your support for this project by contribut
 
 I am continuously working to improve the codebase, including addressing any inconsistencies that may have arisen due to time constraints. Regular updates will be released, including new features, bug fixes, and the incorporation of new technologies and models as they become available. Thank you for your understanding and support.
 
+# Credits
+
+>Our player depends on [mpv](https://github.com/mpv-player/mpv) and [ModernX](https://github.com/cyl0/ModernX) for the OSC.
+
+>Thanks to [HubertSontowski](https://github.com/HubertSotnowski) and [styler00dollar](https://github.com/styler00dollar) for helping out with implementing CAIN.
+
 # Join the discord
 
-To interact with the community, share your results or to get help when encountering any problems visit our [discord](https://discord.gg/jBDqCkSxYz). Previews of upcoming versions are gonna be showcased on there as well. 
+To interact with the community, share your results or to get help when encountering any problems visit our [discord](https://discord.gg/jBDqCkSxYz). Previews of upcoming versions are gonna be showcased on there as well.

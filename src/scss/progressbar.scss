@@ -12,8 +12,8 @@ $macosblue: #1e5cce;
 
   .export {
     position: absolute;
-    bottom: 17.5%;
-    right: 1%;
+    bottom: 14.5%;
+    right: 5%;
     font-size: 8pt;
     font-weight: 500;
     background: rgb(6 6 6 / 43%);
@@ -25,6 +25,62 @@ $macosblue: #1e5cce;
     &:hover {
       background: rgb(30 30 30 / 43%);
       cursor: pointer;
+    }
+  }
+
+  #realtime-btn {
+    position: absolute;
+    bottom: 14.5%;
+    right: 1%;
+    font-size: 8pt;
+    font-weight: 500;
+    background: rgba(6,6,6,.43);
+    border-radius: 10px;
+    padding: 6px 12px;
+    color: #d0d0d0;
+    box-shadow: 0px 8px 15px rgb(0 0 0 / 10%);
+    transition: .2s;
+    &:hover {
+      background: rgb(30 30 30 / 43%);
+      cursor: pointer;
+    }
+
+    .tooltip-text {
+      visibility: hidden;
+      width: 90px;
+      background-color: $macosblue;
+      color: #fff;
+      text-align: center;
+      padding: 5px 0;
+      border-radius: 6px;
+      position: absolute;
+      z-index: 99;
+      font-size: 7pt;
+      top: -32px;
+      margin-left: -68px;
+      transition: .2s;
+      font-weight: 400;
+      box-shadow: 0 4px 20px 0 rgb(0 0 0 / 10%);
+      opacity: 0;
+      transition: opacity .25s;
+    }
+  
+    &:hover .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+      z-index: 99;
+    }
+  
+    .tooltip-text::after {
+      content: " ";
+      position: absolute;
+      top: 50%;
+      right: 25%;
+      margin-top: 11px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--tooltip-triangle) transparent transparent transparent;
+      z-index: 99;
     }
   }
 
