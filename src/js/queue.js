@@ -872,6 +872,7 @@ try {
               sessionStorage.setItem('currentFile', item.file);
               sessionStorage.setItem('queueIndex', queue.indexOf(item));
               exportBtn.innerHTML = '<span id="export-button"><i class="fa-solid fa-circle-stop" id="enhance-icon"></i></i> Stop processing video(s) <span id="key-shortcut">Ctrl + Enter</span></span>'
+              document.getElementById('clear-queue-btn').style.visibility = 'hidden';
               // listen for preview
               Preview.listenForPreview();
               // initialize ui for process
@@ -935,6 +936,7 @@ try {
         })
         .then(function () {
           exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
+          document.getElementById('clear-queue-btn').style.visibility = 'visible';
           if (queue.length == 0) {
             enhancr.terminal('Queue is empty. Add media to queue to get started.\r\n');
           } else {
