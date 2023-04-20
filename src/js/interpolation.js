@@ -270,17 +270,17 @@ class Interpolation {
 
             function getRifeOnnx() {
                 if (document.getElementById('rife-tta-check').checked) {
-                    if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx")
-                    } else {
+                    // if (fp16) {
+                    //     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx")
+                    // } else {
                         return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx")
-                    }
+                    // }
                 } else {
-                    if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx")
-                    } else {
+                    // if (fp16) {
+                    //     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx")
+                    // } else {
                         return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx")
-                    }
+                    // }
                 }
             }
             let rifeOnnx = getRifeOnnx();

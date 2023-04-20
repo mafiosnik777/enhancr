@@ -2336,3 +2336,5 @@ ffmpegParamsRestoration.addEventListener("change", function () {
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Params written to project file.");
 });
+
+// document.title = `enhancr [${localStorage.getItem('gpu').split('GPU: ')[1].split(" |")[0]}]`
