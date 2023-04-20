@@ -935,9 +935,10 @@ try {
           }
         })
         .then(function () {
-          exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
+          exportBtn.innerHTML = '<i class="fa-solid fa-turn-up fa-rotate-90" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
           document.getElementById('clear-queue-btn').style.visibility = 'visible';
           if (queue.length == 0) {
+            document.getElementById('clear-queue-btn').style.visibility = 'hidden';
             enhancr.terminal('Queue is empty. Add media to queue to get started.\r\n');
           } else {
             enhancr.terminal('Completed processing queue successfully.\r\n');
@@ -953,11 +954,20 @@ try {
 
     } else {
       sessionStorage.setItem('stopped', 'true');
-      find('name', 'VSPipe', false).then(function (list) {
+      find('name', 'trtexec', false).then(function (list) {
         var i;
         for (i = 0; i < list.length; i++) {
           process.kill(list[i].pid);
-        }
+      }
+      let killVsPipe = () => {
+        find('name', 'VSPipe', false).then(function (list) {
+          var i;
+          for (i = 0; i < list.length; i++) {
+            process.kill(list[i].pid);
+          }
+        })
+      }
+      setTimeout(killVsPipe, 1000);
       }).then(function () {
         exportBtn.innerHTML = '<i class="fa-solid fa-turn-up fa-rotate-90" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
         enhancr.terminal('Stopped queue successfully.\r\n');

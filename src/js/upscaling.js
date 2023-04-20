@@ -468,7 +468,7 @@ class Upscaling {
                             let log = lines.slice(-10).reverse();
                             // don't merge streams if an error occurs
                             if (log.includes('[Pipe] pipe:: Invalid data found when processing input')) {
-                                terminal.innerHTML += `[enhancr] An error has occured.`;
+                                terminal.innerHTML += `\r\n[enhancr] An error has occured.`;
                                 sessionStorage.setItem('status', 'done');
                                 resolve();
                             } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
