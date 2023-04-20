@@ -110,24 +110,6 @@ class Restoration {
                 };
             }
 
-            // scan media for subtitles
-            const subsPath = path.join(cache, "subs.ass");
-            try {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for subtitles..`;
-                execSync(`${ffmpeg} -y -loglevel error -i "${file}" -c:s copy ${subsPath}`);
-            } catch (err) {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` No subtitles were found, skipping subtitle extraction..`;
-            };
-
-            // scan media for audio
-            const audioPath = path.join(cache, "audio.mka");
-            try {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for audio..`;
-                execSync(`${ffmpeg} -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
-            } catch (err) {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` No audio stream was found, skipping copying audio..`;
-            };
-
             //get trtexec path
             function getTrtExecPath() {
                 return !isPackaged ? path.join(__dirname, '..', "/env/python/Library/bin/trtexec.exe") : path.join(process.resourcesPath, "/env/python/Library/bin/trtexec.exe")
