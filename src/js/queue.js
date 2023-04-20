@@ -959,7 +959,7 @@ try {
           process.kill(list[i].pid);
         }
       }).then(function () {
-        exportBtn.innerHTML = '<i class="fa-solid fa-film" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
+        exportBtn.innerHTML = '<i class="fa-solid fa-turn-up fa-rotate-90" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
         enhancr.terminal('Stopped queue successfully.\r\n');
         setTimeout(() => {
           document.getElementById('progress-done').style.width = '0%';
