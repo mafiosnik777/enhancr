@@ -6,6 +6,7 @@ import platform
 import tempfile
 import json
 import math
+import functools
 
 import torch
 
@@ -32,6 +33,7 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     streams = data['streams']
     fp16 = data['fp16']
     tiling = data['tiling']
+    frameskip = data['frameskip']
     tileHeight = int(data['tileHeight'])
     tileWidth = int(data['tileWidth'])
 
@@ -42,6 +44,18 @@ core.num_threads = cpu_count() / 2
 engine_path = os.path.join(os.getenv('APPDATA'), '.enhancr', 'models', 'engine')
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
+
+def execute(n, upscaled, metric_thresh, f):
+    ssim_clip = f.props.get("float_ssim")
+
+    if n == 0 or n == len(upscaled) - 1 or (ssim_clip and ssim_clip > metric_thresh):
+        return upscaled
+    else:
+        return upscaled[n-1]
+
+offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
+offs1 = core.std.CopyFrameProps(offs1, clip)
+clip = core.vmaf.Metric(clip, offs1, 2)
 
 if fp16:
     clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
@@ -57,9 +71,14 @@ def nvFuser():
         return False
 
 if tiling:
-    clip = swinir(clip=clip, model=1, device_index=0, num_streams=int(streams), tile_w=tileWidth, tile_h=tileHeight, cuda_graphs=True, nvfuser=nvFuser())
+    upscaled = swinir(clip=clip, model=1, device_index=0, num_streams=int(streams), tile_w=tileWidth, tile_h=tileHeight, cuda_graphs=True, nvfuser=nvFuser())
 else:
-    clip = swinir(clip=clip, model=1, device_index=0, num_streams=int(streams), cuda_graphs=True, nvfuser=nvFuser())
+    upscaled = swinir(clip=clip, model=1, device_index=0, num_streams=int(streams), cuda_graphs=True, nvfuser=nvFuser())
+
+if frameskip:
+    metric_thresh = 0.999
+    partial = functools.partial(execute, upscaled=upscaled, metric_thresh=metric_thresh)
+    clip = core.std.FrameEval(core.std.BlankClip(clip=upscaled, width=upscaled.width, height=upscaled.height), partial, prop_src=[clip])
 
 # padding if clip dimensions aren't divisble by 2
 if (clip.height % 2 != 0):

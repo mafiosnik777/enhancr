@@ -326,6 +326,7 @@ class Upscaling {
                 scale: scale,
                 streams: numStreams.value,
                 onnx: onnx,
+                frameskip: document.getElementById('skip-check').checked,
                 tiling: document.getElementById("tiling-check").checked,
                 tileHeight: (document.getElementById("tile-res").value).split('x')[1],
                 tileWidth: (document.getElementById("tile-res").value).split('x')[0]

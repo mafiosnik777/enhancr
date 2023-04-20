@@ -6,6 +6,7 @@ import platform
 import tempfile
 import json
 import vapoursynth as vs
+import functools
 
 from multiprocessing import cpu_count
 
@@ -23,6 +24,7 @@ with open(os.path.join(tmp), encoding='utf-8') as f:
     video_path = data['file']
     engine = data['engine']
     tiling = data['tiling']
+    frameskip = data['frameskip']
     tileHeight = int(data['tileHeight'])
     tileWidth = int(data['tileWidth'])
     fp16 = data['fp16']
@@ -34,12 +36,29 @@ core.num_threads = cpu_count() / 2
     
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
+def execute(n, upscaled, metric_thresh, f):
+    ssim_clip = f.props.get("float_ssim")
+
+    if n == 0 or n == len(upscaled) - 1 or (ssim_clip and ssim_clip > metric_thresh):
+        return upscaled
+    else:
+        return upscaled[n-1]
+
+offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
+offs1 = core.std.CopyFrameProps(offs1, clip)
+clip = core.vmaf.Metric(clip, offs1, 2)
+
 clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
 
 if tiling == False:
-    clip = core.ncnn.Model(clip, network_path=engine, num_streams=threading(), fp16=fp16)
+    upscaled = core.ncnn.Model(clip, network_path=engine, num_streams=threading(), fp16=fp16)
 else:
-    clip = core.ncnn.Model(clip, network_path=engine, num_streams=threading(), fp16=fp16, tilesize=[tileHeight, tileWidth])
+    upscaled = core.ncnn.Model(clip, network_path=engine, num_streams=threading(), fp16=fp16, tilesize=[tileHeight, tileWidth])
+
+if frameskip:
+    metric_thresh = 0.999
+    partial = functools.partial(execute, upscaled=upscaled, metric_thresh=metric_thresh)
+    clip = core.std.FrameEval(core.std.BlankClip(clip=upscaled, width=upscaled.width, height=upscaled.height), partial, prop_src=[clip])
 
 # padding if clip dimensions aren't divisble by 2
 if (clip.height % 2 != 0):
