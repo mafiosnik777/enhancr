@@ -237,6 +237,10 @@ function toggleModels() {
   document.getElementById('dpir-list').style.visibility = 'hidden';
   document.getElementById('settings-list').style.visibility = 'hidden';
   document.getElementById('theming').style.visibility = 'hidden';
+  document.getElementById('hwencode-list').style.visibility = 'hidden';
+  document.getElementById('unsupported-list').style.visibility = 'hidden';
+  document.getElementById('trim-list').style.visibility = 'hidden';
+  document.getElementById('sensitivity-list').style.visibility = 'hidden';
   if (sessionStorage.getItem('settingsSaved') == 'false') {
     openModal(saveModal);
     sessionStorage.setItem('settingsSaved', 'true');
