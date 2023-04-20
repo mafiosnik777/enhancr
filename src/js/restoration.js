@@ -463,7 +463,7 @@ class Restoration {
                                 terminal.innerHTML += `[enhancr] An error has occured.`;
                                 sessionStorage.setItem('status', 'done');
                                 resolve();
-                            } else if ((sessionStorage.getItem('realtime') == 'false')) {
+                            } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
                                 terminal.innerHTML += `[enhancr] Finishing up restoration..\r\n`;
                                 terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
 

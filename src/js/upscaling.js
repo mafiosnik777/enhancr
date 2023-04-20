@@ -470,7 +470,7 @@ class Upscaling {
                                 terminal.innerHTML += `[enhancr] An error has occured.`;
                                 sessionStorage.setItem('status', 'done');
                                 resolve();
-                            } else if ((sessionStorage.getItem('realtime') == 'false')) {
+                            } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
                                 terminal.innerHTML += `[enhancr] Finishing up upscaling..\r\n`;
 
                                 // fix audio loss when muxing mkv

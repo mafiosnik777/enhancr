@@ -78,8 +78,6 @@ class Interpolation {
 
             const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
 
-            terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for interpolation process..';
-
             // convert gif to video
             const gifVideoPath = path.join(cache, path.parse(file).name + ".mkv");
             if (path.extname(file) == ".gif") {
@@ -90,24 +88,6 @@ class Interpolation {
                     terminal.innerHTML += '\r\n' + enhancrPrefix + ` Error: GIF preparation has failed.`;
                 };
             }
-            
-            // scan media for subtitles
-            const subsPath = path.join(cache, "subs.ass");
-            try {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for subtitles..`;
-                execSync(`${ffmpeg} -y -loglevel error -i "${file}" -c:s copy "${subsPath}"`);
-            } catch (err) {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` No subtitles were found, skipping subtitle extraction..`;
-            };
-
-            // scan media for audio
-            const audioPath = path.join(cache, "audio.mka");
-            try {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Scanning media for audio..\r\n`;
-                execSync(`${ffmpeg} -y -loglevel quiet -i "${file}" -vn -c copy ${audioPath}`)
-            } catch (err) {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` No audio stream was found, skipping copying audio..\r\n`;
-            };
 
             //get trtexec path
             function getTrtExecPath() {
@@ -545,7 +525,7 @@ class Interpolation {
                                 terminal.innerHTML += `[enhancr] An error has occured.`;
                                 sessionStorage.setItem('status', 'done');
                                 resolve();
-                            } else if ((sessionStorage.getItem('realtime') == 'false')) {
+                            } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
                                 terminal.innerHTML += `[enhancr] Finishing up interpolation..\r\n`;
                                 
                                 // fix audio loss when muxing mkv
