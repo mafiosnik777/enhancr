@@ -22,7 +22,7 @@ else:
 with open(os.path.join(tmp), encoding='utf-8') as f:
     data = json.load(f)
     video_path = data['file']
-    engine = data['engine']
+    engine = data['onnx']
     tiling = data['tiling']
     frameskip = data['frameskip']
     tileHeight = int(data['tileHeight'])
