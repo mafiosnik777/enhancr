@@ -1,11 +1,10 @@
 const { app, shell, BrowserWindow, nativeTheme } = require('electron');
 const vibe = require('@pyke/vibe');
+const { localStorage} = require('electron-browser-storage');
 
 const fs = require('fs-extra');
 const path = require('path');
 const os = require('os');
-
-const { localStorage, sessionStorage } = require('electron-browser-storage');
 
 const remoteMain = require('@electron/remote/main');
 const setupIpc = require('./main/setup-ipc');
@@ -27,6 +26,7 @@ const createDirs = [
 ];
 
 const devMode = !app.isPackaged;
+const pro = true;
 
 const appDataPath = path.resolve(appDataPaths[process.platform], '.enhancr');
 const settingsPath = path.resolve(appDataPath, 'settings.json');
@@ -162,6 +162,8 @@ app.whenReady().then(async () => {
     setupIpc(mainWindow);
     if (!devMode) mainWindow.removeMenu();
 
+    localStorage.setItem('pro', pro);
+
     // Inject css for solid bg (for now)
     if (settings.disableBlur) {
         // Appear seamless when changing pages, but corners may be visible for a few frames.
@@ -197,7 +199,7 @@ app.whenReady().then(async () => {
     const now = new Date();
 
     // check if app is packaged -> if not skip auth / if yes check if subscription is still valid
-    if (!devMode && (patreonUntil == null || now > validUntil)) mainWindow.loadFile(path.join(__dirname, './pages/auth.html'))
+    if (!devMode && (patreonUntil == null || now > validUntil) && pro) mainWindow.loadFile(path.join(__dirname, './pages/auth.html'))
     else mainWindow.loadFile(path.join(__dirname, './pages/welcome.html'))
 
     app.on('open-url', (event, url) => {

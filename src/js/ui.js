@@ -1251,6 +1251,7 @@ var x265BtnUp = document.getElementById("x265-up"),
 var engineInputUpscale = document.getElementById("engine-upscale");
 var engineDropdownUpscale = document.getElementById("engine-dropdown-upscale");
 var shuffleCuganOption = document.getElementById("shufflecugan");
+var shuffleCuganNcnnOption = document.getElementById("shufflecugan-ncnn");
 var realesrganOption = document.getElementById("realesrgan-tensorrt");
 var realcuganOption = document.getElementById("realcugan-tensorrt");
 var swinIROption = document.getElementById("swinir");
@@ -1645,6 +1646,25 @@ shuffleCuganOption.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.upscaling[0].engine = "shufflecugan";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (shufflecugan)
+shuffleCuganNcnnOption.addEventListener("click", function () {
+    upscaleEngineText.textContent = "Upscaling - ShuffleCUGAN (NCNN)";
+    hiderUpscale.style.visibility = "hidden";
+    engineDropdownUpscale.style.visibility = "hidden";
+    factorSpan.textContent = "2x";
+    factor2.style.display = "block";
+    factor3.style.display = "none";
+    factor4.style.display = "none";
+    sessionStorage.setItem("upscaleFactor", "2");
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.upscaling[0].engine = "shufflecugan-ncnn";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });
@@ -2337,4 +2357,19 @@ ffmpegParamsRestoration.addEventListener("change", function () {
     console.log("Params written to project file.");
 });
 
-// document.title = `enhancr [${localStorage.getItem('gpu').split('GPU: ')[1].split(" |")[0]}]`
+if (localStorage.getItem('pro') == 'false') {
+    console.log('Adjusting UI for lite version..')
+
+    document.getElementById('cain-trt').style.color = '#4f4f4f';
+    document.getElementById('rife-trt').style.color = '#4f4f4f';
+    document.getElementById('gmfss').style.color = '#4f4f4f';
+    document.getElementById('gmfss-trt').style.color = '#4f4f4f';
+
+    document.getElementById('shufflecugan').style.color = '#4f4f4f';
+    document.getElementById('realesrgan-tensorrt').style.color = '#4f4f4f';
+    document.getElementById('realcugan-tensorrt').style.color = '#4f4f4f';
+    document.getElementById('swinir').style.color = '#4f4f4f';
+
+    document.getElementById('dpir').style.color = '#4f4f4f';
+    document.getElementById('anime-video').style.color = '#4f4f4f';
+}

@@ -179,6 +179,8 @@ class Upscaling {
                     } else {
                         return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx");
                     }
+                } else if (engine == 'Upscaling - ShuffleCUGAN (NCNN)') {
+                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin");
                 } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (TensorRT)') {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
@@ -327,6 +329,8 @@ class Upscaling {
                 model = "RealESRGAN"
             } else if (engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
                 model = "ShuffleCUGAN"
+            } else if (engine == "Upscaling - ShuffleCUGAN (NCNN)") {
+                model = "ShuffleCUGAN"
             } else if (engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
             } else if (engine == "Upscaling - RealCUGAN (TensorRT)") {
@@ -355,6 +359,9 @@ class Upscaling {
                 }
                 if (engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/env/inference/shufflecugan.py") : path.join(process.resourcesPath, "/env/inference/shufflecugan.py");
+                }
+                if (engine == "Upscaling - ShuffleCUGAN (NCNN)") {
+                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/shufflecugan_ncnn.py") : path.join(process.resourcesPath, "/env/inference/shufflecugan_ncnn.py");
                 }
                 if (engine == "Upscaling - RealCUGAN (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/env/inference/cugan_trt.py") : path.join(process.resourcesPath, "/env/inference/cugan_trt.py");

@@ -249,13 +249,14 @@ function loadInterpolation() {
     cvpv6Option.style.display = 'none';
   }
   if (data.interpolation[0].engine === "") {
-    interpolationEngineSpan.textContent = "Channel Attention - CAIN (TensorRT)";
+    interpolationEngineSpan.textContent = "Channel Attention - CAIN (NCNN)";
     rife23Option.style.display = 'none';
     rife4Option.style.display = 'none';
     rife46Option.style.display = 'none';
     gmfssUnionOption.style.display = 'none';
     gmfssFortunaOption.style.display = 'none';
     gmfssFortunaUnionOption.style.display = 'none';
+    rvpv2Option.style.display = 'none';
   }
 
   // fill model input
@@ -445,6 +446,13 @@ function loadUpscaling() {
   // fill engine input
   if (data.upscaling[0].engine === "shufflecugan") {
     upscaleEngineSpan.textContent = "Upscaling - ShuffleCUGAN (TensorRT)"
+    document.getElementById('factor4').style.display = 'none';
+    document.getElementById('factor3').style.display = 'none';
+  }
+  if (data.upscaling[0].engine === "shufflecugan-ncnn") {
+    upscaleEngineSpan.textContent = "Upscaling - ShuffleCUGAN (NCNN)"
+    document.getElementById('factor4').style.display = 'none';
+    document.getElementById('factor3').style.display = 'none';
   }
   if (data.upscaling[0].engine === "realesrgan-ncnn") {
     upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (NCNN)"
@@ -458,6 +466,11 @@ function loadUpscaling() {
   }
   if (data.upscaling[0].engine === "swinir") {
     upscaleEngineSpan.textContent = "Upscaling - SwinIR (PyTorch)"
+    document.getElementById('factor4').style.display = 'none';
+    document.getElementById('factor3').style.display = 'none';
+  }
+  if (data.upscaling[0].engine === "s") {
+    upscaleEngineSpan.textContent = "Upscaling - ShuffleCUGAN (NCNN)"
     document.getElementById('factor4').style.display = 'none';
     document.getElementById('factor3').style.display = 'none';
   }
