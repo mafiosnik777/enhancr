@@ -39,10 +39,14 @@ def load_state_dict(state_dict):
             print("[Error] Couldn't convert model", file=sys.stderr)
     return model
 
-state_dict = torch.load(args.input, map_location=torch.device('cpu'))
+if torch.cuda.is_available():
+    state_dict = torch.load(args.input, map_location=torch.device('cuda'))
+else:
+    state_dict = torch.load(args.input, map_location=torch.device('cpu'))
+
 model = load_state_dict(state_dict)
 
-if args.fp16:
+if args.fp16 and torch.cuda.is_available():
     device = torch.device("cuda")
     model.half()
     model = model.to(device)
@@ -51,7 +55,7 @@ input_names = ["input"]
 output_names = ["output"]
 
 
-if args.fp16:
+if args.fp16 and torch.cuda.is_available():
     f1 = torch.rand((1, 3, 64, 64)).half().to(device)
 else:
     f1 = torch.rand((1, 3, 64, 64))
