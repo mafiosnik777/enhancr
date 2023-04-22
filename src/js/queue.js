@@ -881,6 +881,10 @@ try {
               console.log('Starting queue');
               sessionStorage.setItem('currentFile', item.file);
               sessionStorage.setItem('queueIndex', queue.indexOf(item));
+              realtimeBtn.style.pointerEvents = 'none';
+              let realtimeBtnIcon = document.getElementById("realtime-btn-icon");
+              realtimeBtnIcon.className = 'fa-solid fa-lock';
+              realtimeBtnIcon.style.color = 'grey';
               exportBtn.innerHTML = '<span id="export-button"><i class="fa-solid fa-circle-stop" id="enhance-icon"></i></i> Stop processing video(s) <span id="key-shortcut">Ctrl + Enter</span></span>'
               document.getElementById('clear-queue-btn').style.visibility = 'hidden';
               // listen for preview
@@ -979,6 +983,11 @@ try {
       }
       setTimeout(killVsPipe, 1000);
       }).then(function () {
+        realtimeBtn.style.pointerEvents = 'auto';
+        let realtimeBtnIcon = document.getElementById("realtime-btn-icon");
+        realtimeBtnIcon.className = 'fa-regular fa-circle-play';
+        realtimeBtnIcon.style.color = 'white';
+
         exportBtn.innerHTML = '<i class="fa-solid fa-turn-up fa-rotate-90" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
         enhancr.terminal('Stopped queue successfully.\r\n');
         setTimeout(() => {
@@ -1007,10 +1016,6 @@ try {
     }
     realtimeIsRunning = true;
 
-    realtimeBtn.disabled = true;
-    let realtimeBtnIcon = document.getElementById("realtime-btn-icon");
-    realtimeBtnIcon.className = 'fa-solid fa-lock';
-    realtimeBtnIcon.style.color = 'grey';
     let initialPreviewState = document.getElementById('preview-check').checked;
     document.getElementById('preview-check').checked = false;
     sessionStorage.setItem('realtime', 'true');
@@ -1019,8 +1024,6 @@ try {
     sessionStorage.setItem('realtime', 'false');
     document.getElementById('preview-text').innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Preview not initialized</span>'
     document.getElementById('preview-check').checked = initialPreviewState;
-    realtimeBtnIcon.className = 'fa-regular fa-circle-play';
-    realtimeBtnIcon.style.color = 'white';
     realtimeIsRunning = false;
   }
 
