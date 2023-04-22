@@ -14,7 +14,6 @@ sys.path.insert(0, current_dir)
 
 from arch.vsgmfss_union import gmfss_union
 from arch.vsgmfss_fortuna import gmfss_fortuna
-from utils.vfi_inference import vfi_frame_merger
 
 ossystem = platform.system()
 core = vs.core
@@ -47,12 +46,6 @@ def threading():
   return int(streams) if int(streams) < cpu_count() else cpu_count()
 core.num_threads = cpu_count() / 2
 
-if frameskip:
-    offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
-    offs1 = core.std.CopyFrameProps(offs1, clip)
-    # use ssim for similarity calc
-    clip = core.vmaf.Metric(clip, offs1, 2)
-
 if sceneDetection:
     if sensitivity:
         clip = core.misc.SCDetect(clip=clip, threshold=sensitivityValue)
@@ -71,9 +64,6 @@ elif model == "GMFSS - Fortuna":
     clip = gmfss_fortuna(clip, num_streams=threading(), trt=False, model=0)
 elif model == "GMFSS - Fortuna - Union":
     clip = gmfss_fortuna(clip, num_streams=threading(), trt=False, model=1)
-
-clip1 = core.std.Interleave([clip, clip])
-clip = vfi_frame_merger(clip1, clip)
 
 # padding if clip dimensions aren't divisble by 2
 if (clip.height % 2 != 0):
