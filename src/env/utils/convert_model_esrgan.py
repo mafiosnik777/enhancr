@@ -10,10 +10,20 @@ sys.path.insert(0, current_dir)
 from arch.SRVGGNet import SRVGGNetCompact as RealESRGAN
 from arch.RRDBNet import RRDBNet as ESRGAN
 
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
 parse = argparse.ArgumentParser(description="")
 parse.add_argument("--input", metavar="--input", type=str, help="input model")
 parse.add_argument("--output", metavar="--output", type=str, help="output model")
-parse.add_argument("--fp16", metavar="--fp16", type=bool, help="fp16 precision")
+parse.add_argument("--fp16", metavar="--fp16", type=str2bool, default=False, help="fp16 precision")
 args = parse.parse_args()
 
 

@@ -125,7 +125,7 @@ class Upscaling {
             let convertModel = getConversionScript();
 
             let fp16Onnx = () => {
-                if (fp16) return "True"
+                if (fp16 && engine == 'Upscaling - RealESRGAN (TensorRT)') return "True"
                 else return "False"
             }
 
@@ -142,7 +142,7 @@ class Upscaling {
             if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth") {
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
-                        var cmd = `${inject_env} && "${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}" --fp16="${fp16Onnx()}"`;
+                        var cmd = `${inject_env} && "${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}" --fp16=${fp16Onnx()}`;
                         console.log(cmd);
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
@@ -208,8 +208,10 @@ class Upscaling {
                 if (engine == "Upscaling - RealESRGAN (NCNN)") {
                     if (!(document.getElementById('custom-model-check').checked)) {
                         return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
-                    } else {
+                    } else if (path.extname(customModel) != ".pth") {
                         return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
+                    } else {
+                        return path.join(cache, path.parse(customModel).name + '.onnx');
                     }
                 } else {
                     return path.join(appDataPath, '/.enhancr/models/engine', `${path.parse(onnx).name}-${fp}_${shapeDimensionsMax}_trt_${trtVersion}.engine`);
