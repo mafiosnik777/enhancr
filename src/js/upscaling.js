@@ -115,12 +115,6 @@ class Upscaling {
             }
             let trtexec = getTrtExecPath();
 
-            //get python path
-            function getPythonPath() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/python/python.exe") : path.join(process.resourcesPath, "/env/python/python.exe");
-            }
-            let python = getPythonPath();
-
             let fp16 = document.getElementById('fp16-check');
             var customModel = path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
 
@@ -135,11 +129,21 @@ class Upscaling {
                 else return "False"
             }
 
+            //get python path
+            function getPythonPath() {
+                return !isPackaged ? path.join(__dirname, '..', "/env/python/python.exe") : path.join(process.resourcesPath, "/env/python/python.exe");
+            }
+            let python = getPythonPath();
+
+            // inject env hook
+            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"`;
+
             // convert pth to onnx
             if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth") {
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
-                        var cmd = `"${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')} --fp16=${fp16Onnx()}"`;
+                        var cmd = `${inject_env} && "${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}" --fp16="${fp16Onnx()}"`;
+                        console.log(cmd);
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
                         term.stdout.on('data', (data) => {
@@ -400,9 +404,6 @@ class Upscaling {
                 return parseInt(((dimensions).split('x ')[1]).split(' ')[0]) * scale;
             }
             let height = getHeight();
-
-            // inject env hook
-            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"`;
 
             let mpv = () => {
                 return !isPackaged ? path.join(__dirname, '..', "\\env\\mpv\\enhancr-mpv.exe") : path.join(process.resourcesPath, "\\env\\mpv\\enhancr-mpv.exe")
