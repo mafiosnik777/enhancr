@@ -305,6 +305,7 @@ class Restoration {
                 framerate: fps,
                 streams: numStreams.value,
                 model: model,
+                frameskip: document.getElementById('skip-check').checked,
                 fp16: fp16.checked,
                 strength: parseInt(strengthParam),
                 tiling: document.getElementById("tiling-check").checked,
