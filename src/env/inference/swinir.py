@@ -81,13 +81,13 @@ if frameskip:
     clip = core.std.FrameEval(core.std.BlankClip(clip=upscaled, width=upscaled.width, height=upscaled.height), partial, prop_src=[clip])
 
 # padding if clip dimensions aren't divisble by 2
-if (clip.height % 2 != 0):
-    clip = core.std.AddBorders(clip, bottom=1)
+if (upscaled.height % 2 != 0):
+    upscaled = core.std.AddBorders(upscaled, bottom=1)
     
-if (clip.width % 2 != 0):
-    clip = core.std.AddBorders(clip, right=1)
+if (upscaled.width % 2 != 0):
+    upscaled = core.std.AddBorders(upscaled, right=1)
 
-clip = vs.core.resize.Bicubic(clip, format=vs.YUV422P8, matrix_s="709")
+clip = vs.core.resize.Bicubic(upscaled, format=vs.YUV422P8, matrix_s="709")
 
 print("Starting video output | Threads: " + str(int(cpu_count() / 2)) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 clip.set_output()

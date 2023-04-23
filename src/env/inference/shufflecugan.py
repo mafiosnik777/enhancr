@@ -76,8 +76,8 @@ if frameskip:
 if (upscaled.height % 2 != 0):
     upscaled = core.std.AddBorders(upscaled, bottom=1)
     
-if (clip.width % 2 != 0):
-    clip = core.std.AddBorders(upscaled, right=1)
+if (upscaled.width % 2 != 0):
+    upscaled = core.std.AddBorders(upscaled, right=1)
 
 clip = vs.core.resize.Bicubic(upscaled, format=vs.YUV420P8, matrix_s="709")
 
