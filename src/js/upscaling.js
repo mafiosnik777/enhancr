@@ -139,7 +139,7 @@ class Upscaling {
             let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"`;
 
             // convert pth to onnx
-            if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth") {
+            if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth" && (engine == "Upscaling - RealESRGAN (TensorRT)" || engine == "Upscaling - RealESRGAN (NCNN)")) {
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
                         var cmd = `${inject_env} && "${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}" --fp16=${fp16Onnx()}`;
@@ -185,7 +185,7 @@ class Upscaling {
                     }
                 } else if (engine == 'Upscaling - ShuffleCUGAN (NCNN)') {
                     return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin");
-                } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (TensorRT)') {
+                } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (NCNN)') {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
                         return path.join(cache, path.parse(customModel).name + '.onnx');

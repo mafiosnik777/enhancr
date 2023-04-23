@@ -131,7 +131,7 @@ class Restoration {
             var customModel = path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
 
             // convert pth to onnx
-            if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth") {
+            if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth" && (engine == "Upscaling - RealESRGAN (1x) (TensorRT)" || engine == "Upscaling - RealESRGAN (1x) (NCNN)")) {
                 function convertToOnnx() {
                     return new Promise(function (resolve) {
                         var cmd = `"${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}"`;
