@@ -949,6 +949,10 @@ try {
           }
         })
         .then(function () {
+          realtimeBtn.style.pointerEvents = 'auto';
+          let realtimeBtnIcon = document.getElementById("realtime-btn-icon");
+          realtimeBtnIcon.className = 'fa-regular fa-circle-play';
+          realtimeBtnIcon.style.color = 'white';
           exportBtn.innerHTML = '<i class="fa-solid fa-turn-up fa-rotate-90" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
           document.getElementById('clear-queue-btn').style.visibility = 'visible';
           if (queue.length == 0) {
