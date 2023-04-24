@@ -20,6 +20,18 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 - Realtime Player (assuming you have a powerful enough GPU) with perfect support for audio, subtitles, fonts, attachments etc.
 - ... and much more
 
+# Installation
+
+**Release 0.9.8 features a free version 🎉**
+https://dl.enhancr.app/enhancr-setup-free-0.9.8.exe
+
+To ensure that you have the most recent version of the software and all necessary dependencies, we recommend downloading the installer from [Patreon](https://www.patreon.com/mafiosnik). 
+Please note that builds and an embeddable python environment for the **Pro** version **are not** provided through this repository.
+
+![installer](https://mafiosnik.needsmental.help/mEerVMP8LA.png?key=bzdnzy2RYJGOvO)
+
+# Built-in engines
+
 ## Interpolation
 
 >**RIFE (NCNN)** - [megvii-research](https://github.com/megvii-research)/**[ECCV2022-RIFE](https://github.com/megvii-research/ECCV2022-RIFE)** - powered by [styler00dollar](https://github.com/styler00dollar)/**[VapourSynth-RIFE-NCNN-Vulkan](https://github.com/styler00dollar/VapourSynth-RIFE-NCNN-Vulkan)**
@@ -36,6 +48,8 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 
 
 ## Upscaling
+
+>**ShuffleCUGAN (NCNN)** - [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
 >**ShuffleCUGAN (TensorRT)** - [styler00dollar](https://github.com/styler00dollar)/**[VSGAN-tensorrt-docker](https://github.com/styler00dollar/VSGAN-tensorrt-docker)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
@@ -68,16 +82,6 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 -   Windows 11
 
 <sub>Sidenote: Starting with TensorRT 8.6, support for 2nd generation Kepler and Maxwell (900 Series and below) has been dropped. You will need at least a Pascal GPU (1000 series and up) and CUDA 12.0 + driver version >= 525.xx to run inference using TensorRT.</sub>
-
-# Installation
-
-
-To ensure that you have the most recent version of the software and all necessary dependencies, we recommend downloading the installer from [Patreon](https://www.patreon.com/mafiosnik). 
-Please note that builds and an embeddable python environment **are not** provided through this repository.
-
-![installer](https://mafiosnik.needsmental.help/mEerVMP8LA.png?key=bzdnzy2RYJGOvO)
-
->*Release 0.9.8 will feature a free version, with some features cut down.*
 
 # macOS and Linux Support
 
