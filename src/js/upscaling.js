@@ -31,6 +31,7 @@ const enhancrPrefix = "[enhancr]";
 const progressSpan = document.getElementById("progress-span");
 
 const blankModal = document.getElementById("blank-modal");
+const subsModal = document.getElementById("modal");
 
 function openModal(modal) {
     if (modal == undefined) return
@@ -413,111 +414,121 @@ class Upscaling {
             let mpvTitle = `enhancr - ${path.basename(sessionStorage.getItem("pipeOutPath"))} [${localStorage.getItem('gpu').split("GPU: ")[1]}]`
 
             let tmpOutPath = path.join(cache, Date.now() + ".mkv");
+            if (extension != ".mkv" && fse.existsSync(subsPath) == true) {
+                openModal(subsModal);
+                terminal.innerHTML += "\r\n[Error] Input video contains subtitles, but output container is not .mkv, cancelling.";
+                sessionStorage.setItem('status', 'error');
+                throw new Error('Input video contains subtitles, but output container is not .mkv');
+            } else {
 
-            terminal.innerHTML += '\r\n' + enhancrPrefix + ` Starting upscaling process..` + '\r\n';
-            let previewEncoder = () => {
-                if (sessionStorage.getItem('gpu') == 'Intel') return '-c:v h264_qsv -preset fast -look_ahead 30 -q 25 -pix_fmt nv12'
-                if (sessionStorage.getItem('gpu') == 'AMD') return '-c:v h264_amf -quality balanced -rc cqp -qp 20 -pix_fmt nv12'
-                if (sessionStorage.getItem('gpu') == 'NVIDIA') return '-c:v h264_nvenc -preset llhq -b_adapt 1 -rc-lookahead 30 -qp 18 -qp_cb_offset -2 -qp_cr_offset -2 -pix_fmt nv12'
-            }
+                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Starting upscaling process..` + '\r\n';
+                let previewEncoder = () => {
+                    if (sessionStorage.getItem('gpu') == 'Intel') return '-c:v h264_qsv -preset fast -look_ahead 30 -q 25 -pix_fmt nv12'
+                    if (sessionStorage.getItem('gpu') == 'AMD') return '-c:v h264_amf -quality balanced -rc cqp -qp 20 -pix_fmt nv12'
+                    if (sessionStorage.getItem('gpu') == 'NVIDIA') return '-c:v h264_nvenc -preset llhq -b_adapt 1 -rc-lookahead 30 -qp 18 -qp_cb_offset -2 -qp_cr_offset -2 -pix_fmt nv12'
+                }
 
-            function upscale() {
-                return new Promise(function(resolve) {
-                    // if preview is enabled split out 2 streams from output
-                    if (preview.checked == true) {
-                        var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" ${previewEncoder()} "${path.join(previewPath, '/master.m3u8')}"`;
-                        // if user selects realtime processing pipe to mpv
-                    } else if (sessionStorage.getItem('realtime') == 'true') {
-                        var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${mpv()}" --title="${mpvTitle}" --force-media-title=" " --audio-file="${file}" --sub-file="${file}" --external-file="${file}" --msg-level=all=no -`;
-                    } else {
-                        var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
-                    }
-                    let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
-                    // merge stdout & stderr & write data to terminal
-                    process.stdout.write('');
-                    term.stdout.on('data', (data) => {
-                        process.stdout.write(`[Pipe] ${data}`);
-                    });
-                    term.stderr.on('data', (data) => {
-                        process.stderr.write(`[Pipe] ${data}`);
-                        // remove leading and trailing whitespace, including newline characters
-                        let dataString = data.toString().trim();
-                        if (dataString.startsWith('Frame:')) {
-                            // Replace the last line of the textarea with the updated line
-                            terminal.innerHTML = terminal.innerHTML.replace(/([\s\S]*\n)[\s\S]*$/, '$1' + '[Pipe] ' + dataString);
-                        } else if (!(dataString.startsWith('CUDA lazy loading is not enabled.'))) {
-                            terminal.innerHTML += '\n[Pipe] ' + dataString;
+                function upscale() {
+                    return new Promise(function(resolve) {
+                        // if preview is enabled split out 2 streams from output
+                        if (preview.checked == true) {
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}" -f hls -hls_list_size 0 -hls_flags independent_segments -hls_time 0.5 -hls_segment_type mpegts -hls_segment_filename "${previewDataPath}" ${previewEncoder()} "${path.join(previewPath, '/master.m3u8')}"`;
+                            // if user selects realtime processing pipe to mpv
+                        } else if (sessionStorage.getItem('realtime') == 'true') {
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${mpv()}" --title="${mpvTitle}" --force-media-title=" " --audio-file="${file}" --sub-file="${file}" --external-file="${file}" --msg-level=all=no -`;
+                        } else {
+                            var cmd = `${inject_env} && "${vspipe}" --arg "tmp=${path.join(cache, "tmp.json")}" -c y4m "${engine}" - -p | "${ffmpeg}" -y -loglevel error -i pipe: ${params} -s ${width}x${height} "${tmpOutPath}"`;
                         }
-                        sessionStorage.setItem('progress', data);
-                    });
-                    term.on("close", () => {
-                        let lines = terminal.value.match(/[^\r\n]+/g);
-                        let log = lines.slice(-10).reverse();
-                        // don't merge streams if an error occurs
-                        if (log.includes('[Pipe] pipe:: Invalid data found when processing input')) {
-                            terminal.innerHTML += `\r\n[enhancr] An error has occured.`;
-                            sessionStorage.setItem('status', 'done');
-                            resolve();
-                        } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
-                            terminal.innerHTML += `[enhancr] Finishing up upscaling..\r\n`;
-
-                            // fix audio loss when muxing mkv
-                            let mkv = extension == ".mkv";
-                            let mkvFix = mkv ? "-max_interleave_delta 0" : "";
-
-                            // fix muxing audio into webm
-                            let webm = extension == ".webm";
-                            let webmFix = webm ? "-c:a libopus -b:a 192k" : "-codec copy";
-
-                            let out = sessionStorage.getItem('pipeOutPath');
-
-                            const mkvmerge = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvmerge.exe");
-                            const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvpropedit.exe");
-
-                            if (extension == "Frame Sequence") {
-                                fse.mkdirSync(path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now()));
-                                terminal.innerHTML += `[enhancr] Exporting as frame sequence..\r\n`;
-                                var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
-                            } else {
-                                terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-                                // var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
-                                var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --edit info --set "writing-application=enhancr - v${app.getVersion()} 64-bit"`
+                        let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
+                        // merge stdout & stderr & write data to terminal
+                        process.stdout.write('');
+                        term.stdout.on('data', (data) => {
+                            process.stdout.write(`[Pipe] ${data}`);
+                        });
+                        term.stderr.on('data', (data) => {
+                            process.stderr.write(`[Pipe] ${data}`);
+                            // remove leading and trailing whitespace, including newline characters
+                            let dataString = data.toString().trim();
+                            if (dataString.startsWith('Frame:')) {
+                                // Replace the last line of the textarea with the updated line
+                                terminal.innerHTML = terminal.innerHTML.replace(/([\s\S]*\n)[\s\S]*$/, '$1' + '[Pipe] ' + dataString);
+                            } else if (!(dataString.startsWith('CUDA lazy loading is not enabled.'))) {
+                                terminal.innerHTML += '\n[Pipe] ' + dataString;
                             }
+                            sessionStorage.setItem('progress', data);
+                        });
+                        term.on("close", () => {
+                            let lines = terminal.value.match(/[^\r\n]+/g);
+                            let log = lines.slice(-10).reverse();
+                            // don't merge streams if an error occurs
+                            if (log.includes('[Pipe] pipe:: Invalid data found when processing input')) {
+                                terminal.innerHTML += `\r\n[enhancr] An error has occured.`;
+                                sessionStorage.setItem('status', 'done');
+                                resolve();
+                            } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
+                                terminal.innerHTML += `[enhancr] Finishing up upscaling..\r\n`;
 
-                            let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
+                                // fix audio loss when muxing mkv
+                                let mkv = extension == ".mkv";
+                                let mkvFix = mkv ? "-max_interleave_delta 0" : "";
 
-                            // merge stdout & stderr & write data to terminal
-                            process.stdout.write('');
-                            muxTerm.stdout.on('data', (data) => {
-                                process.stdout.write(`[Pipe] ${data}`);
-                                terminal.innerHTML += '[Muxer] ' + data;
-                            });
-                            muxTerm.stderr.on('data', (data) => {
-                                process.stderr.write(`[Pipe] ${data}`);
-                                terminal.innerHTML += '[Pipe] ' + data;
-                                sessionStorage.setItem('progress', data);
-                            });
-                            muxTerm.on("close", () => {
-                                // finish up upscaling process
+                                // fix muxing audio into webm
+                                let webm = extension == ".webm";
+                                let webmFix = webm ? "-c:a libopus -b:a 192k" : "-codec copy";
+
+                                let out = sessionStorage.getItem('pipeOutPath');
+
+                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvmerge.exe");
+                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvpropedit.exe");
+
+                                if (extension == "Frame Sequence") {
+                                    fse.mkdirSync(path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now()));
+                                    terminal.innerHTML += `[enhancr] Exporting as frame sequence..\r\n`;
+                                    var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
+                                } else {
+                                    terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
+                                    if (extension == ".mp4" || extension == ".mov") {
+                                        var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
+                                    } else {
+                                        var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --set "writing-application=enhancr v${app.getVersion()} 64-bit"`
+                                    }
+                                }
+
+                                let muxTerm = spawn(muxCmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
+
+                                // merge stdout & stderr & write data to terminal
+                                process.stdout.write('');
+                                muxTerm.stdout.on('data', (data) => {
+                                    process.stdout.write(`[Pipe] ${data}`);
+                                    terminal.innerHTML += '[Muxer] ' + data;
+                                });
+                                muxTerm.stderr.on('data', (data) => {
+                                    process.stderr.write(`[Pipe] ${data}`);
+                                    terminal.innerHTML += '[Pipe] ' + data;
+                                    sessionStorage.setItem('progress', data);
+                                });
+                                muxTerm.on("close", () => {
+                                    // finish up upscaling process
+                                    terminal.innerHTML += `[enhancr] Completed upscaling`;
+                                    const upscalingBtnSpan = document.getElementById("upscaling-button-text");
+                                    var notification = new Notification("Upscaling completed", { icon: "./assets/enhancr.png", body: path.basename(file) });
+                                    sessionStorage.setItem('status', 'done');
+                                    ipcRenderer.send('rpc-done');
+                                    successTitle.innerHTML = path.basename(sessionStorage.getItem("upscaleInputPath"));
+                                    thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Date.now());
+                                    resolve();
+                                });
+                            } else {
                                 terminal.innerHTML += `[enhancr] Completed upscaling`;
-                                const upscalingBtnSpan = document.getElementById("upscaling-button-text");
-                                var notification = new Notification("Upscaling completed", { icon: "./assets/enhancr.png", body: path.basename(file) });
                                 sessionStorage.setItem('status', 'done');
                                 ipcRenderer.send('rpc-done');
-                                successTitle.innerHTML = path.basename(sessionStorage.getItem("upscaleInputPath"));
-                                thumbModal.src = path.join(appDataPath, '/.enhancr/thumbs/thumbUpscaling.png?' + Date.now());
                                 resolve();
-                            });
-                        } else {
-                            terminal.innerHTML += `[enhancr] Completed upscaling`;
-                            sessionStorage.setItem('status', 'done');
-                            ipcRenderer.send('rpc-done');
-                            resolve();
-                        }
+                            }
+                        });
                     });
-                });
+                }
+                await upscale();
             }
-            await upscale();
             // fse.emptyDirSync(cache);
             console.log("Cleared temporary files");
             // timeout for 2 seconds after upscale
