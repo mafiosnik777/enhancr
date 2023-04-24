@@ -28,6 +28,16 @@ if (process.platform == "win32" && !isWin11 || process.platform == "linux") {
     document.getElementById('profile-container').style.top = '9.3%';
     document.getElementById('close').style.top = '1%';
     document.getElementById('minimize').style.top = '2%';
+
+    // Window controls
+    const minimize = document.getElementById("minimize");
+    minimize.addEventListener("click", function () {
+        ipcRenderer.send("minimize-window");
+    });
+    const close = document.getElementById("close");
+    close.addEventListener("click", function () {
+        ipcRenderer.send("close-window");
+    });
 } else {
     winControls.style.visibility = "hidden";
 }

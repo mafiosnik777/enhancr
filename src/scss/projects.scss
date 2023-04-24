@@ -10,6 +10,24 @@ $macosblue: #1e5cce;
     }
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body > #win-controls {
+    padding-left: 1.5%;
+    padding-top: 1%;
+    -webkit-app-region: drag;
+    box-sizing: border-box;
+    display: flex;
+}
+
+body > #win-controls > i {
+    position: initial;
+    margin-right: 9px;
+}
+
 .project-side-container {
     position: absolute;
     background: rgba(0, 0, 0, 0.25);
