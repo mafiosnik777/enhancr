@@ -2361,15 +2361,27 @@ if (localStorage.getItem('pro') == 'false') {
     console.log('Adjusting UI for lite version..')
 
     document.getElementById('cain-trt').style.color = '#4f4f4f';
+    document.getElementById('cain-trt').style.pointerEvents = 'none';
     document.getElementById('rife-trt').style.color = '#4f4f4f';
+    document.getElementById('rife-trt').style.pointerEvents = 'none';
     document.getElementById('gmfss').style.color = '#4f4f4f';
+    document.getElementById('gmfss').style.pointerEvents = 'none';
     document.getElementById('gmfss-trt').style.color = '#4f4f4f';
+    document.getElementById('gmfss-trt').style.pointerEvents = 'none';
 
     document.getElementById('shufflecugan').style.color = '#4f4f4f';
+    document.getElementById('shufflecugan').style.pointerEvents = 'none';
     document.getElementById('realesrgan-tensorrt').style.color = '#4f4f4f';
+    document.getElementById('realesrgan-tensorrt').style.pointerEvents = 'none';
     document.getElementById('realcugan-tensorrt').style.color = '#4f4f4f';
+    document.getElementById('realcugan-tensorrt').style.pointerEvents = 'none';
     document.getElementById('swinir').style.color = '#4f4f4f';
+    document.getElementById('swinir').style.pointerEvents = 'none';
 
     document.getElementById('dpir').style.color = '#4f4f4f';
+    document.getElementById('dpir').style.pointerEvents = 'none';
     document.getElementById('anime-video').style.color = '#4f4f4f';
+    document.getElementById('anime-video').style.pointerEvents = 'none';
+
+    document.getElementById('pro-badge-user').style.visibility = 'hidden';
 }

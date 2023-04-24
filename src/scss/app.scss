@@ -100,6 +100,61 @@ body {
   background-color: #1c73d333;
 }
 
+.pro-badge {
+  font-weight: 600;
+  position: absolute;
+  right: 2%;
+}
+
+#pro-badge-cain {
+    top: 20%;
+}
+
+#pro-badge-rife {
+  top: 52%;
+}
+
+#pro-badge-gmfss {
+  top: 69%;
+}
+
+#pro-badge-gmfss-trt {
+  top: 85%;
+}
+
+#pro-badge-shufflecugan {
+  top: 21%;
+}
+
+#pro-badge-esrgan {
+  top: 52%;
+}
+
+#pro-badge-cugan {
+  top: 68%;
+}
+
+#pro-badge-swinir {
+  top: 84%;
+}
+
+#pro-badge-dpir {
+  top: 8%;
+}
+
+#pro-badge-animevideo {
+  top: 70%;
+}
+
+#pro-badge-user {
+  font-size: 5pt;
+  font-weight: 500;
+  right: 1%;
+  position: absolute;
+  z-index: 69;
+  top: 57%;
+}
+
 .theme-side {
   &:hover {
     color: var(--side-hover) !important;

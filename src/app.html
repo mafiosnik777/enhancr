@@ -47,6 +47,7 @@
             id="queue-badge">0</span></div>
         <i id="enhancr-user" class="fa-solid fa-circle-user"></i>
         <img src="" id="patreon-user-img">
+        <span id="pro-badge-user"><i class="fa-solid fa-crown" style="color: orange;"></i></span>
       </div>
     </div>
     <!-- Side bar -->
@@ -127,10 +128,14 @@
     <div id="engine-dropdown">
       <div class="option" id="cain">Channel Attention - CAIN (NCNN)</div>
       <div class="option" id="cain-trt">Channel Attention - CAIN (TensorRT)</div>
+      <span id="pro-badge-cain" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
       <div class="option" id="rife">Optical Flow - RIFE (NCNN)</div>
       <div class="option" id="rife-trt">Optical Flow - RIFE (TensorRT)</div>
+      <span id="pro-badge-rife" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
       <div class="option" id="gmfss">GMFlow - GMFSS (PyTorch)</div>
+      <span id="pro-badge-gmfss" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
       <div class="option" id="gmfss-trt">GMFlow - GMFSS (TensorRT)</div>
+      <span id="pro-badge-gmfss-trt" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
     </div>
     <div id="model-dropdown">
       <div class="option" id="rife-23">RIFE - v2.3</div>
@@ -194,11 +199,15 @@
         </div>
         <div id="engine-dropdown-upscale">
           <div class="option" id="shufflecugan-ncnn">Upscaling - ShuffleCUGAN (NCNN)</div>
+          <span id="pro-badge-shufflecugan" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
           <div class="option" id="shufflecugan">Upscaling - ShuffleCUGAN (TensorRT)</div>
           <div class="option" id="realesrgan-ncnn">Upscaling - RealESRGAN (NCNN)</div>
           <div class="option" id="realesrgan-tensorrt">Upscaling - RealESRGAN (TensorRT)</div>
+          <span id="pro-badge-esrgan" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
           <div class="option" id="realcugan-tensorrt">Upscaling - RealCUGAN (TensorRT)</div>
+          <span id="pro-badge-cugan" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
           <div class="option" id="swinir">Upscaling - SwinIR (PyTorch)</div>
+          <span id="pro-badge-swinir" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
         </div>
         <div id="factor-dropdown">
           <div class="option" id="factor2">2x</div>
@@ -272,8 +281,10 @@
     </div>
     <div id="engine-dropdown-restoration">
       <div class="option" id="dpir">Restoration - DPIR (TensorRT)</div>
+      <span id="pro-badge-dpir" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
       <div class="option" id="anime-video-ncnn">Restoration - RealESRGAN (1x) (NCNN)</div>
       <div class="option" id="anime-video">Restoration - RealESRGAN (1x) (TensorRT)</div>
+      <span id="pro-badge-animevideo" class="pro-badge">PRO <i class="fa-solid fa-crown" style="color: orange;"></i></span>
     </div>
     <div id="model-dropdown-restoration">
       <div class="option" id="denoise">Denoise</div>
@@ -359,7 +370,7 @@
                 high-resolution media</span></i></span></li>
       </ul>
       <ul style="list-style-type:none;" id="interpolation-settings-list" class="animate__animated animate__fadeIn">
-        <div id="interpolation-settings-side">Inference</div>
+        <div id="interpolation-settings-side">Options</div>
         <li><input type="checkbox" id="sc-check" /><span> Enable Scene Detection <i id="preview-question"
               class="fa-solid fa-circle-question"><span class="tooltip-text" id="sc-question">Skips inference on
                 scene change frames to mitigate artifacts (Interpolation only)
