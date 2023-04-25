@@ -59,10 +59,10 @@ out_tile_width = clip.width * 2
 
 ncnn_shape_hint = (in_tile_channels, in_tile_height, in_tile_width, out_tile_channels, out_tile_height, out_tile_width)
 
-if fp16 == False:
-    upscaled = core.ncnn.Model(clip, network_path=engine, num_streams=threading(), fp16=True, use_ncnn_network_format=True, ncnn_shape_hint=ncnn_shape_hint)
+if tiling == True:
+    upscaled = core.ncnn.Model(clip, network_path=engine, num_streams=threading(), fp16=fp16, use_ncnn_network_format=True, ncnn_shape_hint=ncnn_shape_hint)
 else:
-    upscaled = core.ncnn.Model(clip, network_path=engine, num_streams=threading(), fp16=False, use_ncnn_network_format=True, ncnn_shape_hint=ncnn_shape_hint)
+    upscaled = core.ncnn.Model(clip, network_path=engine, num_streams=threading(), fp16=fp16, use_ncnn_network_format=True, ncnn_shape_hint=ncnn_shape_hint, tilesize=[tileHeight, tileWidth])
 
 if frameskip:
     metric_thresh = 0.999
