@@ -109,6 +109,14 @@ class Upscaling {
                 };
             }
 
+            // scan media for subtitles
+            const subsPath = path.join(cache, "subs.ass");
+            try {
+                execSync(`${ffmpeg} -y -loglevel error -i "${file}" -c:s copy ${subsPath}`);
+            } catch (err) {
+                //ignore
+            };
+
             //get trtexec path
             function getTrtExecPath() {
                 return !isPackaged ? path.join(__dirname, '..', "/env/python/Library/bin/trtexec.exe") : path.join(process.resourcesPath, "/env/python/Library/bin/trtexec.exe")
