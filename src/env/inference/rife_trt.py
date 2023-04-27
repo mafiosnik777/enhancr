@@ -32,16 +32,21 @@ def rife_trt(
     terminal = clip.std.DuplicateFrames(frames=clip.num_frames - 1).std.Trim(first=1)
     terminal = core.std.Interleave([terminal] * (multi - 1))
 
+    if check_model_precision_trt(engine) == "float32":
+        grayPrecision = vs.GRAYS
+    else:
+        grayPrecision = vs.GRAYH
+
     timepoint = core.std.Interleave(
         [
-            clip.std.BlankClip(format=vs.GRAYS, color=i / multi, length=1)
+            clip.std.BlankClip(format=grayPrecision, color=i / multi, length=1)
             for i in range(1, multi)
         ]
     ).std.Loop(clip.num_frames)
 
     scale = core.std.Interleave(
         [
-            clip.std.BlankClip(format=vs.GRAYS, color=scale, length=1)
+            clip.std.BlankClip(format=grayPrecision, color=scale, length=1)
             for i in range(1, multi)
         ]
     ).std.Loop(clip.num_frames)
