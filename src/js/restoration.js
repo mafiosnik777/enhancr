@@ -186,8 +186,18 @@ class Restoration {
             let fp = floatingPoint ? "fp16" : "fp32";
 
             let shapeOverride = document.getElementById('shape-check').checked;
-            let shapeDimensionsMax = shapeOverride ? document.getElementById('shape-res').value : '1080x1920';
-            let shapeDimensionsOpt = Math.ceil(parseInt(shapeDimensionsMax.split('x')[0]) / 2) + 'x' + Math.ceil(parseInt(shapeDimensionsMax.split('x')[1]) / 2);
+            let shapeDimensionsMax = shapeOverride ? document.getElementById('shape-res').value : '1088x1920';
+            let shapeDimensionsMaxSplit = shapeDimensionsMax.split('x');
+            let shapeWidth = parseInt(shapeDimensionsMaxSplit[0]);
+            let shapeHeight = parseInt(shapeDimensionsMaxSplit[1]);
+
+            let halfWidth = Math.ceil(shapeWidth / 2);
+            let halfHeight = Math.ceil(shapeHeight / 2);
+
+            let adjustedWidth = Math.floor(halfWidth / 8) * 8;
+            let adjustedHeight = Math.floor(halfHeight / 8) * 8;
+
+            let shapeDimensionsOpt = adjustedHeight + 'x' + adjustedWidth;
 
             // get engine path
             function getEnginePath() {

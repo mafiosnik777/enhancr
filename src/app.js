@@ -26,7 +26,7 @@ const createDirs = [
 ];
 
 const devMode = !app.isPackaged;
-const pro = false;
+const pro = true;
 
 const appDataPath = path.resolve(appDataPaths[process.platform], '.enhancr');
 const settingsPath = path.resolve(appDataPath, 'settings.json');
