@@ -230,9 +230,9 @@ class Interpolation {
                             var optShapes = ``
                         }
                         if (fp16) {
-                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${optShapes} --inputIOFormats=fp16:chw --outputIOFormats=fp16:chw --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
+                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${optShapes} --inputIOFormats=fp16:chw --outputIOFormats=fp16:chw --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
                         } else {
-                            var engineCmd = `"${trtexec}" --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805`;
+                            var engineCmd = `"${trtexec}" --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
                         }
                         let engineTerm = spawn(engineCmd, [], {
                             shell: true,
