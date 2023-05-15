@@ -220,11 +220,11 @@ def cuda_kernel(strFunction:str, strKernel:str, objVariables:typing.Dict):
 def cuda_launch(strKey:str):
     if 'CUDA_HOME' not in os.environ:
         os.environ['CUDA_HOME'] = cupy.cuda.get_cuda_path()
-    # end
+    
+    options = ('-I ' + os.environ['CUDA_HOME'], '-I ' + os.environ['CUDA_HOME'] + '/include')
+    module = cupy.RawModule(code=objCudacache[strKey]['strKernel'], options=options)
 
-    return cupy.cuda.compile_with_cache(objCudacache[strKey]['strKernel'], tuple(['-I ' + os.environ['CUDA_HOME'], '-I ' + os.environ['CUDA_HOME'] + '/include'])).get_function(objCudacache[strKey]['strFunction'])
-# end
-
+    return module.get_function(objCudacache[strKey]['strFunction'])
 
 ##########################################################
 
