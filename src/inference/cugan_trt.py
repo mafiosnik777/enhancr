@@ -39,7 +39,7 @@ def threading():
 core.num_threads = cpu_count() / 2
 
 cwd = os.getcwd()
-vsmlrt_path = os.path.join(cwd, '..', 'python', 'Library', 'vstrt.dll')
+vsmlrt_path = os.path.join(cwd, '..', 'external', 'python', 'vstrt.dll')
 core.std.LoadPlugin(path=vsmlrt_path)
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
@@ -70,13 +70,13 @@ else:
 if frameskip:
     metric_thresh = 0.999
     partial = functools.partial(execute, upscaled=upscaled, metric_thresh=metric_thresh)
-    upscaled = core.std.FrameEval(core.std.BlankClip(clip=upscaled, width=upscaled.width, height=upscaled.height), partial, prop_src=[clip])
+    clip = core.std.FrameEval(core.std.BlankClip(clip=upscaled, width=upscaled.width, height=upscaled.height), partial, prop_src=[clip])
 
 # padding if clip dimensions aren't divisble by 2
 if (upscaled.height % 2 != 0):
     upscaled = core.std.AddBorders(upscaled, bottom=1)
     
-if (upscaled.width % 2 != 0):
+if (clip.width % 2 != 0):
     upscaled = core.std.AddBorders(upscaled, right=1)
 
 clip = vs.core.resize.Bicubic(upscaled, format=vs.YUV420P8, matrix_s="709")

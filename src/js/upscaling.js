@@ -48,7 +48,7 @@ const preview = document.getElementById('preview-check');
 
 sessionStorage.setItem('stopped', 'false');
 
-const trtVersion = '8.6.0';
+const trtVersion = '8.6.1';
 
 class Upscaling {
     static async process(scale, dimensions, file, output, params, extension, engine, fileOut, index) {
@@ -96,7 +96,7 @@ class Upscaling {
 
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for upscaling process..';
 
-            const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
+            const ffmpeg = !isPackaged ? path.join(__dirname, '..', "external/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "external/ffmpeg/ffmpeg.exe");
 
             // convert gif to video
             const gifVideoPath = path.join(cache, path.parse(file).name + ".mkv");
@@ -119,7 +119,7 @@ class Upscaling {
 
             //get trtexec path
             function getTrtExecPath() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/python/Library/bin/trtexec.exe") : path.join(process.resourcesPath, "/env/python/Library/bin/trtexec.exe")
+                return !isPackaged ? path.join(__dirname, '..', "/external/python/bin/trtexec.exe") : path.join(process.resourcesPath, "/external/python/bin/trtexec.exe")
             }
             let trtexec = getTrtExecPath();
 
@@ -128,7 +128,7 @@ class Upscaling {
 
             //get conversion script
             function getConversionScript() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/utils/convert_model_esrgan.py") : path.join(process.resourcesPath, "/env/utils/convert_model_esrgan.py")
+                return !isPackaged ? path.join(__dirname, '..', "/utils/convert_model_esrgan.py") : path.join(process.resourcesPath, "/utils/convert_model_esrgan.py")
             }
             let convertModel = getConversionScript();
 
@@ -139,12 +139,12 @@ class Upscaling {
 
             //get python path
             function getPythonPath() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/python/python.exe") : path.join(process.resourcesPath, "/env/python/python.exe");
+                return !isPackaged ? path.join(__dirname, '..', "/external/python/python.exe") : path.join(process.resourcesPath, "/external/python/python.exe");
             }
             let python = getPythonPath();
 
             // inject env hook
-            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"`;
+            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_auto_activate.bat")}"`;
 
             // convert pth to onnx
             if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth" && (engine == "Upscaling - RealESRGAN (TensorRT)" || engine == "Upscaling - RealESRGAN (NCNN)")) {
@@ -175,24 +175,24 @@ class Upscaling {
             function getOnnxPath() {
                 if (!(document.getElementById('custom-model-check').checked) && engine == 'Upscaling - RealESRGAN (TensorRT)') {
                     if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3_fp16.onnx");
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3_fp16.onnx");
                     } else {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                     }
                 } else if (engine == 'Upscaling - RealCUGAN (TensorRT)') {
                     if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x_fp16.onnx");
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x_fp16.onnx");
                     } else {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx");
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x.onnx");
                     }
                 } else if (engine == 'Upscaling - ShuffleCUGAN (TensorRT)') {
                     if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan_fp16.onnx");
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan_fp16.onnx");
                     } else {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx");
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx");
                     }
                 } else if (engine == 'Upscaling - ShuffleCUGAN (NCNN)') {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin");
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin");
                 } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (NCNN)') {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
@@ -215,7 +215,7 @@ class Upscaling {
             function getEnginePath() {
                 if (engine == "Upscaling - RealESRGAN (NCNN)") {
                     if (!(document.getElementById('custom-model-check').checked)) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
                     } else if (path.extname(customModel) != ".pth") {
                         return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     } else {
@@ -229,7 +229,7 @@ class Upscaling {
             sessionStorage.setItem('engineOut', engineOut);
 
             const getOnnxPrecisionScript = () => {
-                return !isPackaged ? path.join(__dirname, '..', "/env/inference/utils/onnx_precision.py") : path.join(process.resourcesPath, "/env/inference/utils/onnx_precision.py")
+                return !isPackaged ? path.join(__dirname, '..', "/inference/utils/onnx_precision.py") : path.join(process.resourcesPath, "/inference/utils/onnx_precision.py")
             }
 
             let ioPrecision = () => {
@@ -366,22 +366,22 @@ class Upscaling {
             // determine ai engine
             function pickEngine() {
                 if (engine == "Upscaling - RealESRGAN (NCNN)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/esrgan_ncnn.py") : path.join(process.resourcesPath, "/env/inference/esrgan_ncnn.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/esrgan_ncnn.py") : path.join(process.resourcesPath, "/inference/esrgan_ncnn.py");
                 }
                 if (engine == "Upscaling - RealESRGAN (TensorRT)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/esrgan.py") : path.join(process.resourcesPath, "/env/inference/esrgan.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/esrgan.py") : path.join(process.resourcesPath, "/inference/esrgan.py");
                 }
                 if (engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/shufflecugan.py") : path.join(process.resourcesPath, "/env/inference/shufflecugan.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/shufflecugan.py") : path.join(process.resourcesPath, "/inference/shufflecugan.py");
                 }
                 if (engine == "Upscaling - ShuffleCUGAN (NCNN)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/shufflecugan_ncnn.py") : path.join(process.resourcesPath, "/env/inference/shufflecugan_ncnn.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/shufflecugan_ncnn.py") : path.join(process.resourcesPath, "/inference/shufflecugan_ncnn.py");
                 }
                 if (engine == "Upscaling - RealCUGAN (TensorRT)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/cugan_trt.py") : path.join(process.resourcesPath, "/env/inference/cugan_trt.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/cugan_trt.py") : path.join(process.resourcesPath, "/inference/cugan_trt.py");
                 }
                 if (engine == "Upscaling - SwinIR (PyTorch)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/swinir.py") : path.join(process.resourcesPath, "/env/inference/swinir.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/swinir.py") : path.join(process.resourcesPath, "/inference/swinir.py");
                 }
             }
             var engine = pickEngine();
@@ -392,7 +392,7 @@ class Upscaling {
                     if (document.getElementById('python-check').checked) {
                         return "vspipe"
                     } else {
-                        return !isPackaged ? path.join(__dirname, '..', "\\env\\python\\VSPipe.exe") : path.join(process.resourcesPath, "\\env\\python\\VSPipe.exe");
+                        return !isPackaged ? path.join(__dirname, '..', "\\external\\python\\VSPipe.exe") : path.join(process.resourcesPath, "\\external\\python\\VSPipe.exe");
                     }
                 }
                 if (process.platform == "linux") {
@@ -416,7 +416,7 @@ class Upscaling {
             let height = getHeight();
 
             let mpv = () => {
-                return !isPackaged ? path.join(__dirname, '..', "\\env\\mpv\\enhancr-mpv.exe") : path.join(process.resourcesPath, "\\env\\mpv\\enhancr-mpv.exe")
+                return !isPackaged ? path.join(__dirname, '..', "\\external\\mpv\\enhancr-mpv.exe") : path.join(process.resourcesPath, "\\external\\mpv\\enhancr-mpv.exe")
             }
 
             let mpvTitle = `enhancr - ${path.basename(sessionStorage.getItem("pipeOutPath"))} [${localStorage.getItem('gpu').split("GPU: ")[1]}]`
@@ -474,7 +474,7 @@ class Upscaling {
                                 sessionStorage.setItem('status', 'done');
                                 resolve();
                             } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
-                                terminal.innerHTML += `[enhancr] Finishing up upscaling..\r\n`;
+                                terminal.innerHTML += `\r\n[enhancr] Finishing up upscaling..\r\n`;
 
                                 // fix audio loss when muxing mkv
                                 let mkv = extension == ".mkv";
@@ -486,8 +486,8 @@ class Upscaling {
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
-                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvmerge.exe");
-                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvpropedit.exe");
+                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "external/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "external/mkvtoolnix/mkvmerge.exe");
+                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "external/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "external/mkvtoolnix/mkvpropedit.exe");
 
                                 if (extension == "Frame Sequence") {
                                     fse.mkdirSync(path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now()));

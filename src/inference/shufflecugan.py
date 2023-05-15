@@ -39,7 +39,7 @@ def threading():
 core.num_threads = cpu_count() / 2
 
 cwd = os.getcwd()
-vsmlrt_path = os.path.join(cwd, '..', 'python', 'Library', 'vstrt.dll')
+vsmlrt_path = os.path.join(cwd, '..', 'external', 'python', 'vstrt.dll')
 core.std.LoadPlugin(path=vsmlrt_path)
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
@@ -57,9 +57,9 @@ offs1 = core.std.CopyFrameProps(offs1, clip)
 clip = core.vmaf.Metric(clip, offs1, 2)
 
 if check_model_precision_trt(engine) == "float32":
-    clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
+    clip = vs.core.resize.Spline64(clip, format=vs.RGBS, matrix_in_s="709", transfer_in_s="linear")
 else:
-    clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
+    clip = vs.core.resize.Spline64(clip, format=vs.RGBH, matrix_in_s="709", transfer_in_s="linear")
     print("Using fp16 i/o for inference", file=sys.stderr)
 
 if tiling == False:
@@ -70,12 +70,12 @@ else:
 if frameskip:
     metric_thresh = 0.999
     partial = functools.partial(execute, upscaled=upscaled, metric_thresh=metric_thresh)
-    clip = core.std.FrameEval(core.std.BlankClip(clip=upscaled, width=upscaled.width, height=upscaled.height), partial, prop_src=[clip])
+    upscaled = core.std.FrameEval(core.std.BlankClip(clip=upscaled, width=upscaled.width, height=upscaled.height), partial, prop_src=[clip])
 
 # padding if clip dimensions aren't divisble by 2
 if (upscaled.height % 2 != 0):
     upscaled = core.std.AddBorders(upscaled, bottom=1)
-
+    
 if (upscaled.width % 2 != 0):
     upscaled = core.std.AddBorders(upscaled, right=1)
 

@@ -54,8 +54,8 @@ module.exports = {
             );
         },
         postMake:  () => {
-            const pythonDir = './src/env/'
-            const targetDir = './out/enhancr-win32-x64/resources/env'
+            const pythonDir = './src/external/'
+            const targetDir = './out/enhancr-win32-x64/resources/external'
             fs.copySync(pythonDir, targetDir);
         }
     },

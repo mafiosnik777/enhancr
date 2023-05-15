@@ -8,7 +8,7 @@ upload.json
 
 __pycache__
 
-src/env/ffmpeg/*
+src/external/ffmpeg/*
 
 *-error.log
 

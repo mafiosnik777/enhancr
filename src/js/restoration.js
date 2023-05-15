@@ -48,7 +48,7 @@ const preview = document.getElementById('preview-check');
 
 sessionStorage.setItem('stopped', 'false');
 
-const trtVersion = '8.6.0';
+const trtVersion = '8.6.1';
 
 class Restoration {
     static async process(file, model, output, params, extension, engine, fileOut, index) {
@@ -96,7 +96,7 @@ class Restoration {
 
             terminal.innerHTML += '\r\n' + enhancrPrefix + ' Preparing media for restoration process..';
 
-            const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
+            const ffmpeg = !isPackaged ? path.join(__dirname, '..', "external/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "external/ffmpeg/ffmpeg.exe");
 
             // convert gif to video
             const gifVideoPath = path.join(cache, path.parse(file).name + ".mkv");
@@ -119,19 +119,19 @@ class Restoration {
 
             //get trtexec path
             function getTrtExecPath() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/python/Library/bin/trtexec.exe") : path.join(process.resourcesPath, "/env/python/Library/bin/trtexec.exe")
+                return !isPackaged ? path.join(__dirname, '..', "/external/python/bin/trtexec.exe") : path.join(process.resourcesPath, "/external/python/bin/trtexec.exe")
             }
             let trtexec = getTrtExecPath();
 
             //get python path
             function getPythonPath() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/python/python.exe") : path.join(process.resourcesPath, "/env/python/python.exe");
+                return !isPackaged ? path.join(__dirname, '..', "/external/python/python.exe") : path.join(process.resourcesPath, "/external/python/python.exe");
             }
             let python = getPythonPath();
 
             //get conversion script
             function getConversionScript() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/utils/convert_model_esrgan.py") : path.join(process.resourcesPath, "/env/utils/convert_model_esrgan.py")
+                return !isPackaged ? path.join(__dirname, '..', "/external/utils/convert_model_esrgan.py") : path.join(process.resourcesPath, "/external/utils/convert_model_esrgan.py")
             }
             let convertModel = getConversionScript();
 
@@ -164,13 +164,13 @@ class Restoration {
             //get onnx input path
             function getOnnxPath() {
                 if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Denoise') {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx")
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx")
                 } else if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Deblock') {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx")
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx")
                 } else if (engine == 'Restoration - RealESRGAN (1x) (TensorRT)' && !(document.getElementById('custom-model-check').checked)) {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
                 } else if (engine == 'Restoration - RealESRGAN (1x) (NCNN)' && !(document.getElementById('custom-model-check').checked)) {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
                 } else {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
@@ -203,7 +203,7 @@ class Restoration {
             function getEnginePath() {
                 if (engine == 'Restoration - RealESRGAN (1x) (NCNN)') {
                     if (!(document.getElementById('custom-model-check').checked)) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
                     } else {
                         return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     }
@@ -222,7 +222,7 @@ class Restoration {
             }
 
             const getOnnxPrecisionScript = () => {
-                return !isPackaged ? path.join(__dirname, '..', "/env/inference/utils/onnx_precision.py") : path.join(process.resourcesPath, "/env/inference/utils/onnx_precision.py")
+                return !isPackaged ? path.join(__dirname, '..', "inference/utils/onnx_precision.py") : path.join(process.resourcesPath, "inference/utils/onnx_precision.py")
             }
 
             let ioPrecision = () => {
@@ -361,13 +361,13 @@ class Restoration {
             // determine ai engine
             function pickEngine() {
                 if (engine == "Restoration - DPIR (TensorRT)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/dpir.py") : path.join(process.resourcesPath, "/env/inference/dpir.py")
+                    return !isPackaged ? path.join(__dirname, '..', "inference/dpir.py") : path.join(process.resourcesPath, "inference/dpir.py")
                 }
                 if (engine == "Restoration - RealESRGAN (1x) (TensorRT)") {
-                    return !isPackaged ? path.join(__dirname, '..', "env/inference/esrgan.py") : path.join(process.resourcesPath, "/env/inference/esrgan.py")
+                    return !isPackaged ? path.join(__dirname, '..', "inference/esrgan.py") : path.join(process.resourcesPath, "inference/esrgan.py")
                 }
                 if (engine == "Restoration - RealESRGAN (1x) (NCNN)") {
-                    return !isPackaged ? path.join(__dirname, '..', "env/inference/esrgan_ncnn.py") : path.join(process.resourcesPath, "/env/inference/esrgan_ncnn.py")
+                    return !isPackaged ? path.join(__dirname, '..', "inference/esrgan_ncnn.py") : path.join(process.resourcesPath, "inference/esrgan_ncnn.py")
                 }
             }
             var engine = pickEngine();
@@ -378,7 +378,7 @@ class Restoration {
                     if (document.getElementById('python-check').checked) {
                         return "vspipe"
                     } else {
-                        return !isPackaged ? path.join(__dirname, '..', "\\env\\python\\VSPipe.exe") : path.join(process.resourcesPath, "\\env\\python\\VSPipe.exe");
+                        return !isPackaged ? path.join(__dirname, '..', "\\external\\python\\VSPipe.exe") : path.join(process.resourcesPath, "\\external\\python\\VSPipe.exe");
                     }
                 }
                 if (process.platform == "linux") {
@@ -404,10 +404,10 @@ class Restoration {
             let height = getHeight();
 
             // inject env hook
-            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"`;
+            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_auto_activate.bat")}"`;
 
             let mpv = () => {
-                return !isPackaged ? path.join(__dirname, '..', "\\env\\mpv\\enhancr-mpv.exe") : path.join(process.resourcesPath, "\\env\\mpv\\enhancr-mpv.exe")
+                return !isPackaged ? path.join(__dirname, '..', "\\external\\mpv\\enhancr-mpv.exe") : path.join(process.resourcesPath, "\\external\\mpv\\enhancr-mpv.exe")
             }
 
             let mpvTitle = `enhancr - ${path.basename(sessionStorage.getItem("pipeOutPath"))} [${localStorage.getItem('gpu').split("GPU: ")[1]}]`
@@ -467,7 +467,7 @@ class Restoration {
                                 sessionStorage.setItem('status', 'done');
                                 resolve();
                             } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
-                                terminal.innerHTML += `[enhancr] Finishing up restoration..\r\n`;
+                                terminal.innerHTML += `\r\n[enhancr] Finishing up restoration..\r\n`;
                                 terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
 
                                 // fix audio loss when muxing mkv
@@ -480,8 +480,8 @@ class Restoration {
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
-                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvmerge.exe");
-                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvpropedit.exe");
+                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "external/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "external/mkvtoolnix/mkvmerge.exe");
+                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "external/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "external/mkvtoolnix/mkvpropedit.exe");
 
                                 if (extension == "Frame Sequence") {
                                     fse.mkdirSync(path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now()));

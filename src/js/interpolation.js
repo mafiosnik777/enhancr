@@ -30,7 +30,7 @@ const preview = document.getElementById('preview-check');
 
 sessionStorage.setItem('stopped', 'false');
 
-const trtVersion = '8.6.0';
+const trtVersion = '8.6.1';
 
 class Interpolation {
     static async process(file, model, output, params, extension, engine, dimensions, fileOut, index) {
@@ -76,7 +76,7 @@ class Interpolation {
                 fse.mkdirSync(previewPath);
             };
 
-            const ffmpeg = !isPackaged ? path.join(__dirname, '..', "env/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "env/ffmpeg/ffmpeg.exe");
+            const ffmpeg = !isPackaged ? path.join(__dirname, '..', "external/ffmpeg/ffmpeg.exe") : path.join(process.resourcesPath, "external/ffmpeg/ffmpeg.exe");
 
             // convert gif to video
             const gifVideoPath = path.join(cache, path.parse(file).name + ".mkv");
@@ -99,7 +99,7 @@ class Interpolation {
 
             //get trtexec path
             function getTrtExecPath() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/python/Library/bin/trtexec.exe") : path.join(process.resourcesPath, "/env/python/Library/bin/trtexec.exe")
+                return !isPackaged ? path.join(__dirname, '..', "/external/python/bin/trtexec.exe") : path.join(process.resourcesPath, "/external/python/bin/trtexec.exe")
             }
             let trtexec = getTrtExecPath();
 
@@ -121,7 +121,7 @@ class Interpolation {
 
             //get python path
             function getPythonPath() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/python/python.exe") : path.join(process.resourcesPath, "/env/python/python.exe");
+                return !isPackaged ? path.join(__dirname, '..', "/external/python/python.exe") : path.join(process.resourcesPath, "/external/python/python.exe");
             }
             let python = getPythonPath();
 
@@ -147,22 +147,22 @@ class Interpolation {
 
             //get conversion script
             function getConversionScript() {
-                return !isPackaged ? path.join(__dirname, '..', "/env/utils/convert_model_rvpv2.py") : path.join(process.resourcesPath, "/env/utils/convert_model_rvpv2.py")
+                return !isPackaged ? path.join(__dirname, '..', "/external/utils/convert_model_rvpv2.py") : path.join(process.resourcesPath, "/external/utils/convert_model_rvpv2.py")
             }
             let convertModel = getConversionScript();
 
             function getOnnx() {
                 if (model == 'RVP - v1.0') {
                     if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx")
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx")
                     } else {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx")
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx")
                     }
                 } else if (model == 'CVP - v6.0') {
                     if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx")
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx")
                     } else {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx")
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx")
                     }
                 } else {
                     return path.join(cache, 'rvpv2.onnx');
@@ -185,7 +185,7 @@ class Interpolation {
             }
 
             // inject env hook
-            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\env\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\env\\python\\condabin\\conda_auto_activate.bat")}"`
+            let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_auto_activate.bat")}"`
 
             // rvpv2 model conversion (pth -> onnx)
             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)' && model == 'RVP - v2.0') {
@@ -193,7 +193,7 @@ class Interpolation {
 
                 function convertToOnnx() {
                     return new Promise(function(resolve) {
-                        let rvpv2Model = !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth");
+                        let rvpv2Model = !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth");
                         var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${rvpv2Model}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height} --fp16=${fp16Onnx()}`;
                         console.log(convertCmd);
                         let convertTerm = spawn(convertCmd, [], {
@@ -261,15 +261,15 @@ class Interpolation {
             function getRifeOnnx() {
                 if (document.getElementById('rife-tta-check').checked) {
                     if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx")
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue_fp16.onnx")
                     } else {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx")
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleTrue.onnx")
                     }
                 } else {
                     if (fp16) {
-                        return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx")
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse_fp16.onnx")
                     } else {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx") : path.join(process.resourcesPath, "/env/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx")
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/rife-trt/rife46_ensembleFalse.onnx")
                     }
                 }
             }
@@ -437,22 +437,23 @@ class Interpolation {
             // determine ai engine
             function pickEngine() {
                 if (engine == "Channel Attention - CAIN (TensorRT)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/cain_trt.py") : path.join(process.resourcesPath, "/env/inference/cain_trt.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/cain_trt.py") : path.join(process.resourcesPath, "/inference/cain_trt.py");
                 }
                 if (engine == "Channel Attention - CAIN (NCNN)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/cain.py") : path.join(process.resourcesPath, "/env/inference/cain.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/cain.py") : path.join(process.resourcesPath, "/inference/cain.py");
                 }
                 if (engine == "Optical Flow - RIFE (NCNN)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/rife.py") : path.join(process.resourcesPath, "/env/inference/rife.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/rife.py") : path.join(process.resourcesPath, "/inference/rife.py");
                 }
                 if (engine == "Optical Flow - RIFE (TensorRT)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/rife_trt.py") : path.join(process.resourcesPath, "/env/inference/rife_trt.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/rife_trt.py") : path.join(process.resourcesPath, "/inference/rife_trt.py");
                 }
                 if (engine == "GMFlow - GMFSS (PyTorch)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/gmfss.py") : path.join(process.resourcesPath, "/env/inference/gmfss.py");
+                    console.log(!isPackaged ? path.join(__dirname, '..', "/inference/gmfss.py") : path.join(process.resourcesPath, "/inference/gmfss.py"))
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/gmfss.py") : path.join(process.resourcesPath, "/inference/gmfss.py");
                 }
                 if (engine == "GMFlow - GMFSS (TensorRT)") {
-                    return !isPackaged ? path.join(__dirname, '..', "/env/inference/gmfss_trt.py") : path.join(process.resourcesPath, "/env/inference/gmfss_trt.py");
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/gmfss_trt.py") : path.join(process.resourcesPath, "/inference/gmfss_trt.py");
                 }
             }
             var engine = pickEngine();
@@ -463,7 +464,7 @@ class Interpolation {
                     if (document.getElementById('python-check').checked) {
                         return "vspipe"
                     } else {
-                        return !isPackaged ? path.join(__dirname, '..', "\\env\\python\\VSPipe.exe") : path.join(process.resourcesPath, "\\env\\python\\VSPipe.exe")
+                        return !isPackaged ? path.join(__dirname, '..', "\\external\\python\\VSPipe.exe") : path.join(process.resourcesPath, "\\external\\python\\VSPipe.exe")
                     }
                 }
                 if (process.platform == "linux") {
@@ -476,7 +477,7 @@ class Interpolation {
             let vspipe = pickVspipe();
 
             let mpv = () => {
-                return !isPackaged ? path.join(__dirname, '..', "\\env\\mpv\\enhancr-mpv.exe") : path.join(process.resourcesPath, "\\env\\mpv\\enhancr-mpv.exe")
+                return !isPackaged ? path.join(__dirname, '..', "\\external\\mpv\\enhancr-mpv.exe") : path.join(process.resourcesPath, "\\external\\mpv\\enhancr-mpv.exe")
             }
 
             let mpvTitle = `enhancr - ${path.basename(sessionStorage.getItem("pipeOutPath"))} [${localStorage.getItem('gpu').split("GPU: ")[1]}]`
@@ -537,7 +538,7 @@ class Interpolation {
                                 sessionStorage.setItem('status', 'done');
                                 resolve();
                             } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
-                                terminal.innerHTML += `[enhancr] Finishing up interpolation..\r\n`;
+                                terminal.innerHTML += `\r\n[enhancr] Finishing up interpolation..\r\n`;
 
                                 // fix audio loss when muxing mkv
                                 let mkv = extension == ".mkv";
@@ -549,8 +550,8 @@ class Interpolation {
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
-                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvmerge.exe");
-                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "env/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "env/mkvtoolnix/mkvpropedit.exe");
+                                const mkvmerge = !isPackaged ? path.join(__dirname, '..', "external/mkvtoolnix/mkvmerge.exe") : path.join(process.resourcesPath, "external/mkvtoolnix/mkvmerge.exe");
+                                const mkvpropedit = !isPackaged ? path.join(__dirname, '..', "external/mkvtoolnix/mkvpropedit.exe") : path.join(process.resourcesPath, "external/mkvtoolnix/mkvpropedit.exe");
 
                                 if (extension == "Frame Sequence") {
                                     fse.mkdirSync(path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now()));
