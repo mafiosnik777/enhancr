@@ -191,9 +191,15 @@ class Upscaling {
                     } else {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/shufflecugan/sudo_shufflecugan.onnx");
                     }
+                } else if (engine == 'Upscaling - SwinIR (TensorRT)') {
+                    if (fp16) {
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/swinir/swinir_bubble.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/swinir/swinir_bubble.onnx");
+                    } else {
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/swinir/swinir_bubble.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/swinir/swinir_bubble.onnx");
+                    }
                 } else if (engine == 'Upscaling - ShuffleCUGAN (NCNN)') {
                     return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/shufflecugan/shufflecugan.bin");
-                } else if (engine != 'Upscaling - SwinIR (PyTorch)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (NCNN)') {
+                } else if (engine != 'Upscaling - SwinIR (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - RealCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (TensorRT)' || engine != 'Upscaling - ShuffleCUGAN (NCNN)') {
                     terminal.innerHTML += '\r\n[enhancr] Using custom model: ' + customModel;
                     if (path.extname(customModel) == ".pth") {
                         return path.join(cache, path.parse(customModel).name + '.onnx');
@@ -211,6 +217,9 @@ class Upscaling {
             let shapeDimensionsMax = shapeOverride ? document.getElementById('shape-res').value : '1080x1920';
             let shapeDimensionsOpt = Math.ceil(parseInt(shapeDimensionsMax.split('x')[0]) / 2) + 'x' + Math.ceil(parseInt(shapeDimensionsMax.split('x')[1]) / 2);
 
+            var widthOpt = parseInt((dimensions).split(' x')[0]);
+            var heightOpt = parseInt(((dimensions).split('x ')[1]).split(' ')[0]);
+
             // get engine path
             function getEnginePath() {
                 if (engine == "Upscaling - RealESRGAN (NCNN)") {
@@ -221,6 +230,8 @@ class Upscaling {
                     } else {
                         return path.join(cache, path.parse(customModel).name + '.onnx');
                     }
+                } else if (engine == "Upscaling - SwinIR (TensorRT)") {
+                    return path.join(appDataPath, '/.enhancr/models/engine', `${path.parse(onnx).name}-${fp}_${heightOpt}x${widthOpt}_trt_${trtVersion}.engine`);
                 } else {
                     return path.join(appDataPath, '/.enhancr/models/engine', `${path.parse(onnx).name}-${fp}_${shapeDimensionsMax}_trt_${trtVersion}.engine`);
                 }
@@ -243,9 +254,38 @@ class Upscaling {
                 function convertToEngine() {
                     return new Promise(function(resolve) {
                         if (fp16.checked == true) {
-                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${ioPrecision()} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-kDISABLE_EXTERNAL_TACTIC_SOURCES_FOR_CORE_0805`;
+                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${ioPrecision()} --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
                         } else {
-                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-kDISABLE_EXTERNAL_TACTIC_SOURCES_FOR_CORE_0805`;
+                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x3x8x8 --optShapes=input:1x3x${shapeDimensionsOpt} --maxShapes=input:1x3x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
+                        }
+                        let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
+                        process.stdout.write('');
+                        term.stdout.on('data', (data) => {
+                            process.stdout.write(`${data}`);
+                            terminal.innerHTML += data;
+                        });
+                        term.stderr.on('data', (data) => {
+                            process.stderr.write(`${data}`);
+                            progressSpan.innerHTML = path.basename(file) + ' | Converting onnx to engine..';
+                            terminal.innerHTML += data;
+                        });
+                        term.on("close", () => {
+                            sessionStorage.setItem('conversion', 'success');
+                            resolve();
+                        });
+                    })
+                }
+                await convertToEngine();
+            }
+
+            // convert onnx to trt engine (SwinIR)
+            if (!fse.existsSync(engineOut) && engine == 'Upscaling - SwinIR (TensorRT)') {
+                function convertToEngine() {
+                    return new Promise(function(resolve) {
+                        if (fp16.checked == true) {
+                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${ioPrecision()} --optShapes=input:1x3x${heightOpt}x${widthOpt} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
+                        } else {
+                            var cmd = `"${trtexec}" --onnx="${onnx}" --optShapes=input:1x3x${heightOpt}x${widthOpt} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
@@ -349,7 +389,7 @@ class Upscaling {
                 model = "RealESRGAN"
             } else if (engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
-            } else if (engine == "Upscaling - SwinIR (PyTorch)") {
+            } else if (engine == "Upscaling - SwinIR (TensorRT)") {
                 model = "SwinIR"
             }
 
@@ -380,7 +420,7 @@ class Upscaling {
                 if (engine == "Upscaling - RealCUGAN (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/inference/cugan_trt.py") : path.join(process.resourcesPath, "/inference/cugan_trt.py");
                 }
-                if (engine == "Upscaling - SwinIR (PyTorch)") {
+                if (engine == "Upscaling - SwinIR (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/inference/swinir.py") : path.join(process.resourcesPath, "/inference/swinir.py");
                 }
             }

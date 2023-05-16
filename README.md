@@ -59,7 +59,7 @@ Please note that builds and an embeddable python environment for the **Pro** ver
 
 >**RealCUGAN (TensorRT)** - [bilibili](https://github.com/bilibili)/**[ailab/Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
->**SwinIR (PyTorch)** - [JingyunLiang](https://github.com/JingyunLiang)/**[SwinIR](https://github.com/JingyunLiang/SwinIR)** - powered by [HolyWu](https://github.com/HolyWu)/**[vs-swinir](https://github.com/HolyWu/vs-swinir)**
+>**SwinIR (TensorRT)** - [JingyunLiang](https://github.com/JingyunLiang)/**[SwinIR](https://github.com/JingyunLiang/SwinIR)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
 ## Restoration
 

@@ -1722,7 +1722,7 @@ realcuganOption.addEventListener("click", function () {
 
 // change engine (swinir)
 swinIROption.addEventListener("click", function () {
-    upscaleEngineText.textContent = "Upscaling - SwinIR (PyTorch)";
+    upscaleEngineText.textContent = "Upscaling - SwinIR (TensorRT)";
     hiderUpscale.style.visibility = "hidden";
     engineDropdownUpscale.style.visibility = "hidden";
     factor2.style.display = "block";

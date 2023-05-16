@@ -1,25 +1,22 @@
 # -*- coding: utf-8 -*-
 import os
 import sys
-import vapoursynth as vs
 import platform
 import tempfile
 import json
-import math
+import vapoursynth as vs
 import functools
 
-import torch
-
+from vapoursynth import core
 from multiprocessing import cpu_count
 
 # workaround for relative imports with embedded python
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
-from arch.vs_swinir import swinir
+from utils.trt_precision import check_model_precision_trt
 
 ossystem = platform.system()
-core = vs.core
 
 if ossystem == "Windows":
     tmp_dir = tempfile.gettempdir() + "\\enhancr\\"
@@ -30,8 +27,8 @@ else:
 with open(os.path.join(tmp), encoding='utf-8') as f:
     data = json.load(f)
     video_path = data['file']
+    engine = data['engine']
     streams = data['streams']
-    fp16 = data['fp16']
     tiling = data['tiling']
     frameskip = data['frameskip']
     tileHeight = int(data['tileHeight'])
@@ -41,7 +38,9 @@ def threading():
   return int(streams) if int(streams) < cpu_count() else cpu_count()
 core.num_threads = cpu_count() / 2
 
-engine_path = os.path.join(os.getenv('APPDATA'), '.enhancr', 'models', 'engine')
+cwd = os.getcwd()
+vsmlrt_path = os.path.join(cwd, '..', 'external', 'python', 'vstrt.dll')
+core.std.LoadPlugin(path=vsmlrt_path)
 
 clip = core.lsmas.LWLibavSource(source=f"{video_path}", cache=0)
 
@@ -57,23 +56,16 @@ offs1 = core.std.BlankClip(clip, length=1) + clip[:-1]
 offs1 = core.std.CopyFrameProps(offs1, clip)
 clip = core.vmaf.Metric(clip, offs1, 2)
 
-if fp16:
-    clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
-else:
+if check_model_precision_trt(engine) == "float32":
     clip = vs.core.resize.Bicubic(clip, format=vs.RGBS, matrix_in_s="709")
-
-def nvFuser():
-    total_memory = torch.cuda.get_device_properties(0).total_memory
-    vram_gb = total_memory / (1024**3)
-    if math.ceil(vram_gb) > 14:
-        return True
-    else:
-        return False
-
-if tiling:
-    upscaled = swinir(clip=clip, model=1, device_index=0, num_streams=int(streams), tile_w=tileWidth, tile_h=tileHeight, cuda_graphs=True, nvfuser=nvFuser())
 else:
-    upscaled = swinir(clip=clip, model=1, device_index=0, num_streams=int(streams), cuda_graphs=True, nvfuser=nvFuser())
+    clip = vs.core.resize.Bicubic(clip, format=vs.RGBH, matrix_in_s="709")
+    print("Using fp16 i/o for inference", file=sys.stderr)
+
+if tiling == False:
+    upscaled = core.trt.Model(clip, engine_path=engine, num_streams=threading())
+else:
+    upscaled = core.trt.Model(clip, engine_path=engine, num_streams=threading(), tilesize=[tileHeight, tileWidth])
 
 if frameskip:
     metric_thresh = 0.999
@@ -83,11 +75,11 @@ if frameskip:
 # padding if clip dimensions aren't divisble by 2
 if (upscaled.height % 2 != 0):
     upscaled = core.std.AddBorders(upscaled, bottom=1)
-    
+
 if (upscaled.width % 2 != 0):
     upscaled = core.std.AddBorders(upscaled, right=1)
 
-clip = vs.core.resize.Bicubic(upscaled, format=vs.YUV422P8, matrix_s="709")
+clip = vs.core.resize.Bicubic(upscaled, format=vs.YUV420P8, matrix_s="709")
 
 print("Starting video output | Threads: " + str(int(cpu_count() / 2)) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 clip.set_output()

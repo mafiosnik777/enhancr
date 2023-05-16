@@ -296,7 +296,7 @@ function renderQueueItem() {
                 model = "ShuffleCUGAN"
               } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
-              } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
+              } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
                 model = "SwinIR"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
@@ -416,7 +416,7 @@ function renderQueueItem() {
                       model = "ShuffleCUGAN"
                     } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                       model = "RealCUGAN"
-                    } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
+                    } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
                       model = "SwinIR"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
@@ -457,7 +457,7 @@ function renderQueueItem() {
                       model = "ShuffleCUGAN"
                     } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                       model = "RealCUGAN"
-                    } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
+                    } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
                     model = "SwinIR"
                     }
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
@@ -534,7 +534,7 @@ function renderQueueItem() {
                 model = "ShuffleCUGAN"
               } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
-              } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
+              } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
                 model = "SwinIR"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
@@ -611,7 +611,7 @@ function renderQueueItem() {
                 model = "ShuffleCUGAN"
               } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
-              } else if (queue[index].engine == "Upscaling - SwinIR (PyTorch)") {
+              } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
                 model = "SwinIR"
               }
               outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
