@@ -476,7 +476,7 @@ class Restoration {
 
                                 // fix muxing audio into webm
                                 let webm = extension == ".webm";
-                                let webmFix = webm ? "-c:a libopus -b:a 192k" : "-codec copy";
+                                let webmFix = webm ? "-c:a libopus -b:a 192k -c:v copy" : "-codec copy";
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
@@ -489,7 +489,7 @@ class Restoration {
                                     var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-                                    if (extension == ".mp4" || extension == ".mov") {
+                                    if (extension == ".mp4" || extension == ".mov" || extension == ".webm") {
                                         var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -c:s srt -dn ${mkvFix} ${webmFix} "${out}"`;
                                     } else {
                                         var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --set "writing-application=enhancr v${app.getVersion()} 64-bit"`

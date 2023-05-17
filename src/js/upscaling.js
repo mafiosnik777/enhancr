@@ -217,8 +217,8 @@ class Upscaling {
             let shapeDimensionsMax = shapeOverride ? document.getElementById('shape-res').value : '1080x1920';
             let shapeDimensionsOpt = Math.ceil(parseInt(shapeDimensionsMax.split('x')[0]) / 2) + 'x' + Math.ceil(parseInt(shapeDimensionsMax.split('x')[1]) / 2);
 
-            var widthOpt = parseInt((dimensions).split(' x')[0]);
-            var heightOpt = parseInt(((dimensions).split('x ')[1]).split(' ')[0]);
+            var widthOpt = shapeOverride ? (document.getElementById('shape-res').value).split('x')[1] : parseInt((dimensions).split(' x')[0]);
+            var heightOpt = shapeOverride ? (document.getElementById('shape-res').value).split('x')[0] : parseInt(((dimensions).split('x ')[1]).split(' ')[0]);
 
             // get engine path
             function getEnginePath() {
@@ -522,7 +522,7 @@ class Upscaling {
 
                                 // fix muxing audio into webm
                                 let webm = extension == ".webm";
-                                let webmFix = webm ? "-c:a libopus -b:a 192k" : "-codec copy";
+                                let webmFix = webm ? "-c:a libopus -b:a 192k -c:v copy" : "-codec copy";
 
                                 let out = sessionStorage.getItem('pipeOutPath');
 
@@ -535,7 +535,7 @@ class Upscaling {
                                     var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${tmpOutPath}" "${path.join(output, path.basename(sessionStorage.getItem("pipeOutPath")) + "-" + Date.now(), "output_frame_%04d.png")}"`;
                                 } else {
                                     terminal.innerHTML += `[enhancr] Muxing in streams..\r\n`;
-                                    if (extension == ".mp4" || extension == ".mov") {
+                                    if (extension == ".mp4" || extension == ".mov" || extension == ".webm") {
                                         var muxCmd = `"${ffmpeg}" -y -loglevel error -i "${file}" -i "${tmpOutPath}" -map 1? -map 0? -map -0:v -dn ${mkvFix} ${webmFix} "${out}"`;
                                     } else {
                                         var muxCmd = `"${mkvmerge}" --quiet -o "${out}" --no-video "${file}" "${tmpOutPath}" && "${mkvpropedit}" --quiet "${out}" --set "writing-application=enhancr v${app.getVersion()} 64-bit"`
