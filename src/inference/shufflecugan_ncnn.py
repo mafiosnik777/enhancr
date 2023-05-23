@@ -50,6 +50,23 @@ clip = core.vmaf.Metric(clip, offs1, 2)
 
 clip = vs.core.resize.Spline64(clip, format=vs.RGBS, matrix_in_s="709", transfer_in_s="linear")
 
+# ncnn related padding
+def pad(n):
+    return ((n + 7) // 8) * 8 - n
+
+paddedHeight = False
+paddedWidth = False
+pxw = pad(clip.width)
+pxh = pad(clip.height)
+
+if (clip.height % 8 != 0):
+    clip = core.std.AddBorders(clip, bottom=pad(clip.height))
+    paddedHeight = True
+    
+if (clip.width % 8 != 0):
+    clip = core.std.AddBorders(clip, right=pad(clip.width))
+    paddedWidth = True
+
 in_tile_channels = 3
 in_tile_height = clip.height
 in_tile_width = clip.width
@@ -69,14 +86,13 @@ if frameskip:
     partial = functools.partial(execute, upscaled=upscaled, metric_thresh=metric_thresh)
     upscaled = core.std.FrameEval(core.std.BlankClip(clip=upscaled, width=upscaled.width, height=upscaled.height), partial, prop_src=[clip])
 
-# padding if clip dimensions aren't divisble by 2
-if (upscaled.height % 2 != 0):
-    upscaled = core.std.AddBorders(upscaled, bottom=1)
-    
-if (clip.width % 2 != 0):
-    clip = core.std.AddBorders(upscaled, right=1)
-
 clip = vs.core.resize.Bicubic(upscaled, format=vs.YUV420P8, matrix_s="709")
+
+if paddedHeight:
+    clip = core.std.Crop(clip, bottom=pxh*2)
+
+if paddedWidth:
+    clip = core.std.Crop(clip, right=pxw*2)
 
 print("Starting video output | Threads: " + str(int(cpu_count() / 2)) + " | " + "Streams: " + str(threading()), file=sys.stderr)
 clip.set_output()
