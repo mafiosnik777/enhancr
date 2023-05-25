@@ -107,16 +107,27 @@ function getReadChunkFunction(fileHandle) {
         return buffer;
     }
 
+    readChunk.close = async function() {
+        await fileHandle.close();
+    }
+
     return readChunk;
 }
 
 async function readMetadata(filepath) {
-    const mediaInfo = await MediaInfoFactory({ format: "JSON", coverData: true });
-    const fileHandle = await promises.open(filepath, "r");
-    const fileSize = (await fileHandle.stat()).size;
-    const readChunk = getReadChunkFunction(fileHandle);
-    const result = await mediaInfo.analyzeData(() => fileSize, readChunk);
-    return result;
+    let fileHandle;
+    try {
+        const mediaInfo = await MediaInfoFactory({ format: "JSON", coverData: true });
+        fileHandle = await promises.open(filepath, "r");
+        const fileSize = (await fileHandle.stat()).size;
+        const readChunk = getReadChunkFunction(fileHandle);
+        const result = await mediaInfo.analyzeData(() => fileSize, readChunk);
+        await readChunk.close();
+        return result;
+    } finally {
+        if (fileHandle !== undefined)
+            fileHandle.close().catch(error => console.error("Failed to close file handle:", error));
+    }
 }
 
 const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share")
