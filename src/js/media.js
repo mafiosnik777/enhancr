@@ -160,7 +160,11 @@ function fetchMetadata() {
             infoSize.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
             infoDimensions.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
             infoFrameRate.textContent = FrameRate + " ➜ " + parseFloat(FrameRate) * 2;
-            infoDuration.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+            const durationInSeconds = parseInt(Duration);
+            const hours = Math.floor(durationInSeconds / 3600);
+            const minutes = Math.floor((durationInSeconds % 3600) / 60);
+            const seconds = durationInSeconds % 60;
+            infoDuration.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             infoFramecount.textContent = FrameCount;
             infoBitrate.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
             webFrame.clearCache()
@@ -237,7 +241,11 @@ function fetchMetadataUpscale() {
             infoSizeUp.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
             infoDimensionsUp.textContent = Width + " x " + Height + " ➜ " + parseInt(Width) * upscaleFactor + " x " + parseInt(Height) * upscaleFactor + " (" + aspectRatio + ")";
             infoFrameRateUp.textContent = FrameRate;
-            infoDurationUp.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+            const durationInSeconds = parseInt(Duration);
+            const hours = Math.floor(durationInSeconds / 3600);
+            const minutes = Math.floor((durationInSeconds % 3600) / 60);
+            const seconds = durationInSeconds % 60;
+            infoDurationUp.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             infoFramecountUp.textContent = FrameCount;
             infoBitrateUp.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
             webFrame.clearCache()
@@ -337,7 +345,11 @@ function fetchMetadataRestore() {
             infoSizeRes.textContent = Math.round(parseInt(filesize) / (1024 * 1024) * 100) / 100 + ' MB';
             infoDimensionsRes.textContent = Width + " x " + Height + " (" + aspectRatio + ")";
             infoFrameRateRes.textContent = FrameRate;
-            infoDurationRes.textContent = new Date(parseInt(Duration) * 1000).toISOString().substr(14, 5);
+            const durationInSeconds = parseInt(Duration);
+            const hours = Math.floor(durationInSeconds / 3600);
+            const minutes = Math.floor((durationInSeconds % 3600) / 60);
+            const seconds = durationInSeconds % 60;
+            infoDurationRes.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             infoFramecountRes.textContent = FrameCount;
             infoBitrateRes.textContent = Math.round(parseInt(bitRate) / 1024) + " kbit/s"
             webFrame.clearCache()
