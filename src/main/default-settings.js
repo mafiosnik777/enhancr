@@ -5,7 +5,6 @@ module.exports = {
     settings: [
         {
             preview: true,
-            disableBlur: false,
             rpc: true,
             theme: 'blue',
             rifeTta: false,

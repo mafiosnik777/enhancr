@@ -156,7 +156,7 @@ app.whenReady().then(async () => {
 
     const mainWindow = new BrowserWindow(windowOptions);
 
-    if (vibe.platform.isWin11()) vibe.applyEffect(mainWindow, 'mica'); else vibe.applyEffect(mainWindow, 'blurbehind');
+    if (vibe.platform.isWin11()) vibe.applyEffect(mainWindow, 'mica');
 
     remoteMain.enable(mainWindow.webContents);
     setupIpc(mainWindow);
@@ -165,7 +165,7 @@ app.whenReady().then(async () => {
     localStorage.setItem('pro', pro);
 
     // Inject css for solid bg (for now)
-    if (settings.disableBlur) {
+    if (!vibe.platform.isWin11()) {
         // Appear seamless when changing pages, but corners may be visible for a few frames.
         mainWindow.webContents.on('will-navigate', () => {
             mainWindow.setBackgroundColor('#222222');

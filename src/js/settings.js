@@ -22,7 +22,6 @@ const appDataPath = process.env.APPDATA || (process.platform == 'darwin' ? proce
 
 function saveSettings() {
   var previewCheck = document.getElementById("preview-check").checked;
-  var blurCheck = document.getElementById("oled-mode").checked;
   var rpcCheck = document.getElementById("toggle-rpc").checked;
 
   var rifeTtaCheck = document.getElementById("rife-tta-check").checked;
@@ -71,7 +70,6 @@ function saveSettings() {
     settings: [
       {
         preview: previewCheck,
-        disableBlur: blurCheck,
         rpc: rpcCheck,
         theme: theme,
         rifeTta: rifeTtaCheck,
@@ -137,11 +135,6 @@ fs.readFile(path.join(appDataPath, '/.enhancr/settings.json'), (err, settings) =
   } else {
     preview.style.display = "none";
     sessionStorage.setItem('previewSetting', 'false');
-  }
-  if (json.settings[0].disableBlur === false) {
-    document.getElementById("oled-mode").checked = false;
-  } else {
-    document.getElementById("oled-mode").checked = true;
   }
   try {
     document.getElementById("toggle-rpc").checked = json.settings[0].rpc;
@@ -399,7 +392,6 @@ hider.addEventListener('click', () => {
 pageSwitcher.addEventListener('click', changePage);
 
 var previewToggle = document.getElementById("preview-check");
-var blurToggle = document.getElementById("oled-mode");
 var rpcToggle = document.getElementById("toggle-rpc");
 
 var rifeTtaToggle = document.getElementById("rife-tta-check");
@@ -417,9 +409,6 @@ var shapeRes = document.getElementById("shape-res");
 var shapesCheck = document.getElementById("shape-check");
 
 previewToggle.addEventListener('click', function () {
-  sessionStorage.setItem('settingsSaved', 'false');
-})
-blurToggle.addEventListener('click', function () {
   sessionStorage.setItem('settingsSaved', 'false');
 })
 rpcToggle.addEventListener('click', function () {

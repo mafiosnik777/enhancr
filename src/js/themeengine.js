@@ -13,7 +13,6 @@ var settingsSwitcher = document.getElementById("settings-switcher");
 
 var toggleRpc = document.getElementById("toggle-rpc");
 var togglePreview = document.getElementById("preview-check");
-var toggleOled = document.getElementById("oled-mode");
 var toggleRifeTta = document.getElementById("rife-tta-check");
 var toggleRifeUhd = document.getElementById("rife-uhd-check");
 var scCheck = document.getElementById("sc-check");
@@ -52,7 +51,6 @@ function blueSelect() {
 
     toggleRpc.style.setProperty('--toggle-color', "#1e5cce");
     togglePreview.style.setProperty('--toggle-color', "#1e5cce");
-    toggleOled.style.setProperty('--toggle-color', "#1e5cce");
     toggleRifeTta.style.setProperty('--toggle-color', "#1e5cce");
     toggleRifeUhd.style.setProperty('--toggle-color', "#1e5cce");
     togglefp16.style.setProperty('--toggle-color', "#1e5cce");
@@ -114,7 +112,6 @@ function pinkSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#ce1e6c");
     //.style.setProperty('--toggle-color', "#ce1e6c");
     togglePreview.style.setProperty('--toggle-color', "#ce1e6c");
-    toggleOled.style.setProperty('--toggle-color', "#ce1e6c");
     toggleRifeTta.style.setProperty('--toggle-color', "#ce1e6c");
     toggleRifeUhd.style.setProperty('--toggle-color', "#ce1e6c");
     togglefp16.style.setProperty('--toggle-color', "#ce1e6c");
@@ -174,7 +171,6 @@ function greenSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#9ece1e");
     //.style.setProperty('--toggle-color', "#9ece1e");
     togglePreview.style.setProperty('--toggle-color', "#9ece1e");
-    toggleOled.style.setProperty('--toggle-color', "#9ece1e");
     toggleRifeTta.style.setProperty('--toggle-color', "#9ece1e");
     toggleRifeUhd.style.setProperty('--toggle-color', "#9ece1e");
     togglefp16.style.setProperty('--toggle-color', "#9ece1e");
@@ -234,7 +230,6 @@ function purpleSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#601ece");
     //.style.setProperty('--toggle-color', "#601ece");
     togglePreview.style.setProperty('--toggle-color', "#601ece");
-    toggleOled.style.setProperty('--toggle-color', "#601ece");
     toggleRifeTta.style.setProperty('--toggle-color', "#601ece");
     toggleRifeUhd.style.setProperty('--toggle-color', "#601ece");
     togglefp16.style.setProperty('--toggle-color', "#601ece");
@@ -295,7 +290,6 @@ function orangeSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#e36812");
     //.style.setProperty('--toggle-color', "#e36812");
     togglePreview.style.setProperty('--toggle-color', "#e36812");
-    toggleOled.style.setProperty('--toggle-color', "#e36812");
     toggleRifeTta.style.setProperty('--toggle-color', "#e36812");
     toggleRifeUhd.style.setProperty('--toggle-color', "#e36812");
     togglefp16.style.setProperty('--toggle-color', "#e36812");
@@ -355,7 +349,6 @@ function yellowSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#cece1b");
     //.style.setProperty('--toggle-color', "#cece1b");
     togglePreview.style.setProperty('--toggle-color', "#cece1b");
-    toggleOled.style.setProperty('--toggle-color', "#cece1b");
     toggleRifeTta.style.setProperty('--toggle-color', "#cece1b");
     toggleRifeUhd.style.setProperty('--toggle-color', "#cece1b");
     togglefp16.style.setProperty('--toggle-color', "#cece1b");
@@ -415,7 +408,6 @@ function redSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#ce2a1e");
     //.style.setProperty('--toggle-color', "#ce2a1e");
     togglePreview.style.setProperty('--toggle-color', "#ce2a1e");
-    toggleOled.style.setProperty('--toggle-color', "#ce2a1e");
     toggleRifeTta.style.setProperty('--toggle-color', "#ce2a1e");
     toggleRifeUhd.style.setProperty('--toggle-color', "#ce2a1e");
     togglefp16.style.setProperty('--toggle-color', "#ce2a1e");
@@ -475,7 +467,6 @@ function sandSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#E9DAC1");
     //.style.setProperty('--toggle-color', "#E9DAC1");
     togglePreview.style.setProperty('--toggle-color', "#E9DAC1");
-    toggleOled.style.setProperty('--toggle-color', "#E9DAC1");
     toggleRifeTta.style.setProperty('--toggle-color', "#E9DAC1");
     toggleRifeUhd.style.setProperty('--toggle-color', "#E9DAC1");
     togglefp16.style.setProperty('--toggle-color', "#E9DAC1");
@@ -535,7 +526,6 @@ function mintSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#8FE3CF");
     //.style.setProperty('--toggle-color', "#8FE3CF");
     togglePreview.style.setProperty('--toggle-color', "#8FE3CF");
-    toggleOled.style.setProperty('--toggle-color', "#8FE3CF");
     toggleRifeTta.style.setProperty('--toggle-color', "#8FE3CF");
     toggleRifeUhd.style.setProperty('--toggle-color', "#8FE3CF");
     togglefp16.style.setProperty('--toggle-color', "#8FE3CF");
@@ -595,7 +585,6 @@ function salmonSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#FFB3B3");
     //.style.setProperty('--toggle-color', "#FFB3B3");
     togglePreview.style.setProperty('--toggle-color', "#FFB3B3");
-    toggleOled.style.setProperty('--toggle-color', "#FFB3B3");
     toggleRifeTta.style.setProperty('--toggle-color', "#FFB3B3");
     toggleRifeUhd.style.setProperty('--toggle-color', "#FFB3B3");
     togglefp16.style.setProperty('--toggle-color', "#FFB3B3");
@@ -655,7 +644,6 @@ function eggSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#FFEF82");
     //.style.setProperty('--toggle-color', "#FFEF82");
     togglePreview.style.setProperty('--toggle-color', "#FFEF82");
-    toggleOled.style.setProperty('--toggle-color', "#FFEF82");
     toggleRifeTta.style.setProperty('--toggle-color', "#FFEF82");
     toggleRifeUhd.style.setProperty('--toggle-color', "#FFEF82");
     togglefp16.style.setProperty('--toggle-color', "#FFEF82");
@@ -715,7 +703,6 @@ function lavenderSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#AFB4FF");
     //.style.setProperty('--toggle-color', "#AFB4FF");
     togglePreview.style.setProperty('--toggle-color', "#AFB4FF");
-    toggleOled.style.setProperty('--toggle-color', "#AFB4FF");
     toggleRifeTta.style.setProperty('--toggle-color', "#AFB4FF");
     toggleRifeUhd.style.setProperty('--toggle-color', "#AFB4FF");
     togglefp16.style.setProperty('--toggle-color', "#AFB4FF");
@@ -775,7 +762,6 @@ function roseSelect() {
     toggleRpc.style.setProperty('--toggle-color', "#FF5D5D");
     //.style.setProperty('--toggle-color', "#FF5D5D");
     togglePreview.style.setProperty('--toggle-color', "#FF5D5D");
-    toggleOled.style.setProperty('--toggle-color', "#FF5D5D");
     toggleRifeTta.style.setProperty('--toggle-color', "#FF5D5D");
     toggleRifeUhd.style.setProperty('--toggle-color', "#FF5D5D");
     togglefp16.style.setProperty('--toggle-color', "#FF5D5D");
@@ -835,7 +821,6 @@ function greySelect() {
     toggleRpc.style.setProperty('--toggle-color', "#696969");
     //.style.setProperty('--toggle-color', "#696969");
     togglePreview.style.setProperty('--toggle-color', "#696969");
-    toggleOled.style.setProperty('--toggle-color', "#696969");
     toggleRifeTta.style.setProperty('--toggle-color', "#696969");
     toggleRifeUhd.style.setProperty('--toggle-color', "#696969");
     togglefp16.style.setProperty('--toggle-color', "#696969");
