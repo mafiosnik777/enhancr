@@ -453,18 +453,22 @@ class Restoration {
                             if (dataString.startsWith('Frame:')) {
                                 // Replace the last line of the textarea with the updated line
                                 terminal.innerHTML = terminal.innerHTML.replace(/([\s\S]*\n)[\s\S]*$/, '$1' + '[Pipe] ' + dataString);
-                            } else if (!(dataString.startsWith('CUDA lazy loading is not enabled.'))) {
+                            } else if (!(dataString.startsWith('pipe:: Invalid data found when processing input'))) {
                                 terminal.innerHTML += '\n[Pipe] ' + dataString;
+                            } else {
+                                sessionStorage.setItem('error', 'true');
                             }
                             sessionStorage.setItem('progress', data);
                         });
                         term.on("close", () => {
-                            let lines = terminal.value.match(/[^\r\n]+/g);
-                            let log = lines.slice(-10).reverse();
                             // don't merge streams if an error occurs
-                            if (log.includes('[Pipe] pipe:: Invalid data found when processing input')) {
+                            if (sessionStorage.getItem('error') == 'true') {
                                 terminal.innerHTML += `\r\n[enhancr] An error has occured.`;
                                 sessionStorage.setItem('status', 'done');
+                                sessionStorage.setItem('error', 'false');
+                                let errorCount = Number(sessionStorage.getItem("errorCount")) || 0;
+                                errorCount++;
+                                sessionStorage.setItem("errorCount", errorCount.toString());
                                 resolve();
                             } else if ((sessionStorage.getItem('realtime') == 'false') || sessionStorage.getItem('realtime') == null) {
                                 terminal.innerHTML += `\r\n[enhancr] Finishing up restoration..\r\n`;

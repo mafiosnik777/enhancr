@@ -955,11 +955,16 @@ try {
           realtimeBtnIcon.style.color = 'white';
           exportBtn.innerHTML = '<i class="fa-solid fa-turn-up fa-rotate-90" id="enhance-icon"></i> Enhance video(s) <span id="key-shortcut">Ctrl + Enter</span>';
           document.getElementById('clear-queue-btn').style.visibility = 'visible';
+
+          let errorCount = Number(sessionStorage.getItem("errorCount")) || 0;
           if (queue.length == 0) {
             document.getElementById('clear-queue-btn').style.visibility = 'hidden';
             enhancr.terminal('Queue is empty. Add media to queue to get started.\r\n');
+          } else if (errorCount >= 0){
+            enhancr.terminal(`Completed queue with ${errorCount} error(s).\r\n`);
+            sessionStorage.setItem("errorCount", "0");
           } else {
-            enhancr.terminal('Completed processing queue successfully.\r\n');
+            enhancr.terminal('Completed queue successfully.\r\n');
           }
           terminal.scrollTop = terminal.scrollHeight;
           running = false;

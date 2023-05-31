@@ -78,6 +78,7 @@ var outputContainerSpan = document.getElementById("container-span");
 var modelSpan = document.getElementById("model-span");
 
 sessionStorage.setItem("currentTab", "interpolation");
+sessionStorage.setItem("errorCount", "0");
 
 const openBtn = document.querySelectorAll('[data-modal-target]')
 const closeBtn = document.querySelectorAll("[data-modal-close]")
