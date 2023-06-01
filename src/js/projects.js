@@ -466,6 +466,9 @@ function loadUpscaling() {
   if (data.upscaling[0].engine === "realesrgan-ncnn") {
     upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (NCNN)"
   }
+  if (data.upscaling[0].engine === "realesrgan-dml") {
+    upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (DirectML)"
+  }
   if (data.upscaling[0].engine === "realesrgan") {
     upscaleEngineSpan.textContent = "Upscaling - RealESRGAN (TensorRT)"
   }
@@ -659,10 +662,12 @@ function loadRestoration() {
   // fill engine input
   if (data.restoration[0].engine === "dpir") {
     restorationEngineSpan.textContent = "Restoration - DPIR (TensorRT)";
-  } else if (data.restoration[0].engine === "animevideo") {
+  } else if (data.restoration[0].engine === "esrgan-1x-trt") {
     restorationEngineSpan.textContent = "Restoration - RealESRGAN (1x) (TensorRT)";
-  } else {
+  } else if (data.restoration[0].engine === "esrgan-1x-ncnn") {
     restorationEngineSpan.textContent = "Restoration - RealESRGAN (1x) (NCNN)";
+  } else if (data.restoration[0].engine === "esrgan-1x-dml") {
+    restorationEngineSpan.textContent = "Restoration - RealESRGAN (1x) (DirectML)";
   }
 
   const modelSpanRes = document.getElementById('model-span-restoration');

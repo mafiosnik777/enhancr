@@ -147,7 +147,7 @@ class Upscaling {
             let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_auto_activate.bat")}"`;
 
             // convert pth to onnx
-            if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth" && (engine == "Upscaling - RealESRGAN (TensorRT)" || engine == "Upscaling - RealESRGAN (NCNN)")) {
+            if (document.getElementById('custom-model-check').checked && path.extname(customModel) == ".pth" && (engine == "Upscaling - RealESRGAN (TensorRT)" || engine == "Upscaling - RealESRGAN (NCNN)" || engine == "Upscaling - RealESRGAN (DirectML)")) {
                 function convertToOnnx() {
                     return new Promise(function(resolve) {
                         var cmd = `${inject_env} && "${python}" "${convertModel}" --input="${path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML)}" --output="${path.join(cache, path.parse(customModel).name + '.onnx')}" --fp16=${fp16Onnx()}`;
@@ -179,6 +179,8 @@ class Upscaling {
                     } else {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                     }
+                } else if (!(document.getElementById('custom-model-check').checked) && engine == 'Upscaling - RealESRGAN (DirectML)') {
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx");
                 } else if (engine == 'Upscaling - RealCUGAN (TensorRT)') {
                     if (fp16) {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cugan/cugan_pro-2x_fp16.onnx");
@@ -387,6 +389,8 @@ class Upscaling {
                 model = "ShuffleCUGAN"
             } else if (engine == "Upscaling - RealESRGAN (NCNN)") {
                 model = "RealESRGAN"
+            } else if (engine == "Upscaling - RealESRGAN (DirectML)") {
+                model = "RealESRGAN"
             } else if (engine == "Upscaling - RealCUGAN (TensorRT)") {
                 model = "RealCUGAN"
             } else if (engine == "Upscaling - SwinIR (TensorRT)") {
@@ -407,6 +411,9 @@ class Upscaling {
             function pickEngine() {
                 if (engine == "Upscaling - RealESRGAN (NCNN)") {
                     return !isPackaged ? path.join(__dirname, '..', "/inference/esrgan_ncnn.py") : path.join(process.resourcesPath, "/inference/esrgan_ncnn.py");
+                }
+                if (engine == "Upscaling - RealESRGAN (DirectML)") {
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/esrgan_dml.py") : path.join(process.resourcesPath, "/inference/esrgan_dml.py");
                 }
                 if (engine == "Upscaling - RealESRGAN (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "/inference/esrgan.py") : path.join(process.resourcesPath, "/inference/esrgan.py");

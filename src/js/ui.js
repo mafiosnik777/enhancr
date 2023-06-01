@@ -1298,6 +1298,7 @@ var realesrganOption = document.getElementById("realesrgan-tensorrt");
 var realcuganOption = document.getElementById("realcugan-tensorrt");
 var swinIROption = document.getElementById("swinir");
 var realesrganNcnnOption = document.getElementById("realesrgan-ncnn");
+var realesrganDmlOption = document.getElementById("realesrgan-dml");
 
 var upscaleOutputPath = document.getElementById("upscale-output-path");
 var upscaleOutputPathText = document.getElementById("upscale-output-path-text");
@@ -1724,6 +1725,23 @@ realesrganNcnnOption.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.upscaling[0].engine = "realesrgan-ncnn";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (realesrgan-dml)
+realesrganDmlOption.addEventListener("click", function () {
+    upscaleEngineText.textContent = "Upscaling - RealESRGAN (DirectML)";
+    hiderUpscale.style.visibility = "hidden";
+    engineDropdownUpscale.style.visibility = "hidden";
+    factor2.style.display = "block";
+    factor3.style.display = "block";
+    factor4.style.display = "block";
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.upscaling[0].engine = "realesrgan-dml";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });
@@ -2286,8 +2304,9 @@ engineInputRestore.addEventListener("click", function () {
 });
 
 const dpirOption = document.getElementById('dpir');
-const animevideoOption = document.getElementById('anime-video');
-const animevideoNcnnOption = document.getElementById('anime-video-ncnn');
+const esrgan1xOption = document.getElementById('anime-video');
+const esrgan1xNcnnOption = document.getElementById('anime-video-ncnn');
+const esrgan1xDmlOption = document.getElementById('anime-video-dml');
 const restoreEngineText = document.getElementById('restoration-engine-text');
 const modelSpanRes = document.getElementById('model-span-restoration');
 const denoiseSharpen = document.getElementById('denoise-sharpen');
@@ -2312,8 +2331,8 @@ dpirOption.addEventListener("click", function () {
     console.log("Engine written to project file.");
 });
 
-// change engine (animevideo)
-animevideoOption.addEventListener("click", function () {
+// change engine (realesrgan-1x-trt)
+esrgan1xOption.addEventListener("click", function () {
     restoreEngineText.textContent = "Restoration - RealESRGAN (1x) (TensorRT)";
     hiderRestore.style.visibility = "hidden";
     engineDropdownRestore.style.visibility = "hidden";
@@ -2325,13 +2344,13 @@ animevideoOption.addEventListener("click", function () {
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
-    data.restoration[0].engine = "animevideo";
+    data.restoration[0].engine = "esrgan-1x-trt";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });
 
-// change engine (animevideo-ncnn)
-animevideoNcnnOption.addEventListener("click", function () {
+// change engine (realesrgan-1x-ncnn)
+esrgan1xNcnnOption.addEventListener("click", function () {
     restoreEngineText.textContent = "Restoration - RealESRGAN (1x) (NCNN)";
     hiderRestore.style.visibility = "hidden";
     engineDropdownRestore.style.visibility = "hidden";
@@ -2343,7 +2362,25 @@ animevideoNcnnOption.addEventListener("click", function () {
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
-    data.restoration[0].engine = "animevideo-ncnn";
+    data.restoration[0].engine = "esrgan-1x-ncnn";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (realesrgan-1x-dml)
+esrgan1xDmlOption.addEventListener("click", function () {
+    restoreEngineText.textContent = "Restoration - RealESRGAN (1x) (DirectML)";
+    hiderRestore.style.visibility = "hidden";
+    engineDropdownRestore.style.visibility = "hidden";
+    modelSpanRes.textContent = "Denoise/Sharpen";
+    denoiseSharpen.style.display = 'block';
+    denoise.style.display = 'none';
+    deblock.style.display = 'none';
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.restoration[0].engine = "esrgan-1x-dml";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });
