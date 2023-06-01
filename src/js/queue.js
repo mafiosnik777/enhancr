@@ -1008,7 +1008,7 @@ try {
           });
           document.getElementById('eta').style.display = 'none';
           document.getElementById('fps-meter').style.display = 'none';
-        }, 2000)
+        }, 5000)
         ipcRenderer.send('rpc-done');
         terminal.scrollTop = terminal.scrollHeight;
         running = false;
