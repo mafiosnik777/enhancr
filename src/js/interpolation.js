@@ -145,27 +145,21 @@ class Interpolation {
                 height = roundedHeight
             }
 
-            //get conversion script
-            function getConversionScript() {
-                return !isPackaged ? path.join(__dirname, '..', "//utils/convert_model_rvpv2.py") : path.join(process.resourcesPath, "/utils/convert_model_rvpv2.py")
-            }
-            let convertModel = getConversionScript();
-
             function getOnnx() {
                 if (model == 'RVP - v1.0') {
-                    if (fp16) {
+                    if (fp16 && engine != 'Channel Attention - CAIN (DirectML)') {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx")
                     } else {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx")
                     }
                 } else if (model == 'CVP - v6.0') {
-                    if (fp16) {
+                    if (fp16 && engine != 'Channel Attention - CAIN (DirectML)') {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx")
                     } else {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx")
                     }
-                } else {
-                    return path.join(cache, 'rvpv2.onnx');
+                } else if (model == 'RVP - v2.0') {
+                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.onnx")
                 }
             }
 
@@ -180,57 +174,24 @@ class Interpolation {
             const progressSpan = document.getElementById("progress-span");
 
             let fp16Onnx = () => {
-                if (fp16) return "True"
+                if (fp16 && model != 'RVP - v2.0') return "True"
                 else return "False"
             }
 
             // inject env hook
             let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_auto_activate.bat")}"`
 
-            // rvpv2 model conversion (pth -> onnx)
-            if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)' && model == 'RVP - v2.0') {
-                terminal.innerHTML += '\r\n' + enhancrPrefix + ` Converting model to onnx..\r\n`;
-
-                function convertToOnnx() {
-                    return new Promise(function(resolve) {
-                        let rvpv2Model = !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.pth");
-                        var convertCmd = `${inject_env} && ${python} "${convertModel}" --input="${rvpv2Model}" --output="${onnx}" --tmp="${cache}" --width=${width} --height=${height} --fp16=${fp16Onnx()}`;
-                        console.log(convertCmd);
-                        let convertTerm = spawn(convertCmd, [], {
-                            shell: true,
-                            stdio: ['inherit', 'pipe', 'pipe'],
-                            windowsHide: true
-                        });
-                        process.stdout.write('');
-                        convertTerm.stdout.on('data', (data) => {
-                            process.stdout.write(`${data}`);
-                            terminal.innerHTML += data;
-                        });
-                        convertTerm.stderr.on('data', (data) => {
-                            process.stderr.write(`${data}`);
-                            progressSpan.innerHTML = path.basename(file) + ' | Converting model to onnx..';
-                            terminal.innerHTML += data;
-                        });
-                        convertTerm.on("close", () => {
-                            sessionStorage.setItem('conversion', 'success');
-                            resolve();
-                        });
-                    })
-                }
-                await convertToOnnx();
-            }
-
             // engine conversion (onnx -> engine) (cain-trt)
             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function(resolve) {
                         if (!(model == 'RVP - v2.0')) {
-                            var optShapes = `--optShapes=input:1x6x${height}x${width}`
+                            var inputIO = `--inputIOFormats=fp16:chw --outputIOFormats=fp16:chw`
                         } else {
-                            var optShapes = ``
+                            var inputIO = ``
                         }
                         if (fp16) {
-                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${optShapes} --inputIOFormats=fp16:chw --outputIOFormats=fp16:chw --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
+                            var engineCmd = `"${trtexec}" --fp16 --onnx="${onnx}" --optShapes=input:1x6x${height}x${width} ${inputIO} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
                         } else {
                             var engineCmd = `"${trtexec}" --onnx="${onnx}" ${optShapes} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
                         }
@@ -392,6 +353,7 @@ class Interpolation {
                 toPadHeight: toPadHeight,
                 streams: numStreams.value,
                 halfPrecision: fp16,
+                onnx: onnx,
                 sensitivity: document.getElementById('sensitivity-check').checked,
                 sensitivityValue: document.getElementById('sensitivity').value,
                 rife_tta: document.getElementById("rife-tta-check").checked,
@@ -417,6 +379,8 @@ class Interpolation {
                 model = "RIFE"
             } else if (engine == "Optical Flow - RIFE (TensorRT)") {
                 model = "RIFE"
+            } else if (engine == "Channel Attention - CAIN (DirectML)") {
+                model = "CAIN"
             } else if (engine == "Channel Attention - CAIN (TensorRT)") {
                 model = "CAIN"
             } else if (engine == "GMFlow - GMFSS (PyTorch)") {
@@ -441,6 +405,9 @@ class Interpolation {
                 }
                 if (engine == "Channel Attention - CAIN (NCNN)") {
                     return !isPackaged ? path.join(__dirname, '..', "/inference/cain.py") : path.join(process.resourcesPath, "/inference/cain.py");
+                }
+                if (engine == "Channel Attention - CAIN (DirectML)") {
+                    return !isPackaged ? path.join(__dirname, '..', "/inference/cain_dml.py") : path.join(process.resourcesPath, "/inference/cain_dml.py");
                 }
                 if (engine == "Optical Flow - RIFE (NCNN)") {
                     return !isPackaged ? path.join(__dirname, '..', "/inference/rife.py") : path.join(process.resourcesPath, "/inference/rife.py");

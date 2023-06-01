@@ -56,6 +56,7 @@ var engineInput = document.getElementById("engine");
 var engineDropdown = document.getElementById("engine-dropdown");
 
 var cain = document.getElementById("cain");
+var cainDml = document.getElementById("cain-dml");
 var cainTrt = document.getElementById("cain-trt");
 
 var modelInput = document.getElementById("model-selector");
@@ -578,6 +579,32 @@ cain.addEventListener("click", function () {
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.interpolation[0].engine = "cain";
     data.interpolation[0].model = "RVP - v1.0";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (cain-dml)
+cainDml.addEventListener("click", function () {
+    interpolationEngineSpan.textContent = "Channel Attention - CAIN (DirectML)";
+    hider.style.visibility = "hidden";
+    engineDropdown.style.visibility = "hidden";
+    rife23Option.style.display = 'none';
+    rife4Option.style.display = 'none';
+    rife46Option.style.display = 'none';
+    gmfssUnionOption.style.display = 'none';
+    gmfssFortunaOption.style.display = 'none';
+    gmfssFortunaUnionOption.style.display = 'none';
+    rvpv1Option.style.display = 'block';
+    rvpv2Option.style.display = 'block';
+    cvpv6Option.style.display = 'block';
+
+    modelSpan.textContent = 'CVP - v6.0';
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.interpolation[0].engine = "cain-dml";
+    data.interpolation[0].model = "CVP - v6.0";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });

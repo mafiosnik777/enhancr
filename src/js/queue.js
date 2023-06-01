@@ -262,6 +262,7 @@ function renderQueueItem() {
       'Optical Flow - RIFE (NCNN)': 'RIFE',
       'Optical Flow - RIFE (TensorRT)': 'RIFE',
       'Channel Attention - CAIN (TensorRT)': 'CAIN',
+      'Channel Attention - CAIN (DirectML)': 'CAIN',
       'GMFlow - GMFSS (PyTorch)': 'GMFSS',
       'GMFlow - GMFSS (TensorRT)': 'GMFSS',
       'Upscaling - RealESRGAN (TensorRT)': 'RealESRGAN',

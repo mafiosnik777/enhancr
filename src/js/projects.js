@@ -210,6 +210,15 @@ function loadInterpolation() {
     gmfssFortunaOption.style.display = 'none';
     gmfssFortunaUnionOption.style.display = 'none';
   }
+  if (data.interpolation[0].engine === "cain-dml") {
+    interpolationEngineSpan.textContent = "Channel Attention - CAIN (DirectML)";
+    rife23Option.style.display = 'none';
+    rife4Option.style.display = 'none';
+    rife46Option.style.display = 'none';
+    gmfssUnionOption.style.display = 'none';
+    gmfssFortunaOption.style.display = 'none';
+    gmfssFortunaUnionOption.style.display = 'none';
+  }
   if (data.interpolation[0].engine === "rife") {
     interpolationEngineSpan.textContent = "Optical Flow - RIFE (NCNN)";
     rvpv1Option.style.display = 'none';
