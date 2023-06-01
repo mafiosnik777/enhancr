@@ -171,6 +171,20 @@ if (!(localStorage.getItem('patreonUser') == null)) {
 
 sessionStorage.setItem("multiInput", "false");
 
+// clear out queue temp vars
+
+let queueLength = Number(sessionStorage.getItem('queueLength'));
+
+for(let i = 0; i < queueLength; i++) {
+    try {
+        sessionStorage.removeItem('queuePercent' + i);
+        sessionStorage.removeItem('queueLength');
+        sessionStorage.removeItem('percent');
+        sessionStorage.remove('progress');
+    } catch (error) {
+    }
+}
+
 // drag and drop files
 var dropOverlay = document.getElementById('overlay');
 var dropSpan = document.getElementById('drop-span')

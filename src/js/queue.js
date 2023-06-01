@@ -165,7 +165,9 @@ function renderQueueItem() {
     info.append(percent);
     percent.innerHTML = '0%';
     if (queueItem.status == '1') {
-      percent.innerHTML = '100%';
+      let percentValue = sessionStorage.getItem(`queuePercent${i}`);
+      percent.innerHTML = `${percentValue ? percentValue : '0'}%`;
+      // progressOverlay.style.width = `${percentValue ? percentValue : '0'}%`;
     }
     // create remove button
     let remove = document.createElement('i');
@@ -206,26 +208,28 @@ function renderQueueItem() {
     play.classList.add('context-item0');
     play.setAttribute('id', `context-item0-queue${i}`);
     listItem1.append(play);
-    play.innerHTML = "<i class='fa-solid fa-link'></i> Chain"
+    if (queueItem.status == '1') play.innerHTML = "<i class='fa-solid fa-film'></i> Play video"; else play.innerHTML = "<i class='fa-solid fa-link'></i> Chain";
     let openPath = document.createElement('button');
     openPath.classList.add('menu__item');
     openPath.classList.add('context-item1');
     openPath.setAttribute('id', `context-item1-queue${i}`);
     listItem2.append(openPath);
-    openPath.innerHTML = "<i class='fa-solid fa-pencil'></i> Output name"
+    if (queueItem.status == '1') openPath.innerHTML = "<i class='fa-solid fa-folder-closed'></i> Open in folder"; else openPath.innerHTML = "<i class='fa-solid fa-pencil'></i> Output name";
     let share = document.createElement('button');
     share.classList.add('menu__item');
     share.classList.add('context-item2');
     share.setAttribute('id', `context-item2-queue${i}`);
     listItem3.append(share);
-    share.innerHTML = "<i class='fa-solid fa-scissors'></i> Trim"
+    if (queueItem.status == '1') share.innerHTML = '<i class="fa-solid fa-share-nodes"></i> Share'; else share.innerHTML = "<i class='fa-solid fa-scissors'></i> Trim";
     // create progress overlay
     let progressOverlay = document.createElement('div');
     progressOverlay.classList.add('queue-item-progress-overlay');
     progressOverlay.setAttribute('id', `queue-item-progress-overlay${i}`);
     progressOverlay.style.background = ThemeEngine.getTheme(sessionStorage.getItem('theme'));
     if (queueItem.status == '1') {
-      progressOverlay.style.width = '100%';
+      let percentValue = sessionStorage.getItem(`queuePercent${i}`);
+      percent.innerHTML = `${percentValue ? percentValue : '0'}%`;
+      progressOverlay.style.width = `${percentValue ? percentValue : '0'}%`;
     }
     progress.append(progressOverlay);
 
@@ -253,75 +257,64 @@ function renderQueueItem() {
     });
 
     // context menu listeners
+    const modelMap = {
+      'Channel Attention - CAIN (NCNN)': 'CAIN',
+      'Optical Flow - RIFE (NCNN)': 'RIFE',
+      'Optical Flow - RIFE (TensorRT)': 'RIFE',
+      'Channel Attention - CAIN (TensorRT)': 'CAIN',
+      'GMFlow - GMFSS (PyTorch)': 'GMFSS',
+      'GMFlow - GMFSS (TensorRT)': 'GMFSS',
+      'Upscaling - RealESRGAN (TensorRT)': 'RealESRGAN',
+      'Upscaling - RealESRGAN (NCNN)': 'RealESRGAN',
+      'Upscaling - ShuffleCUGAN (TensorRT)': 'ShuffleCUGAN',
+      'Upscaling - ShuffleCUGAN (NCNN)': 'ShuffleCUGAN',
+      'Upscaling - RealCUGAN (TensorRT)': 'RealCUGAN',
+      'Upscaling - SwinIR (TensorRT)': 'SwinIR',
+      'Restoration - DPIR (TensorRT)': 'DPIR',
+      'Restoration - RealESRGAN (1x) (NCNN)': 'RealESRGAN',
+    };
 
     //chaining / play video
-    let context0 = [].slice.call(document.getElementsByClassName('context-item0'));
-
-    context0.forEach(function (item) {
-      if (!(item.classList.contains('listener'))) {
-        item.classList.add('listener')
-        item.addEventListener('click', function () {
-          let id = item.id;
-          let index = id.charAt(id.length - 1);
-          let chainModal = document.getElementById('modal-chain');
-          let mode = queue[index].mode;
-          if (item.innerHTML == '<i class="fa-solid fa-film"></i> Play video') {
-            var model;
+    const contextItem0 = Array.from(document.getElementsByClassName('context-item0'));
+    contextItem0.forEach((item) => {
+      if (!item.classList.contains('listener')) {
+        item.classList.add('listener');
+        item.addEventListener('click', () => {
+          const id = item.id;
+          const index = id.charAt(id.length - 1);
+          const chainModal = document.getElementById('modal-chain');
+          const mode = queue[index].mode;
+          
+          if (item.innerHTML === '<i class="fa-solid fa-film"></i> Play video') {
+            let model;
             let outputPath;
-            if (!(sessionStorage.getItem(`out${index}`) == null)) {
+    
+            if (sessionStorage.getItem(`out${index}`) !== null) {
               outputPath = path.join(queue[index].output, sessionStorage.getItem(`out${index}`) + queue[index].extension);
               shell.openPath(outputPath);
-            } else if (queue[index].mode == 'interpolation') {
-              if (queue[index].engine == "Channel Attention - CAIN (NCNN)") {
-                model = "CAIN"
-              } else if (queue[index].engine == "Optical Flow - RIFE (NCNN)") {
-                model = "RIFE"
-              } else if (queue[index].engine == "Optical Flow - RIFE (TensorRT)") {
-                model = "RIFE"
-              } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
-                model = "CAIN"
-              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
-                model = "GMFSS"
-              } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
-                model = "GMFSS"
+            } else {
+              if (mode === 'interpolation') {
+                model = modelMap[queue[index].engine] || '';
+                outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
+              } else if (mode === 'upscaling') {
+                model = modelMap[queue[index].engine] || '';
+                outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
+              } else if (mode === 'restoration') {
+                model = modelMap[queue[index].engine] || 'RealESRGAN';
+                outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
               }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
-              shell.openPath(outputPath);
-            } else if (queue[index].mode == 'upscaling') {
-              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
-                model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
-                model = "ShuffleCUGAN"
-              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (NCNN)") {
-                model = "ShuffleCUGAN"
-              } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
-                model = "RealCUGAN"
-              } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
-                model = "SwinIR"
-              }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
-              shell.openPath(outputPath);
-            } else if (queue[index].mode == 'restoration') {
-              if (queue[index].engine == "Restoration - DPIR (TensorRT)") {
-                model = "DPIR"
-              } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
-                model = "AnimeVideo"
-              } else {
-                model = "AnimeVideo"
-              }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
               shell.openPath(outputPath);
             }
           } else {
-            console.log(item.innerHTML)
-            let chainBtnInterpolation = document.getElementById('chain-interpolation');
-            let chainBtnUpscaling = document.getElementById('chain-upscaling');
-            let chainBtnRestoration = document.getElementById('chain-restoration');
-            if (mode == 'interpolation') {
+            const chainBtnInterpolation = document.getElementById('chain-interpolation');
+            const chainBtnUpscaling = document.getElementById('chain-upscaling');
+            const chainBtnRestoration = document.getElementById('chain-restoration');
+    
+            if (mode === 'interpolation') {
               chainBtnInterpolation.style.display = 'none';
               chainBtnUpscaling.style.display = 'block';
               chainBtnRestoration.style.display = 'block';
-            } else if (mode == 'upscaling') {
+            } else if (mode === 'upscaling') {
               chainBtnInterpolation.style.display = 'block';
               chainBtnUpscaling.style.display = 'none';
               chainBtnRestoration.style.display = 'block';
@@ -330,164 +323,94 @@ function renderQueueItem() {
               chainBtnUpscaling.style.display = 'block';
               chainBtnRestoration.style.display = 'none';
             }
+    
             openModal(chainModal);
-            if (!(chainBtnUpscaling.classList.contains('listener'))) {
+    
+            const closeModalAndSetInputPath = (videoInputPath, inputTextElement, tabBtn) => {
+              closeModal(chainModal);
+              sessionStorage.setItem("inputPath", videoInputPath);
+    
+              if (videoInputPath.length >= 55 && path.basename(videoInputPath).length >= 55) {
+                inputTextElement.textContent = "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
+              } else if (videoInputPath.length >= 55) {
+                inputTextElement.textContent = "../" + path.basename(videoInputPath);
+              } else {
+                inputTextElement.textContent = videoInputPath;
+              }
+    
+              tabBtn.click();
+            };
+    
+            if (!chainBtnUpscaling.classList.contains('listener')) {
               chainBtnUpscaling.classList.add('listener');
-              chainBtnUpscaling.addEventListener('click', function () {
-                closeModal(chainModal);
-                let upscaleTabBtn = document.getElementById('upscale-side-arrow');
+              chainBtnUpscaling.addEventListener('click', () => {
+                const upscaleTabBtn = document.getElementById('upscale-side-arrow');
                 let videoInputPath;
                 let model;
-                var upscaleVideoInputText = document.getElementById("upscale-input-text");
-                if (sessionStorage.getItem(`out${index}`) == null) {
-                  if (queue[index].mode == 'interpolation') {
-                    if (queue[index].engine == "Channel Attention - CAIN (NCNN)") {
-                      model = "CAIN"
-                    } else if (queue[index].engine == "Optical Flow - RIFE (NCNN)") {
-                      model = "RIFE"
-                    } else if (queue[index].engine == "Optical Flow - RIFE (TensorRT)") {
-                      model = "RIFE"
-                    } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
-                      model = "CAIN"
-                    } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
-                      model = "GMFSS"
-                    } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
-                      model = "GMFSS"
-                    }
+    
+                if (sessionStorage.getItem(`out${index}`) === null) {
+                  if (mode === 'interpolation') {
+                    model = modelMap[queue[index].engine] || '';
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
                   } else {
-                    if (queue[index].engine == "Restoration - DPIR (TensorRT)") {
-                      model = "DPIR"
-                    } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
-                      model = "AnimeVideo"
-                    } else {
-                      model = "AnimeVideo"
-                    }
+                    model = modelMap[queue[index].engine] || 'RealESRGAN';
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
                   }
                 } else {
                   videoInputPath = path.join(queue[index].output, sessionStorage.getItem(`out${index}`) + queue[index].extension);
                 }
+    
                 sessionStorage.setItem("upscaleInputPath", videoInputPath);
-                if (
-                  videoInputPath.length >= 55 &&
-                  path.basename(videoInputPath).length >= 55
-                ) {
-                  upscaleVideoInputText.textContent =
-                    "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
-                } else if (videoInputPath.length >= 55) {
-                  upscaleVideoInputText.textContent = "../" + path.basename(videoInputPath);
-                } else {
-                  upscaleVideoInputText.textContent = videoInputPath;
-                }
-                upscaleTabBtn.click();
-              })
+                closeModalAndSetInputPath(videoInputPath, document.getElementById("upscale-input-text"), upscaleTabBtn);
+              });
             }
-            if (!(chainBtnRestoration.classList.contains('listener'))) {
+    
+            if (!chainBtnRestoration.classList.contains('listener')) {
               chainBtnRestoration.classList.add('listener');
-              chainBtnRestoration.addEventListener('click', function () {
-                closeModal(chainModal);
-                let restoreTabBtn = document.getElementById('restore-side');
+              chainBtnRestoration.addEventListener('click', () => {
+                const restoreTabBtn = document.getElementById('restore-side');
                 let videoInputPath;
                 let model;
-                var restoreVideoInputText = document.getElementById("restore-input-text");
-                if (sessionStorage.getItem(`out${index}`) == null) {
-                  if (queue[index].mode == 'interpolation') {
-                    if (queue[index].engine == "Channel Attention - CAIN (NCNN)") {
-                      model = "CAIN"
-                    } else if (queue[index].engine == "Optical Flow - RIFE (NCNN)") {
-                      model = "RIFE"
-                    } else if (queue[index].engine == "Optical Flow - RIFE (TensorRT)") {
-                      model = "RIFE"
-                    } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
-                      model = "CAIN"
-                    } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
-                      model = "GMFSS"
-                    } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
-                      model = "GMFSS"
-                    }
+    
+                if (sessionStorage.getItem(`out${index}`) === null) {
+                  if (mode === 'interpolation') {
+                    model = modelMap[queue[index].engine] || '';
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
                   } else {
-                    if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
-                      model = "RealESRGAN"
-                    } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
-                      model = "ShuffleCUGAN"
-                    } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (NCNN)") {
-                      model = "ShuffleCUGAN"
-                    } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
-                      model = "RealCUGAN"
-                    } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
-                      model = "SwinIR"
-                    }
+                    model = modelMap[queue[index].engine] || '';
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
                   }
                 } else {
                   videoInputPath = path.join(queue[index].output, sessionStorage.getItem(`out${index}`) + queue[index].extension);
                 }
+    
                 sessionStorage.setItem("inputPathRestore", videoInputPath);
-                if (
-                  videoInputPath.length >= 55 &&
-                  path.basename(videoInputPath).length >= 55
-                ) {
-                  restoreVideoInputText.textContent =
-                    "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
-                } else if (videoInputPath.length >= 55) {
-                  restoreVideoInputText.textContent = "../" + path.basename(videoInputPath);
-                } else {
-                  restoreVideoInputText.textContent = videoInputPath;
-                }
-                restoreTabBtn.click();
-              })
+                closeModalAndSetInputPath(videoInputPath, document.getElementById("restore-input-text"), restoreTabBtn);
+              });
             }
-            if (!(chainBtnInterpolation.classList.contains('listener'))) {
+    
+            if (!chainBtnInterpolation.classList.contains('listener')) {
               chainBtnInterpolation.classList.add('listener');
-              chainBtnInterpolation.addEventListener('click', function () {
-                closeModal(chainModal);
-                let interpolationTabBtn = document.getElementById('interpolate-side');
+              chainBtnInterpolation.addEventListener('click', () => {
+                const interpolationTabBtn = document.getElementById('interpolate-side');
                 let videoInputPath;
                 let model;
-                var interpolationVideoInputText = document.getElementById("input-video-text");
-                if (sessionStorage.getItem(`out${index}`) == null) {
-                  if (queue[index].mode == 'upscaling') {
-                    if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
-                      model = "RealESRGAN"
-                    } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
-                      model = "ShuffleCUGAN"
-                    } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (NCNN)") {
-                      model = "ShuffleCUGAN"
-                    } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
-                      model = "RealCUGAN"
-                    } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
-                    model = "SwinIR"
-                    }
+    
+                if (sessionStorage.getItem(`out${index}`) === null) {
+                  if (mode === 'upscaling') {
+                    model = modelMap[queue[index].engine] || '';
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
                   } else {
-                    if (queue[index].engine == "Restoration - DPIR (TensorRT)") {
-                      model = "DPIR"
-                    } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
-                      model = "AnimeVideo"
-                    } else {
-                      model = "AnimeVideo"
-                    }
+                    model = modelMap[queue[index].engine] || 'RealESRGAN';
                     videoInputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
                   }
                 } else {
                   videoInputPath = path.join(queue[index].output, sessionStorage.getItem(`out${index}`) + queue[index].extension);
                 }
+    
                 sessionStorage.setItem("inputPath", videoInputPath);
-                if (
-                  videoInputPath.length >= 55 &&
-                  path.basename(videoInputPath).length >= 55
-                ) {
-                  interpolationVideoInputText.textContent =
-                    "../" + path.basename(videoInputPath).substr(0, 55) + "\u2026";
-                } else if (videoInputPath.length >= 55) {
-                  interpolationVideoInputText.textContent = "../" + path.basename(videoInputPath);
-                } else {
-                  interpolationVideoInputText.textContent = videoInputPath;
-                }
-                interpolationTabBtn.click();
-              })
+                closeModalAndSetInputPath(videoInputPath, document.getElementById("input-video-text"), interpolationTabBtn);
+              });
             }
           }
         });
@@ -495,204 +418,150 @@ function renderQueueItem() {
     });
 
     // edit export name / show in folder
-    let context1 = [].slice.call(document.getElementsByClassName('context-item1'));
+    const contextItem1 = Array.from(document.getElementsByClassName('context-item1'));
 
-    context1.forEach(function (item) {
-      if (!(item.classList.contains('listener'))) {
+    contextItem1.forEach(item => {
+      if (!item.classList.contains('listener')) {
         item.classList.add('listener');
-        item.addEventListener('click', function () {
-          let id = item.id;
-          let index = id.charAt(id.length - 1);
-          if (item.innerHTML == '<i class="fa-solid fa-folder-closed"></i> Open in folder') {
-            let model;
+        item.addEventListener('click', () => {
+          const id = item.id;
+          const index = id.charAt(id.length - 1);
+
+          if (item.innerHTML === '<i class="fa-solid fa-folder-closed"></i> Open in folder') {
             let outputPath;
-            if (!(sessionStorage.getItem(`out${index}`) == null)) {
-              outputPath = path.join(queue[index].output, sessionStorage.getItem(`out${index}`) + queue[index].extension);
+            const queueItem = queue[index];
+
+            if (sessionStorage.getItem(`out${index}`) !== null) {
+              outputPath = path.join(queueItem.output, sessionStorage.getItem(`out${index}`) + queueItem.extension);
               remote.shell.showItemInFolder(outputPath);
-            } else if (queue[index].mode == 'interpolation') {
-              if (queue[index].engine == "Channel Attention - CAIN (NCNN)") {
-                model = "CAIN"
-              } else if (queue[index].engine == "Optical Flow - RIFE (NCNN)") {
-                model = "RIFE"
-              } else if (queue[index].engine == "Optical Flow - RIFE (TensorRT)") {
-                model = "RIFE"
-              } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
-                model = "CAIN"
-              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
-                model = "GMFSS"
-              } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
-                model = "GMFSS"
-              }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
+            } else if (queueItem.mode === 'interpolation') {
+              const engine = queueItem.engine;
+              const model = modelMap[engine];
+              outputPath = path.join(queueItem.output, path.parse(queueItem.file).name + `_${model}-2x${queueItem.extension}`);
               remote.shell.showItemInFolder(outputPath);
-            } else if (queue[index].mode == 'upscaling') {
-              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
-                model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
-                model = "ShuffleCUGAN"
-              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (NCNN)") {
-                model = "ShuffleCUGAN"
-              } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
-                model = "RealCUGAN"
-              } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
-                model = "SwinIR"
-              }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
+            } else if (queueItem.mode === 'upscaling') {
+              const engine = queueItem.engine;
+              const model = modelMap[engine];
+              outputPath = path.join(queueItem.output, path.parse(queueItem.file).name + `_${model}-${queueItem.scale}x${queueItem.extension}`);
               console.log(outputPath);
               remote.shell.showItemInFolder(outputPath);
-            } else if (queue[index].mode == 'restoration') {
-              if (queue[index].engine == "Restoration - DPIR (TensorRT)") {
-                model = "DPIR"
-              } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
-                model = "AnimeVideo"
-              } else {
-                model = "AnimeVideo"
-              }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
+            } else if (queueItem.mode === 'restoration') {
+              const engine = queueItem.engine;
+              const model = engine.includes("RealESRGAN") ? "RealESRGAN" : "DPIR";
+              outputPath = path.join(queueItem.output, path.parse(queueItem.file).name + `_${model}-1x${queueItem.extension}`);
               remote.shell.showItemInFolder(outputPath);
             }
           } else {
-            let editModal = document.getElementById('modal-edit');
+            const editModal = document.getElementById('modal-edit');
             openModal(editModal);
-            let editField = document.getElementById('edit-export-name');
+            const editField = document.getElementById('edit-export-name');
             editField.value = '';
-            let fileName = document.getElementById(`queue-title${index}`);
+            const fileName = document.getElementById(`queue-title${index}`);
             editField.placeholder = path.parse(fileName.innerHTML).name;
-            let saveBtn = document.getElementById('save-edit-btn');
-            saveBtn.addEventListener('click', function () {
-              if (!(editField.value == '')) {
+            const saveBtn = document.getElementById('save-edit-btn');
+            saveBtn.addEventListener('click', () => {
+              if (editField.value !== '') {
                 sessionStorage.setItem(`out${index}`, editField.value);
                 closeModal(editModal);
                 enhancr.terminal(`Set output file name for position '${index}' in queue to: '${editField.value}'`);
               }
-            })
-          }
-        })
-      };
-    });
-
-    // open folder / share
-    let context2 = [].slice.call(document.getElementsByClassName('context-item2'));
-
-    context2.forEach(function (item) {
-      if (!(item.classList.contains('listener'))) {
-        item.classList.add('listener');
-        item.addEventListener('click', async function () {
-          let id = item.id;
-          let index = id.charAt(id.length - 1);
-          if (item.innerHTML == '<i class="fa-solid fa-share-nodes"></i> Share') {
-            const response = await axios.get('https://api.gofile.io/getServer');
-            var bestServer = response.data.data.server;
-            let outputPath;
-            let model;
-            if (!(sessionStorage.getItem(`out${index}`) == null)) {
-              outputPath = path.join(queue[index].output, sessionStorage.getItem(`out${index}`) + queue[index].extension);
-            } else if (queue[index].mode == 'interpolation') {
-              if (queue[index].engine == "Channel Attention - CAIN (NCNN)") {
-                model = "CAIN"
-              } else if (queue[index].engine == "Optical Flow - RIFE (NCNN)") {
-                model = "RIFE"
-              } else if (queue[index].engine == "Optical Flow - RIFE (TensorRT)") {
-                model = "RIFE"
-              } else if (queue[index].engine == "Channel Attention - CAIN (TensorRT)") {
-                model = "CAIN"
-              } else if (queue[index].engine == "GMFlow - GMFSS (PyTorch)") {
-                model = "GMFSS"
-              } else if (queue[index].engine == "GMFlow - GMFSS (TensorRT)") {
-                model = "GMFSS"
-              }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
-            } else if (queue[index].mode == 'upscaling') {
-              if (queue[index].engine == "Upscaling - RealESRGAN (TensorRT)" || queue[index].engine == "Upscaling - RealESRGAN (NCNN)") {
-                model = "RealESRGAN"
-              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (TensorRT)") {
-                model = "ShuffleCUGAN"
-              } else if (queue[index].engine == "Upscaling - ShuffleCUGAN (NCNN)") {
-                model = "ShuffleCUGAN"
-              } else if (queue[index].engine == "Upscaling - RealCUGAN (TensorRT)") {
-                model = "RealCUGAN"
-              } else if (queue[index].engine == "Upscaling - SwinIR (TensorRT)") {
-                model = "SwinIR"
-              }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
-            } else if (queue[index].mode == 'restoration') {
-              if (queue[index].engine == "Restoration - DPIR (TensorRT)") {
-                model = "DPIR"
-              } else if (queue[index].engine == "Restoration - AnimeVideo (TensorRT)") {
-                model = "AnimeVideo"
-              } else {
-                model = "AnimeVideo"
-              }
-              outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
-            }
-
-            var fpsMeter = document.getElementById('fps-meter');
-            fpsMeter.style.display = "none";
-            var eta = document.getElementById('eta');
-            eta.style.style.display = "none";
-
-            const progressDone = document.getElementById("progress-done");
-
-            sessionStorage.setItem('uploadStatus', 'uploading');
-            let cmd = `curl -F file=@"${outputPath}" https://${bestServer}.gofile.io/uploadFile -o ${path.join(tempPath, '/upload.json')}`;
-            let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'] });
-            process.stdout.write('');
-            term.stdout.on('data', (data) => {
-              sessionStorage.setItem("uploadProgress", data);
             });
-            term.stderr.on('data', (data) => {
-              sessionStorage.setItem("uploadProgress", data);
-            });
-            term.on("close", () => {
-              win.setProgressBar(-1, { mode: "none" });
-              win.flashFrame(true);
-              sessionStorage.setItem('uploadStatus', 'done');
-              const json = JSON.parse(fs.readFileSync(path.join(tempPath, '/upload.json')));
-              terminal.textContent += "\r\n[gofile.io] Upload completed: " + json.data.downloadPage;
-              terminal.scrollTop = terminal.scrollHeight;
-              progressSpan.textContent = `Upload complete: ${path.basename(outputPath)} | 100%`;
-              var notification = new Notification("Upload completed", { icon: "./assets/enhancr.png", body: json.data.downloadPage });
-              progressDone.style.width = `100%`;
-              clipboard.writeText(json.data.downloadPage);
-              terminal.textContent += "\r\n[gofile.io] Copied link to clipboard.";
-              window.open(json.data.downloadPage, "_blank");
-            });
-
-            var progressInterval = setInterval(async function () {
-              var progress = sessionStorage.getItem('uploadProgress');
-              if (progress.length >= 22) {
-                var trimmed = progress.trim();
-                var percentage = trimmed.split(' ')[0];
-                terminal.textContent += `\r\n[gofile.io] Uploading... (${percentage}%)`;
-                terminal.scrollTop = terminal.scrollHeight;
-                progressSpan.textContent = `Uploading ${path.basename(outputPath)} | ${percentage}%`;
-                progressDone.style.width = `${percentage}%`;
-                if (percentage == 100) {
-                  sessionStorage.setItem('uploadStatus', 'done');
-                }
-                win.setProgressBar(parseInt(percentage) / 100);
-                ipcRenderer.send('rpc-uploading', parseInt(percentage), path.basename(outputPath));
-                if (sessionStorage.getItem('uploadStatus') == 'done') {
-                  win.setProgressBar(-1);
-                  win.flashFrame(true);
-                  clearInterval(progressInterval);
-                }
-              } else {
-                // do nothing
-              }
-            }, 1000)
-          } else {
-            let trimModal = document.getElementById('modal-trim');
-            openModal(trimModal);
-            let saveTimestamps = document.getElementById('save-timestamps-btn');
-            saveTimestamps.addEventListener('click', () => {
-              sessionStorage.setItem(`trim${index}`, document.getElementById('timestamp-trim').value);
-              closeModal(trimModal);
-            })
           }
         });
       }
     });
+
+  // open folder / share
+  const contextItem2 = Array.from(document.getElementsByClassName('context-item2'));
+
+  contextItem2.forEach((item) => {
+    if (!item.classList.contains('listener')) {
+      item.classList.add('listener');
+      item.addEventListener('click', async () => {
+        const id = item.id;
+        const index = id.charAt(id.length - 1);
+        if (item.innerHTML === '<i class="fa-solid fa-share-nodes"></i> Share') {
+          const response = await axios.get('https://api.gofile.io/getServer');
+          const bestServer = response.data.data.server;
+          let outputPath;
+          let model;
+
+          if (sessionStorage.getItem(`out${index}`) !== null) {
+            outputPath = path.join(queue[index].output, sessionStorage.getItem(`out${index}`) + queue[index].extension);
+          } else if (queue[index].mode === 'interpolation') {
+            model = modelMap[queue[index].engine];
+            outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-2x${queue[index].extension}`);
+          } else if (queue[index].mode === 'upscaling') {
+            model = modelMap[queue[index].engine];
+            outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-${queue[index].scale}x${queue[index].extension}`);
+          } else if (queue[index].mode === 'restoration') {
+            model = modelMap[queue[index].engine] || "RealESRGAN";
+            outputPath = path.join(queue[index].output, path.parse(queue[index].file).name + `_${model}-1x${queue[index].extension}`);
+          }
+
+          const progressDone = document.getElementById("progress-done");
+          sessionStorage.setItem('uploadStatus', 'uploading');
+          const cmd = `curl -F file=@"${outputPath}" https://${bestServer}.gofile.io/uploadFile -o ${path.join(tempPath, '/upload.json')}`;
+          const term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'] });
+
+          process.stdout.write('');
+
+          term.stdout.on('data', (data) => {
+            sessionStorage.setItem("uploadProgress", data);
+          });
+
+          term.stderr.on('data', (data) => {
+            sessionStorage.setItem("uploadProgress", data);
+          });
+
+          term.on("close", () => {
+            win.setProgressBar(-1, { mode: "none" });
+            win.flashFrame(true);
+            sessionStorage.setItem('uploadStatus', 'done');
+            const json = JSON.parse(fs.readFileSync(path.join(tempPath, '/upload.json')));
+            terminal.textContent += "\r\n[gofile.io] Upload completed: " + json.data.downloadPage;
+            terminal.scrollTop = terminal.scrollHeight;
+            progressSpan.textContent = `Upload complete: ${path.basename(outputPath)} | 100%`;
+            const notification = new Notification("Upload completed", { icon: "./assets/enhancr.png", body: json.data.downloadPage });
+            progressDone.style.width = `100%`;
+            clipboard.writeText(json.data.downloadPage);
+            terminal.textContent += "\r\n[gofile.io] Copied link to clipboard.";
+            window.open(json.data.downloadPage, "_blank");
+          });
+
+          const progressInterval = setInterval(() => {
+            const progress = sessionStorage.getItem('uploadProgress');
+            if (progress.length >= 22) {
+              const trimmed = progress.trim();
+              const percentage = trimmed.split(' ')[0];
+              terminal.textContent += `\r\n[gofile.io] Uploading... (${percentage}%)`;
+              terminal.scrollTop = terminal.scrollHeight;
+              progressSpan.textContent = `Uploading ${path.basename(outputPath)} | ${percentage}%`;
+              progressDone.style.width = `${percentage}%`;
+              if (percentage === 100) {
+                sessionStorage.setItem('uploadStatus', 'done');
+              }
+              win.setProgressBar(parseInt(percentage) / 100);
+              ipcRenderer.send('rpc-uploading', parseInt(percentage), path.basename(outputPath));
+              if (sessionStorage.getItem('uploadStatus') === 'done') {
+                win.setProgressBar(-1);
+                win.flashFrame(true);
+                clearInterval(progressInterval);
+              }
+            }
+          }, 1000);
+        } else {
+          const trimModal = document.getElementById('modal-trim');
+          openModal(trimModal);
+          const saveTimestamps = document.getElementById('save-timestamps-btn');
+          saveTimestamps.addEventListener('click', () => {
+            sessionStorage.setItem(`trim${index}`, document.getElementById('timestamp-trim').value);
+            closeModal(trimModal);
+          });
+        }
+      });
+    }
+  });
 
     // remove queue item listener
     let removeBtn = [].slice.call(document.getElementsByClassName('queue-item-remove'));
@@ -910,6 +779,9 @@ try {
               queueIcon.classList.add('fa-rotate');
               queueIcon.classList.add('fa-spin');
               queueIcon.classList.add('queue-item-spin');
+
+              let queueDots = document.getElementById(`queue-item-dots${queue.indexOf(item)}`);
+              queueDots.style.pointerEvents = 'none';
             };
           }
         })
@@ -928,10 +800,14 @@ try {
           sessionStorage.removeItem('percent');
           sessionStorage.removeItem('currentFrame');
           sessionStorage.removeItem('totalFrames');
+          sessionStorage.removeItem('trim${queue.indexOf(item)}');
+          sessionStorage.removeItem('out${queue.indexOf(item)}');
           document.getElementById('progress-done').style.width = "0%";
           document.getElementById('eta').style.display = "none";
           document.getElementById('fps-meter').style.display = "none";
           document.getElementById('loading').style.display = "none";
+          let queueDots = document.getElementById(`queue-item-dots${queue.indexOf(item)}`);
+          queueDots.style.pointerEvents = 'auto';
         })
         .process(async (item, index, pool) => {
           if (item.status == '0') {
@@ -1090,6 +966,15 @@ document.getElementById('clear-queue-btn').addEventListener('click', () => {
   renderQueueItem()
   document.getElementById('clear-queue-btn').style.visibility = 'hidden';
   sessionStorage.setItem('queueLength', queue.length);
+  for(let i = 0; i < queue.length; i++) {
+    try {
+        sessionStorage.removeItem('queuePercent' + i);
+        sessionStorage.removeItem('queueLength');
+        sessionStorage.removeItem('percent');
+        sessionStorage.remove('progress');
+    } catch (error) {
+    }
+}
   let empty = document.createElement('span');
   empty.setAttribute('id', 'queue-blank');
   empty.textContent = 'No items scheduled for processing, add items to the queue to get started.';

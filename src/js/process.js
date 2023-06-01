@@ -97,6 +97,10 @@ class Process {
                     var percentage = Math.ceil(100 * (currentFrame / totalFrames));
                     sessionStorage.setItem("percent", percentage + "%");
                     progressDone.style.width = percentage + "%";
+
+                    let queueIndex = Number(sessionStorage.getItem('queueIndex'));
+                    sessionStorage.setItem(`queuePercent${queueIndex}`, queueIndex || 0);
+
                     win.setProgressBar(parseInt(percentage) / 100);
                     let currentIndex = parseInt(sessionStorage.getItem('queueIndex'));
                     let queueProgress = document.getElementById(`queue-percent${currentIndex}`);
@@ -205,6 +209,10 @@ class Process {
                     var percentage = Math.ceil(100 * (currentFrame / totalFrames));
                     sessionStorage.setItem("percent", percentage + "%");
                     progressDone.style.width = percentage + "%";
+
+                    let queueIndex = Number(sessionStorage.getItem('queueIndex'));
+                    sessionStorage.setItem(`queuePercent${queueIndex}`, queueIndex || 0);
+
                     win.setProgressBar(parseInt(percentage) / 100);
                     let currentIndex = parseInt(sessionStorage.getItem('queueIndex'));
                     let queueProgress = document.getElementById(`queue-percent${currentIndex}`);
@@ -315,6 +323,10 @@ class Process {
                         var percentage = Math.ceil(100 * (currentFrame / totalFrames));
                         sessionStorage.setItem("percent", percentage + "%");
                         progressDone.style.width = percentage + "%";
+
+                        let queueIndex = Number(sessionStorage.getItem('queueIndex'));
+                        sessionStorage.setItem(`queuePercent${queueIndex}`, percentage || 0);
+
                         win.setProgressBar(parseInt(percentage) / 100);
                         let currentIndex = parseInt(sessionStorage.getItem('queueIndex'));
                         let queueProgress = document.getElementById(`queue-percent${currentIndex}`);
