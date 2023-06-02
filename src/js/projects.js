@@ -662,6 +662,8 @@ function loadRestoration() {
   // fill engine input
   if (data.restoration[0].engine === "dpir") {
     restorationEngineSpan.textContent = "Restoration - DPIR (TensorRT)";
+  } else if (data.restoration[0].engine === "dpir-dml") {
+    restorationEngineSpan.textContent = "Restoration - DPIR (DirectML)";
   } else if (data.restoration[0].engine === "esrgan-1x-trt") {
     restorationEngineSpan.textContent = "Restoration - RealESRGAN (1x) (TensorRT)";
   } else if (data.restoration[0].engine === "esrgan-1x-ncnn") {
@@ -678,6 +680,11 @@ function loadRestoration() {
 
   // fill model input
   if (data.restoration[0].engine === "dpir") {
+    modelSpanRes.textContent = "Denoise";
+    denoiseSharpen.style.display = 'none';
+    denoise.style.display = 'block';
+    deblock.style.display = 'block';
+  } else if (data.restoration[0].engine === "dpir-dml") {
     modelSpanRes.textContent = "Denoise";
     denoiseSharpen.style.display = 'none';
     denoise.style.display = 'block';

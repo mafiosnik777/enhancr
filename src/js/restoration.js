@@ -167,6 +167,10 @@ class Restoration {
                     return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx")
                 } else if (engine == 'Restoration - DPIR (TensorRT)' && model == 'Deblock') {
                     return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx")
+                } else if (engine == 'Restoration - DPIR (DirectML)' && model == 'Denoise') {
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx")
+                } else if (engine == 'Restoration - DPIR (DirectML)' && model == 'Deblock') {
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx")
                 } else if (engine == 'Restoration - RealESRGAN (1x) (TensorRT)' && !(document.getElementById('custom-model-check').checked)) {
                     return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
                 } else if (engine == 'Restoration - RealESRGAN (1x) (NCNN)' && !(document.getElementById('custom-model-check').checked)) {
@@ -236,7 +240,7 @@ class Restoration {
             console.log(engine); 
 
             // convert onnx to trt engine
-            if (!fse.existsSync(engineOut) && (engine != 'Restoration - RealESRGAN (1x) (NCNN)' && engine != "Restoration - RealESRGAN (1x) (DirectML)")) {
+            if (!fse.existsSync(engineOut) && (engine != 'Restoration - RealESRGAN (1x) (NCNN)' && engine != "Restoration - RealESRGAN (1x) (DirectML)" && engine != "Restoration - DPIR (DirectML)")) {
                 function convertToEngine() {
                     return new Promise(function(resolve) {
                         if (fp16.checked == true) {
@@ -347,6 +351,8 @@ class Restoration {
             // determine model
             if (engine == "Restoration - DPIR (TensorRT)") {
                 model = "DPIR"
+            } else if (engine == "Restoration - DPIR (DirectML)") {
+                model = "DPIR"
             } else if (engine == "Restoration - RealESRGAN (1x) (TensorRT)") {
                 model = "RealESRGAN-1x"
             } else {
@@ -367,6 +373,9 @@ class Restoration {
             function pickEngine() {
                 if (engine == "Restoration - DPIR (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "inference/dpir.py") : path.join(process.resourcesPath, "inference/dpir.py")
+                }
+                if (engine == "Restoration - DPIR (DirectML)") {
+                    return !isPackaged ? path.join(__dirname, '..', "inference/dpir_dml.py") : path.join(process.resourcesPath, "inference/dpir_dml.py")
                 }
                 if (engine == "Restoration - RealESRGAN (1x) (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "inference/esrgan.py") : path.join(process.resourcesPath, "inference/esrgan.py")

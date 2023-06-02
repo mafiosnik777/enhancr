@@ -2304,6 +2304,7 @@ engineInputRestore.addEventListener("click", function () {
 });
 
 const dpirOption = document.getElementById('dpir');
+const dpirDmlOption = document.getElementById('dpir-dml');
 const esrgan1xOption = document.getElementById('anime-video');
 const esrgan1xNcnnOption = document.getElementById('anime-video-ncnn');
 const esrgan1xDmlOption = document.getElementById('anime-video-dml');
@@ -2327,6 +2328,24 @@ dpirOption.addEventListener("click", function () {
     var currentProject = sessionStorage.getItem("currentProject");
     const data = JSON.parse(fs.readFileSync(currentProject));
     data.restoration[0].engine = "dpir";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
+
+// change engine (dpir-dml)
+dpirDmlOption.addEventListener("click", function () {
+    restoreEngineText.textContent = "Restoration - DPIR (DirectML)";
+    hiderRestore.style.visibility = "hidden";
+    engineDropdownRestore.style.visibility = "hidden";
+    modelSpanRes.textContent = "Denoise";
+    denoiseSharpen.style.display = 'none';
+    denoise.style.display = 'block';
+    deblock.style.display = 'block';
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.restoration[0].engine = "dpir-dml";
     fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
     console.log("Engine written to project file.");
 });

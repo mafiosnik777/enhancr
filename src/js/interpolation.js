@@ -144,7 +144,7 @@ class Interpolation {
                 width = roundedWidth;
                 height = roundedHeight
             }
-
+            
             function getOnnx() {
                 if (model == 'RVP - v1.0') {
                     if (fp16 && engine != 'Channel Attention - CAIN (DirectML)') {
@@ -158,7 +158,7 @@ class Interpolation {
                     } else {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6.onnx")
                     }
-                } else if (model == 'RVP - v2.0') {
+                } else {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv2/rvpv2.onnx")
                 }
             }
@@ -172,11 +172,6 @@ class Interpolation {
             sessionStorage.setItem('engineOut', engineOut);
 
             const progressSpan = document.getElementById("progress-span");
-
-            let fp16Onnx = () => {
-                if (fp16 && model != 'RVP - v2.0') return "True"
-                else return "False"
-            }
 
             // inject env hook
             let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_auto_activate.bat")}"`
