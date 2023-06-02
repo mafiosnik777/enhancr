@@ -31,6 +31,7 @@ var mediaInfoText = document.getElementsByClassName("info-text");
 var tooltips = document.getElementsByClassName("tooltip-text");
 var header = document.getElementsByClassName("theme-header");
 var side = document.getElementsByClassName("theme-side");
+var options = document.getElementsByClassName("option");
 
 var blue = document.getElementById("theme-select-blue");
 
@@ -40,7 +41,7 @@ var progressDone = document.getElementById("progress-done");
 let queueProgressBar = document.getElementsByClassName('queue-item-progress-overlay');
 
 function blueSelect() {
-    selector.style.top = "38%";
+    selector.style.top = "40%";
     selector.style.left = "13%";
     sessionStorage.setItem('theme', 'blue');
     settingsSaveButton.style.color = "#1e5cce";
@@ -75,6 +76,10 @@ function blueSelect() {
         side[i].style.setProperty('--side-hover', "#1e5cce");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#1e5cce");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#1c73d333";
     }
@@ -100,7 +105,7 @@ blue.addEventListener("click", blueSelect);
 var pink = document.getElementById("theme-select-pink");
 
 function pinkSelect() {
-    selector.style.top = "38%";
+    selector.style.top = "40%";
     selector.style.left = "25%";
     sessionStorage.setItem('theme', 'pink');
     settingsSaveButton.style.color = "#ce1e6c";
@@ -135,6 +140,10 @@ function pinkSelect() {
         side[i].style.setProperty('--side-hover', "#ce1e6c");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#ce1e6c");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#ce1e6c33";
     }
@@ -159,7 +168,7 @@ pink.addEventListener("click", pinkSelect);
 var green = document.getElementById("theme-select-green");
 
 function greenSelect() {
-    selector.style.top = "38%";
+    selector.style.top = "40%";
     selector.style.left = "37%";
     sessionStorage.setItem('theme', 'green');
     settingsSaveButton.style.color = "#9ece1e";
@@ -194,6 +203,10 @@ function greenSelect() {
         side[i].style.setProperty('--side-hover', "#9ece1e");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#9ece1e");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#9ece1e33";
     }
@@ -218,7 +231,7 @@ green.addEventListener("click", greenSelect);
 var purple = document.getElementById("theme-select-purple");
 
 function purpleSelect() {
-    selector.style.top = "38%";
+    selector.style.top = "40%";
     selector.style.left = "49%";
     sessionStorage.setItem('theme', 'purple');
     settingsSaveButton.style.color = "#601ece";
@@ -253,6 +266,10 @@ function purpleSelect() {
         side[i].style.setProperty('--side-hover', "#601ece");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#601ece");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#601ece33";
     }
@@ -278,7 +295,7 @@ purple.addEventListener("click", purpleSelect);
 var orange = document.getElementById("theme-select-orange");
 
 function orangeSelect() {
-    selector.style.top = "38%";
+    selector.style.top = "40%";
     selector.style.left = "61%";
     sessionStorage.setItem('theme', 'orange');
     settingsSaveButton.style.color = "#e36812";
@@ -313,6 +330,10 @@ function orangeSelect() {
         side[i].style.setProperty('--side-hover', "#e36812");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#e36812");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#e3681233";
     }
@@ -337,7 +358,7 @@ orange.addEventListener("click", orangeSelect);
 var yellow = document.getElementById("theme-select-yellow");
 
 function yellowSelect() {
-    selector.style.top = "38%";
+    selector.style.top = "40%";
     selector.style.left = "73%";
     sessionStorage.setItem('theme', 'yellow');
     settingsSaveButton.style.color = "#cece1b";
@@ -372,6 +393,10 @@ function yellowSelect() {
         side[i].style.setProperty('--side-hover', "#cece1b");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#cece1b");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#cece1b33";
     }
@@ -396,7 +421,7 @@ yellow.addEventListener("click", yellowSelect);
 var red = document.getElementById("theme-select-red");
 
 function redSelect() {
-    selector.style.top = "38%";
+    selector.style.top = "40%";
     selector.style.left = "85%";
     sessionStorage.setItem('theme', 'red');
     settingsSaveButton.style.color = "#ce2a1e";
@@ -431,6 +456,10 @@ function redSelect() {
         side[i].style.setProperty('--side-hover', "#ce2a1e");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#ce2a1e");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#ce2a1e33";
     }
@@ -455,7 +484,7 @@ red.addEventListener("click", redSelect);
 var sand = document.getElementById("theme-select-sand");
 
 function sandSelect() {
-    selector.style.top = "47%";
+    selector.style.top = "50%";
     selector.style.left = "13%";
     sessionStorage.setItem('theme', 'sand');
     settingsSaveButton.style.color = "#E9DAC1";
@@ -490,6 +519,10 @@ function sandSelect() {
         side[i].style.setProperty('--side-hover', "#E9DAC1");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#E9DAC1");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#E9DAC133";
     }
@@ -514,7 +547,7 @@ sand.addEventListener("click", sandSelect);
 var mint = document.getElementById("theme-select-mint");
 
 function mintSelect() {
-    selector.style.top = "47%";
+    selector.style.top = "50%";
     selector.style.left = "25%";
     sessionStorage.setItem('theme', 'mint');
     settingsSaveButton.style.color = "#8FE3CF";
@@ -549,6 +582,10 @@ function mintSelect() {
         side[i].style.setProperty('--side-hover', "#8FE3CF");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#8FE3CF");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#8FE3CF33";
     }
@@ -573,7 +610,7 @@ mint.addEventListener("click", mintSelect);
 var salmon = document.getElementById("theme-select-salmon");
 
 function salmonSelect() {
-    selector.style.top = "47%";
+    selector.style.top = "50%";
     selector.style.left = "37%";
     sessionStorage.setItem('theme', 'salmon');
     settingsSaveButton.style.color = "#FFB3B3";
@@ -608,6 +645,10 @@ function salmonSelect() {
         side[i].style.setProperty('--side-hover', "#FFB3B3");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#FFB3B3");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#FFB3B333";
     }
@@ -632,7 +673,7 @@ salmon.addEventListener("click", salmonSelect);
 var egg = document.getElementById("theme-select-egg");
 
 function eggSelect() {
-    selector.style.top = "47%";
+    selector.style.top = "50%";
     selector.style.left = "49%";
     sessionStorage.setItem('theme', 'egg');
     settingsSaveButton.style.color = "#FFEF82";
@@ -667,6 +708,10 @@ function eggSelect() {
         side[i].style.setProperty('--side-hover', "#FFEF82");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#FFEF82");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#FFEF8233";
     }
@@ -691,7 +736,7 @@ egg.addEventListener("click", eggSelect);
 var lavender = document.getElementById("theme-select-lavender");
 
 function lavenderSelect() {
-    selector.style.top = "47%";
+    selector.style.top = "50%";
     selector.style.left = "61%";
     sessionStorage.setItem('theme', 'lavender');
     settingsSaveButton.style.color = "#AFB4FF";
@@ -726,6 +771,10 @@ function lavenderSelect() {
         side[i].style.setProperty('--side-hover', "#AFB4FF");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#AFB4FF");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#AFB4FF33";
     }
@@ -750,7 +799,7 @@ lavender.addEventListener("click", lavenderSelect);
 var rose = document.getElementById("theme-select-rose");
 
 function roseSelect() {
-    selector.style.top = "47%";
+    selector.style.top = "50%";
     selector.style.left = "73%";
     sessionStorage.setItem('theme', 'rose');
     settingsSaveButton.style.color = "#FF5D5D";
@@ -785,6 +834,10 @@ function roseSelect() {
         side[i].style.setProperty('--side-hover', "#FF5D5D");
     }
 
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#FF5D5D");
+    }
+
     for (var i = 0; i < header.length; i++) {
         header[i].style.background = "#FF5D5D33";
     }
@@ -809,7 +862,7 @@ rose.addEventListener("click", roseSelect);
 var grey = document.getElementById("theme-select-grey");
 
 function greySelect() {
-    selector.style.top = "47%";
+    selector.style.top = "50%";
     selector.style.left = "85%";
     sessionStorage.setItem('theme', 'grey');
     settingsSaveButton.style.color = "#696969";
@@ -842,6 +895,10 @@ function greySelect() {
 
     for (var i = 0; i < side.length; i++) {
         side[i].style.setProperty('--side-hover', "#696969");
+    }
+
+    for (var i = 0; i < options.length; i++) {
+        options[i].style.setProperty('--option-hover', "#696969");
     }
 
     for (var i = 0; i < header.length; i++) {

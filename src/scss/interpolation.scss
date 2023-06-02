@@ -197,7 +197,7 @@ $macosblue: #1e5cce;
   cursor: pointer;
 
   &:hover {
-    color: $macosblue;
+    color: var(--option-hover) !important;
   }
 }
 
