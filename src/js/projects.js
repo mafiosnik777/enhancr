@@ -664,6 +664,8 @@ function loadRestoration() {
     restorationEngineSpan.textContent = "Restoration - DPIR (TensorRT)";
   } else if (data.restoration[0].engine === "dpir-dml") {
     restorationEngineSpan.textContent = "Restoration - DPIR (DirectML)";
+  } else if (data.restoration[0].engine === "scunet") {
+    restorationEngineSpan.textContent = "Restoration - ScuNET (TensorRT)";
   } else if (data.restoration[0].engine === "esrgan-1x-trt") {
     restorationEngineSpan.textContent = "Restoration - RealESRGAN (1x) (TensorRT)";
   } else if (data.restoration[0].engine === "esrgan-1x-ncnn") {
@@ -677,23 +679,48 @@ function loadRestoration() {
   const denoiseSharpen = document.getElementById('denoise-sharpen');
   const denoise = document.getElementById('denoise');
   const deblock = document.getElementById('deblock');
+  const strength15 = document.getElementById('strength-15');
+  const strength25 = document.getElementById('strength-25');
+  const strength50 = document.getElementById('strength-50');
+  const strengthGAN = document.getElementById('strength-gan');
 
   // fill model input
   if (data.restoration[0].engine === "dpir") {
     modelSpanRes.textContent = "Denoise";
     denoiseSharpen.style.display = 'none';
+    strength15.style.display = 'none';
+    strength25.style.display = 'none';
+    strength50.style.display = 'none';
+    strengthGAN.style.display = 'none';
     denoise.style.display = 'block';
     deblock.style.display = 'block';
   } else if (data.restoration[0].engine === "dpir-dml") {
     modelSpanRes.textContent = "Denoise";
+    strength15.style.display = 'none';
+    strength25.style.display = 'none';
+    strength50.style.display = 'none';
+    strengthGAN.style.display = 'none';
     denoiseSharpen.style.display = 'none';
     denoise.style.display = 'block';
     deblock.style.display = 'block';
-  } else {
+  } else if (data.restoration[0].engine === "esrgan-1x-trt" || data.restoration[0].engine === "esrgan-1x-ncnn") {
     modelSpanRes.textContent = "Denoise/Sharpen";
     denoiseSharpen.style.display = 'block';
     denoise.style.display = 'none';
     deblock.style.display = 'none';
+    strength15.style.display = 'none';
+    strength25.style.display = 'none';
+    strength50.style.display = 'none';
+    strengthGAN.style.display = 'none';
+  } else {
+    modelSpanRes.textContent = "Strength: 50%";
+    denoiseSharpen.style.display = 'none';
+    denoise.style.display = 'none';
+    deblock.style.display = 'none';
+    strength15.style.display = 'block';
+    strength25.style.display = 'block';
+    strength50.style.display = 'block';
+    strengthGAN.style.display = 'block';
   }
 }
 loadRestoration();

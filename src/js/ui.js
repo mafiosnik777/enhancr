@@ -2305,6 +2305,7 @@ engineInputRestore.addEventListener("click", function () {
 
 const dpirOption = document.getElementById('dpir');
 const dpirDmlOption = document.getElementById('dpir-dml');
+const scunetOption = document.getElementById('scunet');
 const esrgan1xOption = document.getElementById('anime-video');
 const esrgan1xNcnnOption = document.getElementById('anime-video-ncnn');
 const esrgan1xDmlOption = document.getElementById('anime-video-dml');
@@ -2313,6 +2314,32 @@ const modelSpanRes = document.getElementById('model-span-restoration');
 const denoiseSharpen = document.getElementById('denoise-sharpen');
 const denoise = document.getElementById('denoise');
 const deblock = document.getElementById('deblock');
+const strength15 = document.getElementById('strength-15');
+const strength25 = document.getElementById('strength-25');
+const strength50 = document.getElementById('strength-50');
+const strengthGAN = document.getElementById('strength-gan');
+
+// change engine (scunet)
+scunetOption.addEventListener("click", function () {
+    restoreEngineText.textContent = "Restoration - ScuNET (TensorRT)";
+    hiderRestore.style.visibility = "hidden";
+    engineDropdownRestore.style.visibility = "hidden";
+    modelSpanRes.textContent = "Strength: 50%";
+    denoiseSharpen.style.display = 'none';
+    denoise.style.display = 'none';
+    deblock.style.display = 'none';
+    strength15.style.display = 'block';
+    strength25.style.display = 'block';
+    strength50.style.display = 'block';
+    strengthGAN.style.display = 'block';
+
+    // autosave
+    var currentProject = sessionStorage.getItem("currentProject");
+    const data = JSON.parse(fs.readFileSync(currentProject));
+    data.restoration[0].engine = "scunet";
+    fs.writeFileSync(currentProject, JSON.stringify(data, null, 4));
+    console.log("Engine written to project file.");
+});
 
 // change engine (dpir)
 dpirOption.addEventListener("click", function () {
@@ -2323,6 +2350,10 @@ dpirOption.addEventListener("click", function () {
     denoiseSharpen.style.display = 'none';
     denoise.style.display = 'block';
     deblock.style.display = 'block';
+    strength15.style.display = 'none';
+    strength25.style.display = 'none';
+    strength50.style.display = 'none';
+    strengthGAN.style.display = 'none';
 
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
@@ -2341,6 +2372,10 @@ dpirDmlOption.addEventListener("click", function () {
     denoiseSharpen.style.display = 'none';
     denoise.style.display = 'block';
     deblock.style.display = 'block';
+    strength15.style.display = 'none';
+    strength25.style.display = 'none';
+    strength50.style.display = 'none';
+    strengthGAN.style.display = 'none';
 
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
@@ -2359,6 +2394,10 @@ esrgan1xOption.addEventListener("click", function () {
     denoiseSharpen.style.display = 'block';
     denoise.style.display = 'none';
     deblock.style.display = 'none';
+    strength15.style.display = 'none';
+    strength25.style.display = 'none';
+    strength50.style.display = 'none';
+    strengthGAN.style.display = 'none';
 
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
@@ -2377,6 +2416,10 @@ esrgan1xNcnnOption.addEventListener("click", function () {
     denoiseSharpen.style.display = 'block';
     denoise.style.display = 'none';
     deblock.style.display = 'none';
+    strength15.style.display = 'none';
+    strength25.style.display = 'none';
+    strength50.style.display = 'none';
+    strengthGAN.style.display = 'none';
 
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
@@ -2395,6 +2438,10 @@ esrgan1xDmlOption.addEventListener("click", function () {
     denoiseSharpen.style.display = 'block';
     denoise.style.display = 'none';
     deblock.style.display = 'none';
+    strength15.style.display = 'none';
+    strength25.style.display = 'none';
+    strength50.style.display = 'none';
+    strengthGAN.style.display = 'none';
 
     // autosave
     var currentProject = sessionStorage.getItem("currentProject");
@@ -2420,6 +2467,27 @@ denoise.addEventListener("click", function () {
 
 deblock.addEventListener("click", function () {
     modelSpanRes.textContent = "Deblock";
+    modelDropdownRes.style.visibility = "hidden";
+    hiderRestore.style.visibility = "hidden";
+});
+
+strength15.addEventListener("click", function () {
+    modelSpanRes.textContent = "Strength: 15%";
+    modelDropdownRes.style.visibility = "hidden";
+    hiderRestore.style.visibility = "hidden";
+});
+strength25.addEventListener("click", function () {
+    modelSpanRes.textContent = "Strength: 25%";
+    modelDropdownRes.style.visibility = "hidden";
+    hiderRestore.style.visibility = "hidden";
+});
+strength50.addEventListener("click", function () {
+    modelSpanRes.textContent = "Strength: 50%";
+    modelDropdownRes.style.visibility = "hidden";
+    hiderRestore.style.visibility = "hidden";
+});
+strengthGAN.addEventListener("click", function () {
+    modelSpanRes.textContent = "Strength: GAN";
     modelDropdownRes.style.visibility = "hidden";
     hiderRestore.style.visibility = "hidden";
 });

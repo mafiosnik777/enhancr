@@ -274,6 +274,7 @@ function renderQueueItem() {
       'Upscaling - SwinIR (TensorRT)': 'SwinIR',
       'Restoration - DPIR (TensorRT)': 'DPIR',
       'Restoration - DPIR (DirectML)': 'DPIR',
+      'Restoration - ScuNET (TensorRT)': 'ScuNET',
       'Restoration - RealESRGAN (1x) (NCNN)': 'RealESRGAN',
       'Restoration - RealESRGAN (1x) (TensorRT)': 'RealESRGAN',
       'Restoration - RealESRGAN (1x) (DirectML)': 'RealESRGAN',

@@ -171,6 +171,14 @@ class Restoration {
                     return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/dpir/dpir_denoise.onnx")
                 } else if (engine == 'Restoration - DPIR (DirectML)' && model == 'Deblock') {
                     return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/dpir/dpir_deblock.onnx")
+                } else if (engine == 'Restoration - ScuNET (TensorRT)' && model == 'Strength: 15%') {
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/scunet/scunet_color_15_opset18_fp32_sim.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/scunet/scunet_color_15_opset18_fp32_sim.onnx")
+                } else if (engine == 'Restoration - ScuNET (TensorRT)' && model == 'Strength: 25%') {
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/scunet/scunet_color_25_opset18_fp32_sim.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/scunet/scunet_color_25_opset18_fp32_sim.onnx")
+                } else if (engine == 'Restoration - ScuNET (TensorRT)' && model == 'Strength: 50%') {
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/scunet/scunet_color_50_opset18_fp32_sim.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/scunet/scunet_color_50_opset18_fp32_sim.onnx")
+                } else if (engine == 'Restoration - ScuNET (TensorRT)' && model == 'Strength: GAN') {
+                    return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/scunet/scunet_color_real_gan_opset18_fp32_sim.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/scunet/scunet_color_real_gan_opset18_fp32_sim.onnx")
                 } else if (engine == 'Restoration - RealESRGAN (1x) (TensorRT)' && !(document.getElementById('custom-model-check').checked)) {
                     return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/esrgan/animevideov3.onnx")
                 } else if (engine == 'Restoration - RealESRGAN (1x) (NCNN)' && !(document.getElementById('custom-model-check').checked)) {
@@ -223,8 +231,8 @@ class Restoration {
             let fp16 = document.getElementById('fp16-check');
 
             let dim = () => {
-                if (engine == 'Restoration - RealESRGAN (1x) (TensorRT)') return "3";
-                else return "4";
+                if (engine == 'Restoration - DPIR (TensorRT)') return "4";
+                else return "3";
             }
 
             const getOnnxPrecisionScript = () => {
@@ -237,16 +245,34 @@ class Restoration {
                 else return '';
             };
 
-            console.log(engine); 
+            let dimensions = document.getElementById('dimensionsRes');
+            // get width & height
+            function getWidth() {
+                return parseInt((dimensions.innerHTML).split(' x')[0]);
+            };
+            let width = getWidth();
+            
+            function getHeight() {
+                return parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
+            };
+            let height = getHeight();
+
+            let shapes = () => {
+                if (engine == 'Restoration - ScuNET (TensorRT)') {
+                    return `--optShapes=input:1x3x${height}x${width}`
+                } else {
+                    return `--minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax}`
+                }
+            }
 
             // convert onnx to trt engine
             if (!fse.existsSync(engineOut) && (engine != 'Restoration - RealESRGAN (1x) (NCNN)' && engine != "Restoration - RealESRGAN (1x) (DirectML)" && engine != "Restoration - DPIR (DirectML)")) {
                 function convertToEngine() {
                     return new Promise(function(resolve) {
                         if (fp16.checked == true) {
-                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${ioPrecision()} --minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
+                            var cmd = `"${trtexec}" --fp16 --onnx="${onnx}" ${ioPrecision()} ${shapes()} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
                         } else {
-                            var cmd = `"${trtexec}" --onnx="${onnx}" --minShapes=input:1x${dim()}x8x8 --optShapes=input:1x${dim()}x${shapeDimensionsOpt} --maxShapes=input:1x${dim()}x${shapeDimensionsMax} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
+                            var cmd = `"${trtexec}" --onnx="${onnx}" ${shapes()} --saveEngine="${engineOut}" --tacticSources=+CUDNN,-CUBLAS,-CUBLAS_LT --skipInference --preview=+fasterDynamicShapes0805,-disableExternalTacticSourcesForCore0805`;
                         }
                         let term = spawn(cmd, [], { shell: true, stdio: ['inherit', 'pipe', 'pipe'], windowsHide: true });
                         process.stdout.write('');
@@ -353,6 +379,8 @@ class Restoration {
                 model = "DPIR"
             } else if (engine == "Restoration - DPIR (DirectML)") {
                 model = "DPIR"
+            } else if (engine == "Restoration - ScuNET (TensorRT)") {
+                model = "ScuNET"
             } else if (engine == "Restoration - RealESRGAN (1x) (TensorRT)") {
                 model = "RealESRGAN-1x"
             } else {
@@ -376,6 +404,9 @@ class Restoration {
                 }
                 if (engine == "Restoration - DPIR (DirectML)") {
                     return !isPackaged ? path.join(__dirname, '..', "inference/dpir_dml.py") : path.join(process.resourcesPath, "inference/dpir_dml.py")
+                }
+                if (engine == "Restoration - ScuNET (TensorRT)") {
+                    return !isPackaged ? path.join(__dirname, '..', "inference/scunet.py") : path.join(process.resourcesPath, "inference/scunet.py")
                 }
                 if (engine == "Restoration - RealESRGAN (1x) (TensorRT)") {
                     return !isPackaged ? path.join(__dirname, '..', "inference/esrgan.py") : path.join(process.resourcesPath, "inference/esrgan.py")
@@ -406,19 +437,6 @@ class Restoration {
                 }
             }
             let vspipe = pickVspipe();
-
-            let dimensions = document.getElementById('dimensionsRes');
-
-            // get width & height
-            function getWidth() {
-                return parseInt((dimensions.innerHTML).split(' x')[0]);
-            };
-            let width = getWidth();
-
-            function getHeight() {
-                return parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
-            }
-            let height = getHeight();
 
             // inject env hook
             let inject_env = !isPackaged ? `"${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(__dirname, '..', "\\external\\python\\condabin\\conda_auto_activate.bat")}"` : `"${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_hook.bat")}" && "${path.join(process.resourcesPath, "\\external\\python\\condabin\\conda_auto_activate.bat")}"`;
