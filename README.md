@@ -44,6 +44,8 @@ Please note that builds and an embeddable python environment for the **Pro** ver
 
 >**CAIN (NCNN)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [mafiosnik](https://github.com/mafiosnik777)/**vsynth-cain-NCNN-vulkan** (unreleased)
 
+>**CAIN (DirectML)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
+
 >**CAIN (TensorRT)** - [myungsub](https://github.com/myungsub)/**[CAIN](https://github.com/myungsub/CAIN)** - powered by [HubertSotnowski](https://github.com/HubertSotnowski)/**[cain-TensorRT](https://github.com/HubertSotnowski/cain-TensorRT)**
 
 
@@ -55,15 +57,21 @@ Please note that builds and an embeddable python environment for the **Pro** ver
 
 >**RealESRGAN (NCNN)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
+>**RealESRGAN (DirectML)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
+
 >**RealESRGAN (TensorRT)** - [xinntao](https://github.com/xinntao)/**[Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
 >**RealCUGAN (TensorRT)** - [bilibili](https://github.com/bilibili)/**[ailab/Real-CUGAN](https://github.com/bilibili/ailab/tree/main/Real-CUGAN)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
 
->**SwinIR (TensorRT)** - [JingyunLiang](https://github.com/JingyunLiang)/**[SwinIR](https://github.com/JingyunLiang/SwinIR)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
+>**SwinIR (TensorRT)** - [JingyunLiang](https://github.com/JingyunLiang)/**[SwinIR](https://github.com/JingyunLiang/SwinIR)** - powered by [mafiosnik777](https://github.com/mafiosnik777)/**SwinIR-TensorRT** (unreleased)
 
 ## Restoration
 
+>**DPIR (DirectML)** - [cszn](https://github.com/cszn)/**[DPIR](https://github.com/cszn/DPIR)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
+
 >**DPIR (TensorRT)** - [cszn](https://github.com/cszn)/**[DPIR](https://github.com/cszn/DPIR)** - powered by [AmusementClub](https://github.com/AmusementClub)/**[vs-mlrt](https://github.com/AmusementClub/vs-mlrt)**
+
+>**SCUNet (TensorRT)** - [cszn](https://github.com/cszn)/**[SCUNet](https://github.com/cszn/SCUNet)** - powered by [mafiosnik777](https://github.com/mafiosnik777)/**SCUNet-TensorRT** (unreleased)
 
 # System Requirements
 
@@ -71,14 +79,14 @@ Please note that builds and an embeddable python environment for the **Pro** ver
 
 #### Minimum:
  - Dual Core CPU with Hyperthreading enabled
- - Vulkan-capable graphics processor for inference with NCNN
+ - Vulkan-capable graphics processor for inference with NCNN / DirectX 12-capable graphics processor for inference with DirectML
  - Windows 10
 
 #### Recommended:
 
 -   Quad Core Intel Kaby Lake/AMD Ryzen or newer with Hyperthreading enabled
 -   16 GB RAM
--   NVIDIA 2000 Series (Ampere) for TensorRT/NCNN or AMD Polaris for NCNN
+-   NVIDIA 2000 Series (Ampere) for TensorRT
 -   Windows 11
 
 <sub>Sidenote: Starting with TensorRT 8.6, support for 2nd generation Kepler and Maxwell (900 Series and below) has been dropped. You will need at least a Pascal GPU (1000 series and up) and CUDA 12.0 + driver version >= 525.xx to run inference using TensorRT.</sub>
