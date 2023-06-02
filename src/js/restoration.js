@@ -213,6 +213,18 @@ class Restoration {
 
             let shapeDimensionsOpt = adjustedHeight + 'x' + adjustedWidth;
 
+            let dimensions = document.getElementById('dimensionsRes');
+            // get width & height
+            function getWidth() {
+                return parseInt((dimensions.innerHTML).split(' x')[0]);
+            };
+            let width = getWidth();
+            
+            function getHeight() {
+                return parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
+            };
+            let height = getHeight();
+
             // get engine path
             function getEnginePath() {
                 if (engine == 'Restoration - RealESRGAN (1x) (NCNN)') {
@@ -221,6 +233,8 @@ class Restoration {
                     } else {
                         return path.join(appDataPath, '/.enhancr/models/RealESRGAN', document.getElementById('custom-model-text').innerHTML);
                     }
+                } else if (engine == 'Restoration - ScuNET (TensorRT)') {
+                    return path.join(appDataPath, '/.enhancr/models/engine', `${path.parse(onnx).name}-${fp}_${height}x${width}_trt_${trtVersion}.engine`);
                 } else {
                     return path.join(appDataPath, '/.enhancr/models/engine', `${path.parse(onnx).name}-${fp}_${shapeDimensionsMax}_trt_${trtVersion}.engine`);
                 }
@@ -244,18 +258,6 @@ class Restoration {
                 if (onnxPrecision.trim() === 'FLOAT16') return '--inputIOFormats=fp16:chw --outputIOFormats=fp16:chw';
                 else return '';
             };
-
-            let dimensions = document.getElementById('dimensionsRes');
-            // get width & height
-            function getWidth() {
-                return parseInt((dimensions.innerHTML).split(' x')[0]);
-            };
-            let width = getWidth();
-            
-            function getHeight() {
-                return parseInt(((dimensions.innerHTML).split('x ')[1]).split(' ')[0]);
-            };
-            let height = getHeight();
 
             let shapes = () => {
                 if (engine == 'Restoration - ScuNET (TensorRT)') {
