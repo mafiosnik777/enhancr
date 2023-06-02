@@ -147,11 +147,7 @@ class Interpolation {
             
             function getOnnx() {
                 if (model == 'RVP - v1.0') {
-                    if (fp16 && engine != 'Channel Attention - CAIN (DirectML)') {
-                        return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1_fp16.onnx")
-                    } else {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-rvpv1/rvpv1.onnx")
-                    }
                 } else if (model == 'CVP - v6.0') {
                     if (fp16 && engine != 'Channel Attention - CAIN (DirectML)') {
                         return !isPackaged ? path.join(__dirname, '..', "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx") : path.join(process.resourcesPath, "/external/python/vapoursynth64/plugins/models/cain-cvpv6/cvpv6_fp16.onnx")
@@ -180,7 +176,7 @@ class Interpolation {
             if (!fse.existsSync(engineOut) && engine == 'Channel Attention - CAIN (TensorRT)') {
                 function convertToEngine() {
                     return new Promise(function(resolve) {
-                        if (!(model == 'RVP - v2.0')) {
+                        if (!(model == 'RVP - v2.0') || !(model == 'RVP - v1.0')) {
                             var inputIO = `--inputIOFormats=fp16:chw --outputIOFormats=fp16:chw`
                         } else {
                             var inputIO = ``
