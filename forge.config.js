@@ -27,7 +27,9 @@ module.exports = {
           },
         ignore: [
             'src/scss',
-            'env',
+            'external',
+            'inference',
+            'utils',
             /\.map$/i,
             // ...ignoredPaths,
         ],
@@ -55,8 +57,14 @@ module.exports = {
         },
         postMake:  () => {
             const pythonDir = './src/external/'
-            const targetDir = './out/enhancr-win32-x64/resources/external'
-            fs.copySync(pythonDir, targetDir);
+            const inferenceDir = './src/inference/'
+            const utilsDir = './src/utils/'
+            const targetDirPython = './out/enhancr-win32-x64/resources/external'
+            const targetDirInference = './out/enhancr-win32-x64/resources/inference'
+            const targetDirUtils = './out/enhancr-win32-x64/resources/utils'
+            fs.copySync(pythonDir, targetDirPython);
+            fs.copySync(pythonDir, targetDirInference);
+            fs.copySync(pythonDir, targetDirUtils);
         }
     },
     makers: [
