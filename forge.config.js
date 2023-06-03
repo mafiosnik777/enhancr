@@ -63,8 +63,8 @@ module.exports = {
             const targetDirInference = './out/enhancr-win32-x64/resources/inference'
             const targetDirUtils = './out/enhancr-win32-x64/resources/utils'
             fs.copySync(pythonDir, targetDirPython);
-            fs.copySync(pythonDir, targetDirInference);
-            fs.copySync(pythonDir, targetDirUtils);
+            fs.copySync(inferenceDir, targetDirInference);
+            fs.copySync(utilsDir, targetDirUtils);
         }
     },
     makers: [
