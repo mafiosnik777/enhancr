@@ -27,9 +27,9 @@ module.exports = {
           },
         ignore: [
             'src/scss',
-            'external',
-            'inference',
-            'utils',
+            'src/external',
+            'src/inference',
+            'src/utils',
             /\.map$/i,
             // ...ignoredPaths,
         ],
