@@ -481,7 +481,7 @@ function loadUpscaling() {
     document.getElementById('factor4').style.display = 'none';
     document.getElementById('factor3').style.display = 'none';
   }
-  if (data.upscaling[0].engine === "s") {
+  if (data.upscaling[0].engine === "") {
     upscaleEngineSpan.textContent = "Upscaling - ShuffleCUGAN (NCNN)"
     document.getElementById('factor4').style.display = 'none';
     document.getElementById('factor3').style.display = 'none';
