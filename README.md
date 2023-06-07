@@ -23,7 +23,7 @@ It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI
 # Installation
 
 **Release 0.9.8 features a free version 🎉**
-https://dl.enhancr.app/enhancr-setup-free-0.9.8.exe
+https://dl.enhancr.app/enhancr-setup-free-0.9.9.exe
 
 To ensure that you have the most recent version of the software and all necessary dependencies, we recommend downloading the installer from [Patreon](https://www.patreon.com/mafiosnik). 
 Please note that builds and an embeddable python environment for the **Pro** version **are not** provided through this repository.
