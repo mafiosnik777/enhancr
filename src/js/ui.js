@@ -2544,6 +2544,8 @@ if (localStorage.getItem('pro') == 'false') {
     document.getElementById('swinir').style.color = '#4f4f4f';
     document.getElementById('swinir').style.pointerEvents = 'none';
 
+    document.getElementById('scunet').style.color = '#4f4f4f';
+    document.getElementById('scunet').style.pointerEvents = 'none';
     document.getElementById('dpir').style.color = '#4f4f4f';
     document.getElementById('dpir').style.pointerEvents = 'none';
     document.getElementById('anime-video').style.color = '#4f4f4f';

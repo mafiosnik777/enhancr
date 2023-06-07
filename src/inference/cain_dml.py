@@ -13,7 +13,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
 from utils.vfi_inference import vfi_frame_merger
-from utils.trt_precision import check_model_precision_trt
 
 ossystem = platform.system()
 core = vs.core
