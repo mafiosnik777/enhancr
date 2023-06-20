@@ -123,7 +123,7 @@ class Process {
                         var fpsNumber = parseFloat(fps.replace(" fps"));
                         var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
                         etaElement.style.display = "inline-block";
-                        etaText.textContent = " " + eta + " minutes";
+                        etaText.textContent = eta === 1 ? " " + eta + " minutes" : " " + eta + " minute";
                         var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
                         ipcRenderer.send('rpc-restoration', fpsNumber, engineCleaned, percentage);
                     }
@@ -234,7 +234,7 @@ class Process {
                         var fpsNumber = parseFloat(fps.replace(" fps"));
                         var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
                         etaElement.style.display = "inline-block";
-                        etaText.textContent = " " + eta + " minutes";
+                        etaText.textContent = eta === 1 ? " " + eta + " minutes" : " " + eta + " minute";
                         var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
                         ipcRenderer.send('rpc-upscaling', fpsNumber, engineCleaned, percentage);
                     }
@@ -353,7 +353,7 @@ class Process {
                             var fpsNumber = parseFloat(fps.replace(" fps"));
                             var eta = Math.round((totalFrames - currentFrame) / fpsNumber / 60);
                             etaElement.style.display = "inline-block";
-                            etaText.textContent = " " + eta + " minutes";
+                            etaText.textContent = eta === 1 ? " " + eta + " minutes" : " " + eta + " minute";
                             var engineCleaned = sessionStorage.getItem('engine').split("- ")[1];
                             ipcRenderer.send('rpc-interpolation', fpsNumber, engineCleaned, percentage);
                         }
