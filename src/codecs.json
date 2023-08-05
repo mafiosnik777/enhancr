@@ -12,9 +12,9 @@
             "h264_amf": "-c:v h264_amf -quality balanced -profile high -rc cqp -qp 20 -pix_fmt nv12",
             "hevc_amf": "-c:v hevc_amf -quality balanced -profile main -rc cqp -qp 20 -pix_fmt nv12",
             "av1_amf": "-c:v av1_amf -quality balanced -profile main -rc cqp -qp 20 -pix_fmt nv12",
-            "h264_qsv": "-c:v h264_qsv -preset slow -look_ahead 30 -q 25 -pix_fmt nv12",
-            "hevc_qsv": "-c:v hevc_qsv -preset slow -look_ahead 30 -q 25 -pix_fmt nv12",
-            "av1_qsv":"-c:v av1_qsv -preset slow -look_ahead 30 -q 25 -pix_fmt nv12"
+            "h264_qsv": "-c:v h264_qsv -preset slow -q 25 -pix_fmt nv12",
+            "hevc_qsv": "-c:v hevc_qsv -preset slow -q 25 -pix_fmt nv12",
+            "av1_qsv":"-c:v av1_qsv -preset slow -q 25 -pix_fmt nv12"
         }
     ]
 }

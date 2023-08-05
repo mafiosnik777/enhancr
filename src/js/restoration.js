@@ -456,7 +456,7 @@ class Restoration {
 
                 terminal.innerHTML += '\r\n' + enhancrPrefix + ` Starting restoration process..` + '\r\n';
                 let previewEncoder = () => {
-                    if (sessionStorage.getItem('gpu') == 'Intel') return '-c:v h264_qsv -preset fast -look_ahead 30 -q 25 -pix_fmt nv12'
+                    if (sessionStorage.getItem('gpu') == 'Intel') return '-c:v h264_qsv -preset fast -q 25 -pix_fmt nv12'
                     if (sessionStorage.getItem('gpu') == 'AMD') return '-c:v h264_amf -quality balanced -rc cqp -qp 20 -pix_fmt nv12'
                     if (sessionStorage.getItem('gpu') == 'NVIDIA') return '-c:v h264_nvenc -preset llhq -b_adapt 1 -rc-lookahead 30 -qp 18 -qp_cb_offset -2 -qp_cr_offset -2 -pix_fmt nv12'
                 }
