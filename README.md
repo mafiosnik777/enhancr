@@ -157,4 +157,4 @@ I am continuously working to improve the codebase, including addressing any inco
 
 # Join the discord
 
-To interact with the community, share your results or to get help when encountering any problems visit our [discord](https://discord.gg/jBDqCkSxYz). Previews of upcoming versions are gonna be showcased on there as well.
+To interact with the community, share your results or to get help when encountering any problems visit our [discord](https://dsc.gg/enhancr). Previews of upcoming versions are gonna be showcased on there as well.
