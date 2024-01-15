@@ -1,9 +1,9 @@
 
-# ![heading-icon](https://mafiosnik.needsmental.help/TuuFJcPFi2.png?key=wfGxa75b2G2pyp)
+# ![heading-icon](https://github.com/mafiosnik777/enhancr/assets/108760201/a231a622-729e-4eef-a80c-924c83b221a7)
 
 **enhancr** is an **elegant and easy to use** GUI for **Video Frame Interpolation** and **Video Upscaling** which takes advantage of artificial intelligence - built using **node.js** and **Electron**. It was created **to enhance the user experience** for anyone interested in enhancing video footage using artificial intelligence. The GUI was **designed to provide a stunning experience** powered by state-of-the-art technologies **without feeling clunky and outdated** like other alternatives.
 
-![gui-preview-image](https://mafiosnik.needsmental.help/1wLGH7CxEA.png?key=uk7M7TaolACipq)
+![gui-preview-image](https://github.com/mafiosnik777/enhancr/assets/108760201/6fef0e1a-33d0-4c11-af17-fd2e625c286a)
 
 It features blazing-fast **TensorRT** inference by NVIDIA, which can speed up AI processes **significantly**. **Pre-packaged, without the need to install Docker or WSL** (Windows Subsystem for Linux) - and **NCNN** inference by Tencent which is lightweight and runs on **NVIDIA**, **AMD** and even **Apple Silicon** - in contrast to the mammoth of an inference PyTorch is, which **only runs on NVIDIA GPUs**.
 
@@ -28,7 +28,7 @@ https://dl.enhancr.app/setup/enhancr-setup-free-0.9.9.exe
 To ensure that you have the most recent version of the software and all necessary dependencies, we recommend downloading the installer from [Patreon](https://www.patreon.com/mafiosnik). 
 Please note that builds and an embeddable python environment for the **Pro** version **are not** provided through this repository.
 
-![installer](https://mafiosnik.needsmental.help/mEerVMP8LA.png?key=bzdnzy2RYJGOvO)
+![installer](https://github.com/mafiosnik777/enhancr/assets/108760201/bfa0ae2b-f369-4f2e-aa79-0c417b0230be)
 
 # Built-in engines
 
@@ -96,7 +96,7 @@ Please note that builds and an embeddable python environment for the **Pro** ver
 The GUI was created with cross-platform compatibility in mind and is compatible with both operating systems.
 **Our primary focus at the moment is ensuring a stable and fully functioning solution for Windows users, but support for Linux and macOS will be made available with the 1.0 update.**
 
-![enhancr-macos](https://mafiosnik.needsmental.help/st6TAP6g9t.png?key=kfq89rqeM2kEdi)
+![enhancr-macos](https://github.com/mafiosnik777/enhancr/assets/108760201/b4e9b65c-0d3a-46f1-981d-bc90950f9fb3)
 
 Support for Apple Silicon is planned as well, ~~but I currently only have an Intel Macbook Pro available for testing~~ i'll get a Apple Silicon instance on Amazon AWS to implement this, in time for the 1.0 release.
 
